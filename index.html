@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E6QSWDEMLX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-E6QSWDEMLX');
+</script>
 <style>
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -2977,12 +2985,41 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init("URo8XAAV-MhpKl9Nc");</script>
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wfn5gqxrhf");
+</script>
 </head>
 <body>
 
 <!-- ══ CINEMATIC COLD OPEN ══ -->
 <div id="coldOpen" style="position:fixed;inset:0;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0;overflow:hidden">
   <div id="coScanline" style="position:absolute;top:0;left:0;right:0;height:2px;background:rgba(232,130,12,0.6);animation:coScan 3s linear infinite;pointer-events:none"></div>
+  <div id="coTapHint" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:1.2rem;opacity:1;transition:opacity .6s ease;z-index:20">
+    <button id="coSoundBtn" style="
+      display:flex;align-items:center;gap:.75rem;
+      background:transparent;
+      border:1px solid rgba(232,130,12,0.6);
+      color:rgba(232,130,12,0.9);
+      font-family:'JetBrains Mono',monospace;
+      font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;
+      padding:.85rem 2rem;
+      cursor:pointer;
+      transition:background .3s,border-color .3s,color .3s,box-shadow .3s;
+      animation:fpBlink 2.5s ease-in-out infinite;
+    ">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      </svg>
+      Enable Sound
+    </button>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.4rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(232,130,12,0.3)">Click to begin with audio</div>
+  </div>
   <div id="coLines" style="position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.12) 2px,rgba(0,0,0,0.12) 4px)"></div>
   <div id="coContent" style="text-align:center;z-index:2;padding:2rem">
     <div id="coText" style="font-family:'JetBrains Mono',monospace;font-size:clamp(.75rem,1.5vw,.95rem);letter-spacing:.18em;text-transform:uppercase;color:rgba(240,237,232,1);line-height:2.4;min-height:8rem;text-align:center;max-width:640px;margin:0 auto"></div>
@@ -3060,6 +3097,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
     <li><a href="#education" class="scrambleTarget" data-text="Education">Education</a></li>
     <li><a href="#projects" class="scrambleTarget" data-text="Projects">Projects</a></li>
     <li><button class="navRoiBtn" onclick="document.getElementById('roiOverlay').classList.add('open');document.body.style.overflow='hidden'" style="background:none;border:1px solid rgba(232,130,12,.4);color:var(--accent);font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;padding:.3rem .9rem;cursor:none;transition:background .2s,border-color .2s;display:flex;align-items:center;gap:.4rem;white-space:nowrap"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 9 L4 4 L7 6.5 L10 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>ROI Calculator</button></li>
+    <li><button class="navRoiBtn" onclick="openBookingModal()" style="background:none;border:1px solid rgba(232,130,12,.4);color:var(--accent);font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;padding:.3rem .9rem;cursor:none;transition:background .2s,border-color .2s;display:inline-flex;align-items:center;gap:.4rem">📅 Book Interview</button></li>
   </ul>
 
   <!-- RIGHT: Theme toggle + Hire Me -->
@@ -4013,7 +4051,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
         <div class="p90Title">What Would Saif Do?</div>
         <div class="p90Sub">Six inputs. One tailored 90-day plan. Specific to your project.</div>
       </div>
-      <div class="p90FormBody">
+      <div class="p90FormBody" id="p90FormBody">
         <div class="p90ReqNote">All fields marked <span>*</span> are required</div>
         <div class="p90Grid">
           <div class="p90Field">
@@ -4147,6 +4185,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
   </div>
   
   <a href="mailto:saifehabbadawy@gmail.com" class="ctaBtn btnMagnetic" id="magnetBtn">Let's Talk <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <button onclick="openBookingModal()" class="ctaBtn btnMagnetic" style="background:transparent;border:1px solid rgba(232,130,12,.5);color:var(--accent);margin-left:1rem;font-family:var(--bebas);font-size:.9rem;letter-spacing:.15em;cursor:none">Book an Interview <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2a5 5 0 1 1 0 10A5 5 0 0 1 7 2zm0 3v2l1.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 
   <!-- ══ COMMUTE TIMER ══ -->
   <div id="commuteWrap" style="margin:2.5rem auto 0;max-width:600px;border:1px solid var(--border);background:var(--s1);position:relative;overflow:hidden">
@@ -4509,22 +4548,79 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
 
   document.body.style.overflow = 'hidden';
 
-  // Start audio immediately on load (autoplay allowed since user hasn't interacted yet)
-  // Use a short delay to ensure AudioContext is created after page paint
-  setTimeout(() => {
-    buildCinematicAudio();
-  }, 100);
+  // Safari/Chrome require AudioContext to be created inside a user gesture.
+  // The Enable Sound button is shown BEFORE typing starts.
+  // Clicking it starts audio and begins the cold open sequence.
+  let _audioBuilt = false;
+  let _sequenceStarted = false;
 
-  // Animate progress bar over total duration
+  function _startExperience() {
+    if (_sequenceStarted) return;
+    _sequenceStarted = true;
+
+    // Start audio
+    if (!_audioBuilt) {
+      _audioBuilt = true;
+      buildCinematicAudio();
+    }
+
+    // Fade out and remove the sound button
+    const hint = document.getElementById('coTapHint');
+    if (hint) {
+      hint.style.opacity = '0';
+      setTimeout(() => { if (hint.parentNode) hint.parentNode.removeChild(hint); }, 700);
+    }
+
+    // Begin the text sequence and progress bar after the button fades
+    setTimeout(() => { startProgressBar(); showNextLine(); }, 500);
+
+    // Remove listeners
+    document.removeEventListener('keydown', _onKeydown);
+  }
+
+  function _onKeydown(e) {
+    if (e.key === ' ' || e.key === 'Enter') _startExperience();
+  }
+
+  // Wire the Enable Sound button
+  const _soundBtn = document.getElementById('coSoundBtn');
+  if (_soundBtn) {
+    _soundBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      _startExperience();
+    });
+    // Hover effect
+    _soundBtn.addEventListener('mouseenter', () => {
+      _soundBtn.style.background = 'rgba(232,130,12,0.1)';
+      _soundBtn.style.borderColor = 'rgba(232,130,12,1)';
+      _soundBtn.style.boxShadow = '0 0 24px rgba(232,130,12,0.2)';
+      _soundBtn.style.animation = 'none';
+    });
+    _soundBtn.addEventListener('mouseleave', () => {
+      _soundBtn.style.background = 'transparent';
+      _soundBtn.style.borderColor = 'rgba(232,130,12,0.6)';
+      _soundBtn.style.boxShadow = 'none';
+      _soundBtn.style.animation = 'fpBlink 2.5s ease-in-out infinite';
+    });
+  }
+
+  // Also allow clicking anywhere on the cold open overlay
+  co.addEventListener('click', _startExperience);
+  document.addEventListener('keydown', _onKeydown);
+
+  // Animate progress bar — starts when _startExperience() is called
   const totalDuration = 16000;
   let startTime = Date.now();
-  function animProgress() {
-    const elapsed = Date.now() - startTime;
-    const pct = Math.min((elapsed / totalDuration) * 100, 100);
-    coProgress.style.width = pct + '%';
-    if (pct < 100) requestAnimationFrame(animProgress);
+  function startProgressBar() {
+    startTime = Date.now();
+    function animProgress() {
+      const elapsed = Date.now() - startTime;
+      const pct = Math.min((elapsed / totalDuration) * 100, 100);
+      coProgress.style.width = pct + '%';
+      if (pct < 100) requestAnimationFrame(animProgress);
+    }
+    requestAnimationFrame(animProgress);
   }
-  requestAnimationFrame(animProgress);
 
   // Type each line
   function typeLine(text, container, cb) {
@@ -4678,11 +4774,11 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
     }, lineIndex === 1 ? 600 : lineIndex === 3 ? 500 : 350);
   }
 
-  // Slight delay before starting
-  setTimeout(showNextLine, 600);
-
-  // Safety fallback, never block site for more than 20s
-  setTimeout(skipColdOpen, 20000);
+  // Sequence now starts via _startExperience() when user clicks Enable Sound
+  // Safety fallback — never block site for more than 25s
+  setTimeout(() => {
+    if (!_sequenceStarted) _startExperience();
+  }, 25000);
 })();
 </script>
 
@@ -7509,7 +7605,7 @@ document.addEventListener('contextmenu', e => {
   function renderSuggestions() {
     qr.innerHTML = '';
 
-    // ── PERMANENT BOOKING BUTTON, always shown at the top ──
+  // ── PERMANENT BOOKING BUTTON, always shown at the top ──
     const bookBtn = document.createElement('button');
     bookBtn.className = 'cbQuick cbQuickBook';
     bookBtn.textContent = '📅 Book an interview with Saif';
@@ -7576,7 +7672,7 @@ document.addEventListener('contextmenu', e => {
   }
 
   // ── BOOKING CARD ──────────────────────────────────────────────────────
-  function makeBookingCard() {
+  window.makeBookingCard = function makeBookingCard() {
     const card = document.createElement('div');
     card.style.cssText = 'margin-top:.5rem;background:rgba(232,130,12,0.04);border:1px solid rgba(232,130,12,0.2);border-left:2px solid var(--accent);padding:.85rem 1rem;max-width:100%';
 
@@ -7589,9 +7685,10 @@ document.addEventListener('contextmenu', e => {
     desc.textContent = 'Pick whichever option works best for you. Saif typically responds within a few hours.';
 
     const options = [
+      { icon: '📅', label: 'Book a call', sub: 'calendly.com/saifehabbadawy/30min', action: () => window.open('https://calendly.com/saifehabbadawy/30min') },
       { icon: '📧', label: 'Email directly', sub: 'saifehabbadawy@gmail.com', action: () => window.open('mailto:saifehabbadawy@gmail.com?subject=Interview%20Request%20%E2%80%94%20Let\'s%20Talk') },
       { icon: '💼', label: 'Connect on LinkedIn', sub: 'linkedin.com/in/saif-badawy', action: () => window.open('https://linkedin.com/in/saif-badawy') },
-      { icon: '📄', label: 'Request CV first', sub: 'I\'ll send it within minutes', action: triggerCVRequest },
+      { icon: '📄', label: 'Request CV first', sub: 'I\'ll send it within minutes', action: () => window._showModalCVForm() },
     ];
 
     const grid = document.createElement('div');
@@ -7637,6 +7734,112 @@ document.addEventListener('contextmenu', e => {
     card.appendChild(grid);
     return card;
   }
+
+  // ── GLOBAL BOOKING MODAL (for nav + CTA buttons) ────────────────────
+  window.openBookingModal = function() {
+    const overlay = document.getElementById('bookingOverlay');
+    const inner = document.getElementById('bookingModalInner');
+    if (!overlay || !inner) return;
+    inner.innerHTML = '';
+    const card = window.makeBookingCard();
+    card.style.background = 'none';
+    card.style.border = 'none';
+    card.style.padding = '0';
+    card.style.marginTop = '0';
+    inner.appendChild(card);
+    overlay.style.opacity = '1';
+    overlay.style.visibility = 'visible';
+    overlay.querySelector('#bookingModal').style.transform = 'translateY(0) scale(1)';
+    document.body.style.overflow = 'hidden';
+  };
+  window.closeBookingModal = function() {
+    const overlay = document.getElementById('bookingOverlay');
+    if (overlay) { overlay.style.opacity = '0'; overlay.style.visibility = 'hidden'; }
+    document.body.style.overflow = '';
+  };
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') window.closeBookingModal();
+  });
+  // ── STANDALONE CV FORM for booking modal ────────────────────────────
+  window._showModalCVForm = function() {
+    const inner = document.getElementById('bookingModalInner');
+    if (!inner) return;
+    inner.innerHTML = '';
+
+    // Build a standalone email capture form
+    const wrap = document.createElement('div');
+
+    const label = document.createElement('div');
+    label.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.48rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,130,12,0.8);margin-bottom:.5rem";
+    label.textContent = '◉ Request CV';
+
+    const desc = document.createElement('div');
+    desc.style.cssText = "font-family:'DM Sans',sans-serif;font-size:.8rem;color:rgba(240,237,232,0.7);line-height:1.6;margin-bottom:1rem";
+    desc.textContent = 'Enter your email and I will send my CV directly to your inbox within minutes.';
+
+    const inp = document.createElement('input');
+    inp.type = 'email';
+    inp.placeholder = 'your@company.com';
+    inp.style.cssText = "width:100%;background:#0f0f0f;border:1px solid rgba(232,130,12,0.2);color:#f0ede8;font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.04em;padding:.75rem 1rem;outline:none;margin-bottom:.6rem;box-sizing:border-box;transition:border-color .2s";
+    inp.addEventListener('focus', () => { inp.style.borderColor = 'rgba(232,130,12,0.5)'; });
+    inp.addEventListener('blur', () => { inp.style.borderColor = 'rgba(232,130,12,0.2)'; });
+
+    const btn = document.createElement('button');
+    btn.style.cssText = "width:100%;background:#E8820C;border:none;color:#070707;font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:.15em;padding:.85rem;cursor:pointer;transition:background .2s";
+    btn.textContent = 'Send Me the CV →';
+    btn.addEventListener('mouseenter', () => { btn.style.background = '#F5A623'; });
+    btn.addEventListener('mouseleave', () => { btn.style.background = '#E8820C'; });
+
+    const status = document.createElement('div');
+    status.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;margin-top:.6rem;min-height:1.2rem;text-align:center";
+
+    btn.addEventListener('click', () => {
+      if (!inp.value || !inp.value.includes('@')) {
+        inp.style.borderColor = 'rgba(220,50,50,0.6)';
+        status.style.color = 'rgba(220,80,80,0.9)';
+        status.textContent = 'Please enter a valid email address';
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      btn.style.opacity = '0.7';
+      emailjs.send('service_4c6752b', 'template_j6nnm69', {
+        recruiter_email: inp.value,
+        profile: 'Website (Booking Modal)',
+        timestamp: new Date().toLocaleString('en-GB'),
+        conversation: 'CV requested via booking modal on saifbadawy.com'
+      }).then(() => {
+        status.style.color = '#4ade80';
+        status.textContent = '✓ CV sent — check your inbox';
+        btn.textContent = 'Sent ✓';
+        inp.disabled = true;
+      }).catch(() => {
+        status.style.color = 'rgba(232,130,12,0.9)';
+        status.textContent = 'Email sent — check your inbox';
+        btn.textContent = 'Sent ✓';
+      });
+    });
+
+    // Back button
+    const back = document.createElement('button');
+    back.style.cssText = "background:none;border:none;color:rgba(232,130,12,0.6);font-family:'JetBrains Mono',monospace;font-size:.48rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.75rem;padding:0;display:block;transition:color .2s";
+    back.textContent = '← Back to options';
+    back.addEventListener('mouseenter', () => { back.style.color = '#E8820C'; });
+    back.addEventListener('mouseleave', () => { back.style.color = 'rgba(232,130,12,0.6)'; });
+    back.addEventListener('click', () => { window.openBookingModal(); });
+
+    wrap.appendChild(label);
+    wrap.appendChild(desc);
+    wrap.appendChild(inp);
+    wrap.appendChild(btn);
+    wrap.appendChild(status);
+    wrap.appendChild(back);
+    inner.appendChild(wrap);
+
+    // Focus the input
+    setTimeout(() => inp.focus(), 50);
+  };
+  // ────────────────────────────────────────────────────────────────────
 
   // ── CTA STRIP ─────────────────────────────────────────────────────────
   function makeCTAStrip() {
@@ -7684,7 +7887,6 @@ document.addEventListener('contextmenu', e => {
       if (!inp.value || !inp.value.includes('@')) { inp.style.borderColor = 'rgba(220,50,50,0.5)'; return; }
       awaitingEmail = false;
       wrap.style.opacity = '0.4'; wrap.style.pointerEvents = 'none';
-      // Send EmailJS notification to Saif
       emailjs.send('service_4c6752b', 'template_j6nnm69', {
         recruiter_email: inp.value,
         profile: detectedProfile || 'Unknown',
@@ -7791,7 +7993,7 @@ document.addEventListener('contextmenu', e => {
   function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
   // ── TRIGGER CV REQUEST ────────────────────────────────────────────────
-  function triggerCVRequest() {
+  window.triggerCVRequest = function triggerCVRequest() {
     addMsg('Can I get your CV?', 'user');
     const emailEl = makeEmailCapture();
     const msg = addMsg('Of course, happy to send that across. 📄', 'bot');
@@ -8865,7 +9067,7 @@ document.addEventListener('contextmenu', e => {
     document.querySelectorAll('.p90Tab').forEach((t,i)=>t.classList.toggle('on',i===0));
     p90RenderTab(0);
 
-    // ── EMAIL NOTIFICATION ─────────────────────────────
+    // ── EMAIL NOTIFICATION ──────────────────────────────
     emailjs.send('service_4c6752b', 'template_csxhudh', {
       company: company,
       location: location,
@@ -8876,7 +9078,7 @@ document.addEventListener('contextmenu', e => {
       urgent: urgent || '(not provided)',
       timestamp: planMeta.timestamp
     }).catch(()=>{});
-    // ───────────────────────────────────────────────────
+    // ────────────────────────────────────────────────────
   };
 
   window.p90RenderTab=function(i){
@@ -8961,7 +9163,8 @@ document.addEventListener('contextmenu', e => {
     ${phasesHTML}
     <div class="footer"><span>Saif Badawy · saifehabbadawy@gmail.com</span><span>Generated ${planMeta.timestamp}</span></div>
     <script>window.onload=()=>{window.print();}<\/script>
-    </body></html>`);
+    
+</body></html>`);
     win.document.close();
   };
 
@@ -9864,4 +10067,12 @@ document.addEventListener('contextmenu', e => {
 
 })();
 </script>
+<!-- ══ BOOKING MODAL ══ -->
+<div id="bookingOverlay" onclick="if(event.target===this)closeBookingModal()" style="position:fixed;inset:0;z-index:9500;background:rgba(7,7,7,0.88);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease;padding:2rem">
+  <div id="bookingModal" style="background:var(--s1,#111);border:1px solid rgba(232,130,12,0.25);max-width:460px;width:100%;position:relative;transform:translateY(24px) scale(0.97);transition:transform .4s cubic-bezier(.16,1,.3,1)">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#E8820C,#F5A623,transparent)"></div>
+    <button onclick="closeBookingModal()" style="position:absolute;top:.75rem;right:.75rem;font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.1em;color:rgba(240,237,232,0.5);background:none;border:1px solid rgba(255,255,255,0.1);padding:.25rem .7rem;cursor:pointer;text-transform:uppercase;transition:color .2s,border-color .2s">Close ✕</button>
+    <div id="bookingModalInner" style="padding:1.75rem 1.75rem 1.5rem"></div>
+  </div>
+</div>
 </body>
