@@ -2975,6 +2975,8 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("URo8XAAV-MhpKl9Nc");</script>
 </head>
 <body>
 
@@ -4507,26 +4509,10 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
 
   document.body.style.overflow = 'hidden';
 
-  // Build audio immediately — but Chrome on hosted sites suspends AudioContext
-  // until a user gesture. We resume it on the very first interaction.
+  // Start audio immediately on load (autoplay allowed since user hasn't interacted yet)
+  // Use a short delay to ensure AudioContext is created after page paint
   setTimeout(() => {
     buildCinematicAudio();
-    // After build, if suspended (Netlify/Chrome autoplay policy), resume on first touch
-    function resumeCtx() {
-      if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-      ['click','keydown','touchstart','pointerdown'].forEach(e =>
-        document.removeEventListener(e, resumeCtx)
-      );
-    }
-    ['click','keydown','touchstart','pointerdown'].forEach(e =>
-      document.addEventListener(e, resumeCtx, {once: true})
-    );
-    // Also try resuming after a short delay — sometimes Chrome allows it
-    setTimeout(() => {
-      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    }, 500);
   }, 100);
 
   // Animate progress bar over total duration
@@ -7698,6 +7684,13 @@ document.addEventListener('contextmenu', e => {
       if (!inp.value || !inp.value.includes('@')) { inp.style.borderColor = 'rgba(220,50,50,0.5)'; return; }
       awaitingEmail = false;
       wrap.style.opacity = '0.4'; wrap.style.pointerEvents = 'none';
+      // Send EmailJS notification to Saif
+      emailjs.send('service_4c6752b', 'template_j6nnm69', {
+        recruiter_email: inp.value,
+        profile: detectedProfile || 'Unknown',
+        timestamp: new Date().toLocaleString('en-GB'),
+        conversation: conversationHistory.map(m => m.role.toUpperCase() + ': ' + m.content.replace(/<[^>]+>/g,'')).join('\n')
+      }).catch(()=>{});
       setTimeout(() => {
         respond(`CV sent to <strong>${inp.value}</strong> ✅ You will receive it in seconds. And Saif now knows you requested it, expect a follow-up from him directly within 24 hours.`);
       }, 500);
@@ -8872,16 +8865,18 @@ document.addEventListener('contextmenu', e => {
     document.querySelectorAll('.p90Tab').forEach((t,i)=>t.classList.toggle('on',i===0));
     p90RenderTab(0);
 
-    // ── EMAIL NOTIFICATION ──────────────────────────────
-    // EmailJS will be wired in here once credentials are provided.
-    // Placeholder, ready to activate:
-    // emailjs.send('SERVICE_ID','TEMPLATE_ID',{
-    //   company, location, type:TYPE_LBL[type], scale:SCALE_LBL[scale],
-    //   phase:PHASE_LBL[phase]||phase, team, challenge:CHAL_LBL[challenge],
-    //   role:ROLE_LBL[role]||role, urgent:urgent||'(not provided)',
-    //   timestamp:planMeta.timestamp
-    // });
-    // ────────────────────────────────────────────────────
+    // ── EMAIL NOTIFICATION ─────────────────────────────
+    emailjs.send('service_4c6752b', 'template_csxhudh', {
+      company: company,
+      location: location,
+      project_type: TYPE_LBL[type] || type,
+      scale: SCALE_LBL[scale] || scale,
+      challenge: CHAL_LBL[challenge] || challenge,
+      role: ROLE_LBL[role] || role,
+      urgent: urgent || '(not provided)',
+      timestamp: planMeta.timestamp
+    }).catch(()=>{});
+    // ───────────────────────────────────────────────────
   };
 
   window.p90RenderTab=function(i){
