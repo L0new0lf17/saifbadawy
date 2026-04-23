@@ -155,7 +155,7 @@ section{padding:6rem 3rem;max-width:1200px;margin:0 auto}
 #expViz5{width:auto!important;display:block}
 .expViz .vizWrap{position:relative;width:100%}
 .expViz .vizWrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent);z-index:2;pointer-events:none}
-body.light-mode .expViz canvas{background:#e8e3db;border-color:rgba(0,0,0,0.08)}
+
 
 .expCompany{font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
 .expBadge{display:inline-block;font-family:var(--mono);font-size:.5rem;letter-spacing:.1em;padding:.2rem .6rem;border:1px solid rgba(232,130,12,.35);color:var(--accent2);text-transform:uppercase;margin-bottom:.5rem}
@@ -490,288 +490,6 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
 .staggerGrid.revealed > *:nth-child(6){opacity:1;transform:none;transition-delay:.55s}
 /* MEMBERSHIP SAFE REVEAL */
 
-
-
-/* ══ DARK/LIGHT MODE ══ */
-body.light-mode {
-  --black:#f5f2ed;
-  --off:#ece8e1;
-  --s1:#e8e3db;
-  --s2:#ddd8cf;
-  --s3:#d4cec4;
-  --border:rgba(0,0,0,0.08);
-  --borderB:rgba(0,0,0,0.15);
-  --white:#1a1410;
-  --muted:rgba(26,20,16,1);
-  --faint:rgba(26,20,16,0.75);
-  --accent:#C96E08;
-  --accent2:#E8820C;
-  --accentDim:rgba(201,110,8,0.12);
-}
-body.light-mode nav { background:rgba(245,242,237,0.95); }
-body.light-mode #blueprintCanvas { opacity:0.25; }
-body.light-mode .heroBg { background:none; }
-body.light-mode #particles { opacity:0.15; }
-body.light-mode #ambientGlow { background:radial-gradient(circle,rgba(201,110,8,0.06) 0%,transparent 68%); }
-body.light-mode .heroName .ghost { color:var(--white); -webkit-text-stroke:0; }
-body.light-mode footer { border-top:1px solid rgba(0,0,0,0.1); }
-
-/* Toggle button */
-#themeToggle {
-  display:flex;
-  align-items:center;
-  gap:.55rem;
-  background:transparent;
-  border:1px solid var(--border);
-  border-radius:2px;
-  padding:.3rem .75rem .3rem .6rem;
-  cursor:none;
-  flex-shrink:0;
-  transition:border-color .25s, background .25s;
-}
-#themeToggle:hover {
-  border-color:rgba(232,130,12,.5);
-  background:rgba(232,130,12,.06);
-}
-.tmLabel {
-  font-family:var(--mono);
-  font-size:.44rem;
-  letter-spacing:.15em;
-  color:var(--white);
-  text-transform:uppercase;
-  transition:color .3s;
-  user-select:none;
-  white-space:nowrap;
-}
-.tmTrack {
-  width:28px;height:14px;
-  border-radius:7px;
-  background:rgba(232,130,12,.2);
-  border:1px solid rgba(232,130,12,.3);
-  position:relative;
-  flex-shrink:0;
-  transition:background .3s;
-}
-.tmThumb {
-  position:absolute;
-  top:2px;left:2px;
-  width:8px;height:8px;
-  border-radius:50%;
-  background:var(--accent);
-  transition:transform .3s cubic-bezier(.16,1,.3,1), background .3s;
-}
-body.light-mode #themeToggle { border-color:rgba(0,0,0,.15); }
-body.light-mode .tmLabel { color:rgba(26,20,16,.7); }
-body.light-mode .tmTrack { background:rgba(201,110,8,.15); border-color:rgba(201,110,8,.3); }
-
-#themeToggle:hover { border-color:var(--accent); background:var(--accentDim); transform:rotate(15deg); }
-#themeToggle svg { width:16px; height:16px; }
-body.light-mode #themeToggle { border-color:rgba(201,110,8,0.5); background:rgba(201,110,8,0.1); }
-
-/* ── LIGHT MODE COMPREHENSIVE FIXES ── */
-/* Nav & badge */
-body.light-mode #availBadge { background:rgba(34,197,94,0.1); border-color:rgba(34,197,94,0.35); }
-body.light-mode .availText { color:rgba(26,20,16,0.75); }
-body.light-mode .availText em { color:#16a34a; }
-body.light-mode .availDot { background:#16a34a; }
-body.light-mode .navLinks a { color:rgba(26,20,16,0.7); }
-body.light-mode .navLinks a:hover { color:#1a1410; }
-body.light-mode .navCta { background:#C96E08; color:#fff; }
-body.light-mode .navRoiBtn { border-color:rgba(201,110,8,.4) !important; color:#C96E08 !important; }
-body.light-mode .navRoiBtn:hover { background:rgba(201,110,8,.1) !important; }
-body.light-mode .logo { color:#1a1410; }
-
-/* Hero */
-body.light-mode .heroName { color:#1a1410; }
-body.light-mode .heroEyeText { color:#C96E08; }
-body.light-mode .heroDesc { color:rgba(26,20,16,0.6); }
-body.light-mode .heroDesc strong { color:#1a1410; }
-body.light-mode .pill { border-color:rgba(0,0,0,0.15); color:rgba(26,20,16,0.6); }
-body.light-mode .pill.lit { background:rgba(201,110,8,0.1); border-color:rgba(201,110,8,0.4); color:#C96E08; }
-body.light-mode .mStat { background:#ddd8cf; }
-body.light-mode .mNum { color:#C96E08; }
-body.light-mode .mLabel { color:rgba(26,20,16,0.5); }
-body.light-mode .glow1, body.light-mode .glow2 { opacity:0.3; }
-
-/* Stats strip */
-body.light-mode body.light-mode body.light-mode 
-/* Ticker */
-body.light-mode .ticker { background:#C96E08; }
-body.light-mode .tickItem { color:#fff; }
-
-/* Section titles & labels */
-body.light-mode .secTitle { color:#1a1410; }
-body.light-mode .secTag { color:rgba(26,20,16,0.5); }
-body.light-mode .secNum { color:#C96E08; }
-body.light-mode .secLine { background:rgba(201,110,8,0.3); }
-body.light-mode .section-label { color:#C96E08; }
-
-/* About */
-body.light-mode .aboutText { color:rgba(26,20,16,0.65); }
-body.light-mode .aboutText strong { color:#1a1410; }
-body.light-mode .discItem { color:rgba(26,20,16,0.65); border-color:rgba(0,0,0,0.1); }
-body.light-mode .discItem:first-child { border-color:rgba(0,0,0,0.1); }
-body.light-mode .discItem:hover { color:#1a1410; }
-body.light-mode .langCard { background:#ddd8cf; border-color:rgba(0,0,0,0.1); }
-body.light-mode .langName { color:#1a1410; }
-body.light-mode .langLv { color:#C96E08; }
-body.light-mode .ld { background:rgba(0,0,0,0.12); }
-body.light-mode .ld.on { background:#C96E08; }
-body.light-mode .mapBox { background:#e8e3db; border-color:rgba(0,0,0,0.1); }
-body.light-mode .discPanel p { color:rgba(26,20,16,0.65); }
-body.light-mode .dpTags span { border-color:rgba(201,110,8,0.3); color:#C96E08; }
-body.light-mode .personalNote { background:#ddd8cf; border-color:rgba(0,0,0,0.1); border-left-color:#C96E08; }
-body.light-mode .pNoteText { color:rgba(26,20,16,0.65); }
-body.light-mode .pNoteText strong { color:#1a1410; }
-body.light-mode .pNoteDot { background:#C96E08; }
-
-/* Experience */
-body.light-mode .expBanner { background:#ddd8cf; border-color:rgba(0,0,0,0.1); }
-body.light-mode .expBanner::after { background:#C96E08; }
-body.light-mode .expBannerCo { color:#1a1410; }
-body.light-mode .expBannerLoc { color:rgba(201,110,8,0.9); }
-body.light-mode .expBannerNum { color:#C96E08; }
-body.light-mode .expBannerNumLabel { color:rgba(26,20,16,0.5); }
-body.light-mode .expRole { color:#1a1410; }
-body.light-mode .expLocation { color:rgba(26,20,16,0.5); }
-body.light-mode .expBody { color:rgba(26,20,16,0.65); }
-body.light-mode .expBody strong { color:#1a1410; }
-body.light-mode .expMet { background:#ddd8cf; border-color:rgba(0,0,0,0.1); }
-body.light-mode .expMetNum { color:#C96E08; }
-body.light-mode .expMetLabel { color:rgba(26,20,16,0.5); }
-body.light-mode .etag { border-color:rgba(0,0,0,0.12); color:rgba(26,20,16,0.5); }
-body.light-mode .etag.h { border-color:rgba(201,110,8,0.35); color:#C96E08; }
-body.light-mode .expDot { background:#C96E08; }
-body.light-mode .timeline::before { background:linear-gradient(to bottom,#C96E08,rgba(201,110,8,0.15)); }
-body.light-mode .expYearFloat { background:#C96E08; color:#fff; }
-body.light-mode .expNode .expYearFloat { color:#fff; }
-
-/* Skills */
-body.light-mode .compBox { background:#e8e3db; border-color:rgba(0,0,0,0.1); }
-body.light-mode .compTitle { color:#1a1410; }
-body.light-mode .compName { color:rgba(26,20,16,0.65); }
-body.light-mode .compPct { color:#C96E08; }
-body.light-mode .barTrack { background:rgba(0,0,0,0.08); }
-body.light-mode body.light-mode .barFill { background:#C96E08; }
-body.light-mode .sCell { background:#ece8e1; }
-body.light-mode .sCell:hover { background:#ddd8cf; }
-body.light-mode .sName { color:#1a1410; }
-body.light-mode .sDetail { color:rgba(26,20,16,0.6); }
-body.light-mode .chartCard { background:#e8e3db; border-color:rgba(0,0,0,0.1); }
-body.light-mode .chartLabel { color:rgba(26,20,16,0.5); }
-body.light-mode .radarWrap { background:#e8e3db; border-color:rgba(0,0,0,0.1); }
-body.light-mode .radarTitle { color:rgba(26,20,16,0.5); }
-body.light-mode .radarLegendItem { color:rgba(26,20,16,0.5); }
-body.light-mode .skillsTape { background:#e8e3db; }
-body.light-mode .sTapeCell { background:#ece8e1; border-color:rgba(0,0,0,0.1); }
-body.light-mode .sTapeName { color:#1a1410; }
-body.light-mode .sTapeDetail { color:rgba(26,20,16,0.6); }
-body.light-mode .techGrid .tPill { border-color:rgba(0,0,0,0.12); color:rgba(26,20,16,0.6); }
-body.light-mode .tPill:hover { background:rgba(201,110,8,0.08); color:#C96E08; border-color:rgba(201,110,8,0.35); }
-
-/* Education */
-body.light-mode .eduCard { background:#e8e3db; border-color:rgba(0,0,0,0.1); }
-body.light-mode .eduDeg { color:#1a1410; }
-body.light-mode .eduDetail { color:rgba(26,20,16,0.65); }
-body.light-mode .eduYear { color:rgba(26,20,16,0.35); }
-body.light-mode .cPill { border-color:rgba(0,0,0,0.12); color:rgba(26,20,16,0.55); }
-body.light-mode .cPill.done { background:rgba(201,110,8,0.08); border-color:rgba(201,110,8,0.35); color:#C96E08; }
-body.light-mode body.light-mode body.light-mode body.light-mode body.light-mode 
-/* Projects */
-body.light-mode .projCard { background:#e8e3db; }
-body.light-mode .projCard:hover { background:#ddd8cf; }
-body.light-mode .projTitle { color:#1a1410; }
-body.light-mode .projDesc { color:rgba(26,20,16,0.65); }
-body.light-mode .projDesc strong { color:#1a1410; }
-body.light-mode .ptag { border-color:rgba(0,0,0,0.12); color:rgba(26,20,16,0.55); }
-body.light-mode .ptag.h { border-color:rgba(201,110,8,0.35); color:#C96E08; }
-body.light-mode .kNum { color:#C96E08; }
-body.light-mode .kLabel { color:rgba(26,20,16,0.5); }
-body.light-mode .projReveal { background:linear-gradient(to top,rgba(245,242,237,0.98),rgba(245,242,237,0.7)); }
-body.light-mode .projRevealNum { color:#C96E08; }
-body.light-mode .projRevealLabel { color:rgba(26,20,16,0.65); }
-
-/* Industry stats */
-body.light-mode .iCard { background:#ece8e1; }
-body.light-mode .iCard:hover { background:#ddd8cf; }
-body.light-mode .iCardNum { color:#C96E08; }
-body.light-mode .iCardLabel { color:#1a1410; }
-body.light-mode .iCardSub { color:rgba(26,20,16,0.65); }
-body.light-mode .iCardSrc { color:rgba(26,20,16,0.35); }
-body.light-mode .industrySec { background:#e8e3db; border-color:rgba(0,0,0,0.08); }
-
-/* Contact */
-body.light-mode .ctaHead { color:#1a1410; }
-body.light-mode .ctaGhost { -webkit-text-stroke:1.5px rgba(26,20,16,0.18); }
-body.light-mode .ctaSub { color:rgba(26,20,16,0.65); }
-body.light-mode .ctaEye { color:#C96E08; }
-body.light-mode .tagCloudItem { border-color:rgba(0,0,0,0.12); color:rgba(26,20,16,0.55); }
-body.light-mode .tagCloudItem:hover { border-color:rgba(201,110,8,0.5); color:#C96E08; }
-body.light-mode .ctaLink { color:rgba(26,20,16,0.55); border-color:rgba(0,0,0,0.12); }
-body.light-mode .ctaLink:hover { color:#C96E08; border-color:#C96E08; }
-body.light-mode .ctaBgWord { color:rgba(0,0,0,0.03); }
-body.light-mode .quoteBlock { background:#e8e3db; border-color:rgba(0,0,0,0.08); }
-body.light-mode .quoteText { color:#1a1410; }
-body.light-mode .quoteStrip { border-color:rgba(0,0,0,0.08); }
-body.light-mode .quotePane { border-color:rgba(0,0,0,0.08); }
-body.light-mode .quotePane:hover { background:#ddd8cf; }
-body.light-mode .quotePaneText { color:#1a1410; }
-body.light-mode .quoteMark { color:rgba(201,110,8,0.12); }
-body.light-mode .quotePaneSub { color:#C96E08; }
-
-/* Footer */
-body.light-mode footer { color:rgba(26,20,16,0.55); background:#ddd8cf; }
-body.light-mode #londonClock { color:rgba(26,20,16,0.55); }
-body.light-mode #kbHint { color:rgba(26,20,16,0.35); }
-body.light-mode .kbKey { border-color:rgba(0,0,0,0.2); }
-
-/* Scroll progress & dots */
-body.light-mode #scrollProg { background:linear-gradient(to bottom,#C96E08,#E8820C); }
-body.light-mode .sDot { background:rgba(0,0,0,0.12); border-color:rgba(201,110,8,0.2); }
-body.light-mode .sDot.active { background:#C96E08; }
-body.light-mode #scrollTop { background:#C96E08; }
-
-/* Footprint grid */
-body.light-mode .fpCard { background:#ddd8cf; }
-body.light-mode .fpCard:hover { background:#d4cec4; }
-body.light-mode .fpRegion { color:rgba(26,20,16,0.5); }
-body.light-mode .fpCity { color:#1a1410; }
-body.light-mode .fpRole { color:#C96E08; }
-body.light-mode .fpPing { background:#C96E08; }
-
-/* CV modal */
-body.light-mode .cvModal .cvFront { background:#e8e3db; }
-body.light-mode .cvModal .cvBack { background:#ddd8cf; }
-body.light-mode .cvFrontText { color:#1a1410; }
-body.light-mode .cvFrontSub { color:rgba(26,20,16,0.6); }
-body.light-mode .cvPreviewLine { background:rgba(0,0,0,0.1); }
-body.light-mode .linkPreview { background:#e8e3db; border-color:rgba(0,0,0,0.1); }
-body.light-mode .lpName { color:#1a1410; }
-body.light-mode .lpTitle { color:#C96E08; }
-body.light-mode .lpStatNum { color:#1a1410; }
-body.light-mode .lpStatLabel { color:rgba(26,20,16,0.5); }
-
-/* Image panels */
-body.light-mode .ipOverlay { background:linear-gradient(135deg,rgba(245,242,237,0.65) 0%,rgba(201,110,8,0.06) 100%); }
-body.light-mode .imgPanel img { opacity:0.6; }
-
-/* Cursor */
-body.light-mode #cur { background:#C96E08; }
-body.light-mode #curR { border-color:#C96E08; }
-body.light-mode #ambientGlow { background:radial-gradient(circle,rgba(201,110,8,0.08) 0%,transparent 68%); }
-
-/* Blueprint canvas light mode */
-body.light-mode #blueprintCanvas { opacity:0.12; filter:invert(1); }
-
-/* Transition overlay for smooth mode switch */
-#modeWipe {
-  position:fixed; inset:0; z-index:9995;
-  background:var(--accent);
-  clip-path:circle(0% at var(--wx,50%) var(--wy,50%));
-  transition:clip-path .5s cubic-bezier(.4,0,.2,1);
-  pointer-events:none;
-}
-#modeWipe.wiping { clip-path:circle(150% at var(--wx,50%) var(--wy,50%)); }
 
 
 /* ══ CV DOWNLOAD FLIP CARD ══ */
@@ -1991,6 +1709,69 @@ body.light-mode #blueprintCanvas { opacity:0.12; filter:invert(1); }
   transition:color .2s;
 }
 .memCard:hover .memTitle{color:var(--accent)}
+.memCard{cursor:pointer}
+
+/* ══ MEMBERSHIP DOWNLOAD MODAL ══ */
+#memDlOverlay{
+  position:fixed;inset:0;z-index:9500;
+  background:rgba(7,7,7,0.82);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;
+  transition:opacity .3s ease,visibility .3s ease;
+}
+#memDlOverlay.open{opacity:1;visibility:visible;}
+#memDlCard{
+  background:var(--s1);
+  border:1px solid rgba(232,130,12,0.3);
+  border-top:2px solid var(--accent);
+  max-width:420px;width:90%;
+  padding:2rem;
+  transform:translateY(18px) scale(0.97);
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+#memDlOverlay.open #memDlCard{transform:translateY(0) scale(1);}
+#memDlLabel{
+  font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(232,130,12,0.85);
+  margin-bottom:.6rem;
+}
+#memDlTitle{
+  font-family:var(--bebas);font-size:1.6rem;letter-spacing:.08em;
+  color:var(--white);line-height:1.1;margin-bottom:.5rem;
+}
+#memDlSub{
+  font-family:var(--mono);font-size:.55rem;letter-spacing:.08em;
+  color:rgba(240,237,232,0.5);text-transform:uppercase;
+  margin-bottom:1.25rem;
+}
+#memDlDesc{
+  font-family:var(--sans);font-size:.88rem;
+  color:rgba(240,237,232,0.72);line-height:1.65;
+  margin-bottom:1.5rem;
+}
+#memDlBtns{display:flex;flex-direction:column;gap:.5rem;}
+.memDlBtn{
+  display:flex;align-items:center;justify-content:center;gap:.6rem;
+  width:100%;padding:.9rem;
+  background:var(--accent);color:var(--black);
+  font-family:var(--bebas);font-size:1rem;letter-spacing:.18em;
+  border:none;cursor:pointer;
+  transition:background .2s,transform .15s;
+}
+.memDlBtn:hover{background:var(--accent2);transform:translateY(-1px);}
+.memDlBtn:active{transform:translateY(0);}
+.memDlBtn svg{width:16px;height:16px;flex-shrink:0;}
+.memDlBtn.secondary{background:transparent;border:1px solid rgba(232,130,12,0.5);color:var(--accent);}
+.memDlBtn.secondary:hover{background:rgba(232,130,12,0.08);border-color:var(--accent);}
+#memDlClose{
+  position:absolute;top:1rem;right:1rem;
+  background:none;border:1px solid rgba(232,130,12,0.25);
+  color:rgba(240,237,232,0.5);font-family:var(--mono);
+  font-size:.5rem;letter-spacing:.1em;padding:.35rem .6rem;
+  cursor:pointer;transition:all .2s;
+}
+#memDlClose:hover{border-color:var(--accent);color:var(--accent);}
+#memDlCard{position:relative;}
 .memSub{
   font-family:var(--mono);
   font-size:.43rem;
@@ -2279,7 +2060,7 @@ body.light-mode #blueprintCanvas { opacity:0.12; filter:invert(1); }
 .sStat.ssVis .sDivLine{width:48px}
 .sStat:hover .sDivLine{width:64px;background:linear-gradient(90deg,var(--accent),transparent)}
 
-body.light-mode .tmThumb { transform:translateX(14px); }
+
 
 /* ══ 90-DAY PLAN ══ */
 #plan90{background:var(--black);padding:6rem 3rem;max-width:none;position:relative;overflow:hidden}
@@ -2341,17 +2122,17 @@ body.light-mode .tmThumb { transform:translateX(14px); }
 .p90DlBtn{display:flex;align-items:center;gap:.5rem;background:var(--accent);color:var(--black);font-family:var(--bebas);font-size:.8rem;letter-spacing:.15em;padding:.55rem 1.1rem;border:none;cursor:none;transition:background .2s}
 .p90DlBtn:hover{background:var(--accent2)}
 .p90DlBtn svg{width:12px;height:12px}
-body.light-mode .p90FormWrap{background:#e8e3db;border-color:rgba(0,0,0,.1)}
-body.light-mode .p90FormHead{border-color:rgba(0,0,0,.08)}
-body.light-mode .p90Title{color:#1a1410}
-body.light-mode .p90Sel,body.light-mode .p90Inp{background:#ddd8cf;border-color:rgba(0,0,0,.1);color:#1a1410}
-body.light-mode .p90Sel option{background:#ddd8cf;color:#1a1410}
-body.light-mode .p90KpiBox{background:rgba(201,110,8,.04);border-color:rgba(201,110,8,.15)}
-body.light-mode .p90DTxt{color:rgba(26,20,16,.75)}
-body.light-mode .p90DTxt b{color:#1a1410}
-body.light-mode .p90Greeting{color:rgba(26,20,16,.55)}
-body.light-mode .p90Greeting b{color:#1a1410}
-body.light-mode .p90KpiPill{border-color:rgba(201,110,8,.22);color:rgba(26,20,16,.55)}
+
+
+
+
+
+
+
+
+
+
+
 @keyframes coScan{0%{top:0%}100%{top:100%}}
 .coFadeOut{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transition:opacity .8s ease,visibility .8s ease!important}
 
@@ -2543,24 +2324,24 @@ body.light-mode .p90KpiPill{border-color:rgba(201,110,8,.22);color:rgba(26,20,16
 .projCard:has(.projCaseBtn:hover) .projReveal { transform:translateY(100%) !important; }
 
 /* Light mode */
-body.light-mode #caseOverlay { background:rgba(245,242,237,0.92); }
-body.light-mode .caseModal { background:#e8e3db; border-color:rgba(0,0,0,0.1); }
-body.light-mode .caseClose { color:rgba(26,20,16,0.5); border-color:rgba(0,0,0,0.15); }
-body.light-mode .caseClose:hover { color:#C96E08; border-color:#C96E08; }
-body.light-mode .caseKPI { background:#ddd8cf; }
-body.light-mode .caseKPI:hover { background:#d4cec4; }
-body.light-mode .caseKPINum { color:#C96E08; }
-body.light-mode .caseKPILabel { color:rgba(26,20,16,0.55); }
-body.light-mode .caseSectionText { color:rgba(26,20,16,0.65); }
-body.light-mode .caseSectionText strong { color:#1a1410; }
-body.light-mode .caseStepText { color:rgba(26,20,16,0.65); }
-body.light-mode .caseStepTitle { color:#1a1410; }
-body.light-mode .caseTag { border-color:rgba(0,0,0,.12); color:rgba(26,20,16,.55); }
-body.light-mode .caseTag.h { border-color:rgba(201,110,8,.35); color:#C96E08; }
-body.light-mode .caseOutcome { border-color:rgba(201,110,8,.2); border-left-color:#C96E08; }
-body.light-mode .caseOutcomeText { color:#1a1410; }
-body.light-mode .projCaseBtn { color:#C96E08; border-color:rgba(201,110,8,.35); }
-body.light-mode .projCaseBtn:hover { background:rgba(201,110,8,.08); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* ══════════════════════════════════════════
@@ -2629,9 +2410,9 @@ body.light-mode .projCaseBtn:hover { background:rgba(201,110,8,.08); }
   width:10px; height:10px; border-radius:50%;
   background:var(--accent); cursor:pointer;
 }
-body.light-mode #ambientBtn { background:#ddd8cf; border-color:rgba(0,0,0,.1); }
-body.light-mode #ambToast { background:#e8e3db; }
-body.light-mode #ambVolWrap { background:#e8e3db; border-color:rgba(201,110,8,.3); }
+
+
+
 
 
 /* ══════════════════════════════════════════
@@ -2825,24 +2606,24 @@ body.light-mode #ambVolWrap { background:#e8e3db; border-color:rgba(201,110,8,.3
   box-shadow:0 0 20px rgba(232,130,12,.15);
 }
 
-body.light-mode .roiModal { background:#e8e3db; border-color:rgba(0,0,0,.1); }
-body.light-mode .roiClose { color:rgba(26,20,16,.5); border-color:rgba(0,0,0,.15); }
-body.light-mode .roiClose:hover { color:#C96E08; }
-body.light-mode .roiTitle { color:#1a1410; }
-body.light-mode .roiLabel { color:rgba(26,20,16,.55); }
-body.light-mode .roiSelect, body.light-mode .roiInput { background:#ddd8cf; border-color:rgba(0,0,0,.1); color:#1a1410; }
-body.light-mode .roiSelect option { background:#ddd8cf; color:#1a1410; }
-body.light-mode .roiBig { background:#ddd8cf; }
-body.light-mode .roiBigNum { color:#C96E08; }
-body.light-mode .roiBigLabel { color:rgba(26,20,16,.5); }
-body.light-mode .roiBreakKey { color:rgba(26,20,16,.55); }
-body.light-mode .roiBreakVal { color:#1a1410; }
-body.light-mode .roiNarrative { color:rgba(26,20,16,.65); border-left-color:#C96E08; }
-body.light-mode .roiNarrative strong { color:#1a1410; }
-body.light-mode #roiTrigger { color:#C96E08; border-color:rgba(201,110,8,.35); }
-body.light-mode #roiTrigger:hover { background:rgba(201,110,8,.08); }
-body.light-mode .roiResultsTitle { color:#1a1410; }
-body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -3081,7 +2862,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
 <div id="cur"></div>
 <div id="curR"></div>
 
-<div id="modeWipe"></div>
+</div>
 <div id="pageTransition"></div>
 <nav>
   <!-- LEFT: Logo + badge -->
@@ -3102,12 +2883,6 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
 
   <!-- RIGHT: Theme toggle + Hire Me -->
   <div style="display:flex;align-items:center;gap:.75rem;flex-shrink:0">
-    <button id="themeToggle" aria-label="Toggle dark/light mode" title="Toggle dark / light mode">
-      <span class="tmLabel" id="tmLabel">DARK</span>
-      <span class="tmTrack">
-        <span class="tmThumb" id="tmThumb"></span>
-      </span>
-    </button>
     <button onclick="openHireMe()" class="navCta" style="border:none;cursor:pointer">Hire Me</button>
   </div>
 </nav>
@@ -3126,7 +2901,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
       <span class="pill lit" id="pill0" style="opacity:0"></span>
     </div>
     <p class="heroDesc">
-      I am a <strong>Project Engineer</strong> with over five years of cross-sector experience in oil and gas, EPC delivery and renewable energy. I have worked on <strong>$50M+ upstream assets at ExxonMobil and Wood PLC</strong>, managed 65+ personnel on live construction programmes, and led solar PV feasibility and net-zero decarbonisation projects across Europe. I do not just manage projects — I manage risk, drive change control, engage stakeholders and engineer the conditions for consistent delivery from initiation through to commissioning.
+      I am a <strong>Project Engineer</strong> with over four years of cross-sector experience in oil and gas, EPC delivery and renewable energy. I have worked on <strong>£20M+ upstream assets at ExxonMobil and Wood PLC</strong>, managed 65+ personnel on live construction programmes, and led solar PV feasibility and net-zero decarbonisation projects across Europe. I do not just manage projects — I manage risk, drive change control, engage stakeholders and engineer the conditions for consistent delivery from initiation through to commissioning.
     </p>
     <div class="heroBtns">
       <a href="#contact" class="btnMain">Hire Me <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -3142,10 +2917,10 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
   <div class="heroR">
     <div class="photoWrap">
       <div class="photoBox"><img src="data:image/webp;base64,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" alt="Saif Badawy"></div>
-      <div class="photoBadge">AMIMechE · M-IEEE · M-ASME</div>
+      <div class="photoBadge">Assoc. Member IMechE · M-IEEE · M-ASME</div>
     </div>
     <div class="miniStats">
-      <div class="mStat"><div class="mNum" data-count="50" data-prefix="$" data-suffix="M+">$0</div><div class="mLabel">Portfolio Value</div></div>
+      <div class="mStat"><div class="mNum" data-count="20" data-prefix="£" data-suffix="M+">£0</div><div class="mLabel">Portfolio Value</div></div>
       <div class="mStat"><div class="mNum" data-count="65" data-suffix="+">0+</div><div class="mLabel">Personnel Led</div></div>
       <div class="mStat"><div class="mNum" data-count="95" data-suffix="%">0%</div><div class="mLabel">On-Time Rate</div></div>
       <div class="mStat"><div class="mNum" data-count="5" data-suffix="+">0+</div><div class="mLabel">Years Active</div></div>
@@ -3193,7 +2968,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
 <div class="statsStrip" id="statsStrip">
   <div class="sStat">
     <div class="sIdx">01 · Portfolio</div>
-    <div class="sNum" data-count="50" data-prefix="$" data-suffix="M+">$50M+</div>
+    <div class="sNum" data-count="20" data-prefix="£" data-suffix="M+">£20M+</div>
     <div class="sDivLine"></div>
     <div class="sLabel">Project Portfolio Value</div>
   </div>
@@ -3211,7 +2986,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
   </div>
   <div class="sStat">
     <div class="sIdx">04 · Experience</div>
-    <div class="sNum" data-count="5" data-suffix="+">5+</div>
+    <div class="sNum" data-count="4" data-suffix="+">4+</div>
     <div class="sDivLine"></div>
     <div class="sLabel">Years in Energy Sector</div>
   </div>
@@ -3224,7 +2999,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
   <div class="secTitle fu">Built on<br>Fundamentals.</div>
   <div class="aboutGrid">
     <div class="aCol">
-      <p class="aboutText">I am a <strong>Project Engineer</strong> based in London with over five years of hands-on experience delivering capital projects across oil and gas, EPC and renewable energy. I hold an <strong>MSc in Engineering Management from Brunel University London</strong> and a BEng (Hons) in Mechanical Engineering from the University of Wollongong, Australia, academic foundations I chose deliberately to span both the technical and the strategic.</p>
+      <p class="aboutText">I am a <strong>Project Engineer</strong> based in London with over four years of hands-on experience delivering capital projects across oil and gas, EPC and renewable energy. I hold an <strong>MSc in Engineering Management from Brunel University London</strong> and a BEng (Hons) in Mechanical Engineering from the University of Wollongong, Australia, academic foundations I chose deliberately to span both the technical and the strategic.</p>
       <p class="aboutText">I bring a combination of deep <strong>technical engineering competence</strong> and the leadership instinct to drive complex, multi-discipline programmes from front-end feasibility through to commissioning and handover. Having been embedded within major operators including <strong>ExxonMobil and Wood PLC</strong> across the UAE and Iraq, I understand what delivery looks like under real operating pressure — not just on paper.</p>
       <p class="aboutText">I am <strong>trilingual in English, Arabic and French</strong>, PRINCE2 and Six Sigma Black Belt certified, and hold professional memberships with five engineering institutions. I am actively seeking my next project engineering or management opportunity in energy, renewables or infrastructure — in the United Kingdom, the EU, the Gulf or the wider Middle East.</p>
       <div class="langRow">
@@ -3244,13 +3019,13 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
 
 <ul class="discList" id="discList">
         <li class="discItem" data-disc="epc"><span>EPC and EPCM Project Delivery</span><span class="da discArrow">+</span></li>
-        <li class="discPanel" id="dp-epc"><p>I have delivered EPC and EPCM programmes across oil and gas and energy infrastructure, coordinating multidisciplinary teams across mechanical, civil, structural and instrumentation disciplines from FEED through to commissioning and handover. At Wood PLC and ExxonMobil I managed 65+ site personnel, drove change control protocols and maintained CPM-based schedule oversight on assets valued at $50M+.</p><div class="dpTags"><span>FEED</span><span>Commissioning</span><span>Multi-discipline</span><span>Change Control</span></div></li>
+        <li class="discPanel" id="dp-epc"><p>I have delivered EPC and EPCM programmes across oil and gas and energy infrastructure, coordinating multidisciplinary teams across mechanical, civil, structural and instrumentation disciplines from FEED through to commissioning and handover. At Wood PLC and ExxonMobil I managed 65+ site personnel, drove change control protocols and maintained CPM-based schedule oversight on assets valued at £20M+.</p><div class="dpTags"><span>FEED</span><span>Commissioning</span><span>Multi-discipline</span><span>Change Control</span></div></li>
 
         <li class="discItem" data-disc="renew"><span>Renewable Energy and Solar PV</span><span class="da discArrow">+</span></li>
         <li class="discPanel" id="dp-renew"><p>Currently delivering solar PV feasibility assessments, FEED coordination and heat recovery analyses across UK and European client projects valued up to £15M. My technical inputs contributed to two client bids shortlisted for green infrastructure funding. I apply the same engineering rigour developed in oil and gas to the pace and ambition of the energy transition.</p><div class="dpTags"><span>Solar PV</span><span>Feasibility</span><span>Green Infrastructure</span><span>FEED</span></div></li>
 
         <li class="discItem" data-disc="og"><span>Oil and Gas Engineering</span><span class="da discArrow">+</span></li>
-        <li class="discPanel" id="dp-og"><p>Five years of hands-on oil and gas engineering across upstream, midstream and EPC environments. I have reviewed P&amp;IDs, isometrics and vendor drawings against ASME B31.3, API 650 and ISO standards. I have supported HAZOP preparation, managed discipline interfaces and driven construction planning improvements on major assets with ExxonMobil and Wood PLC across the UAE and Iraq.</p><div class="dpTags"><span>P&amp;ID</span><span>ASME B31.3</span><span>API 650</span><span>HAZOP</span><span>Upstream</span></div></li>
+        <li class="discPanel" id="dp-og"><p>Four years of hands-on oil and gas engineering across upstream, midstream and EPC environments. I have reviewed P&amp;IDs, isometrics and vendor drawings against ASME B31.3, API 650 and ISO standards. I have supported HAZOP preparation, managed discipline interfaces and driven construction planning improvements on major assets with ExxonMobil and Wood PLC across the UAE and Iraq.</p><div class="dpTags"><span>P&amp;ID</span><span>ASME B31.3</span><span>API 650</span><span>HAZOP</span><span>Upstream</span></div></li>
 
         <li class="discItem" data-disc="pc"><span>Project Controls, EVM and CPM</span><span class="da discArrow">+</span></li>
         <li class="discPanel" id="dp-pc"><p>I maintain live project controls frameworks using Earned Value Management and Critical Path Method scheduling in Primavera P6 and MS Project. I track scope, schedule and cost performance simultaneously and produce executive-level KPI reporting across client and contractor organisations. My controls discipline has contributed to 95% on-time delivery rates across all major programmes.</p><div class="dpTags"><span>Primavera P6</span><span>EVM</span><span>CPM</span><span>KPI Reporting</span><span>95% OTD</span></div></li>
@@ -3605,7 +3380,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
     </div>
     <div class="qStatDivider"></div>
     <div class="qStat">
-      <div class="qStatNum" id="qNum2">$50M+</div>
+      <div class="qStatNum" id="qNum2">£20M+</div>
       <div class="qStatLabel">Portfolio Value</div>
     </div>
   </div>
@@ -3667,7 +3442,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
         <div class="sCell"><span class="sIcon">◉</span><div class="sName">Renewables and ESG</div><div class="sDetail">Solar PV feasibility, heat recovery analysis, ESG roadmaps and net-zero decarbonisation strategies I have taken from concept to client bid.</div></div>
         <div class="sCell"><span class="sIcon">◈</span><div class="sName">Engineering Design</div><div class="sDetail">FEED and detailed design across oil and gas systems. P&amp;IDs, HAZOP, ASME B31.3, API 650 and ATEX compliance.</div></div>
         <div class="sCell"><span class="sIcon">▣</span><div class="sName">Digital and Analytics</div><div class="sDetail">Power BI, Python, SQL, MATLAB, SAP, Maximo, ACONEX. SolidWorks, AutoCAD, ANSYS and CREO.</div></div>
-        <div class="sCell"><span class="sIcon">⚙</span><div class="sName">Project Controls</div><div class="sDetail">Primavera P6, MS Project, EVM and CPM scheduling across the full project lifecycle, from initiation and planning through execution, commissioning and handover.</div></div>
+        <div class="sCell"><span class="sIcon">⚙</span><div class="sName">Project Management (Full Project Lifecycle)</div><div class="sDetail">Primavera P6, MS Project, EVM, CPM and PRINCE2 across the full project lifecycle — from initiation and planning through execution, commissioning and handover. Change control, risk registers and stakeholder management.</div></div>
       </div>
 
       <div class="radarWrap">
@@ -3918,6 +3693,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
           <span class="ptag h">ExxonMobil</span><span class="ptag h">FEED</span><span class="ptag">HAZOP</span><span class="ptag">P&amp;ID</span><span class="ptag">ASME B31.3</span>
         </div>
         <button class="projCaseBtn" data-case="exxon">View Case Study <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="projReveal"><div class="projRevealNum">100%</div><div class="projRevealLabel">On Budget · Q4 2021 On-Time Startup</div></div>
       </div>
       
         </div>
@@ -4217,8 +3993,8 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
       <div class="lpTitle">Project Engineer · Engineering Consultant</div>
       <div class="lpLine"></div>
       <div class="lpStats">
-        <div class="lpStat"><div class="lpStatNum">5+</div><div class="lpStatLabel">Years Exp.</div></div>
-        <div class="lpStat"><div class="lpStatNum">$50M+</div><div class="lpStatLabel">Portfolio</div></div>
+        <div class="lpStat"><div class="lpStatNum">4+</div><div class="lpStatLabel">Years Exp.</div></div>
+        <div class="lpStat"><div class="lpStatNum">£20M+</div><div class="lpStatLabel">Portfolio</div></div>
         <div class="lpStat"><div class="lpStatNum">5</div><div class="lpStatLabel">Memberships</div></div>
       </div>
     </div>
@@ -4308,7 +4084,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
     <div class="cr-line">IRENA Renewable Energy Methodologies</div>
 
     <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.2em;color:rgba(240,237,232,1);margin:3rem 0 2.5rem">Professional Memberships</div>
-    <div class="cr-line">AMIMechE · Institution of Mechanical Engineers · 80718683</div>
+    <div class="cr-line">Associate Member of IMechE · Institution of Mechanical Engineers · 80718683</div>
     <div class="cr-line">M-IEEE · Institute of Electrical &amp; Electronics Engineers · 99829680</div>
     <div class="cr-line">M-IET · Institution of Engineering &amp; Technology · 1101164162</div>
     <div class="cr-line">M-ASME · American Society of Mechanical Engineers · 000103758093</div>
@@ -4519,8 +4295,12 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
     masterGain.gain.setValueAtTime(masterGain.gain.value, audioCtx.currentTime);
     masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration);
     setTimeout(() => {
-      audioNodes.forEach(n => { try { n.stop ? n.stop() : n.disconnect(); } catch(e){} });
-      try { audioCtx.close(); } catch(e){}
+      audioNodes.forEach(n => {
+        try { if (n.stop) n.stop(0); } catch(e) {}
+        try { n.disconnect(); } catch(e) {}
+      });
+      audioNodes.length = 0;
+      try { audioCtx.close(); } catch(e) {}
     }, duration * 1000 + 100);
   }
   // ────────────────────────────────────────────────────
@@ -4539,10 +4319,34 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
   function skipColdOpen() {
     if (done) return;
     done = true;
-    fadeOutAudio(1.5);
-    co.style.transition = 'opacity .5s ease';
+
+    // ── Remove all gesture listeners immediately ───────────────
+    co.removeEventListener('click', _startExperience);
+    document.removeEventListener('keydown', _onKeydown);
+
+    // ── Smooth audio fade-out ──────────────────────────────────
+    if (audioCtx && masterGain) {
+      masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      masterGain.gain.setValueAtTime(masterGain.gain.value, audioCtx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.0);
+      setTimeout(() => {
+        audioNodes.forEach(n => {
+          try { if (n.stop) n.stop(0); } catch(e) {}
+          try { n.disconnect(); } catch(e) {}
+        });
+        audioNodes.length = 0;
+        try { audioCtx.close(); } catch(e) {}
+      }, 1100);
+    }
+
+    // ── Fade out cold open visuals immediately ─────────────────
+    co.style.transition = 'opacity .6s ease';
     co.style.opacity = '0';
-    setTimeout(() => { co.style.display = 'none'; document.body.style.overflow = ''; }, 500);
+    // Hide completely and restore scroll after fade
+    setTimeout(() => {
+      co.style.display = 'none';
+      document.body.style.overflow = '';
+    }, 650);
   }
   window.skipColdOpen = skipColdOpen;
 
@@ -4631,6 +4435,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
     requestAnimationFrame(() => { div.style.opacity='1'; div.style.transform='none'; });
     const chars = text.split('');
     function next() {
+      if (done) return;  // abort character typing if skip pressed
       if (i < chars.length) {
         div.textContent += chars[i++];
         setTimeout(next, 28 + Math.random() * 18);
@@ -4641,6 +4446,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
 
   let lineIndex = 0;
   function showNextLine() {
+    if (done) return;  // stop if skip was pressed mid-sequence
     if (lineIndex >= lines.length) {
       // All lines typed, pause then reveal name + credentials
       setTimeout(() => {
@@ -4777,7 +4583,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
   // Sequence now starts via _startExperience() when user clicks Enable Sound
   // Safety fallback — never block site for more than 25s
   setTimeout(() => {
-    if (!_sequenceStarted) _startExperience();
+    if (!_sequenceStarted) skipColdOpen();
   }, 25000);
 })();
 </script>
@@ -5197,7 +5003,7 @@ body.light-mode .roiBreakItem { border-color:rgba(0,0,0,.08); }
   <div class="ringCard">
     <button class="ringClose" id="ringClose">✕ Close</button>
     <canvas id="ringCanvas" width="200" height="200"></canvas>
-    <div class="ringSkillName" id="ringSkillName">Project Controls</div>
+    <div class="ringSkillName" id="ringSkillName">Project Management (Full Project Lifecycle)</div>
     <div class="ringSkillDesc" id="ringSkillDesc">Primavera P6, MS Project, EVM and CPM scheduling across the full project lifecycle.</div>
   </div>
 </div>
@@ -5975,37 +5781,7 @@ document.addEventListener('contextmenu', e => {
 // ENHANCEMENT 2, DARK / LIGHT MODE TOGGLE
 // ══════════════════════════════════════════════════════════════════
 (function() {
-  const toggle = document.getElementById('themeToggle');
-  const wipe = document.getElementById('modeWipe');
-  let isLight = false;
-
-  // Check saved preference
-  if (localStorage.getItem('sbTheme') === 'light') {
-    document.body.classList.add('light-mode');
-    isLight = true;
-    const lbl = document.getElementById('tmLabel');
-    if (lbl) lbl.textContent = 'LIGHT';
-  }
-
-  toggle.addEventListener('click', e => {
-    const rect = toggle.getBoundingClientRect();
-    const cx = rect.left + rect.width/2;
-    const cy = rect.top + rect.height/2;
-
-    wipe.style.setProperty('--wx', cx + 'px');
-    wipe.style.setProperty('--wy', cy + 'px');
-    wipe.classList.add('wiping');
-
-    setTimeout(() => {
-      isLight = !isLight;
-      document.body.classList.toggle('light-mode', isLight);
-      localStorage.setItem('sbTheme', isLight ? 'light' : 'dark');
-      wipe.classList.remove('wiping');
-      const lbl = document.getElementById('tmLabel');
-      if (lbl) lbl.textContent = isLight ? 'LIGHT' : 'DARK';
-    }, 250);
-  });
-})();
+  })();
 
 
 
@@ -6451,10 +6227,12 @@ document.addEventListener('contextmenu', e => {
   if (!pillRow) return;
 
   const pillData = [
-    { text:'PRINCE2 Certified',    lit:true  },
-    { text:'Six Sigma Black Belt', lit:true  },
-    { text:'MSc Brunel University',lit:false },
-    { text:'AMIMechE',             lit:false },
+    { text:'PRINCE2 Certified',                    lit:true },
+    { text:'Six Sigma Black Belt',                 lit:true },
+    { text:'McKinsey Forward',                     lit:true },
+    { text:'MSc Engineering Management',           lit:true },
+    { text:'BEng. (Hons) Mechanical Engineering',  lit:true },
+    { text:'Associate Member of IMechE',            lit:true },
   ];
 
   let pillIndex = 0;
@@ -6544,10 +6322,11 @@ document.addEventListener('contextmenu', e => {
   const ctx = canvas.getContext('2d');
 
   const skillDetails = [
-    { name:'Project Controls', pct:95, desc:'Primavera P6, MS Project, EVM and CPM scheduling across the full project lifecycle.' },
-    { name:'Engineering Design', pct:90, desc:'FEED and detailed design. P&IDs, HAZOP, ASME B31.3, API 650 and ATEX compliance.' },
-    { name:'Renewables & ESG', pct:85, desc:'Solar PV feasibility, heat recovery analysis, ESG roadmaps and net-zero strategies.' },
-    { name:'Digital & Analytics', pct:80, desc:'Power BI, Python, SQL, MATLAB, SAP, Maximo, SolidWorks, AutoCAD, ANSYS.' },
+    // Order matches sCell HTML: Renewables, Engineering Design, Digital, Project Management
+    { name:'Renewables & ESG', pct:78, desc:'Solar PV feasibility, heat recovery analysis, ESG roadmaps and net-zero decarbonisation strategies taken from concept to client bid.' },
+    { name:'Engineering Design', pct:84, desc:'FEED and detailed design across oil and gas systems. P&IDs, HAZOP, ASME B31.3, API 650 and ATEX compliance.' },
+    { name:'Digital & Analytics', pct:80, desc:'Power BI, Python, SQL, MATLAB, SAP, Maximo, ACONEX. SolidWorks, AutoCAD, ANSYS and CREO.' },
+    { name:'Project Management (Full Project Lifecycle)', pct:88, desc:'Primavera P6, MS Project, EVM, CPM and PRINCE2 across the full lifecycle — initiation, planning, execution, commissioning and handover. Change control, risk registers and stakeholder management.' },
   ];
 
   document.querySelectorAll('.sCell').forEach((cell, i) => {
@@ -6780,8 +6559,6 @@ document.addEventListener('contextmenu', e => {
     });
 
     // Theme toggle
-    document.getElementById('themeToggle')?.addEventListener('click', playToggle);
-
     // Section dots
     document.querySelectorAll('.sDot').forEach(el => {
       el.addEventListener('click', playNav);
@@ -7004,47 +6781,278 @@ document.addEventListener('contextmenu', e => {
     if (matrixAnim) { clearInterval(matrixAnim); matrixAnim = null; }
   }
 
-  // ── FIREWORKS ────────────────────────────────────────────────
+  // ── CELEBRATION BURST — text particles + rockets + amber trails ──
   function launchFireworks(duration = 3000) {
     const canvas = document.getElementById('eeFireworks');
     if (!canvas) return;
     canvas.classList.add('show');
-    canvas.width = window.innerWidth;
+    canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
     const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
     const particles = [];
-    function spawn() {
-      const x = 100 + Math.random() * (canvas.width, 200);
-      const y = 50 + Math.random() * (canvas.height * 0.5);
-      for (let i = 0; i < 60; i++) {
-        const angle = (Math.PI * 2 * i) / 60;
-        const speed = 2 + Math.random() * 5;
-        const hue = Math.random() > 0.5 ? '#E8820C' : '#F5A623';
-        particles.push({ x, y, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed, life:1, color:hue, size: 2+Math.random()*2 });
+
+    // Engineering phrases that burst out of each explosion
+    const WORDS = [
+      'DELIVERED', 'ON TIME', 'ON BUDGET', 'ZERO LTIs',
+      '95%', '£20M+', 'PRINCE2', 'EPC', 'FEED → START-UP',
+      'SAIF', 'BUILT IT', 'NO EXCUSES', '11% CAPEX ↓',
+      'COMMISSIONED', 'NET ZERO', 'SIX SIGMA', '65 PERSONNEL',
+      'EXXONMOBIL', 'WOOD PLC', 'DUBAI', 'IRAQ', 'LONDON',
+      '★', '◆', '▲', '●',
+    ];
+    const COLORS = ['#E8820C','#F5A623','#FFD166','#f0ede8','#4ade80','#38bdf8','#E8820C','#F5A623'];
+
+    // Particle types: dot, text, ring, rocket
+    function spawnBurst(cx, cy) {
+      const word   = WORDS[Math.floor(Math.random() * WORDS.length)];
+      const color  = COLORS[Math.floor(Math.random() * COLORS.length)];
+      const count  = 28 + Math.floor(Math.random() * 20);
+
+      // Classic dot sparks
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count;
+        const speed = 1.5 + Math.random() * 6;
+        particles.push({
+          type:'dot', x:cx, y:cy,
+          vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed,
+          life:1, decay: 0.012 + Math.random()*0.01,
+          color: COLORS[Math.floor(Math.random()*COLORS.length)],
+          size: 2 + Math.random() * 3,
+        });
+      }
+
+      // 1–2 text particles burst outward
+      const textCount = 1 + Math.floor(Math.random() * 2);
+      for (let t = 0; t < textCount; t++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 0.8 + Math.random() * 2.2;
+        particles.push({
+          type:'text',
+          text: WORDS[Math.floor(Math.random() * WORDS.length)],
+          x:cx, y:cy,
+          vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed - 1,
+          life:1, decay: 0.008 + Math.random()*0.006,
+          color: color,
+          fontSize: 9 + Math.floor(Math.random() * 10),
+          rotation: (Math.random() - 0.5) * 0.4,
+          rotSpeed: (Math.random() - 0.5) * 0.04,
+        });
+      }
+
+      // Expanding amber ring
+      particles.push({
+        type:'ring', x:cx, y:cy,
+        radius:0, maxRadius: 60 + Math.random()*60,
+        life:1, decay:0.022,
+        color: Math.random() > 0.5 ? '#E8820C' : '#F5A623',
+      });
+
+      // Trail sparks (long streaks)
+      for (let s = 0; s < 8; s++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 3 + Math.random() * 7;
+        particles.push({
+          type:'trail', x:cx, y:cy,
+          vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed,
+          life:1, decay: 0.02 + Math.random()*0.015,
+          color: COLORS[Math.floor(Math.random()*COLORS.length)],
+          history:[],
+        });
       }
     }
-    let spawnTimer = 0;
+
+    // Rockets that fly up and burst
+    function spawnRocket() {
+      const x = W * 0.1 + Math.random() * W * 0.8;
+      particles.push({
+        type:'rocket',
+        x, y: H + 10,
+        vx: (Math.random()-0.5) * 2,
+        vy: -(8 + Math.random() * 6),
+        targetY: H * 0.1 + Math.random() * H * 0.45,
+        life:1, decay:0, burst:false,
+        color:'#F5A623',
+        trail:[],
+      });
+    }
+
+    // Big centred text flash
+    function spawnBigText() {
+      const phrases = ['SAIF BADAWY','£20M DELIVERED','ZERO EXCUSES','ON TIME·ON BUDGET','BUILT FROM SCRATCH'];
+      particles.push({
+        type:'bigtext',
+        text: phrases[Math.floor(Math.random()*phrases.length)],
+        x: W/2, y: H * (0.3 + Math.random()*0.3),
+        life:1, decay:0.008,
+        color:'#E8820C',
+        scale:0,
+      });
+    }
+
+    let frame = 0;
+    let rafId;
+
     function animFW() {
-      ctx.fillStyle = 'rgba(7,7,7,0.15)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      for (let i = particles.length-1; i>=0; i--) {
+      ctx.fillStyle = 'rgba(7,7,7,0.18)';
+      ctx.fillRect(0, 0, W, H);
+
+      // Spawn rockets
+      if (frame % 22 === 0) spawnRocket();
+      // Burst big text occasionally
+      if (frame % 90 === 45) spawnBigText();
+
+      for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
-        p.x += p.vx; p.y += p.vy; p.vy += 0.08; p.vx *= 0.98; p.life -= 0.016;
-        if (p.life <= 0) { particles.splice(i,1); continue; }
-        ctx.globalAlpha = p.life;
-        ctx.fillStyle = p.color;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI*2);
-        ctx.fill();
+
+        if (p.type === 'dot') {
+          p.x  += p.vx; p.y  += p.vy;
+          p.vy += 0.09; p.vx *= 0.97;
+          p.life -= p.decay;
+          if (p.life <= 0) { particles.splice(i,1); continue; }
+          ctx.globalAlpha = p.life;
+          ctx.fillStyle   = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI*2);
+          ctx.fill();
+        }
+
+        else if (p.type === 'text') {
+          p.x  += p.vx; p.y  += p.vy;
+          p.vy += 0.04; p.vx *= 0.98;
+          p.rotation += p.rotSpeed;
+          p.life -= p.decay;
+          if (p.life <= 0) { particles.splice(i,1); continue; }
+          ctx.save();
+          ctx.globalAlpha = Math.min(1, p.life * 1.8);
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rotation);
+          ctx.font = `bold ${p.fontSize}px 'JetBrains Mono', monospace`;
+          ctx.fillStyle  = p.color;
+          ctx.textAlign  = 'center';
+          ctx.textBaseline = 'middle';
+          // Subtle glow
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur  = 8;
+          ctx.fillText(p.text, 0, 0);
+          ctx.shadowBlur = 0;
+          ctx.restore();
+        }
+
+        else if (p.type === 'ring') {
+          p.radius += (p.maxRadius - p.radius) * 0.12;
+          p.life   -= p.decay;
+          if (p.life <= 0) { particles.splice(i,1); continue; }
+          ctx.globalAlpha = p.life * 0.6;
+          ctx.strokeStyle = p.color;
+          ctx.lineWidth   = 2 * p.life;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2);
+          ctx.stroke();
+        }
+
+        else if (p.type === 'trail') {
+          p.history.push({x:p.x, y:p.y});
+          if (p.history.length > 12) p.history.shift();
+          p.x  += p.vx; p.y  += p.vy;
+          p.vy += 0.12; p.vx *= 0.97;
+          p.life -= p.decay;
+          if (p.life <= 0) { particles.splice(i,1); continue; }
+          if (p.history.length > 1) {
+            ctx.globalAlpha = p.life * 0.7;
+            ctx.strokeStyle = p.color;
+            ctx.lineWidth   = 1.5 * p.life;
+            ctx.beginPath();
+            ctx.moveTo(p.history[0].x, p.history[0].y);
+            for (let h = 1; h < p.history.length; h++) ctx.lineTo(p.history[h].x, p.history[h].y);
+            ctx.stroke();
+          }
+          ctx.globalAlpha = p.life;
+          ctx.fillStyle   = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2*p.life, 0, Math.PI*2);
+          ctx.fill();
+        }
+
+        else if (p.type === 'rocket') {
+          p.trail.push({x:p.x, y:p.y});
+          if (p.trail.length > 18) p.trail.shift();
+          p.x += p.vx; p.y += p.vy;
+          p.vy += 0.25; // gravity pulling it back
+          // Draw rocket trail
+          if (p.trail.length > 1) {
+            for (let t = 1; t < p.trail.length; t++) {
+              const alpha = (t / p.trail.length) * 0.7;
+              ctx.globalAlpha = alpha;
+              ctx.strokeStyle = '#F5A623';
+              ctx.lineWidth   = 1.5;
+              ctx.beginPath();
+              ctx.moveTo(p.trail[t-1].x, p.trail[t-1].y);
+              ctx.lineTo(p.trail[t].x,   p.trail[t].y);
+              ctx.stroke();
+            }
+          }
+          // Draw rocket tip
+          ctx.globalAlpha = 1;
+          ctx.fillStyle   = '#fff';
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
+          ctx.fill();
+          // Burst when it reaches target height
+          if (p.y <= p.targetY && !p.burst) {
+            p.burst = true;
+            spawnBurst(p.x, p.y);
+            particles.splice(i, 1);
+            continue;
+          }
+          // Remove if off screen
+          if (p.y > H + 50) { particles.splice(i,1); continue; }
+        }
+
+        else if (p.type === 'bigtext') {
+          p.scale = Math.min(1, p.scale + 0.06);
+          p.life -= p.decay;
+          if (p.life <= 0) { particles.splice(i,1); continue; }
+          const alpha = p.life < 0.3 ? p.life / 0.3 : Math.min(1, p.scale * 2);
+          ctx.save();
+          ctx.globalAlpha = alpha * 0.85;
+          ctx.translate(p.x, p.y);
+          ctx.scale(p.scale, p.scale);
+          ctx.font         = "bold 42px 'Bebas Neue', sans-serif";
+          ctx.textAlign    = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.letterSpacing = '0.12em';
+          // Outline
+          ctx.strokeStyle  = p.color;
+          ctx.lineWidth    = 3;
+          ctx.shadowColor  = p.color;
+          ctx.shadowBlur   = 30;
+          ctx.strokeText(p.text, 0, 0);
+          // Fill
+          ctx.fillStyle    = '#f0ede8';
+          ctx.shadowBlur   = 0;
+          ctx.fillText(p.text, 0, 0);
+          ctx.restore();
+        }
       }
+
       ctx.globalAlpha = 1;
-      spawnTimer++;
-      if (spawnTimer % 30 === 0) spawn();
-      if (particles.length > 0 || spawnTimer < duration/16) requestAnimationFrame(animFW);
-      else canvas.classList.remove('show');
+      frame++;
+
+      if (frame < duration / 16 || particles.length > 0) {
+        rafId = requestAnimationFrame(animFW);
+      } else {
+        canvas.classList.remove('show');
+      }
     }
-    spawn(); spawn();
+
+    spawnRocket(); spawnRocket();
     animFW();
-    setTimeout(() => { canvas.classList.remove('show'); }, duration + 500);
+    setTimeout(() => {
+      cancelAnimationFrame(rafId);
+      canvas.classList.remove('show');
+      ctx.clearRect(0, 0, W, H);
+    }, duration + 800);
   }
 
   // ── TYPEWRITER QUOTE BOX ─────────────────────────────────────
@@ -7474,14 +7482,14 @@ document.addEventListener('contextmenu', e => {
   const KB = {
     greeting: [
       "Hey, good to have you here. 👋 I'm Saif — Project Engineer based in London, passionate about energy, infrastructure and the technology that's reshaping both. By day I manage complex engineering programmes. By night, building things like this website is my way of staying sharp on the digital side. What would you like to know?",
-      "Hi there! I'm Saif Badawy. Five years delivering capital projects across oil and gas, EPC and renewables — and genuinely obsessed with where engineering meets technology. Whether you're here to explore my work or figure out if I'm the right fit, ask me anything. I'm happy to talk. 🚀",
+      "Hi there! I'm Saif Badawy. Four years delivering capital projects across oil and gas, EPC and renewables — and genuinely obsessed with where engineering meets technology. Whether you're here to explore my work or figure out if I'm the right fit, ask me anything. I'm happy to talk. 🚀",
       "Hello and welcome. 🙌 I'm Saif, a Project Engineer who believes the best engineers today need to speak two languages: the language of steel and the language of data. This whole website was built by me from scratch, which probably tells you something. What's on your mind?"
     ],
     epc: "EPC delivery is at the core of what I do. 💪 At <strong>Wood PLC</strong> I coordinated over <strong>65 site personnel</strong> across Dubai and Basra, drove an <strong>11% CAPEX reduction</strong> through competitive tendering and held <strong>95% on-time delivery</strong> throughout. I'm comfortable across the full EPC lifecycle: FEED, detailed design, construction, commissioning and handover. The trick is never treating these as separate phases, they're one continuous system.",
     exxon: "The ExxonMobil project is probably the standout of my career so far. 🏆 A <strong>$10–$25M upstream energy asset</strong> spanning the UAE and Iraq, I led multidisciplinary integration of mechanical, structural and civil systems from FEED through to execution. Reviewed P&IDs, isometrics and vendor drawings against <strong>ASME B31.3 and API 650</strong>, supported HAZOP, resolved cross-discipline design conflicts. And despite a global pandemic, we hit <strong>successful startup in Q4 2021 — on time and on budget</strong>. That one still means a lot. 🎯",
     renewable: "Renewables is where I genuinely believe the most interesting work is happening right now. 🌱 Through my independent work I've been managing Solar PV feasibility, FEED coordination and ESG decarbonisation strategies across the UK and Europe. Two of my technical submissions were <strong>shortlisted for green infrastructure funding</strong>. My BEng dissertation was a net-zero retrofit strategy for a Dubai commercial building, solar PV, biogas integration, a fully NPV-positive business case. That work has since become the live foundation of my consulting approach.",
     skills: "Across the full engineering spectrum this is where I sit: 🛠️<br><br>• <strong>Project Lifecycle Management</strong> from initiation to commissioning, 88%<br>• <strong>EPC and EPCM Delivery</strong>, 86%<br>• <strong>Oil and Gas Engineering</strong> including P&IDs, HAZOP, ASME, 84%<br>• <strong>Stakeholder Management</strong>, 82%<br>• <strong>Risk and Change Control</strong>, 83%<br>• <strong>Renewable Energy and ESG</strong>, 78%<br>• <strong>AI and Digital Transformation</strong>, 74%<br><br>Digital toolkit: Primavera P6, MS Project, AutoCAD, Python, Power BI. And yes, I built this whole website myself. That counts for something. 😄",
-    certifications: "Here is my full credentials picture: 🎓<br><br>✅ <strong>PRINCE2 Practitioner</strong>, Project Management<br>✅ <strong>Lean Six Sigma Black Belt</strong><br>✅ <strong>McKinsey Forward Programme</strong><br>🔄 <strong>LEED Green Associate</strong>, In progress<br>🔄 <strong>PMP</strong>, In progress<br><br>Professional memberships: AMIMechE · M-IEEE · M-IET · M-ASME · Engineers Australia. Five institutions across three continents — I take the professional development side seriously.",
+    certifications: "Here is my full credentials picture: 🎓<br><br>✅ <strong>PRINCE2 Practitioner</strong>, Project Management<br>✅ <strong>Lean Six Sigma Black Belt</strong><br>✅ <strong>McKinsey Forward Programme</strong><br>🔄 <strong>LEED Green Associate</strong>, In progress<br>🔄 <strong>PMP</strong>, In progress<br><br>Professional memberships: AMIMechE (Associate Member of IMechE) · M-IEEE · M-IET · M-ASME · Engineers Australia. Five institutions across three continents — I take the professional development side seriously.",
     education: "The academic foundation: 📚<br><br>🎓 <strong>MSc Engineering Management</strong>, Brunel University London<br>🎓 <strong>BEng (Hons) Mechanical Engineering</strong>, University of Wollongong, Australia<br><br>I chose these degrees deliberately to bridge technical depth with strategic leadership. One teaches you how to build things. The other teaches you how to build organisations that build things.",
     location: "Based in <strong>London, West London (W4)</strong> 🇬🇧 and genuinely open to relocation. I have lived and worked across the <strong>UK, UAE, Iraq and Australia</strong>, the Gulf feels like a second home at this point. Current consulting work spans UK, EU and the Middle East. Trilingual: <strong>English C2, Arabic C2, French C1</strong>. That combination has been genuinely useful on international programmes. 🌍",
     contact: "Best ways to reach me: 📬<br><br>📧 <strong>saifehabbadawy@gmail.com</strong><br>💼 LinkedIn is in the contact section below, I'm active on there<br><br>I'm always open to interesting project conversations, collaboration or just a good engineering discussion. Let's talk.",
@@ -7489,7 +7497,7 @@ document.addEventListener('contextmenu', e => {
     hazop: "Yes, HAZOP is very much part of my toolkit. ⚙️ At ExxonMobil I supported HAZOP preparation and reviewed P&IDs and isometrics against <strong>ASME B31.3 and API 650</strong>. Strong grasp of systematic hazard identification and risk mitigation across design documentation. It is one of those disciplines where precision really matters, you do not want to discover gaps at commissioning.",
     sixsigma: "Certified <strong>Lean Six Sigma Black Belt</strong> and I have actually used it — not just framed the certificate. 🖤 Most recently I applied DMAIC methodology to cut approval cycle times by <strong>30%</strong> on renewable energy consulting engagements. The McKinsey Forward Programme reinforced a lot of the analytical frameworks I had already been applying in the field.",
     wood: "At <strong>Wood PLC</strong> in 2022 I worked as Project Engineer on EPC programmes across Dubai and Basra. 🔧 The numbers that matter: <strong>65 site personnel</strong> coordinated, <strong>11% CAPEX reduction</strong> through competitive tendering and structured supplier evaluation, <strong>95% on-time delivery</strong> maintained, full HSE and COSHH governance throughout. What I am most proud of is that we kept the programme controls credible the whole way through, no fiction in the schedule.",
-    portfolio: "The project portfolio covers over <strong>$50M in asset value</strong> delivered across my career. 💰 Upstream oil and gas, EPC civil and mechanical works, renewable energy feasibility, across four countries and three industry verticals. And then there is this website, which I built from scratch as a personal project to stay sharp on the digital side. Different kind of delivery, same mindset.",
+    portfolio: "The project portfolio covers over <strong>£20M in asset value</strong> delivered across my career. 💰 Upstream oil and gas, EPC civil and mechanical works, renewable energy feasibility, across four countries and three industry verticals. And then there is this website, which I built from scratch as a personal project to stay sharp on the digital side. Different kind of delivery, same mindset.",
     availability: "Currently consulting independently and very much open to the right next engagement. 📋 Whether that is a project engineering role, a full-time position or a contract, if the challenge is interesting and the team is serious, I want to hear about it. Reach me at saifehabbadawy@gmail.com.",
     ai: "AI and IT consulting is genuinely something I am passionate about, and this website is probably the clearest demonstration of that. 🤖 I built this entire portfolio from scratch, the 3D genome visualisation, the ROI calculator, the tailored 90-day plan generator, the cinematic intro, the commute calculator, and the chatbot you are talking to right now. All coded by me, using the Claude API and Web Audio API. It started as a weekend project and turned into something I am genuinely proud of. On the professional side I have been building AI prompt frameworks for engineering PM workflows, mapping manual processes to automation opportunities and advising clients on where AI augmentation makes sense in safety-critical environments. I believe the engineers who thrive in the next decade are the ones who can speak both languages, the language of steel and the language of data. That is where I am positioning myself.",
     fun: "Outside of engineering and building websites? Football ⚽, a lot of travel ✈️ and genuinely enjoying the fact that I have lived across Australia, UAE and the UK. Three countries, three languages, completely different cultures, it makes you adaptable in ways that are hard to teach in a classroom. What else would you like to know?",
@@ -7674,14 +7682,14 @@ document.addEventListener('contextmenu', e => {
   // ── BOOKING CARD ──────────────────────────────────────────────────────
   window.makeBookingCard = function makeBookingCard() {
     const card = document.createElement('div');
-    card.style.cssText = 'margin-top:.5rem;background:rgba(232,130,12,0.04);border:1px solid rgba(232,130,12,0.2);border-left:2px solid var(--accent);padding:.85rem 1rem;max-width:100%';
+    card.style.cssText = 'margin-top:.5rem;background:rgba(232,130,12,0.04);border:1px solid rgba(232,130,12,0.2);border-left:2px solid var(--accent);padding:1.25rem 1.25rem;max-width:100%';
 
     const label = document.createElement('div');
-    label.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.48rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,130,12,0.8);margin-bottom:.7rem";
+    label.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,130,12,0.9);margin-bottom:.85rem";
     label.textContent = '◉ Book a call with Saif';
 
     const desc = document.createElement('div');
-    desc.style.cssText = "font-family:'DM Sans',sans-serif;font-size:.75rem;color:rgba(240,237,232,0.7);line-height:1.6;margin-bottom:.85rem";
+    desc.style.cssText = "font-family:'DM Sans',sans-serif;font-size:.95rem;color:rgba(240,237,232,0.75);line-height:1.65;margin-bottom:1.1rem";
     desc.textContent = 'Pick whichever option works best for you. Saif typically responds within a few hours.';
 
     const options = [
@@ -7692,28 +7700,28 @@ document.addEventListener('contextmenu', e => {
     ];
 
     const grid = document.createElement('div');
-    grid.style.cssText = 'display:flex;flex-direction:column;gap:.4rem';
+    grid.style.cssText = 'display:flex;flex-direction:column;gap:.6rem';
 
     options.forEach(opt => {
       const row = document.createElement('button');
-      row.style.cssText = "display:flex;align-items:center;gap:.75rem;padding:.55rem .75rem;background:var(--s2,#161616);border:1px solid rgba(232,130,12,0.12);color:var(--white,#f0ede8);cursor:pointer;transition:all .2s;text-align:left;width:100%";
-      row.addEventListener('mouseenter', () => { row.style.background = 'rgba(232,130,12,0.07)'; row.style.borderColor = 'rgba(232,130,12,0.35)'; });
-      row.addEventListener('mouseleave', () => { row.style.background = 'var(--s2,#161616)'; row.style.borderColor = 'rgba(232,130,12,0.12)'; });
+      row.style.cssText = "display:flex;align-items:center;gap:1rem;padding:.85rem 1rem;background:var(--s2,#161616);border:1px solid rgba(232,130,12,0.15);color:var(--white,#f0ede8);cursor:pointer;transition:all .2s;text-align:left;width:100%";
+      row.addEventListener('mouseenter', () => { row.style.background = 'rgba(232,130,12,0.09)'; row.style.borderColor = 'rgba(232,130,12,0.45)'; });
+      row.addEventListener('mouseleave', () => { row.style.background = 'var(--s2,#161616)'; row.style.borderColor = 'rgba(232,130,12,0.15)'; });
       row.addEventListener('click', opt.action);
 
       const icon = document.createElement('span');
-      icon.style.cssText = 'font-size:.9rem;flex-shrink:0;width:20px;text-align:center';
+      icon.style.cssText = 'font-size:1.35rem;flex-shrink:0;width:30px;text-align:center';
       icon.textContent = opt.icon;
 
       const info = document.createElement('div');
-      info.style.cssText = 'display:flex;flex-direction:column;gap:.15rem;min-width:0';
+      info.style.cssText = 'display:flex;flex-direction:column;gap:.25rem;min-width:0';
 
       const lbl = document.createElement('div');
-      lbl.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,237,232,1)";
+      lbl.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,1);font-weight:500";
       lbl.textContent = opt.label;
 
       const sub = document.createElement('div');
-      sub.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.42rem;letter-spacing:.08em;color:rgba(232,130,12,0.6)";
+      sub.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.06em;color:rgba(232,130,12,0.7)";
       sub.textContent = opt.sub;
 
       info.appendChild(lbl);
@@ -7722,7 +7730,7 @@ document.addEventListener('contextmenu', e => {
       row.appendChild(info);
 
       const arrow = document.createElement('span');
-      arrow.style.cssText = 'margin-left:auto;font-size:.6rem;color:rgba(232,130,12,0.4);flex-shrink:0';
+      arrow.style.cssText = 'margin-left:auto;font-size:.85rem;color:rgba(232,130,12,0.5);flex-shrink:0';
       arrow.textContent = '→';
       row.appendChild(arrow);
 
@@ -7770,11 +7778,11 @@ document.addEventListener('contextmenu', e => {
     const wrap = document.createElement('div');
 
     const label = document.createElement('div');
-    label.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.48rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,130,12,0.8);margin-bottom:.5rem";
+    label.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,130,12,0.9);margin-bottom:.75rem";
     label.textContent = '◉ Request CV';
 
     const desc = document.createElement('div');
-    desc.style.cssText = "font-family:'DM Sans',sans-serif;font-size:.8rem;color:rgba(240,237,232,0.7);line-height:1.6;margin-bottom:1rem";
+    desc.style.cssText = "font-family:'DM Sans',sans-serif;font-size:.95rem;color:rgba(240,237,232,0.75);line-height:1.65;margin-bottom:1.1rem";
     desc.textContent = 'Enter your email and I will send my CV directly to your inbox within minutes.';
 
     const inp = document.createElement('input');
@@ -8635,32 +8643,61 @@ document.addEventListener('contextmenu', e => {
       <div class="roiSub">Input your project context and see a real estimate of the value Saif would add, in pounds, time saved, and risk avoided. Based on actual delivery track record.</div>
     </div>
     <div class="roiForm">
+      <div class="roiRow">
+        <label class="roiLabel" for="roiCompany">Company Name <span>*</span></label>
+        <input class="roiInput" type="text" id="roiCompany" placeholder="e.g. Shell, Arup, Jacobs, Atkins…" maxlength="80">
+      </div>
       <div class="roiGrid">
         <div class="roiRow">
           <label class="roiLabel" for="roiSector">Project Sector <span>*</span></label>
           <select class="roiSelect" id="roiSector">
             <option value="">Select sector…</option>
             <option value="oilgas">Oil &amp; Gas (Upstream/Downstream)</option>
+            <option value="epc">EPC / EPCM Delivery</option>
             <option value="renewables">Renewable Energy (Solar/Wind)</option>
             <option value="infrastructure">Infrastructure &amp; Civil</option>
-            <option value="epc">EPC / EPCM Delivery</option>
-            <option value="consulting">Engineering Consulting</option>
+            <option value="nuclear">Nuclear &amp; Power Generation</option>
+            <option value="offshore">Offshore &amp; Marine</option>
+            <option value="hydrogen">Hydrogen &amp; CCUS</option>
+            <option value="water">Water &amp; Utilities</option>
+            <option value="mining">Mining &amp; Resources</option>
+            <option value="digital">Digital / AI &amp; Tech</option>
+            <option value="govdef">Government &amp; Defence</option>
+            <option value="consulting">Consulting</option>
           </select>
         </div>
         <div class="roiRow">
           <label class="roiLabel" for="roiRole">Hiring For <span>*</span></label>
           <select class="roiSelect" id="roiRole">
             <option value="">Select role type…</option>
-            <option value="pm">Project Manager</option>
-            <option value="pe">Project Engineer</option>
-            <option value="consultant">Engineering Consultant</option>
-            <option value="controls">Project Controls Lead</option>
-            <option value="esg">Sustainability / ESG Lead</option>
+            <optgroup label="Engineering &amp; Delivery">
+              <option value="pm">Project Manager</option>
+              <option value="spe">Senior Project Engineer</option>
+              <option value="pe">Project Engineer</option>
+              <option value="feed">FEED / Concept Engineer</option>
+              <option value="comm">Commissioning Engineer</option>
+              <option value="pkg">Package / Discipline Manager</option>
+            </optgroup>
+            <optgroup label="Consulting &amp; Controls">
+              <option value="consultant">Engineering Consultant</option>
+              <option value="controls">Project Controls Lead</option>
+              <option value="esg">ESG / Sustainability Lead</option>
+            </optgroup>
+            <optgroup label="AI &amp; Digital">
+              <option value="digital_lead">Digital Transformation Lead</option>
+              <option value="ai_eng">AI Implementation Engineer</option>
+              <option value="data_eng">Data &amp; Analytics Engineer</option>
+            </optgroup>
+            <optgroup label="Business Development">
+              <option value="bid_mgr">Bid &amp; Proposals Manager</option>
+              <option value="tech_sales">Technical Sales / Pre-Sales Engineer</option>
+              <option value="bdm">Business Development Manager</option>
+            </optgroup>
           </select>
         </div>
       </div>
       <div class="roiRow">
-        <label class="roiLabel" for="roiBudget">Project Budget / Portfolio Value</label>
+        <label class="roiLabel" for="roiBudget">Project Budget / Portfolio Value <span>*</span></label>
         <div class="roiSliderWrap">
           <input type="range" class="roiSlider" id="roiBudget" min="1" max="200" value="20" step="1">
           <div class="roiSliderVal" id="roiBudgetVal">£20M</div>
@@ -8668,7 +8705,7 @@ document.addEventListener('contextmenu', e => {
         <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.48rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-top:.25rem"><span>£1M</span><span>£200M+</span></div>
       </div>
       <div class="roiRow">
-        <label class="roiLabel" for="roiDuration">Project Duration (months)</label>
+        <label class="roiLabel" for="roiDuration">Project Duration (months) <span>*</span></label>
         <div class="roiSliderWrap">
           <input type="range" class="roiSlider" id="roiDuration" min="3" max="48" value="12" step="1">
           <div class="roiSliderVal" id="roiDurationVal">12 mo</div>
@@ -8676,15 +8713,22 @@ document.addEventListener('contextmenu', e => {
         <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.48rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-top:.25rem"><span>3 months</span><span>48 months</span></div>
       </div>
       <div class="roiRow">
-        <label class="roiLabel" for="roiChallenge">Primary Challenge</label>
+        <label class="roiLabel" for="roiChallenge">Primary Challenge <span>*</span></label>
         <select class="roiSelect" id="roiChallenge">
-          <option value="">Select challenge…</option>
-          <option value="schedule">Schedule overruns / delays</option>
-          <option value="cost">Cost overruns / budget control</option>
+          <option value="">Select your primary challenge</option>
+          <option value="lifecycle">Full project lifecycle management</option>
+          <option value="schedule">Schedule overrun prevention</option>
+          <option value="cost">Cost overrun / budget pressure</option>
           <option value="stakeholder">Stakeholder alignment</option>
           <option value="risk">Risk management gaps</option>
-          <option value="esg">ESG / sustainability compliance</option>
+          <option value="esg">ESG / regulatory compliance</option>
           <option value="multidisc">Multidisciplinary coordination</option>
+          <option value="contractor">Contractor / supply chain performance</option>
+          <option value="scope">Scope creep / change control</option>
+          <option value="commissioning">Commissioning readiness</option>
+          <option value="procurement">Procurement &amp; CAPEX optimisation</option>
+          <option value="regulatory">Regulatory &amp; permitting delays</option>
+          <option value="digitalroi">AI / digitalisation ROI</option>
         </select>
       </div>
       <button class="roiCalcBtn" id="roiCalcBtn">
@@ -8697,7 +8741,7 @@ document.addEventListener('contextmenu', e => {
       <div class="roiBigGrid">
         <div class="roiBig"><div class="roiBigNum" id="roiSaving">—</div><div class="roiBigLabel">Estimated Cost Saving</div></div>
         <div class="roiBig"><div class="roiBigNum" id="roiTime">—</div><div class="roiBigLabel">Schedule Risk Reduced</div></div>
-        <div class="roiBig"><div class="roiBigNum" id="roiReturn">—</div><div class="roiBigLabel">Estimated ROI Multiple</div></div>
+        <div class="roiBig"><div class="roiBigNum" id="roiReturn">—</div><div class="roiBigLabel">Return on Annual Salary</div></div>
       </div>
       <div class="roiBreakdown" id="roiBreakdown"></div>
       <div class="roiNarrative" id="roiNarrative"></div>
@@ -9109,72 +9153,157 @@ document.addEventListener('contextmenu', e => {
 
   // ROI computation model, based on industry benchmarks + Saif's track record
   function compute() {
-    const sector = document.getElementById('roiSector').value;
-    const role = document.getElementById('roiRole').value;
-    const budget = parseInt(budgetSlider.value);
-    const duration = parseInt(durationSlider.value);
+    const sector    = document.getElementById('roiSector').value;
+    const role      = document.getElementById('roiRole').value;
+    const budget    = parseInt(budgetSlider.value);
+    const duration  = parseInt(durationSlider.value);
     const challenge = document.getElementById('roiChallenge').value;
 
-    if (!sector || !role) {
-      calcBtn.textContent = '⚠ Please select sector and role';
+    const company = document.getElementById('roiCompany') ? document.getElementById('roiCompany').value.trim() : '';
+    if (!sector || !role || !company || !challenge) {
+      calcBtn.textContent = '⚠ Please fill in all required fields';
       setTimeout(() => { calcBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 12 L6 5 L10 8 L14 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Calculate My ROI'; }, 2000);
       return;
     }
 
-    // Base saving rate by challenge type (% of project budget)
+    // ── Challenge rates — sourced from IEA, ScienceDirect, McKinsey, EPC market data ──
     const challengeRates = {
-      schedule: { saving: 0.08, timeReduction: 18, label: 'Schedule overrun prevention' },
-      cost: { saving: 0.11, timeReduction: 10, label: 'Cost overrun avoidance' },
-      stakeholder: { saving: 0.05, timeReduction: 15, label: 'Stakeholder alignment efficiency' },
-      risk: { saving: 0.09, timeReduction: 12, label: 'Risk mitigation value' },
-      esg: { saving: 0.06, timeReduction: 8, label: 'ESG compliance & penalty avoidance' },
-      multidisc: { saving: 0.07, timeReduction: 14, label: 'Multidisciplinary coordination saving' },
-      '': { saving: 0.07, timeReduction: 12, label: 'General programme optimisation' }
+      lifecycle:     { saving:0.10, timeReduction:22, label:'Full project lifecycle management' },
+      schedule:      { saving:0.08, timeReduction:18, label:'Schedule overrun prevention' },
+      cost:          { saving:0.11, timeReduction:10, label:'Cost overrun avoidance (IEA/ScienceDirect: avg 18% O&G overrun)' },
+      stakeholder:   { saving:0.05, timeReduction:15, label:'Stakeholder alignment efficiency' },
+      risk:          { saving:0.09, timeReduction:12, label:'Risk mitigation value' },
+      esg:           { saving:0.06, timeReduction:8,  label:'ESG compliance & penalty avoidance' },
+      multidisc:     { saving:0.07, timeReduction:14, label:'Multidisciplinary coordination saving' },
+      contractor:    { saving:0.07, timeReduction:11, label:'Contractor / supply chain performance (EPC: 32% delay impact)' },
+      scope:         { saving:0.06, timeReduction:13, label:'Scope creep & change control' },
+      commissioning: { saving:0.09, timeReduction:16, label:'Commissioning readiness optimisation' },
+      procurement:   { saving:0.08, timeReduction:9,  label:'Procurement & CAPEX optimisation (McKinsey capex benchmarks)' },
+      regulatory:    { saving:0.05, timeReduction:20, label:'Regulatory & permitting delay reduction' },
+      digitalroi:    { saving:0.06, timeReduction:8,  label:'AI / digitalisation ROI uplift' },
+      '':            { saving:0.07, timeReduction:12, label:'General programme optimisation' },
     };
 
-    // Sector multipliers (based on typical industry cost of delay/failure)
-    const sectorMult = { oilgas:1.3, renewables:1.1, infrastructure:1.2, epc:1.25, consulting:0.9 };
-    const roleMult = { pm:1.1, pe:1.0, consultant:1.05, controls:1.15, esg:0.95 };
+    // ── Sector saving multipliers — based on industry cost-of-delay benchmarks ──
+    const sectorMult = {
+      oilgas:1.30, epc:1.25, nuclear:1.35, offshore:1.30, mining:1.20,
+      infrastructure:1.20, hydrogen:1.15, govdef:1.10, renewables:1.10,
+      water:1.05, digital:0.95, consulting:0.90,
+    };
 
-    const cr = challengeRates[challenge] || challengeRates[''];
-    const sm = sectorMult[sector] || 1.0;
-    const rm = roleMult[role] || 1.0;
+    // ── Annual salary model — sourced from ITJobsWatch 2025, Hays, Leafr ──
+    const baseAnnualSalary = {
+      pm:           79000,  // ITJobsWatch: PM median £525/day × 250 days ÷ 1.65 (contract→perm adj)
+      spe:          68000,  // Senior PE: £450/day market estimate
+      pe:           49000,  // ITJobsWatch: Project Engineer median £325/day
+      feed:         60000,  // FEED Engineer: £400/day market estimate
+      comm:         57000,  // Commissioning Engineer: £380/day
+      pkg:          71000,  // Package Manager: £475/day
+      consultant:   65000,  // Engineering Consultant: £400–£450/day (Hays 2025)
+      controls:     63000,  // Project Controls Lead: £420/day
+      esg:          60000,  // ESG Lead: £400/day (Leafr 2025 avg)
+      digital_lead: 78000,  // Digital Transformation Lead: £500–£600/day (Hays digital)
+      ai_eng:       72000,  // AI Implementation Engineer: £450–£550/day
+      data_eng:     65000,  // Data & Analytics Engineer: £400–£500/day (ITJobsWatch)
+      bid_mgr:      62000,  // Bid & Proposals Manager: £375–£450/day
+      tech_sales:   58000,  // Technical Sales Engineer: £350–£425/day
+      bdm:          68000,  // Business Development Manager: £400–£500/day
+    };
 
-    const rawSaving = budget * cr.saving * sm * rm;
-    const savingM = rawSaving >= 1 ? rawSaving.toFixed(1) + 'M' : Math.round(rawSaving * 1000) + 'K';
+    // ── Sector salary uplift — oil & gas / nuclear premium; consulting lower ──
+    const sectorSalAdj = {
+      oilgas:1.12, epc:1.10, nuclear:1.15, offshore:1.14, mining:1.10,
+      infrastructure:1.07, hydrogen:1.08, govdef:1.05, renewables:1.04,
+      water:1.03, digital:0.98, consulting:0.96,
+    };
+
+    const cr  = challengeRates[challenge] || challengeRates[''];
+    const sm  = sectorMult[sector]  || 1.0;
+    const sal = baseAnnualSalary[role] || 63000;
+    const adj = sectorSalAdj[sector]   || 1.0;
+
+    const rawSaving    = budget * cr.saving * sm;
+    const savingM      = rawSaving >= 1 ? rawSaving.toFixed(1) + 'M' : Math.round(rawSaving * 1000) + 'K';
     const timeReduction = Math.round(cr.timeReduction * (duration / 12));
-    const roiMultiple = ((rawSaving / (budget * 0.015)) ).toFixed(1); // vs typical PM cost
+    const annualSalary  = Math.round(sal * adj / 1000) * 1000;
+    const salaryStr     = '£' + Math.round(annualSalary / 1000) + 'K / year';
+    const roiMultiple   = (rawSaving * 1000000 / annualSalary).toFixed(1);
 
-    // Hire cost assumption: ~1.5% of project budget as all-in staff cost
-    const hireCost = budget * 0.015;
-    const hireCostStr = hireCost >= 1 ? '£' + hireCost.toFixed(1) + 'M' : '£' + Math.round(hireCost * 1000) + 'K';
-
-    // Build breakdown rows
+    // ── Breakdown rows ────────────────────────────────────────────────────────
     const breakdownData = [
-      { key: 'Project Budget / Portfolio Value', val: `£${budget >= 200 ? '200M+' : budget + 'M'}`, cls: '' },
-      { key: 'Primary Saving Driver', val: cr.label, cls: '' },
-      { key: 'Estimated Cost Saving', val: '£' + savingM, cls: 'amber' },
-      { key: 'Schedule Risk Reduction', val: `~${timeReduction} days`, cls: 'pos' },
-      { key: 'Estimated Hire Cost (all-in)', val: hireCostStr, cls: '' },
-      { key: 'Delivery Track Record', val: '95% OTD', cls: 'pos' },
-      { key: 'Portfolio Value Managed', val: '$50M+', cls: 'pos' },
+      { key: 'Company',                                                  val: company,                                       cls: '' },
+      { key: 'Project Budget / Portfolio Value',                        val: `£${budget >= 200 ? '200M+' : budget + 'M'}`,  cls: '' },
+      { key: 'Primary Saving Driver',                                   val: cr.label.split(' (')[0],                       cls: '' },
+      { key: 'Estimated Cost Saving',                                   val: '£' + savingM,                                 cls: 'amber' },
+      { key: 'Schedule Risk Reduction',                                 val: `~${timeReduction} days`,                      cls: 'pos' },
+      { key: "Saif's Estimated Annual Salary||(Negotiable · Excl. bonuses & add-ons)", val: salaryStr,                     cls: '' },
+      { key: 'Delivery Track Record',                                   val: '95% On-Time Delivery',                        cls: 'pos' },
+      { key: 'Portfolio Value Managed',                                 val: '£20M+',                                       cls: 'pos' },
     ];
 
-    // Narrative
-    const sectorNames = { oilgas:'oil & gas', renewables:'renewable energy', infrastructure:'infrastructure', epc:'EPC/EPCM', consulting:'consulting' };
-    const roleNames = { pm:'Project Manager', pe:'Project Engineer', consultant:'Engineering Consultant', controls:'Project Controls Lead', esg:'Sustainability Lead' };
-    const narrative = `For a <strong>£${budget >= 200 ? '200M+' : budget + 'M'} ${sectorNames[sector] || 'engineering'} programme</strong> over ${duration} months, bringing Saif in as ${roleNames[role] || 'project lead'} is projected to save <strong>£${savingM}</strong>, primarily through ${cr.label.toLowerCase()}. With a 95% on-time delivery record and $50M+ portfolio track record, the risk-adjusted ROI on this hire is strong. These estimates are conservative and based on McKinsey and IEA benchmarks for ${sectorNames[sector] || 'engineering'} sector project failure rates.`;
+    // ── Role and sector display names ─────────────────────────────────────────
+    const sectorNames = {
+      oilgas:'oil & gas', epc:'EPC/EPCM', renewables:'renewable energy',
+      infrastructure:'infrastructure', nuclear:'nuclear & power',
+      offshore:'offshore & marine', hydrogen:'hydrogen & CCUS',
+      water:'water & utilities', mining:'mining & resources',
+      digital:'digital / AI', govdef:'government & defence', consulting:'consulting',
+    };
+    const roleNames = {
+      pm:'Project Manager', spe:'Senior Project Engineer', pe:'Project Engineer',
+      feed:'FEED / Concept Engineer', comm:'Commissioning Engineer',
+      pkg:'Package / Discipline Manager', consultant:'Engineering Consultant',
+      controls:'Project Controls Lead', esg:'ESG / Sustainability Lead',
+      digital_lead:'Digital Transformation Lead', ai_eng:'AI Implementation Engineer',
+      data_eng:'Data & Analytics Engineer', bid_mgr:'Bid & Proposals Manager',
+      tech_sales:'Technical Sales Engineer', bdm:'Business Development Manager',
+    };
+
+    const narrative = `For <strong>${company}</strong>, a <strong>£${budget >= 200 ? '200M+' : budget + 'M'} ${sectorNames[sector] || 'engineering'} programme</strong> over ${duration} months, bringing Saif in as ${roleNames[role] || 'project lead'} is projected to save <strong>£${savingM}</strong>, primarily through ${cr.label.split(' (')[0].toLowerCase()}. At an estimated annual salary of <strong>${salaryStr}</strong> — negotiable and excluding bonuses or add-ons — the return on this hire is clear and well above industry norms. Saving rates based on IEA, McKinsey, and ScienceDirect benchmarks for ${sectorNames[sector] || 'engineering'} project performance. Salary benchmarks sourced from ITJobsWatch 2025, Hays, and Leafr market data.`;
 
     // Render
     document.getElementById('roiSaving').textContent = '£' + savingM;
     document.getElementById('roiTime').textContent = '~' + timeReduction + ' days';
     document.getElementById('roiReturn').textContent = roiMultiple + 'x';
 
-    document.getElementById('roiBreakdown').innerHTML = breakdownData.map(r =>
-      `<div class="roiBreakItem"><span class="roiBreakKey">${r.key}</span><span class="roiBreakVal ${r.cls}">${r.val}</span></div>`
-    ).join('');
+    document.getElementById('roiBreakdown').innerHTML = breakdownData.map(r => {
+      const keyLines = r.key.split('||');
+      const keyHtml = keyLines.length > 1
+        ? `${keyLines[0]}<br><span style="font-size:.48rem;letter-spacing:.06em;color:rgba(240,237,232,0.45);font-style:italic">${keyLines[1]}</span>`
+        : r.key;
+      return `<div class="roiBreakItem"><span class="roiBreakKey">${keyHtml}</span><span class="roiBreakVal ${r.cls}">${r.val}</span></div>`;
+    }).join('');
 
     document.getElementById('roiNarrative').innerHTML = narrative;
+
+    // ── Silent email notification to Saif (with location) ───────────────
+    (function() {
+      const _payload = {
+        company:     company,
+        sector:      (document.getElementById('roiSector').options[document.getElementById('roiSector').selectedIndex] || {}).text || sector,
+        role:        roleNames[role] || role,
+        challenge:   cr.label.split(' (')[0],
+        budget:      budget >= 200 ? '£200M+' : '£' + budget + 'M',
+        duration:    duration + ' months',
+        saving:      '£' + savingM,
+        time_saving: '~' + timeReduction + ' days',
+        salary:      salaryStr,
+        roi_multiple: roiMultiple + 'x',
+        timestamp:   new Date().toLocaleString('en-GB'),
+        location:    'Fetching…',
+      };
+      // Silently fetch city + country from ipapi.co, then send
+      fetch('https://ipapi.co/json/')
+        .then(r => r.json())
+        .then(geo => {
+          _payload.location = [geo.city, geo.region, geo.country_name].filter(Boolean).join(', ');
+        })
+        .catch(() => { _payload.location = 'Unknown'; })
+        .finally(() => {
+          emailjs.send('service_4c6752b', 'template_roi01', _payload).catch(() => {});
+        });
+    })();
+    // ─────────────────────────────────────────────────────────────────────
 
     const results = document.getElementById('roiResults');
     results.classList.add('show');
@@ -9182,6 +9311,133 @@ document.addEventListener('contextmenu', e => {
   }
 
   calcBtn.addEventListener('click', compute);
+})();
+</script>
+
+<script>
+// ══ MEMBERSHIP CREDENTIAL DOWNLOAD MODAL ══════════════════════════════════
+(function() {
+
+  // ── Membership data — swap in real PDF URLs when available ──────────────
+  const MEMBERSHIPS = {
+    imech: {
+      title:  'Associate Member of IMechE',
+      sub:    'Institution of Mechanical Engineers',
+      desc:   'Certificate of Associate Membership with the Institution of Mechanical Engineers (IMechE), the UK\u2019s leading professional engineering body. Elected 12 February 2025.',
+      pdfs: [
+        { label: 'AMIMechE Certificate — Feb 2025', pdf: 'https://raw.githubusercontent.com/l0new0lf17/saifbadawy/main/Saif_Badawy_AMIMechE.pdf', filename: 'Saif_Badawy_AMIMechE.pdf' },
+      ],
+    },
+    ieee: {
+      title:  'M-IEEE',
+      sub:    'Institute of Electrical and Electronics Engineers',
+      desc:   'IEEE Membership certificate \u2014 the world\u2019s largest technical professional organisation dedicated to advancing technology.',
+      pdfs: [
+        { label: '2024 Certificate of IEEE Membership', pdf: 'https://raw.githubusercontent.com/l0new0lf17/saifbadawy/main/Saif_Badawy_IEEE_Membership_2024.pdf', filename: 'Saif_Badawy_IEEE_Membership_2024.pdf' },
+        { label: 'IEEE Young Professionals Certificate', pdf: 'https://raw.githubusercontent.com/l0new0lf17/saifbadawy/main/Saif_Badawy_IEEE_YoungProfessionals.pdf', filename: 'Saif_Badawy_IEEE_YoungProfessionals.pdf' },
+      ],
+    },
+    iet: null,  // No certificate PDF available
+    asme: {
+      title:  'M-ASME',
+      sub:    'American Society of Mechanical Engineers',
+      desc:   'ASME Membership certificate \u2014 the global professional community for mechanical engineers, setting standards across 180+ countries. Elected 2023.',
+      pdfs: [
+        { label: 'ASME Membership Certificate — 2023', pdf: 'https://raw.githubusercontent.com/l0new0lf17/saifbadawy/main/Saif_Badawy_ASME_Membership.pdf', filename: 'Saif_Badawy_ASME_Membership.pdf' },
+      ],
+    },
+    engaus: null,  // No certificate PDF available
+  };
+
+  let _currentMem = null;
+
+  // ── Wire click handlers to each memCard ──────────────────────────────────
+  // Only cards with a non-null MEMBERSHIPS entry get a click handler
+  const keys = ['imech','ieee','iet','asme','engaus'];
+  document.querySelectorAll('.memCard').forEach((card, i) => {
+    const key = keys[i];
+    const mem = MEMBERSHIPS[key];
+    if (!mem) {
+      // No PDF available — leave as display-only, remove pointer cursor
+      card.style.cursor = 'default';
+      return;
+    }
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => openMemDl(key));
+    // Subtle indicator that card is clickable — add a small download hint
+    const hint = document.createElement('div');
+    hint.style.cssText = "font-family:var(--mono);font-size:.38rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,130,12,0.45);margin-top:.25rem;transition:color .2s";
+    hint.textContent = '↓ download certificate';
+    card.appendChild(hint);
+    card.addEventListener('mouseenter', () => { hint.style.color = 'rgba(232,130,12,0.85)'; });
+    card.addEventListener('mouseleave', () => { hint.style.color = 'rgba(232,130,12,0.45)'; });
+  });
+
+  const DL_SVG = '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v8M5 7l3 3 3-3M3 13h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function openMemDl(key) {
+    const m = MEMBERSHIPS[key];
+    if (!m) return;
+    _currentMem = m;
+    document.getElementById('memDlTitle').textContent = m.title;
+    document.getElementById('memDlSub').textContent   = m.sub;
+    document.getElementById('memDlDesc').textContent  = m.desc;
+
+    // Build download button(s)
+    const btnsEl = document.getElementById('memDlBtns');
+    btnsEl.innerHTML = '';
+    const files = m.pdfs || [{ label: 'Download Certificate / Credential', pdf: m.pdf, filename: m.filename }];
+    files.forEach((file, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'memDlBtn' + (i > 0 ? ' secondary' : '');
+      btn.innerHTML = DL_SVG + ' ' + file.label.toUpperCase();
+      btn.addEventListener('click', () => triggerDownload(file));
+      btnsEl.appendChild(btn);
+    });
+
+    document.getElementById('memDlOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function triggerDownload(file) {
+    if (!file || !file.pdf) return;
+    if (file.pdf.startsWith('PENDING')) {
+      const btns = document.querySelectorAll('.memDlBtn');
+      btns.forEach(b => {
+        const orig = b.innerHTML;
+        b.textContent = 'Certificate coming soon — check back shortly';
+        b.style.opacity = '0.7';
+        setTimeout(() => { b.innerHTML = orig; b.style.opacity = ''; }, 3000);
+      });
+      return;
+    }
+    const a = document.createElement('a');
+    a.href     = file.pdf;
+    a.download = file.filename;
+    a.target   = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  window.closememDl = function() {
+    document.getElementById('memDlOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(() => { _currentMem = null; }, 400);
+  };
+
+  window.triggerMemDownload = function() {};
+
+  // Close on overlay click or Escape
+  document.getElementById('memDlOverlay').addEventListener('click', function(e) {
+    if (e.target === this) window.closememDl();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('memDlOverlay').classList.contains('open')) {
+      window.closememDl();
+    }
+  });
+
 })();
 </script>
 
@@ -9204,7 +9460,7 @@ document.addEventListener('contextmenu', e => {
       {w:'Week 3',t:'<b>Financial model stress-test:</b> challenge the business case assumptions, tariff, yield, capex contingency and IRR sensitivity under downside scenarios.'},
       {w:'Week 4',t:'<b>Renewables readiness brief:</b> structured assessment of technical, commercial and regulatory risk with clear recommendations. Issued before day 30.'},
     ],kpis:['Resource data validated','Permitting register complete','Financial model stress-tested','Readiness brief issued']},
-    oil:{theme:'Understand the asset. Validate the engineering baseline.',desc:'Five years in oil and gas means knowing exactly where to look first.',items:[
+    oil:{theme:'Understand the asset. Validate the engineering baseline.',desc:'Four years in oil and gas means knowing exactly where to look first.',items:[
       {w:'Week 1',t:'<b>P&ID and document review:</b> audit existing P&IDs, isometrics and vendor drawings against ASME B31.3 and API 650. Every non-conformance logged.'},
       {w:'Week 2',t:'<b>HAZOP status check:</b> validate that all HAZOP recommendations have been actioned and closed. Any open items become priority one from day one.'},
       {w:'Week 3',t:'<b>Schedule and cost baseline review:</b> validate the CPM baseline and cost forecast against actual progress and committed spend to date.'},
@@ -10379,10 +10635,10 @@ document.addEventListener('contextmenu', e => {
 </script>
 <!-- ══ BOOKING MODAL ══ -->
 <div id="bookingOverlay" onclick="if(event.target===this)closeBookingModal()" style="position:fixed;inset:0;z-index:9500;background:rgba(7,7,7,0.88);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease;padding:2rem">
-  <div id="bookingModal" style="background:var(--s1,#111);border:1px solid rgba(232,130,12,0.25);max-width:460px;width:100%;position:relative;transform:translateY(24px) scale(0.97);transition:transform .4s cubic-bezier(.16,1,.3,1)">
+  <div id="bookingModal" style="background:var(--s1,#111);border:1px solid rgba(232,130,12,0.25);max-width:560px;width:100%;position:relative;transform:translateY(24px) scale(0.97);transition:transform .4s cubic-bezier(.16,1,.3,1)">
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#E8820C,#F5A623,transparent)"></div>
     <button onclick="closeBookingModal()" style="position:absolute;top:.75rem;right:.75rem;font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.1em;color:rgba(240,237,232,0.5);background:none;border:1px solid rgba(255,255,255,0.1);padding:.25rem .7rem;cursor:pointer;text-transform:uppercase;transition:color .2s,border-color .2s">Close ✕</button>
-    <div id="bookingModalInner" style="padding:1.75rem 1.75rem 1.5rem"></div>
+    <div id="bookingModalInner" style="padding:2rem 2rem 1.75rem"></div>
   </div>
 </div>
 
@@ -10424,6 +10680,18 @@ document.addEventListener('contextmenu', e => {
     </div>
     <!-- Options container -->
     <div id="hireMeOptions" style="padding:1.25rem 1.75rem 1.75rem"></div>
+  </div>
+</div>
+
+<!-- MEMBERSHIP CREDENTIAL DOWNLOAD MODAL -->
+<div id="memDlOverlay">
+  <div id="memDlCard">
+    <button id="memDlClose" onclick="closememDl()">✕ CLOSE</button>
+    <div id="memDlLabel">◉ Professional Membership</div>
+    <div id="memDlTitle"></div>
+    <div id="memDlSub"></div>
+    <div id="memDlDesc"></div>
+    <div id="memDlBtns"></div>
   </div>
 </div>
 </body>
