@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview — Vehicle Diagnostic Simulator in Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#070707;--off:#0d0d0d;--s1:#111;--s2:#181818;--s3:#202020;
+  --border:rgba(255,255,255,0.06);--borderB:rgba(255,255,255,0.13);
+  --accent:#E8820C;--accent2:#F5A623;--accentDim:rgba(232,130,12,0.1);
+  --white:#f0ede8;--muted:rgba(240,237,232,0.65);
+  --bebas:'Bebas Neue',sans-serif;--sans:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth;background:var(--black)}
+body{background:var(--black);color:var(--white);font-family:var(--sans);font-weight:300;overflow-x:hidden}
+
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.9rem 2.5rem;
+  background:rgba(7,7,7,0.96);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border)
+}
+.logo{font-family:var(--bebas);font-size:1.3rem;letter-spacing:.2em;color:var(--white);display:flex;align-items:center;gap:.6rem}
+.logoDot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 2.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.previewBadge{
+  font-family:var(--mono);font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;
+  padding:.4rem 1rem;border:1px solid rgba(232,130,12,.4);color:var(--accent);
+  background:rgba(232,130,12,.06)
+}
+
+.page{max-width:1200px;margin:0 auto;padding:5rem 3rem 8rem}
+
+/* Section header */
+.secEye{display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem}
+.secNum{font-family:var(--mono);font-size:.55rem;color:var(--accent);letter-spacing:.1em}
+.secLine{width:36px;height:1px;background:rgba(232,130,12,.4)}
+.secTag{font-family:var(--mono);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--white)}
+.secTitle{font-family:var(--bebas);font-size:clamp(2.4rem,4vw,3.5rem);letter-spacing:.04em;line-height:.95;margin-bottom:3rem}
+
+/* Experience text card — sits above the sim, mirrors portfolio style */
+.expMeta{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:.4rem}
+.expRole{font-family:var(--bebas);font-size:2rem;letter-spacing:.05em}
+.expOrg{font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent)}
+.expLoc{font-family:var(--mono);font-size:.55rem;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem}
+.expBody{font-size:.9rem;line-height:1.85;color:var(--white);max-width:760px;margin-bottom:1.2rem}
+.expTags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:2.5rem}
+.etag{font-family:var(--mono);font-size:.48rem;letter-spacing:.1em;padding:.25rem .6rem;border:1px solid var(--border);color:var(--muted);text-transform:uppercase}
+.etag.accent{border-color:rgba(232,130,12,.4);color:var(--accent2);background:rgba(232,130,12,.05)}
+
+/* ── Full-width simulator block ── */
+.simBlock{
+  border:1px solid rgba(232,130,12,.22);
+  background:#05060d;
+  overflow:hidden
+}
+.simTopBar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.65rem 1.2rem;
+  background:rgba(232,130,12,.04);
+  border-bottom:1px solid rgba(232,130,12,.14)
+}
+.simTopBarL{
+  font-family:var(--mono);font-size:.55rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--accent)
+}
+.simTopBarR{
+  display:flex;align-items:center;gap:.5rem;
+  font-family:var(--mono);font-size:.5rem;letter-spacing:.14em;color:var(--muted)
+}
+.simLive{display:flex;align-items:center;gap:.4rem;color:#6ee7b7}
+.simLiveDot{
+  width:6px;height:6px;border-radius:50%;
+  background:#6ee7b7;box-shadow:0 0 7px #6ee7b7;
+  animation:blink 1.6s infinite
+}
+/* The iframe — full width, tall enough to be spacious */
+.simFrame{
+  width:100%;
+  height:640px;
+  border:none;
+  display:block
+}
+.simFootBar{
+  padding:.65rem 1.2rem;
+  border-top:1px solid var(--border);
+  display:flex;align-items:flex-start;gap:.5rem
+}
+.simFootBar::before{
+  content:'';display:block;width:20px;height:1px;
+  background:rgba(232,130,12,.4);flex-shrink:0;margin-top:.45rem
+}
+.simCaption{
+  font-family:var(--mono);font-size:.5rem;letter-spacing:.1em;
+  color:var(--muted);line-height:1.8
+}
+.simCaption strong{color:var(--white);font-weight:600}
+
+/* ── Preview-only info strip (not on website) ── */
+.previewOnly{
+  margin-top:3rem;
+  padding:1.6rem 2rem;
+  border:1px solid rgba(232,130,12,.2);
+  background:rgba(232,130,12,.03);
+  position:relative
+}
+.previewOnlyLabel{
+  position:absolute;top:-1px;left:1.5rem;
+  font-family:var(--mono);font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;
+  background:rgba(232,130,12,.7);color:var(--black);
+  padding:.2rem .6rem
+}
+.previewOnlyTitle{
+  font-family:var(--mono);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1rem;margin-top:.6rem
+}
+.noteRow{
+  display:grid;grid-template-columns:1fr 1fr;gap:.6rem 2rem;
+  margin-bottom:1.5rem
+}
+.noteItem{
+  display:flex;align-items:flex-start;gap:.6rem;
+  font-family:var(--mono);font-size:.5rem;letter-spacing:.08em;line-height:1.65;color:var(--white)
+}
+.noteItem::before{content:'→';color:var(--accent);flex-shrink:0}
+.confirmBtns{display:flex;gap:1rem;align-items:center;margin-top:1.6rem}
+.btnConfirm{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--accent);color:var(--black);
+  font-family:var(--bebas);font-size:.9rem;letter-spacing:.15em;
+  padding:.75rem 1.8rem;border:none;cursor:pointer;
+  transition:background .2s,transform .15s
+}
+.btnConfirm:hover{background:var(--accent2);transform:scale(1.02)}
+.btnReject{
+  font-family:var(--mono);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);background:none;border:1px solid var(--border);
+  padding:.65rem 1.3rem;cursor:pointer;transition:border-color .2s,color .2s
+}
+.btnReject:hover{border-color:var(--borderB);color:var(--white)}
+
+.toast{
+  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(120px);
+  background:var(--accent);color:var(--black);
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  padding:.8rem 2rem;transition:transform .4s cubic-bezier(.2,.8,.2,1);
+  z-index:200;pointer-events:none
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><div class="logoDot"></div>SAIF BADAWY</div>
+  <div style="font-family:var(--mono);font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)">Experience Section · Preview</div>
+  <div class="previewBadge">⬡ PREVIEW MODE</div>
+</nav>
+
+<div class="page">
+
+  <div class="secEye">
+    <span class="secNum">02</span>
+    <div class="secLine"></div>
+    <span class="secTag">Experience</span>
+  </div>
+  <div class="secTitle">Where I've Made<br>a Difference.</div>
+
+  <!-- Experience text (above simulator, same as it appears in portfolio timeline) -->
+  <div class="expOrg">Al Habtoor Engineering</div>
+  <div class="expMeta">
+    <div class="expRole">Engineering Intern</div>
+  </div>
+  <div class="expLoc">Dubai, UAE · 2015</div>
+  <p class="expBody">My first real exposure to engineering in an industrial environment. I contributed to system testing, technical specification development and upgrade framework design, gaining early experience improving operational reliability and reducing downtime across critical systems. This is where my passion for engineering problem-solving first took hold.</p>
+  <div class="expTags">
+    <span class="etag">System Testing</span>
+    <span class="etag">Technical Specs</span>
+    <span class="etag">Reliability</span>
+    <span class="etag accent">Vehicle Diagnostics</span>
+  </div>
+
+  <!-- Full-width simulator -->
+  <div class="simBlock">
+    <div class="simTopBar">
+      <span class="simTopBarL">VEHICLE DIAGNOSTIC SIMULATOR · GT/01</span>
+      <span class="simTopBarR">
+        <span class="simLive"><span class="simLiveDot"></span>SYS · LIVE</span>
+        &nbsp;·&nbsp; REV 04 · 2026
+      </span>
+    </div>
+
+    <iframe
+      class="simFrame"
+      src="vehicle-diagnostic-simulator.html"
+      title="Vehicle Diagnostic Simulator"
+      scrolling="no"
+      allow="autoplay"
+    ></iframe>
+
+    <div class="simFootBar">
+      <div class="simCaption">
+        <strong>Simulation — 3D Vehicle Systems Diagnostic</strong> &nbsp;·&nbsp;
+        Five subsystems verified: Electrical (48V), Fuel System (Direct Injection), Powertrain (V8 Bi-Turbo), Braking (Carbon-Ceramic) and Suspension (Adaptive MagneRide). All systems confirmed operationally nominal. &nbsp;·&nbsp; Drag to rotate · Click label to isolate · Explode view · Interior cockpit available.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PREVIEW-ONLY INFO (not on main website) ── -->
+  <div class="previewOnly">
+    <div class="previewOnlyLabel">For your eyes only — not on website</div>
+    <div class="previewOnlyTitle">Implementation Notes</div>
+    <div class="noteRow">
+      <div class="noteItem">The simulator runs as a self-contained iframe — zero JS conflicts with the main page.</div>
+      <div class="noteItem">The old <code>expViz5</code> canvas + its ~400-line render loop are removed from index.html.</div>
+      <div class="noteItem">Simulator is saved as <strong>vehicle-diagnostic-simulator.html</strong> alongside index.html in your folder.</div>
+      <div class="noteItem">The experience card text layout stays exactly as it is — only the visualisation changes.</div>
+      <div class="noteItem">All other experience visualisations (expViz1–4) remain completely untouched.</div>
+      <div class="noteItem">Caption text updated to match the new GT/01 simulator description.</div>
+    </div>
+    <div class="confirmBtns">
+      <button class="btnConfirm" onclick="doConfirm()">✓ IMPLEMENT ON WEBSITE NOW</button>
+      <button class="btnReject" onclick="doReject()">← ADJUST FIRST</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast">Confirmed — implementing on main website…</div>
+
+<script>
+function doConfirm() {
+  document.getElementById('toast').classList.add('show');
+  setTimeout(() => { document.getElementById('toast').classList.remove('show'); }, 2500);
+  if (window.sendPrompt) window.sendPrompt("Yes it looks great, implement the new vehicle simulator on the website now");
+}
+function doReject() {
+  if (window.sendPrompt) window.sendPrompt("Go back — I want to adjust the vehicle simulator before implementing it on the website");
+}
+</script>
+
+</body>
+</html>

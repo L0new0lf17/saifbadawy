@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notion — Chatbot Transcript Preview</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #1f1f1f;
+  color: #e8e4de;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  font-size: 13px;
+}
+.sidebar {
+  width: 220px;
+  background: #191919;
+  border-right: 1px solid #2a2a2a;
+  flex-shrink: 0;
+  overflow-y: auto;
+  padding: 12px 8px;
+}
+.workspace-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e8e4de;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+.workspace-icon {
+  width: 22px; height: 22px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: white; font-weight: 700;
+}
+.sidebar-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #555;
+  padding: 0 6px;
+  margin-bottom: 6px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 1px;
+}
+.nav-item:hover { background: #252525; color: #ccc; }
+.nav-item.active { background: #2a2a2a; color: #e8e4de; }
+.nav-item.sub { padding-left: 20px; font-size: 11px; color: #666; }
+.nav-item.sub.active { background: #2a2a2a; color: #c084fc; }
+.nav-icon { font-size: 12px; width: 16px; text-align: center; }
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #1f1f1f;
+}
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  padding: 8px 28px 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+.vt-btn {
+  padding: 5px 12px;
+  font-size: 11px;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.vt-btn.active { color: #e8e4de; border-bottom-color: #c084fc; }
+.db-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.db-btn {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #666;
+  background: #252525;
+  border: 1px solid #2a2a2a;
+  cursor: pointer;
+}
+.db-btn:hover { background: #2e2e2e; color: #aaa; }
+.db-count { margin-left: auto; font-size: 11px; color: #555; }
+.table-wrap { flex: 1; overflow-y: auto; padding: 16px 28px; }
+.db-table { width: 100%; border-collapse: collapse; }
+.db-table th {
+  text-align: left;
+  font-size: 11px;
+  color: #555;
+  padding: 6px 10px;
+  border-bottom: 1px solid #2a2a2a;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.db-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #222;
+  font-size: 12px;
+  color: #ccc;
+  vertical-align: middle;
+}
+.db-table tr:hover td { background: #252525; cursor: pointer; }
+.row-link {
+  font-weight: 500;
+  color: #e8e4de;
+  font-size: 12px;
+}
+.db-table tr:hover .row-link { color: #c084fc; text-decoration: underline; }
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.pill-blue { background: #1e3a5f; color: #60a5fa; }
+.pill-green { background: #0d2b1a; color: #4ade80; }
+.pill-yellow { background: #2b1f00; color: #fbbf24; }
+.pill-purple { background: #1f1040; color: #c084fc; }
+.pill-orange { background: #2b1500; color: #fb923c; }
+.pill-gray { background: #252525; color: #888; }
+
+/* Page view */
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #555;
+  cursor: pointer;
+  padding: 10px 28px;
+  border-bottom: 1px solid #2a2a2a;
+  flex-shrink: 0;
+}
+.back-btn:hover { color: #aaa; }
+.page-outer {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px 28px 60px;
+}
+.page-cover {
+  height: 6px;
+  background: linear-gradient(90deg, #1f1040, #3b82f6, #8b5cf6);
+  border-radius: 0 0 4px 4px;
+  margin-bottom: 24px;
+}
+.page-emoji { font-size: 42px; margin-bottom: 10px; }
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #e8e4de;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.props {
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px 0;
+  margin-bottom: 20px;
+  background: #1a1a1a;
+}
+.prop-row {
+  display: flex;
+  align-items: center;
+  padding: 5px 14px;
+  gap: 12px;
+}
+.prop-row:hover { background: #222; }
+.prop-key {
+  font-size: 11px;
+  color: #555;
+  width: 130px;
+  flex-shrink: 0;
+}
+.prop-val { font-size: 12px; color: #ccc; }
+.session-bar {
+  background: #252525;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.session-stat-val { font-size: 18px; font-weight: 700; color: #e8e4de; }
+.session-stat-label { font-size: 10px; color: #555; margin-top: 2px; }
+.page-divider { height: 1px; background: #2a2a2a; margin: 20px 0; }
+.section-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #444;
+  margin-bottom: 14px;
+}
+.transcript { display: flex; flex-direction: column; gap: 2px; }
+.msg-block {
+  display: flex;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  align-items: flex-start;
+}
+.msg-block:hover { background: #252525; }
+.msg-avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.visitor-avatar { background: #1e3a5f; color: #60a5fa; }
+.ai-avatar { background: #1f1040; color: #c084fc; }
+.msg-inner { flex: 1; }
+.msg-sender { font-size: 10px; font-weight: 600; margin-bottom: 3px; }
+.msg-visitor .msg-sender { color: #60a5fa; }
+.msg-ai .msg-sender { color: #c084fc; }
+.msg-time { font-size: 10px; color: #444; margin-left: 6px; font-weight: 400; }
+.msg-text { font-size: 12px; color: #ccc; line-height: 1.65; }
+.msg-text strong { color: #e8e4de; }
+.msg-text .hl { color: #c084fc; }
+.ts-divider {
+  text-align: center;
+  font-size: 10px;
+  color: #444;
+  padding: 8px 0;
+  letter-spacing: 0.5px;
+}
+.calendly-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #0d2b1a;
+  border: 1px solid #1a4a2a;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 11px;
+  color: #4ade80;
+  margin-top: 8px;
+  cursor: pointer;
+}
+.calendly-chip:hover { background: #132b1f; }
+.ai-notes {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.8;
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 14px 16px;
+  border: 1px solid #2a2a2a;
+}
+.ai-notes strong { color: #aaa; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="workspace-name">
+    <div class="workspace-icon">SB</div>
+    Saif Badawy
+  </div>
+  <div class="sidebar-label">Portfolio System</div>
+  <div class="nav-item"><span class="nav-icon">👤</span> Lead Pipeline</div>
+  <div class="nav-item"><span class="nav-icon">👁</span> Visitor Log</div>
+  <div class="nav-item"><span class="nav-icon">📆</span> Bookings</div>
+  <div class="nav-item"><span class="nav-icon">✅</span> Follow-up Tasks</div>
+  <div class="nav-item"><span class="nav-icon">📋</span> Weekly Digest</div>
+  <div class="nav-item active"><span class="nav-icon">💡</span> Tool Interactions</div>
+  <div class="nav-item sub active"><span class="nav-icon">💬</span> Session #047</div>
+</div>
+
+<!-- Main -->
+<div class="main" id="main-area">
+
+  <!-- TABLE VIEW -->
+  <div id="table-view" style="display:flex;flex-direction:column;height:100%;overflow:hidden;">
+    <div class="view-toggle">
+      <div class="vt-btn active">💬 Chatbot</div>
+      <div class="vt-btn">📊 ROI Calculator</div>
+      <div class="vt-btn">📋 90-Day Plan</div>
+    </div>
+    <div class="table-wrap">
+      <div class="db-toolbar">
+        <div class="db-btn">⚙ Filter</div>
+        <div class="db-btn">↕ Sort: Date ↓</div>
+        <div class="db-count">6 sessions this week</div>
+      </div>
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Session</th>
+            <th>Source</th>
+            <th>Messages</th>
+            <th>Duration</th>
+            <th>First Question</th>
+            <th>Outcome</th>
+            <th>Date/Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr onclick="showPage()">
+            <td><div class="row-link">💬 Session #047</div></td>
+            <td><span class="pill pill-blue">LinkedIn</span></td>
+            <td>8 messages</td>
+            <td>6m 14s</td>
+            <td>"What industries have you worked in?"</td>
+            <td><span class="pill pill-green">Calendly opened</span></td>
+            <td>26 Apr, 14:38</td>
+          </tr>
+          <tr onclick="showPage()">
+            <td><div class="row-link">💬 Session #046</div></td>
+            <td><span class="pill pill-orange">Direct (Family)</span></td>
+            <td>4 messages</td>
+            <td>2m 30s</td>
+            <td>"Are you open to contract roles?"</td>
+            <td><span class="pill pill-gray">Browsed only</span></td>
+            <td>26 Apr, 10:30</td>
+          </tr>
+          <tr onclick="showPage()">
+            <td><div class="row-link">💬 Session #039</div></td>
+            <td><span class="pill pill-blue">LinkedIn</span></td>
+            <td>6 messages</td>
+            <td>4m 52s</td>
+            <td>"What's your day rate?"</td>
+            <td><span class="pill pill-green">Calendly opened</span></td>
+            <td>25 Apr, 15:18</td>
+          </tr>
+          <tr onclick="showPage()">
+            <td><div class="row-link">💬 Session #031</div></td>
+            <td><span class="pill pill-blue">LinkedIn</span></td>
+            <td>3 messages</td>
+            <td>1m 44s</td>
+            <td>"Do you work in the UAE?"</td>
+            <td><span class="pill pill-gray">Left site</span></td>
+            <td>24 Apr, 09:12</td>
+          </tr>
+          <tr onclick="showPage()">
+            <td><div class="row-link">💬 Session #024</div></td>
+            <td><span class="pill pill-orange">Direct (Family)</span></td>
+            <td>10 messages</td>
+            <td>8m 01s</td>
+            <td>"Tell me about ExxonMobil"</td>
+            <td><span class="pill pill-gray">Family — exploring</span></td>
+            <td>23 Apr, 18:44</td>
+          </tr>
+          <tr onclick="showPage()">
+            <td><div class="row-link">💬 Session #018</div></td>
+            <td><span class="pill pill-purple" style="background:#1a1a2b;color:#a78bfa;">Google</span></td>
+            <td>5 messages</td>
+            <td>3m 20s</td>
+            <td>"Are you available immediately?"</td>
+            <td><span class="pill pill-yellow">Contact form sent</span></td>
+            <td>22 Apr, 11:05</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="padding-top:10px;font-size:11px;color:#444;text-align:center;">Click any row to open the full transcript →</div>
+    </div>
+  </div>
+
+  <!-- PAGE VIEW -->
+  <div id="page-view" style="display:none;flex-direction:column;height:100%;overflow:hidden;">
+    <div class="back-btn" onclick="showTable()">← Back to Tool Interactions · Chatbot</div>
+    <div style="flex:1;overflow-y:auto;">
+      <div class="page-outer">
+        <div class="page-cover"></div>
+        <div class="page-emoji">💬</div>
+        <div class="page-title">Session #047 — LinkedIn Visitor</div>
+
+        <div class="props">
+          <div class="prop-row"><div class="prop-key">🕐 Date & Time</div><div class="prop-val">26 Apr 2026 · 14:32 – 14:38</div></div>
+          <div class="prop-row"><div class="prop-key">🌐 Source</div><div class="prop-val"><span class="pill pill-blue">LinkedIn</span></div></div>
+          <div class="prop-row"><div class="prop-key">🌍 Country</div><div class="prop-val">🇬🇧 United Kingdom</div></div>
+          <div class="prop-row"><div class="prop-key">⏱ Duration</div><div class="prop-val">6 minutes 14 seconds</div></div>
+          <div class="prop-row"><div class="prop-key">💬 Messages</div><div class="prop-val">8 total (4 visitor · 4 AI)</div></div>
+          <div class="prop-row"><div class="prop-key">📍 Pages Viewed</div><div class="prop-val">Hero → Experience → Contact</div></div>
+          <div class="prop-row"><div class="prop-key">✅ Outcome</div><div class="prop-val"><span class="pill pill-green">Calendly link opened</span></div></div>
+          <div class="prop-row"><div class="prop-key">⚙ Make.com ops</div><div class="prop-val" style="color:#4ade80;">0 ops used — direct Notion POST</div></div>
+        </div>
+
+        <div class="session-bar">
+          <div class="session-stat"><div class="session-stat-val">4</div><div class="session-stat-label">Questions asked</div></div>
+          <div class="session-stat"><div class="session-stat-val">6m 14s</div><div class="session-stat-label">Time in chat</div></div>
+          <div class="session-stat"><div class="session-stat-val" style="color:#4ade80;">✓</div><div class="session-stat-label">Calendly clicked</div></div>
+          <div class="session-stat"><div class="session-stat-val">🇬🇧</div><div class="session-stat-label">United Kingdom</div></div>
+        </div>
+
+        <div class="page-divider"></div>
+        <div class="section-label">Full Conversation Transcript</div>
+
+        <div class="transcript">
+
+          <div class="ts-divider">14:32 — Visitor opened chatbot</div>
+
+          <div class="msg-block msg-visitor">
+            <div class="msg-avatar visitor-avatar">V</div>
+            <div class="msg-inner">
+              <div class="msg-sender">Visitor <span class="msg-time">14:32</span></div>
+              <div class="msg-text">What industries have you worked in?</div>
+            </div>
+          </div>
+
+          <div class="msg-block msg-ai">
+            <div class="msg-avatar ai-avatar">AI</div>
+            <div class="msg-inner">
+              <div class="msg-sender">Saif (AI) <span class="msg-time">14:32</span></div>
+              <div class="msg-text">Primarily <strong>oil & gas</strong> — both upstream and downstream. My experience spans ExxonMobil operations in Iraq, freelance HSE and risk management consulting across the Gulf, and project management roles on large-scale EPC contracts. I've also worked across <span class="hl">EMEA markets</span> including the UK, UAE, and Saudi Arabia.</div>
+            </div>
+          </div>
+
+          <div class="msg-block msg-visitor">
+            <div class="msg-avatar visitor-avatar">V</div>
+            <div class="msg-inner">
+              <div class="msg-sender">Visitor <span class="msg-time">14:34</span></div>
+              <div class="msg-text">Have you done any work related to risk management on major projects?</div>
+            </div>
+          </div>
+
+          <div class="msg-block msg-ai">
+            <div class="msg-avatar ai-avatar">AI</div>
+            <div class="msg-inner">
+              <div class="msg-sender">Saif (AI) <span class="msg-time">14:34</span></div>
+              <div class="msg-text">Yes — it's one of my core areas. I've led <strong>HAZOP studies</strong>, developed risk registers for multi-million dollar projects, and built mitigation frameworks used across active field operations. At ExxonMobil I was responsible for risk assessment across safety-critical infrastructure. You can also run a <span class="hl">quick ROI estimate</span> using the calculator on the site.</div>
+            </div>
+          </div>
+
+          <div class="ts-divider">14:36</div>
+
+          <div class="msg-block msg-visitor">
+            <div class="msg-avatar visitor-avatar">V</div>
+            <div class="msg-inner">
+              <div class="msg-sender">Visitor <span class="msg-time">14:36</span></div>
+              <div class="msg-text">Are you open to roles in the UK or is it mostly Middle East focused?</div>
+            </div>
+          </div>
+
+          <div class="msg-block msg-ai">
+            <div class="msg-avatar ai-avatar">AI</div>
+            <div class="msg-inner">
+              <div class="msg-sender">Saif (AI) <span class="msg-time">14:36</span></div>
+              <div class="msg-text">I'm currently based in the <strong>UK and actively looking</strong> — so UK roles are the priority right now. I'm also open to EMEA-wide opportunities, including the Gulf region for the right contract. Full-time, contract, or consulting — all on the table.</div>
+            </div>
+          </div>
+
+          <div class="msg-block msg-visitor">
+            <div class="msg-avatar visitor-avatar">V</div>
+            <div class="msg-inner">
+              <div class="msg-sender">Visitor <span class="msg-time">14:37</span></div>
+              <div class="msg-text">What's the best way to reach you?</div>
+            </div>
+          </div>
+
+          <div class="msg-block msg-ai">
+            <div class="msg-avatar ai-avatar">AI</div>
+            <div class="msg-inner">
+              <div class="msg-sender">Saif (AI) <span class="msg-time">14:38</span></div>
+              <div class="msg-text">Best way is to <strong>book a quick call directly</strong> — usually 20 minutes, no pressure. Or if you'd prefer to send details first, the contact form goes straight to me. Either works.</div>
+              <div class="calendly-chip">📅 Book a call — Calendly ↗</div>
+            </div>
+          </div>
+
+          <div class="ts-divider">14:38 — Visitor clicked Calendly link · Session ended</div>
+
+        </div>
+
+        <div class="page-divider"></div>
+        <div class="section-label">Auto-generated Notes</div>
+        <div class="ai-notes">
+          🎯 <strong>High intent visitor.</strong> Came from LinkedIn, asked 4 focused questions about industries, risk management, location, and contact method. Clicked Calendly at end — strong conversion signal.<br><br>
+          💡 <strong>Suggested action:</strong> If no booking appears in 48h, consider checking LinkedIn for a visible profile to follow up directly.
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showPage() {
+  document.getElementById('table-view').style.display = 'none';
+  const pv = document.getElementById('page-view');
+  pv.style.display = 'flex';
+}
+function showTable() {
+  document.getElementById('page-view').style.display = 'none';
+  document.getElementById('table-view').style.display = 'flex';
+}
+</script>
+</body>
+</html>

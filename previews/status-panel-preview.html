@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Status Panel Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black: #07080e;
+    --s1: #0d0f18;
+    --s2: #12141f;
+    --border: rgba(240,237,232,0.08);
+    --accent: #E8820C;
+    --accent2: #F5A623;
+    --white: rgba(240,237,232,1);
+    --muted: rgba(240,237,232,0.45);
+    --bebas: 'Bebas Neue', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  body {
+    background: #07080e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 3rem;
+    font-family: var(--mono);
+  }
+
+  /* ── Context label ── */
+  .context-label {
+    font-family: var(--mono);
+    font-size: .52rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(232,130,12,.5);
+    text-align: center;
+    margin-bottom: .5rem;
+  }
+
+  /* ── The panel ── */
+  .statusPanel {
+    width: 280px;
+    background: var(--s1);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Top scan line animation */
+  .statusPanel::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(232,130,12,.6), transparent);
+    animation: scanLine 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes scanLine {
+    0%   { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  /* Header bar */
+  .spHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .6rem .9rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(232,130,12,.04);
+  }
+  .spHeaderLeft {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .spLiveDot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: livePulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes livePulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,.5); }
+    50%      { box-shadow: 0 0 0 4px rgba(74,222,128,.0); }
+  }
+  .spLiveText {
+    font-family: var(--mono);
+    font-size: .44rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: #4ade80;
+  }
+  .spHeaderRight {
+    font-family: var(--mono);
+    font-size: .42rem;
+    letter-spacing: .14em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* Rows */
+  .spRows {
+    padding: .2rem 0;
+  }
+  .spRow {
+    display: flex;
+    align-items: baseline;
+    gap: .6rem;
+    padding: .55rem .9rem;
+    border-bottom: 1px solid rgba(255,255,255,.03);
+    transition: background .2s;
+    position: relative;
+  }
+  .spRow:last-child { border-bottom: none; }
+  .spRow:hover { background: rgba(232,130,12,.03); }
+  .spRow:hover .spKey { color: rgba(232,130,12,.8); }
+
+  .spKey {
+    font-family: var(--mono);
+    font-size: .44rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(232,130,12,.45);
+    min-width: 72px;
+    flex-shrink: 0;
+    transition: color .2s;
+  }
+  .spDots {
+    flex: 1;
+    border-bottom: 1px dotted rgba(255,255,255,.08);
+    margin-bottom: 3px;
+    min-width: 8px;
+  }
+  .spVal {
+    font-family: var(--mono);
+    font-size: .56rem;
+    letter-spacing: .06em;
+    color: var(--white);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .spVal.accent { color: var(--accent); }
+  .spVal.green  { color: #4ade80; }
+
+  /* Badges inline */
+  .spBadge {
+    display: inline-block;
+    font-size: .4rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .15rem .45rem;
+    border: 1px solid rgba(232,130,12,.25);
+    color: rgba(232,130,12,.7);
+    margin-left: .2rem;
+    vertical-align: middle;
+  }
+  .spBadge.green {
+    border-color: rgba(74,222,128,.25);
+    color: rgba(74,222,128,.8);
+  }
+
+  /* Footer CTA */
+  .spFooter {
+    padding: .7rem .9rem;
+    border-top: 1px solid var(--border);
+    background: rgba(232,130,12,.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .spFooter:hover { background: rgba(232,130,12,.1); }
+  .spFooterText {
+    font-family: var(--mono);
+    font-size: .46rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(232,130,12,.8);
+  }
+  .spFooterArrow {
+    font-size: .7rem;
+    color: rgba(232,130,12,.6);
+    transition: transform .2s;
+  }
+  .spFooter:hover .spFooterArrow { transform: translateX(3px); }
+
+  /* ── Comparison label ── */
+  .compare {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+  }
+  .compareItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+  }
+  .compareTag {
+    font-family: var(--mono);
+    font-size: .48rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    padding: .25rem .8rem;
+    border: 1px solid rgba(255,255,255,.1);
+    color: var(--muted);
+  }
+  .compareTag.new {
+    border-color: rgba(232,130,12,.4);
+    color: rgba(232,130,12,.8);
+    background: rgba(232,130,12,.05);
+  }
+
+  /* Old miniStats for comparison */
+  .miniStats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    width: 280px;
+    border: 1px solid var(--border);
+    opacity: .55;
+  }
+  .mStat {
+    background: #0d0f18;
+    padding: .9rem 1rem .8rem;
+    text-align: left;
+  }
+  .mNum {
+    font-family: var(--bebas);
+    font-size: 1.75rem;
+    color: #E8820C;
+    line-height: 1;
+  }
+  .mLabel {
+    font-family: var(--mono);
+    font-size: .44rem;
+    letter-spacing: .14em;
+    color: rgba(240,237,232,.55);
+    text-transform: uppercase;
+    margin-top: .3rem;
+  }
+
+  /* Confirm/reject buttons */
+  .actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .btnImpl {
+    font-family: var(--bebas);
+    font-size: .9rem;
+    letter-spacing: .15em;
+    padding: .7rem 2rem;
+    background: #E8820C;
+    color: #07080e;
+    border: none;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+  }
+  .btnImpl:hover { background: #F5A623; transform: scale(1.02); }
+  .btnAdj {
+    font-family: var(--mono);
+    font-size: .52rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: .7rem 1.5rem;
+    background: none;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: color .2s, border-color .2s;
+  }
+  .btnAdj:hover { color: var(--white); border-color: rgba(255,255,255,.25); }
+</style>
+</head>
+<body>
+
+<div class="compare">
+
+  <!-- LEFT: Current (faded) -->
+  <div class="compareItem">
+    <div class="compareTag">Current — repeated elsewhere</div>
+    <div class="miniStats">
+      <div class="mStat"><div class="mNum">£20M+</div><div class="mLabel">Portfolio Value</div></div>
+      <div class="mStat"><div class="mNum">65+</div><div class="mLabel">Personnel Led</div></div>
+      <div class="mStat"><div class="mNum">90%</div><div class="mLabel">On-Time Rate</div></div>
+      <div class="mStat"><div class="mNum">4+</div><div class="mLabel">Years Active</div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: New -->
+  <div class="compareItem">
+    <div class="compareTag new">Proposed — Live Status Panel</div>
+    <div class="statusPanel">
+
+      <!-- Header -->
+      <div class="spHeader">
+        <div class="spHeaderLeft">
+          <div class="spLiveDot"></div>
+          <span class="spLiveText">Available Now</span>
+        </div>
+        <span class="spHeaderRight">Profile Status</span>
+      </div>
+
+      <!-- Rows -->
+      <div class="spRows">
+        <div class="spRow">
+          <span class="spKey">Location</span>
+          <span class="spDots"></span>
+          <span class="spVal">London, W4 · UK</span>
+        </div>
+        <div class="spRow">
+          <span class="spKey">Time Zone</span>
+          <span class="spDots"></span>
+          <span class="spVal">GMT+0 / BST</span>
+        </div>
+        <div class="spRow">
+          <span class="spKey">Languages</span>
+          <span class="spDots"></span>
+          <span class="spVal">EN · AR · FR</span>
+        </div>
+        <div class="spRow">
+          <span class="spKey">Response</span>
+          <span class="spDots"></span>
+          <span class="spVal green">Same day</span>
+        </div>
+        <div class="spRow">
+          <span class="spKey">Notice</span>
+          <span class="spDots"></span>
+          <span class="spVal accent">Immediate</span>
+        </div>
+        <div class="spRow">
+          <span class="spKey">Open to</span>
+          <span class="spDots"></span>
+          <span class="spVal">UK · EU · Gulf · MENA</span>
+        </div>
+        <div class="spRow">
+          <span class="spKey">Worked in</span>
+          <span class="spDots"></span>
+          <span class="spVal">4 Countries</span>
+        </div>
+      </div>
+
+      <!-- Footer CTA -->
+      <div class="spFooter" onclick="sendPrompt && sendPrompt('Implement the Live Status Panel')">
+        <span class="spFooterText">Book a call → Let's connect</span>
+        <span class="spFooterArrow">→</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="actions">
+  <button class="btnImpl" onclick="sendPrompt && sendPrompt('Yes implement the Live Status Panel under the headshot')">Implement This</button>
+  <button class="btnAdj" onclick="sendPrompt && sendPrompt('I want to adjust the Status Panel before implementing')">Adjust First</button>
+</div>
+
+</body>
+</html>

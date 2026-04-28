@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>3D Vehicle Sim — Preview v3</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#03030a;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh;font-family:'JetBrains Mono',monospace}
+canvas{display:block;border:1px solid rgba(232,130,12,0.18);box-shadow:0 0 60px rgba(20,40,80,0.5)}
+p{color:rgba(232,130,12,0.5);font-size:11px;margin-top:10px;letter-spacing:.1em}
+</style>
+</head><body>
+<canvas id="c"></canvas>
+<p>PREVIEW v3 — AL HABTOOR MOTORS · DUBAI 2015 · 3D VEHICLE SYSTEMS SIMULATION</p>
+<script>
+var C = document.getElementById('c');
+var ctx = C.getContext('2d');
+var W = C.width = 820, H = C.height = 510;
+var MONO = "'JetBrains Mono','Courier New',monospace";
+var ACC = '#E8820C';
+
+// ─── Camera ────────────────────────────────────────────────────────────────
+var fov = 450, camDist = 7.5, camH = 1.28;
+var angle = 0.62;         // current view angle
+var angleBase = 0.62;     // oscillation centre
+var frame = 0;
+
+function project(x, y, z) {
+  var cA = Math.cos(-angle), sA = Math.sin(-angle);
+  var rx = x*cA - z*sA, rz = x*sA + z*cA;
+  var dz = rz - camDist;
+  if (dz >= -0.01) return null;
+  var sc = fov / (-dz);
+  return { x: W/2 + rx*sc, y: H*0.49 - (y - camH)*sc, scale: sc, z: rz };
+}
+
+// ─── Lighting (world-space) ─────────────────────────────────────────────────
+var LIGHTS = [
+  { d: normalise([0.55, 0.78, 0.35]),  p: 0.74 },   // key: top-right-front
+  { d: normalise([-0.62, 0.42, -0.30]), p: 0.20 },  // fill: left-back
+  { d: normalise([0.05, 0.10, 0.99]),  p: 0.10 }    // front rim
+];
+var AMB = 0.11;
+
+function normalise(v){
+  var l = Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
+  return [v[0]/l, v[1]/l, v[2]/l];
+}
+function dot3(a,b){ return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]; }
+
+function faceNormal(pts){
+  var ax=pts[1][0]-pts[0][0], ay=pts[1][1]-pts[0][1], az=pts[1][2]-pts[0][2];
+  var bx=pts[2][0]-pts[0][0], by=pts[2][1]-pts[0][1], bz=pts[2][2]-pts[0][2];
+  var nx=ay*bz-az*by, ny=az*bx-ax*bz, nz=ax*by-ay*bx;
+  var nl=Math.sqrt(nx*nx+ny*ny+nz*nz);
+  return nl<1e-7 ? [0,1,0] : [nx/nl, ny/nl, nz/nl];
+}
+
+function calcBright(pts){
+  var n = faceNormal(pts);
+  var b = AMB;
+  LIGHTS.forEach(function(li){
+    var d = dot3(n, li.d);
+    // double-sided: near-face full, back-face slightly lit (subsurface)
+    b += (d > 0 ? d : d * 0.12) * li.p;
+  });
+  return Math.min(1.08, Math.max(0, b));
+}
+
+function hexTint(hex, bright, alpha){
+  var r=parseInt(hex.slice(1,3),16),
+      g=parseInt(hex.slice(3,5),16),
+      b=parseInt(hex.slice(5,7),16);
+  r=Math.min(255,Math.round(r*bright));
+  g=Math.min(255,Math.round(g*bright));
+  b=Math.min(255,Math.round(b*bright));
+  return alpha!=null ? 'rgba('+r+','+g+','+b+','+alpha+')' : 'rgb('+r+','+g+','+b+')';
+}
+
+// ─── Car Geometry ───────────────────────────────────────────────────────────
+// colour palette
+var BODY   = '#1e2f50';   // deep navy blue
+var BSIDE  = '#192845';   // side (slightly darker)
+var BDARK  = '#101c30';   // shadow side
+var BHIGH  = '#263d66';   // highlight (hood top, roof edge)
+var ROOF   = '#131d2e';   // dark roof
+var GLASS  = '#2a4a68';   // tinted glass
+var CHROME = '#8890a4';
+var TRIM   = '#0c0c0c';
+var SKIRT  = '#0f0f10';
+var GRILLE = '#090909';
+var HLIGHT = '#d0e4ff';   // headlight white-blue
+var TLIGHT = '#ff1800';   // tail-light red
+var DRL    = '#ffe288';   // daytime running light amber
+
+// key X positions (car length axis)
+var XFN=2.20, XFB=2.06, XHF=1.50, XAP=0.92, XCP=-0.52, XDP=-1.65, XTK=-1.94, XRB=-2.06, XRN=-2.20;
+// key Y positions (height axis)
+var YBT=-0.38, YSL=0.22, YSH=0.46, YWB=0.64, YAT=0.90, YRF=0.92, YTK=0.50;
+// key Z positions (width axis)  – near = positive
+var ZF=0.90, ZR=0.86, ZW=0.82;
+
+function buildCar(){
+  var F = [];
+  function push(col, alpha, pts){ F.push({ col:col, alpha:alpha, pts:pts }); }
+
+  // ── FLOOR ──
+  push(TRIM, null, [[XFB,YBT,-ZF],[XFB,YBT,ZF],[XRB,YBT,ZF],[XRB,YBT,-ZF]]);
+
+  // ── FRONT BUMPER LOWER ──
+  push(TRIM,   null, [[XFB,YBT,-ZF],[XFB,YBT,ZF],[XFB,YSL,ZF],[XFB,YSL,-ZF]]);
+  // bumper upper lip
+  push(BODY,   null, [[XFN,YSL,-ZF+0.05],[XFN,YSL,ZF-0.05],[XFB,YSL+0.06,ZF],[XFB,YSL+0.06,-ZF]]);
+
+  // ── FRONT GRILLE & FASCIA ──
+  push(GRILLE, null, [[XFN,YSL,-0.62],[XFN,YSL,0.62],[XFN,YSH,0.58],[XFN,YSH,-0.58]]);
+  // grille surrounds
+  push(CHROME, null, [[XFN,YSL,-0.62],[XFN,YSL,-0.58],[XFN,YSH,-0.52],[XFN,YSH,-0.56]]);
+  push(CHROME, null, [[XFN,YSL, 0.62],[XFN,YSL, 0.58],[XFN,YSH, 0.52],[XFN,YSH, 0.56]]);
+
+  // ── FRONT FASCIA (sloped front top) ──
+  push(BHIGH,  null, [[XFB,YSL,-ZF],[XFN,YSH,-ZF],[XFN,YSH,ZF],[XFB,YSL,ZF]]);
+
+  // ── HOOD (three panels: near-of-center, far-of-center, near-side, far-side) ──
+  // Hood center crease strip
+  push(BHIGH,  null, [[XFN,YSH,-0.18],[XFN,YSH,0.18],[XHF,YWB,0.16],[XHF,YWB,-0.16]]);
+  // Hood near half
+  push(BODY,   null, [[XFN,YSH,0.18],[XFN,YSH,ZF],[XHF,YWB,ZR],[XHF,YWB,0.16]]);
+  // Hood far half
+  push(BDARK,  null, [[XFN,YSH,-0.18],[XFN,YSH,-ZF],[XHF,YWB,-ZR],[XHF,YWB,-0.16]]);
+  // Hood near scoop lip
+  push(CHROME, null, [[XFN,YSH,ZF-0.04],[XHF,YWB,ZR-0.04],[XHF,YWB,ZR],[XFN,YSH,ZF]]);
+
+  // ── WINDSHIELD ──
+  push(GLASS,  0.68, [[XHF,YWB,-ZR],[XHF,YWB,ZR],[XAP,YAT,ZW],[XAP,YAT,-ZW]]);
+  // A-pillar near
+  push(BDARK,  null, [[XHF,YWB,ZR],[XHF,YSH+0.08,ZF],[XAP,YSH+0.08,ZF],[XAP,YAT,ZW]]);
+  // A-pillar far
+  push(BDARK,  null, [[XHF,YWB,-ZR],[XHF,YSH+0.08,-ZF],[XAP,YSH+0.08,-ZF],[XAP,YAT,-ZW]]);
+
+  // ── ROOF ──
+  push(ROOF,   null, [[XAP,YRF,-ZR],[XAP,YRF,ZR],[XCP,YRF,ZR],[XCP,YRF,-ZR]]);
+  // Roof near edge
+  push(ROOF,   null, [[XAP,YAT,ZW],[XCP,YAT,ZW],[XCP,YRF,ZR],[XAP,YRF,ZR]]);
+  // Roof far edge
+  push(BDARK,  null, [[XAP,YAT,-ZW],[XCP,YAT,-ZW],[XCP,YRF,-ZR],[XAP,YRF,-ZR]]);
+
+  // ── REAR WINDOW ──
+  push(GLASS,  0.62, [[XCP,YAT,-ZW],[XCP,YAT,ZW],[XDP,YTK+0.08,ZW-0.06],[XDP,YTK+0.08,-ZW+0.06]]);
+  // C-pillar near
+  push(BDARK,  null, [[XCP,YAT,ZW],[XDP,YTK+0.08,ZW-0.06],[XDP,YSH,ZF],[XCP,YSH,ZF]]);
+  // C-pillar far
+  push(BDARK,  null, [[XCP,YAT,-ZW],[XDP,YTK+0.08,-ZW+0.06],[XDP,YSH,-ZF],[XCP,YSH,-ZF]]);
+
+  // ── SIDE WINDOWS (near z=+ZF) ──
+  // Front quarter window
+  push(GLASS,  0.60, [[XHF,YWB,ZF],[XAP,YAT,ZW],[XAP,YSH+0.08,ZF]]);
+  // Main side window
+  push(GLASS,  0.62, [[XAP,YAT,ZW],[XCP,YAT,ZW],[XCP,YSH+0.04,ZF],[XAP,YSH+0.08,ZF]]);
+  // Rear quarter window
+  push(GLASS,  0.58, [[XCP,YAT,ZW],[XDP,YTK+0.08,ZF],[XDP,YSH,ZF],[XCP,YSH+0.04,ZF]]);
+
+  // ── SIDE BODY — NEAR (+Z) ──
+  // Lower sill
+  push(BSIDE,  null, [[XFB,YBT,ZF],[XRB,YBT,ZF],[XRB,YSL,ZF],[XFB,YSL,ZF]]);
+  // Upper body
+  push(BSIDE,  null, [[XFB,YSL,ZF],[XRB,YSL,ZF],[XRB,YSH,ZF],[XFB,YSH,ZF]]);
+  // Above shoulder (door tops)
+  push(BSIDE,  null, [[XHF,YSH+0.08,ZF],[XCP,YSH+0.04,ZF],[XCP,YSH,ZF],[XHF,YSH,ZF]]);
+  // Character body line (slight bright stripe at shoulder)
+  push(BHIGH,  null, [[XFB+0.05,YSH,ZF+0.001],[XRB-0.05,YSH,ZF+0.001],[XRB-0.05,YSH+0.03,ZF+0.001],[XFB+0.05,YSH+0.03,ZF+0.001]]);
+
+  // ── SIDE BODY — FAR (-Z) ──
+  push(BDARK,  null, [[XFB,YBT,-ZF],[XRB,YBT,-ZF],[XRB,YSL,-ZF],[XFB,YSL,-ZF]]);
+  push(BDARK,  null, [[XFB,YSL,-ZF],[XRB,YSL,-ZF],[XRB,YSH,-ZF],[XFB,YSH,-ZF]]);
+  push(BDARK,  null, [[XHF,YSH+0.08,-ZF],[XCP,YSH+0.04,-ZF],[XCP,YSH,-ZF],[XHF,YSH,-ZF]]);
+
+  // ── TRUNK LID ──
+  push(BODY,   null, [[XDP,YTK+0.08,-ZW+0.06],[XDP,YTK+0.08,ZW-0.06],[XTK,YTK,ZW-0.12],[XTK,YTK,-ZW+0.12]]);
+  // Trunk deck face
+  push(BDARK,  null, [[XTK,YTK,-ZR+0.08],[XTK,YTK,ZR-0.08],[XTK,YSH,ZF],[XTK,YSH,-ZF]]);
+  // Trunk rear slope to bumper
+  push(BDARK,  null, [[XTK,YSH,-ZF],[XTK,YSH,ZF],[XRB,YSH-0.08,ZF],[XRB,YSH-0.08,-ZF]]);
+  // Spoiler lip
+  push(TRIM,   null, [[XDP,YTK+0.08,-ZW+0.06],[XDP,YTK+0.08,ZW-0.06],[XDP,YTK+0.12,ZW-0.08],[XDP,YTK+0.12,-ZW+0.08]]);
+
+  // ── REAR BUMPER & FASCIA ──
+  push(TRIM,   null, [[XRB,YBT,-ZF],[XRB,YBT,ZF],[XRB,YSL,ZF],[XRB,YSL,-ZF]]);
+  push(BDARK,  null, [[XRB,YSL,-ZF],[XRB,YSL,ZF],[XRB,YSH-0.08,ZF],[XRB,YSH-0.08,-ZF]]);
+  // Rear diffuser
+  push(SKIRT,  null, [[XRN,YBT,-ZF+0.1],[XRN,YBT,ZF-0.1],[XRN,YSL-0.04,ZF-0.12],[XRN,YSL-0.04,-ZF+0.12]]);
+
+  // ── HEADLIGHTS (near + far) ──
+  push(HLIGHT, null, [[XFN,YSL+0.04,0.42],[XFN,YSL+0.04,0.80],[XFN,YSH-0.02,0.78],[XFN,YSH-0.02,0.46]]);
+  push(HLIGHT, null, [[XFN,YSL+0.04,-0.42],[XFN,YSL+0.04,-0.80],[XFN,YSH-0.02,-0.78],[XFN,YSH-0.02,-0.46]]);
+  // DRL strip (near)
+  push(DRL,    null, [[XFN,YSL+0.01,0.34],[XFN,YSL+0.01,0.88],[XFN,YSL+0.05,0.88],[XFN,YSL+0.05,0.34]]);
+  // DRL strip (far)
+  push(DRL,    null, [[XFN,YSL+0.01,-0.34],[XFN,YSL+0.01,-0.88],[XFN,YSL+0.05,-0.88],[XFN,YSL+0.05,-0.34]]);
+
+  // ── TAILLIGHTS ──
+  push(TLIGHT, null, [[XRN,YSL+0.04,0.38],[XRN,YSL+0.04,0.80],[XRN,YSH-0.08,0.78],[XRN,YSH-0.08,0.44]]);
+  push(TLIGHT, null, [[XRN,YSL+0.04,-0.38],[XRN,YSL+0.04,-0.80],[XRN,YSH-0.08,-0.78],[XRN,YSH-0.08,-0.44]]);
+  // rear light bar connecting strip
+  push('#cc2200',null,[[XRN,YSH-0.12,-0.36],[XRN,YSH-0.12,0.36],[XRN,YSH-0.08,0.36],[XRN,YSH-0.08,-0.36]]);
+
+  // ── DOOR MIRROR (near side) ──
+  push(BDARK,  null, [[XHF-0.3,YSH+0.18,ZF+0.04],[XHF-0.3,YSH+0.22,ZF+0.04],[XHF-0.05,YSH+0.22,ZF+0.02],[XHF-0.05,YSH+0.18,ZF+0.02]]);
+  push(CHROME, null, [[XHF-0.3,YSH+0.14,ZF+0.02],[XHF-0.3,YSH+0.24,ZF+0.02],[XHF-0.3,YSH+0.24,ZF+0.12],[XHF-0.3,YSH+0.14,ZF+0.12]]);
+
+  // ── ACCENT LINE ──
+  push(ACC,    null, [[XFB+0.06,YSL+0.01,ZF+0.002],[XRB-0.06,YSL+0.01,ZF+0.002],[XRB-0.06,YSL+0.04,ZF+0.002],[XFB+0.06,YSL+0.04,ZF+0.002]]);
+  // Side skirt (near)
+  push(SKIRT,  null, [[XFB+0.06,YBT,ZF+0.002],[XRB-0.06,YBT,ZF+0.002],[XRB-0.06,YSL,ZF+0.002],[XFB+0.06,YSL,ZF+0.002]]);
+  // Door seam lines (near, slightly raised)
+  push(TRIM,   null, [[XHF-0.02,YSL,ZF+0.001],[XHF-0.02,YSH+0.08,ZF+0.001],[XHF,YSH+0.08,ZF+0.001],[XHF,YSL,ZF+0.001]]);
+  push(TRIM,   null, [[XCP-0.02,YSL,ZF+0.001],[XCP-0.02,YSH+0.04,ZF+0.001],[XCP,YSH+0.04,ZF+0.001],[XCP,YSL,ZF+0.001]]);
+
+  return F;
+}
+
+var CAR = buildCar();
+
+// ─── Wheels ─────────────────────────────────────────────────────────────────
+// [x, y_centre, z, isNear]
+var WHEELS = [
+  [1.28, YBT+0.30, ZF+0.06, true],
+  [1.28, YBT+0.30,-ZF-0.06, false],
+  [-1.28,YBT+0.30, ZF+0.06, true],
+  [-1.28,YBT+0.30,-ZF-0.06, false]
+];
+var wheelRot = 0;
+
+function drawWheel(wx, wy, wz, isNear){
+  var c = project(wx, wy, wz);
+  if (!c) return;
+  var R = c.scale * 0.34;
+  // shadow blob
+  ctx.beginPath();
+  ctx.ellipse(c.x, c.y + R*0.92, R*0.82, R*0.16, 0, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fill();
+  // tyre
+  ctx.beginPath(); ctx.arc(c.x, c.y, R, 0, Math.PI*2);
+  ctx.fillStyle = '#171717'; ctx.fill();
+  if (isNear) {
+    var tg = ctx.createRadialGradient(c.x-R*0.32, c.y-R*0.32, R*0.06, c.x, c.y, R);
+    tg.addColorStop(0, 'rgba(90,90,90,0.35)'); tg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(c.x, c.y, R, 0, Math.PI*2);
+    ctx.fillStyle = tg; ctx.fill();
+  }
+  // inner rim barrel
+  ctx.beginPath(); ctx.arc(c.x, c.y, R*0.81, 0, Math.PI*2);
+  ctx.fillStyle = '#222226'; ctx.fill();
+  // brake disc
+  ctx.beginPath(); ctx.arc(c.x, c.y, R*0.52, 0, Math.PI*2);
+  ctx.fillStyle = '#383840'; ctx.fill();
+  // disc ventilation slots
+  for (var v = 0; v < 10; v++) {
+    var va = wheelRot*0.65 + (v/10)*Math.PI*2;
+    ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(va);
+    ctx.fillStyle = '#262628';
+    ctx.fillRect(R*0.30, -R*0.030, R*0.18, R*0.060);
+    ctx.restore();
+  }
+  // 5 Y-spokes (twin-blade per spoke)
+  for (var s = 0; s < 5; s++) {
+    var sa  = wheelRot + (s/5)*Math.PI*2;
+    var sa1 = sa - 0.16, sa2 = sa + 0.16;
+    // outer edge arc connects the two blades
+    ctx.beginPath();
+    ctx.moveTo(c.x + Math.cos(sa1)*R*0.14, c.y + Math.sin(sa1)*R*0.14);
+    ctx.lineTo(c.x + Math.cos(sa1)*R*0.79, c.y + Math.sin(sa1)*R*0.79);
+    ctx.arc(c.x, c.y, R*0.79, sa1, sa2);
+    ctx.lineTo(c.x + Math.cos(sa2)*R*0.14, c.y + Math.sin(sa2)*R*0.14);
+    ctx.arc(c.x, c.y, R*0.14, sa2, sa1, true);
+    ctx.closePath();
+    var sg = ctx.createLinearGradient(
+      c.x + Math.cos(sa)*R*0.14, c.y + Math.sin(sa)*R*0.14,
+      c.x + Math.cos(sa)*R*0.79, c.y + Math.sin(sa)*R*0.79
+    );
+    sg.addColorStop(0, '#c0c0c8'); sg.addColorStop(0.5, '#909098'); sg.addColorStop(1, '#505058');
+    ctx.fillStyle = sg; ctx.fill();
+    ctx.strokeStyle = '#1a1a20'; ctx.lineWidth = R*0.025; ctx.stroke();
+  }
+  // rim outer chrome ring
+  ctx.beginPath(); ctx.arc(c.x, c.y, R*0.81, 0, Math.PI*2);
+  ctx.strokeStyle = isNear ? '#707880' : '#404448'; ctx.lineWidth = R*0.055; ctx.stroke();
+  // hub cap
+  ctx.beginPath(); ctx.arc(c.x, c.y, R*0.16, 0, Math.PI*2);
+  ctx.fillStyle = '#a0a0aa'; ctx.fill();
+  ctx.beginPath(); ctx.arc(c.x, c.y, R*0.09, 0, Math.PI*2);
+  ctx.fillStyle = ACC; ctx.fill();
+  // hub glow
+  ctx.beginPath(); ctx.arc(c.x, c.y, R*0.09, 0, Math.PI*2);
+  ctx.shadowColor = ACC; ctx.shadowBlur = 8; ctx.fillStyle = ACC; ctx.fill(); ctx.shadowBlur = 0;
+}
+
+// ─── Callouts ───────────────────────────────────────────────────────────────
+var CALLOUTS = [
+  { name:'POWERTRAIN', sub:'V6 · TESTED',   wx:1.85, wy:0.25, wz:0,      col:'#E8820C', delay:50,  zone:'TR' },
+  { name:'SUSPENSION', sub:'ADAPTIVE · OK', wx:1.28, wy:YBT+0.30, wz:ZF, col:'#4ade80', delay:100, zone:'BR' },
+  { name:'ELECTRICAL', sub:'48V SYS · OK',  wx:-0.2, wy:0.68, wz:0,      col:'#38bdf8', delay:150, zone:'TL' },
+  { name:'BRAKING',    sub:'ABS · EBD · OK',wx:-1.28,wy:YBT+0.30,wz:ZF,  col:'#a78bfa', delay:200, zone:'BL' },
+  { name:'FUEL SYS.',  sub:'DIRECT INJ.',   wx:1.52, wy:0.46, wz:0,      col:'#F5A623', delay:250, zone:'TC' }
+];
+function zonePos(zone, bw, bh){
+  var p = 16;
+  return zone==='TR' ? {lx:W-bw-p, ly:32}
+       : zone==='TL' ? {lx:p,      ly:32}
+       : zone==='BR' ? {lx:W-bw-p, ly:H-bh-30}
+       : zone==='BL' ? {lx:p,      ly:H-bh-30}
+       :               {lx:W/2-bw/2, ly:32};
+}
+
+// ─── State ──────────────────────────────────────────────────────────────────
+var vPulse = 0, scanY = 0;
+
+// ─── Draw ────────────────────────────────────────────────────────────────────
+function draw(){
+  ctx.clearRect(0,0,W,H);
+
+  // Background deep gradient
+  var bg = ctx.createRadialGradient(W/2, H*0.45, 30, W/2, H*0.45, W*0.72);
+  bg.addColorStop(0, '#0e1520'); bg.addColorStop(1, '#03030a');
+  ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+
+  // ── Perspective grid floor ──
+  var gy = YBT;
+  var glColor = 'rgba(32,48,90,0.55)';
+  for (var gx = -9; gx <= 9; gx++) {
+    var g1=project(gx*0.55,gy,-4), g2=project(gx*0.55,gy,4);
+    if (g1&&g2){ ctx.beginPath(); ctx.moveTo(g1.x,g1.y); ctx.lineTo(g2.x,g2.y);
+      ctx.strokeStyle=glColor; ctx.lineWidth=0.5; ctx.stroke(); }
+  }
+  for (var gz=-4; gz<=4; gz++) {
+    var h1=project(-5,gy,gz*0.55), h2=project(5,gy,gz*0.55);
+    if (h1&&h2){ ctx.beginPath(); ctx.moveTo(h1.x,h1.y); ctx.lineTo(h2.x,h2.y);
+      ctx.strokeStyle=glColor; ctx.lineWidth=0.5; ctx.stroke(); }
+  }
+  // grid accent lines (orange tint on nearest lines)
+  for (var gi=-1; gi<=1; gi++) {
+    var a1=project(gi*0.55,gy,-4), a2=project(gi*0.55,gy,4);
+    if (a1&&a2){ ctx.beginPath(); ctx.moveTo(a1.x,a1.y); ctx.lineTo(a2.x,a2.y);
+      ctx.strokeStyle='rgba(232,130,12,0.10)'; ctx.lineWidth=1; ctx.stroke(); }
+  }
+
+  // ── Under-car ambient glow ──
+  var carCentre = project(0, YBT, 0);
+  if (carCentre) {
+    var glow = ctx.createRadialGradient(carCentre.x, carCentre.y, 10, carCentre.x, carCentre.y, 240);
+    glow.addColorStop(0, 'rgba(25,50,100,0.22)'); glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow; ctx.fillRect(0,0,W,H);
+  }
+
+  // ── Sort and draw car faces ──
+  var visible = [];
+  CAR.forEach(function(face){
+    if (!face.pts || face.pts.length < 3) return;
+    var projs = face.pts.map(function(p){ return project(p[0],p[1],p[2]); });
+    if (projs.some(function(p){ return !p; })) return;
+    var avgZ = projs.reduce(function(s,p){ return s+p.z; }, 0) / projs.length;
+    var bright = calcBright(face.pts);
+    visible.push({ face:face, projs:projs, avgZ:avgZ, bright:bright });
+  });
+  visible.sort(function(a,b){ return a.avgZ - b.avgZ; }); // farthest first
+
+  visible.forEach(function(item){
+    var p=item.projs, f=item.face;
+    ctx.beginPath();
+    ctx.moveTo(p[0].x, p[0].y);
+    for (var i=1; i<p.length; i++) ctx.lineTo(p[i].x, p[i].y);
+    ctx.closePath();
+    ctx.fillStyle = f.alpha!=null ? hexTint(f.col, item.bright, f.alpha) : hexTint(f.col, item.bright);
+    ctx.fill();
+    // glass highlight shimmer
+    if (f.col === GLASS && f.alpha != null) {
+      var gsh = ctx.createLinearGradient(p[0].x, p[0].y, p[Math.floor(p.length/2)].x, p[Math.floor(p.length/2)].y);
+      gsh.addColorStop(0, 'rgba(255,255,255,0.12)'); gsh.addColorStop(0.4, 'rgba(255,255,255,0.04)'); gsh.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.moveTo(p[0].x, p[0].y);
+      for (var i=1; i<p.length; i++) ctx.lineTo(p[i].x, p[i].y);
+      ctx.closePath(); ctx.fillStyle = gsh; ctx.fill();
+    }
+    // headlight glow
+    if (f.col === HLIGHT) {
+      ctx.shadowColor = '#a0c8ff'; ctx.shadowBlur = 18;
+      ctx.beginPath(); ctx.moveTo(p[0].x, p[0].y);
+      for (var i=1; i<p.length; i++) ctx.lineTo(p[i].x, p[i].y);
+      ctx.closePath(); ctx.fillStyle = hexTint(f.col, item.bright); ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    // taillight glow
+    if (f.col === TLIGHT || f.col === '#cc2200') {
+      ctx.shadowColor = '#ff2800'; ctx.shadowBlur = 14;
+      ctx.beginPath(); ctx.moveTo(p[0].x, p[0].y);
+      for (var i=1; i<p.length; i++) ctx.lineTo(p[i].x, p[i].y);
+      ctx.closePath(); ctx.fillStyle = hexTint(f.col, item.bright); ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    ctx.strokeStyle = 'rgba(0,0,6,0.28)'; ctx.lineWidth = 0.4; ctx.stroke();
+  });
+
+  // ── Wheels (drawn after body for correct depth at current angle) ──
+  // Draw far wheels first, then near
+  var sortedWheels = WHEELS.slice().sort(function(a,b){
+    var pa=project(a[0],a[1],a[2]), pb=project(b[0],b[1],b[2]);
+    if (!pa||!pb) return 0;
+    return pa.z - pb.z;
+  });
+  sortedWheels.forEach(function(w){ drawWheel(w[0],w[1],w[2],w[3]); });
+  wheelRot += 0.032;
+
+  // ── Ground reflection strip ──
+  var gBase = project(0, YBT, 0);
+  if (gBase) {
+    var refl = ctx.createLinearGradient(W/2, gBase.y, W/2, gBase.y+56);
+    refl.addColorStop(0, 'rgba(40,70,140,0.10)'); refl.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = refl; ctx.fillRect(0, gBase.y, W, 60);
+  }
+
+  // ── Scan beam ──
+  scanY = (scanY + 1.8) % (H * 0.76);
+  var sy = H * 0.10 + scanY;
+  var sg = ctx.createLinearGradient(0, sy-3, 0, sy+3);
+  sg.addColorStop(0,'rgba(0,0,0,0)'); sg.addColorStop(0.5,'rgba(232,130,12,0.10)'); sg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle = sg; ctx.fillRect(0, sy-3, W, 6);
+
+  // ── HUD: corner brackets ──
+  var bS = 18;
+  [ [10,10], [W-10-bS,10], [10,H-10-bS], [W-10-bS,H-10-bS] ].forEach(function(c,i){
+    var cx=c[0], cy=c[1];
+    ctx.strokeStyle = 'rgba(232,130,12,0.45)'; ctx.lineWidth = 1.5;
+    // shape each bracket as ⌐ style corner
+    ctx.beginPath();
+    if (i===0){ ctx.moveTo(cx,cy+bS); ctx.lineTo(cx,cy); ctx.lineTo(cx+bS,cy); }
+    if (i===1){ ctx.moveTo(cx+bS,cy+bS); ctx.lineTo(cx+bS,cy); ctx.lineTo(cx,cy); }
+    if (i===2){ ctx.moveTo(cx,cy); ctx.lineTo(cx,cy+bS); ctx.lineTo(cx+bS,cy+bS); }
+    if (i===3){ ctx.moveTo(cx+bS,cy); ctx.lineTo(cx+bS,cy+bS); ctx.lineTo(cx,cy+bS); }
+    ctx.stroke();
+  });
+
+  // ── HUD: title bar ──
+  ctx.font = '500 10.5px '+MONO;
+  ctx.fillStyle = 'rgba(232,130,12,0.80)'; ctx.textAlign = 'left';
+  ctx.fillText('3D VEHICLE SIM — AL HABTOOR MOTORS · DUBAI 2015', 32, 23);
+  ctx.fillStyle = 'rgba(232,130,12,0.38)'; ctx.textAlign = 'right'; ctx.font = '9px '+MONO;
+  ctx.fillText('SYS/DIAG v3.2  ◉', W-32, 23);
+
+  // ── HUD: bottom telemetry ──
+  ctx.fillStyle = 'rgba(232,130,12,0.28)'; ctx.textAlign = 'left'; ctx.font = '8px '+MONO;
+  ctx.fillText('FRAME:'+String(frame).padStart(5,'0')+'  ANG:'+angle.toFixed(3), 32, H-14);
+  ctx.textAlign = 'right';
+  ctx.fillText('AL·HABTOOR·MOTORS·DUBAI·2015  ▣', W-32, H-14);
+
+  // ── Callout labels ──
+  CALLOUTS.forEach(function(co){
+    if (frame < co.delay) return;
+    var alpha = Math.min((frame - co.delay) / 22, 1);
+    var sp = project(co.wx, co.wy, co.wz);
+    if (!sp) return;
+    ctx.globalAlpha = alpha;
+
+    var bw=98, bh=31;
+    var zone = zonePos(co.zone, bw, bh);
+    var lx=zone.lx, ly=zone.ly;
+
+    // pulsing double-ring dot
+    var r1 = 3.5 + Math.sin(frame*0.09 + co.delay*0.05) * 1.8;
+    var r2 = r1 * 1.9 + Math.sin(frame*0.07 + co.delay*0.08) * 1.2;
+    ctx.beginPath(); ctx.arc(sp.x,sp.y,r2,0,Math.PI*2);
+    ctx.strokeStyle=co.col+'28'; ctx.lineWidth=1; ctx.stroke();
+    ctx.beginPath(); ctx.arc(sp.x,sp.y,r1,0,Math.PI*2);
+    ctx.strokeStyle=co.col+'60'; ctx.lineWidth=1.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(sp.x,sp.y,3.5,0,Math.PI*2);
+    ctx.fillStyle=co.col; ctx.shadowColor=co.col; ctx.shadowBlur=12; ctx.fill(); ctx.shadowBlur=0;
+
+    // dashed leader line
+    var lcx=lx+bw/2, lcy=ly+bh/2;
+    ctx.strokeStyle=co.col+'45'; ctx.lineWidth=1; ctx.setLineDash([3,5]);
+    ctx.beginPath(); ctx.moveTo(sp.x,sp.y); ctx.lineTo(lcx,lcy); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // label box
+    ctx.fillStyle='rgba(3,4,14,0.94)'; ctx.strokeStyle=co.col; ctx.lineWidth=1.4;
+    ctx.fillRect(lx,ly,bw,bh); ctx.strokeRect(lx,ly,bw,bh);
+    ctx.fillStyle=co.col; ctx.fillRect(lx,ly,bw,2);   // top bar
+    ctx.fillRect(lx,ly,2,bh);                          // left bar
+    // double-line accent (second inner line)
+    ctx.strokeStyle=co.col+'30'; ctx.lineWidth=0.8;
+    ctx.strokeRect(lx+3,ly+4,bw-6,bh-7);
+
+    ctx.font='bold 9px '+MONO; ctx.fillStyle=co.col; ctx.textAlign='left';
+    ctx.fillText(co.name, lx+7, ly+15);
+    ctx.font='8px '+MONO; ctx.fillStyle='rgba(240,237,232,0.90)';
+    ctx.fillText(co.sub, lx+7, ly+26);
+    ctx.fillStyle='#4ade80'; ctx.textAlign='right'; ctx.font='9px '+MONO;
+    ctx.fillText('✓', lx+bw-5, ly+16);
+
+    ctx.globalAlpha=1;
+  });
+
+  // ── All-systems verified banner ──
+  if (frame >= CALLOUTS[CALLOUTS.length-1].delay + 30) {
+    vPulse += 0.04;
+    var gAlpha = 0.60 + Math.sin(vPulse)*0.28;
+    ctx.font='bold 10px '+MONO;
+    ctx.fillStyle='rgba(74,222,128,'+gAlpha+')';
+    ctx.textAlign='center';
+    ctx.fillText('◎  ALL SYSTEMS VERIFIED — OPERATIONAL RELIABILITY CONFIRMED  ◎', W/2, H-14);
+  }
+  ctx.textAlign='left';
+
+  // Gently oscillate camera: slow drift, pauses at nice angles
+  angle = angleBase + Math.sin(frame * 0.006) * 0.38;
+
+  frame++;
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body></html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backend System — Full Architecture</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f0f0f;
+    color: #e8e4de;
+    padding: 24px 16px;
+    min-height: 100vh;
+  }
+  .title {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #e8e4de;
+    margin-bottom: 28px;
+  }
+
+  .layer {
+    margin-bottom: 8px;
+    border-radius: 12px;
+    border: 1px solid #222;
+    overflow: hidden;
+  }
+  .layer-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .layer-num {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #555;
+    min-width: 24px;
+  }
+  .layer-title {
+    font-size: 13px;
+    font-weight: 600;
+    flex: 1;
+  }
+  .layer-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+  .layer-arrow {
+    font-size: 11px;
+    color: #555;
+    transition: transform 0.3s;
+  }
+  .layer-arrow.open { transform: rotate(180deg); }
+
+  .layer-body {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px solid #1a1a1a;
+  }
+  .layer-body.open { display: block; }
+
+  /* Layer colors */
+  .l1 .layer-header { background: #0f1a0f; }
+  .l1 .layer-title { color: #4ade80; }
+  .l1 .layer-tag { background: #0d2b0d; color: #4ade80; border: 1px solid #1a4a1a; }
+
+  .l2 .layer-header { background: #1a1200; }
+  .l2 .layer-title { color: #fbbf24; }
+  .l2 .layer-tag { background: #2b1f00; color: #fbbf24; border: 1px solid #4a3500; }
+
+  .l3 .layer-header { background: #0a0f1a; }
+  .l3 .layer-title { color: #60a5fa; }
+  .l3 .layer-tag { background: #0d1a2b; color: #60a5fa; border: 1px solid #1a3050; }
+
+  .l4 .layer-header { background: #1a0f00; }
+  .l4 .layer-title { color: #fb923c; }
+  .l4 .layer-tag { background: #2b1800; color: #fb923c; border: 1px solid #4a2a00; }
+
+  .l5 .layer-header { background: #150a1a; }
+  .l5 .layer-title { color: #c084fc; }
+  .l5 .layer-tag { background: #220d2b; color: #c084fc; border: 1px solid #3d1a50; }
+
+  .l6 .layer-header { background: #0f1414; }
+  .l6 .layer-title { color: #2dd4bf; }
+  .l6 .layer-tag { background: #0d2222; color: #2dd4bf; border: 1px solid #1a3d3d; }
+
+  /* Cards inside layers */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+  .card-icon { font-size: 14px; }
+  .card-name { font-size: 12px; font-weight: 600; color: #ddd; }
+  .card-desc { font-size: 11px; color: #666; line-height: 1.5; }
+  .card-badge {
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-top: 5px;
+    display: inline-block;
+  }
+  .badge-free { background: #0d2b0d; color: #4ade80; border: 1px solid #1a4a1a; }
+  .badge-bypass { background: #2b1f00; color: #fbbf24; border: 1px solid #4a3500; }
+  .badge-make { background: #1a1200; color: #fbbf24; }
+  .badge-zero { background: #0d1a2b; color: #60a5fa; border: 1px solid #1a3050; }
+
+  /* Flow arrows between layers */
+  .flow-arrow {
+    text-align: center;
+    padding: 4px 0;
+    color: #333;
+    font-size: 18px;
+  }
+
+  /* Ops counter */
+  .ops-bar {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 20px;
+  }
+  .ops-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  .ops-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .ops-label { font-size: 11px; color: #888; width: 200px; flex-shrink: 0; }
+  .ops-track {
+    flex: 1;
+    height: 4px;
+    background: #222;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .ops-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .ops-val { font-size: 11px; color: #666; width: 60px; text-align: right; flex-shrink: 0; }
+
+  .ops-total {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ops-total-label { font-size: 11px; color: #888; }
+  .ops-total-val { font-size: 13px; font-weight: 700; color: #4ade80; }
+  .ops-limit { font-size: 11px; color: #555; }
+
+  .note {
+    background: #0f1a0f;
+    border: 1px solid #1a4a1a;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 11px;
+    color: #4ade80;
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+
+  .two-path {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .path-card {
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .path-zero { background: #0d2b0d; border: 1px solid #1a4a1a; }
+  .path-make { background: #1a1200; border: 1px solid #4a3500; }
+  .path-title { font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+  .path-zero .path-title { color: #4ade80; }
+  .path-make .path-title { color: #fbbf24; }
+  .path-item { font-size: 11px; color: #888; margin-bottom: 3px; display: flex; align-items: flex-start; gap: 5px; }
+  .path-item::before { content: '→'; flex-shrink: 0; }
+  .path-zero .path-item::before { color: #4ade80; }
+  .path-make .path-item::before { color: #fbbf24; }
+
+  .cost-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 12px;
+  }
+  .cost-row:last-child { border-bottom: none; }
+  .cost-name { color: #888; }
+  .cost-val { font-weight: 600; }
+  .cost-free { color: #4ade80; }
+  .cost-paid { color: #fbbf24; }
+</style>
+</head>
+<body>
+
+<div class="title">Portfolio Backend</div>
+<div class="subtitle">Full Automated System</div>
+
+<!-- Layer 1 -->
+<div class="layer l1">
+  <div class="layer-header" onclick="toggle('l1')">
+    <span class="layer-num">01</span>
+    <span class="layer-title">Website Triggers</span>
+    <span class="layer-tag">Your Portfolio</span>
+    <span class="layer-arrow" id="arr-l1">▼</span>
+  </div>
+  <div class="layer-body" id="l1">
+    <div class="two-path">
+      <div class="path-card path-zero">
+        <div class="path-title">⚡ DIRECT TO NOTION · 0 OPS</div>
+        <div class="path-item">Chatbot conversations</div>
+        <div class="path-item">90-Day Plan interactions</div>
+        <div class="path-item">ROI Calculator usage</div>
+        <div class="path-item">Page visits / visitor log</div>
+      </div>
+      <div class="path-card path-make">
+        <div class="path-title">🔀 THROUGH MAKE.COM · COUNTS OPS</div>
+        <div class="path-item">Contact form submission</div>
+        <div class="path-item">Calendly booking made</div>
+        <div class="path-item">High-intent visitor (from LinkedIn/Google only)</div>
+        <div class="path-item">Site goes down alert</div>
+      </div>
+    </div>
+    <div class="note">Family visits, chatbot plays, ROI/90-day interactions → go directly to Notion. Zero Make.com ops used.</div>
+  </div>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<!-- Layer 2 -->
+<div class="layer l2">
+  <div class="layer-header" onclick="toggle('l2')">
+    <span class="layer-num">02</span>
+    <span class="layer-title">Make.com Scenarios</span>
+    <span class="layer-tag">$9/month · 10k ops</span>
+    <span class="layer-arrow" id="arr-l2">▼</span>
+  </div>
+  <div class="layer-body" id="l2">
+    <div class="cards">
+      <div class="card">
+        <div class="card-head"><span class="card-icon">📧</span><span class="card-name">Email Router</span></div>
+        <div class="card-desc">Catches incoming emails, filters by type, routes to Notion lead or spam</div>
+        <span class="card-badge badge-make">~2,880 ops/mo (polling)</span>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">📅</span><span class="card-name">Calendly Handler</span></div>
+        <div class="card-desc">Booking confirmed → log to Notion Bookings + Telegram alert</div>
+        <span class="card-badge badge-free">Webhook · ~20 ops/mo</span>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">🎯</span><span class="card-name">High-Intent Flag</span></div>
+        <div class="card-desc">Visitor from LinkedIn/Google spends 3+ min → Telegram ping</div>
+        <span class="card-badge badge-free">Filtered · ~60 ops/mo</span>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">🚨</span><span class="card-name">Site Down Alert</span></div>
+        <div class="card-desc">UptimeRobot detects outage → instant Telegram message</div>
+        <span class="card-badge badge-free">Rare · ~5 ops/mo</span>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">📊</span><span class="card-name">Weekly Digest</span></div>
+        <div class="card-desc">Every Monday: pull Notion data, format summary, send to Telegram</div>
+        <span class="card-badge badge-free">Scheduled · ~24 ops/mo</span>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">📝</span><span class="card-name">Contact Form</span></div>
+        <div class="card-desc">Form submitted → Notion Lead Pipeline entry + Telegram alert</div>
+        <span class="card-badge badge-free">Webhook · ~30 ops/mo</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<!-- Layer 3 -->
+<div class="layer l3">
+  <div class="layer-header" onclick="toggle('l3')">
+    <span class="layer-num">03</span>
+    <span class="layer-title">Notion Central Hub</span>
+    <span class="layer-tag">Free · All data lives here</span>
+    <span class="layer-arrow" id="arr-l3">▼</span>
+  </div>
+  <div class="layer-body" id="l3">
+    <div class="cards">
+      <div class="card">
+        <div class="card-head"><span class="card-icon">👤</span><span class="card-name">Lead Pipeline</span></div>
+        <div class="card-desc">Every email, contact form, recruiter — tracked with status, source, date</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">👁</span><span class="card-name">Visitor Log</span></div>
+        <div class="card-desc">Where visitors came from, pages viewed, time on site, device type</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">📆</span><span class="card-name">Bookings</span></div>
+        <div class="card-desc">All Calendly calls — name, company, time, notes, outcome</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">✅</span><span class="card-name">Follow-up Tasks</span></div>
+        <div class="card-desc">Auto-created tasks when a lead hasn't been followed up in 3 days</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">📋</span><span class="card-name">Weekly Digest</span></div>
+        <div class="card-desc">Weekly summaries: leads, visits, bookings, top traffic sources</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">💡</span><span class="card-name">Tool Interactions</span></div>
+        <div class="card-desc">Chatbot questions, ROI inputs, 90-day plan outputs — all logged</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<!-- Layer 4 -->
+<div class="layer l4">
+  <div class="layer-header" onclick="toggle('l4')">
+    <span class="layer-num">04</span>
+    <span class="layer-title">Telegram Alerts</span>
+    <span class="layer-tag">Free · Real-time on your phone</span>
+    <span class="layer-arrow" id="arr-l4">▼</span>
+  </div>
+  <div class="layer-body" id="l4">
+    <div class="cards">
+      <div class="card">
+        <div class="card-head"><span class="card-icon">🔔</span><span class="card-name">New Contact</span></div>
+        <div class="card-desc">"Sarah at Shell just submitted your contact form. Subject: consulting opportunity."</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">📅</span><span class="card-name">Booking Confirmed</span></div>
+        <div class="card-desc">"James from Halliburton booked a call for Tuesday 2pm. Topic: project management role."</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">👀</span><span class="card-name">Hot Visitor</span></div>
+        <div class="card-desc">"Someone from BP (LinkedIn) spent 8 min on your site. Viewed: Experience + Contact."</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">🚨</span><span class="card-name">Site Down</span></div>
+        <div class="card-desc">"Your portfolio is unreachable. Down for 3 min. GitHub Pages may be having issues."</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">📊</span><span class="card-name">Weekly Summary</span></div>
+        <div class="card-desc">"This week: 47 visitors, 3 leads, 1 booking, 2 chatbot sessions. Top source: LinkedIn."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<!-- Layer 5 -->
+<div class="layer l5">
+  <div class="layer-header" onclick="toggle('l5')">
+    <span class="layer-num">05</span>
+    <span class="layer-title">Claude Intelligence Layer</span>
+    <span class="layer-tag">Manual · You + Claude review Notion weekly</span>
+    <span class="layer-arrow" id="arr-l5">▼</span>
+  </div>
+  <div class="layer-body" id="l5">
+    <div class="cards">
+      <div class="card">
+        <div class="card-head"><span class="card-icon">🧠</span><span class="card-name">Lead Review</span></div>
+        <div class="card-desc">Paste Notion leads into Claude → get prioritisation, reply suggestions, talking points</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">🎤</span><span class="card-name">Interview Prep</span></div>
+        <div class="card-desc">Booking confirmed → paste into Claude → get tailored prep for that specific company</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">💬</span><span class="card-name">Chatbot Mining</span></div>
+        <div class="card-desc">Monthly: review chatbot questions logged in Notion → find gaps → improve your site</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">📈</span><span class="card-name">Site Optimisation</span></div>
+        <div class="card-desc">Monthly: review visitor patterns, ROI inputs, bounce points → Claude suggests fixes</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flow-arrow">↓</div>
+
+<!-- Layer 6 -->
+<div class="layer l6">
+  <div class="layer-header" onclick="toggle('l6')">
+    <span class="layer-num">06</span>
+    <span class="layer-title">Passive Monitoring</span>
+    <span class="layer-tag">Free · Runs silently</span>
+    <span class="layer-arrow" id="arr-l6">▼</span>
+  </div>
+  <div class="layer-body" id="l6">
+    <div class="cards">
+      <div class="card">
+        <div class="card-head"><span class="card-icon">📉</span><span class="card-name">Google Analytics 4</span></div>
+        <div class="card-desc">Traffic, sources, pages, devices. Dashboard always available.</div>
+        <span class="card-badge badge-free">Free</span>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">🎥</span><span class="card-name">Microsoft Clarity</span></div>
+        <div class="card-desc">Session recordings, heatmaps, rage clicks. See exactly how visitors behave.</div>
+        <span class="card-badge badge-free">Free</span>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">🔗</span><span class="card-name">LinkedIn Insight</span></div>
+        <div class="card-desc">Which companies are visiting from LinkedIn. Industry, seniority data.</div>
+        <span class="card-badge badge-free">Free</span>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">🔍</span><span class="card-name">Search Console</span></div>
+        <div class="card-desc">Google search rankings, clicks, impressions for your name/keywords.</div>
+        <span class="card-badge badge-free">Free</span>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-icon">🟢</span><span class="card-name">UptimeRobot</span></div>
+        <div class="card-desc">Pings your site every 5 min. Triggers Make.com if it goes down.</div>
+        <span class="card-badge badge-free">Free</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ops Summary -->
+<div class="ops-bar">
+  <div class="ops-title">Monthly Make.com Ops Estimate</div>
+  <div class="ops-row">
+    <span class="ops-label">Gmail watcher (polling)</span>
+    <div class="ops-track"><div class="ops-fill" style="width:28.8%;background:#fbbf24"></div></div>
+    <span class="ops-val">2,880</span>
+  </div>
+  <div class="ops-row">
+    <span class="ops-label">Email processing (~50 emails)</span>
+    <div class="ops-track"><div class="ops-fill" style="width:2%;background:#fbbf24"></div></div>
+    <span class="ops-val">200</span>
+  </div>
+  <div class="ops-row">
+    <span class="ops-label">High-intent visitor flags</span>
+    <div class="ops-track"><div class="ops-fill" style="width:0.6%;background:#60a5fa"></div></div>
+    <span class="ops-val">60</span>
+  </div>
+  <div class="ops-row">
+    <span class="ops-label">Contact form submissions</span>
+    <div class="ops-track"><div class="ops-fill" style="width:0.3%;background:#60a5fa"></div></div>
+    <span class="ops-val">30</span>
+  </div>
+  <div class="ops-row">
+    <span class="ops-label">Calendly bookings</span>
+    <div class="ops-track"><div class="ops-fill" style="width:0.2%;background:#60a5fa"></div></div>
+    <span class="ops-val">20</span>
+  </div>
+  <div class="ops-row">
+    <span class="ops-label">Weekly digest (×4)</span>
+    <div class="ops-track"><div class="ops-fill" style="width:0.24%;background:#c084fc"></div></div>
+    <span class="ops-val">24</span>
+  </div>
+  <div class="ops-row">
+    <span class="ops-label">Chatbot / ROI / 90-day / Visits</span>
+    <div class="ops-track"><div class="ops-fill" style="width:0%;background:#4ade80"></div></div>
+    <span class="ops-val" style="color:#4ade80">0</span>
+  </div>
+  <div class="ops-total">
+    <span class="ops-total-label">Total estimated ops/month</span>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="ops-limit">of 10,000 limit</span>
+      <span class="ops-total-val">~3,214 ops (32%)</span>
+    </div>
+  </div>
+</div>
+
+<!-- Cost -->
+<div class="ops-bar" style="margin-top:8px">
+  <div class="ops-title">Total Monthly Cost</div>
+  <div class="cost-row"><span class="cost-name">Make.com Core</span><span class="cost-val cost-paid">$9/mo</span></div>
+  <div class="cost-row"><span class="cost-name">Notion, Telegram, GA4, Clarity, UptimeRobot, LinkedIn Tag, Search Console, EmailJS, Calendly</span><span class="cost-val cost-free">$0</span></div>
+  <div class="cost-row" style="border-top:1px solid #333;margin-top:4px;padding-top:12px">
+    <span class="cost-name" style="color:#e8e4de;font-weight:600">Total</span>
+    <span class="cost-val" style="color:#4ade80;font-size:16px">$9/month</span>
+  </div>
+</div>
+
+<script>
+  function toggle(id) {
+    const body = document.getElementById(id);
+    const arr = document.getElementById('arr-' + id);
+    body.classList.toggle('open');
+    arr.classList.toggle('open');
+  }
+  // Open first layer by default
+  document.getElementById('l1').classList.add('open');
+  document.getElementById('arr-l1').classList.add('open');
+</script>
+</body>
+</html>

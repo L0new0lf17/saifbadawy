@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+<meta charset="UTF-8">
+<title>Vehicle Diagnostic Simulator</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#05060d; --ink:#f4f2ed; --mute:rgba(244,242,237,0.45);
+    --accent:#ff7a18;
+    --c-power:#ff7a18; --c-susp:#6ee7b7; --c-elec:#60a5fa;
+    --c-brake:#c4b5fd; --c-fuel:#fbbf24;
+  }
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
+    font-family:'Inter','Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .stage{position:relative;width:100%;height:100%;
+    background:radial-gradient(1200px 760px at 50% 56%, #131c30 0%, #070914 55%, #02030a 100%);
+    overflow:hidden;isolation:isolate}
+  .stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,0.025) 1px,transparent 1px);
+    background-size:3px 3px;mix-blend-mode:overlay;opacity:0.7;z-index:5}
+  .bracket{position:absolute;width:38px;height:38px;border:1px solid rgba(255,122,24,0.35);
+    pointer-events:none;z-index:6}
+  .bracket.tl{top:18px;left:18px;border-right:none;border-bottom:none}
+  .bracket.tr{top:18px;right:18px;border-left:none;border-bottom:none}
+  .bracket.bl{bottom:18px;left:18px;border-right:none;border-top:none}
+  .bracket.br{bottom:18px;right:18px;border-left:none;border-top:none}
+
+  .topbar{position:absolute;top:24px;left:32px;right:32px;display:flex;justify-content:space-between;
+    align-items:flex-start;z-index:8;pointer-events:none;
+    font-family:'JetBrains Mono','SF Mono',Menlo,monospace;font-size:11px;letter-spacing:0.18em}
+  .topbar .l{color:var(--accent);font-weight:600}
+  .topbar .r{text-align:right;color:var(--mute)}
+  .topbar .r .live{color:#6ee7b7;display:inline-flex;align-items:center;gap:6px}
+  .topbar .r .live::before{content:"";width:6px;height:6px;border-radius:50%;background:#6ee7b7;
+    box-shadow:0 0 8px #6ee7b7;animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+
+  .footbar{position:absolute;bottom:22px;left:32px;right:32px;display:flex;justify-content:space-between;
+    z-index:8;pointer-events:none;
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mute);letter-spacing:0.16em}
+
+  canvas#scene{position:absolute;inset:0;width:100%;height:100%;display:block;
+    cursor:grab;touch-action:none;z-index:2}
+  canvas#scene.dragging{cursor:grabbing}
+
+  /* SVG overlay for crisp leader lines that follow parts */
+  svg.lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:6}
+
+  .controls{position:absolute;left:50%;bottom:54px;transform:translateX(-50%);
+    display:flex;gap:10px;z-index:9;padding:8px;
+    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(8,11,22,0.78);backdrop-filter:blur(14px);
+    box-shadow:0 18px 40px rgba(0,0,0,0.55)}
+  .ctrl{appearance:none;border:1px solid rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.02);color:var(--ink);
+    padding:10px 16px;font:600 10.5px 'JetBrains Mono',monospace;
+    letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;
+    transition:all 0.18s ease;display:inline-flex;align-items:center;gap:8px}
+  .ctrl:hover{border-color:var(--accent);color:var(--accent);background:rgba(255,122,24,0.06)}
+  .ctrl.primary{border-color:var(--accent);color:var(--accent);background:rgba(255,122,24,0.08)}
+  .ctrl.primary.active{background:var(--accent);color:#0a0d18;border-color:var(--accent);
+    box-shadow:0 0 24px rgba(255,122,24,0.55)}
+  .ctrl .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:0.7}
+
+  /* Labels — DOM, crisp; positioned far from top-right corner to avoid telemetry */
+  .labels{position:absolute;inset:0;pointer-events:none;z-index:7}
+  .lbl{position:absolute;pointer-events:auto;cursor:pointer;
+    font-family:'JetBrains Mono',monospace;
+    will-change:transform,opacity;
+    transform:translate(0,0);
+    transition:opacity 0.3s, transform 0.4s cubic-bezier(.6,.2,.2,1)}
+  .lbl .card{background:rgba(7,9,18,0.96);border:1px solid var(--col);
+    padding:8px 12px 9px 14px;min-width:138px;position:relative;
+    box-shadow:0 8px 28px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.4)}
+  .lbl .card::before{content:"";position:absolute;left:0;top:0;width:3px;height:100%;
+    background:var(--col);box-shadow:0 0 12px var(--col)}
+  .lbl .ix{font-size:8.5px;letter-spacing:0.28em;color:var(--col);font-weight:700;margin-bottom:3px}
+  .lbl .nm{font-size:11.5px;font-weight:700;letter-spacing:0.06em;color:#fff;line-height:1.1}
+  .lbl .sub{font-size:9px;letter-spacing:0.15em;color:rgba(255,255,255,0.62);margin-top:3px;text-transform:uppercase}
+  .lbl.dim{opacity:0.22}
+  .lbl.iso .card{box-shadow:0 8px 32px rgba(0,0,0,0.65), 0 0 0 1px var(--col), 0 0 28px var(--col)}
+
+  /* Info card */
+  .infocard{position:absolute;right:32px;bottom:120px;width:300px;z-index:9;
+    background:rgba(8,11,22,0.94);backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,0.10);
+    transform:translateY(20px);opacity:0;transition:all 0.4s cubic-bezier(.6,.2,.2,1);
+    pointer-events:none}
+  .infocard.show{transform:translateY(0);opacity:1;pointer-events:auto}
+  .infocard .head{padding:14px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.08);
+    position:relative;box-shadow:inset 3px 0 0 var(--ac)}
+  .infocard .ix{font:600 9px 'JetBrains Mono',monospace;letter-spacing:0.3em;
+    color:var(--mute);margin-bottom:6px}
+  .infocard .ti{font-size:18px;font-weight:600;letter-spacing:-0.01em;line-height:1.1}
+  .infocard .st{display:inline-flex;align-items:center;gap:6px;margin-top:8px;
+    font:600 9px 'JetBrains Mono',monospace;letter-spacing:0.2em}
+  .infocard .st .d{width:6px;height:6px;border-radius:50%;background:var(--ac);box-shadow:0 0 8px var(--ac)}
+  .infocard .body{padding:14px 16px 16px}
+  .infocard .row2{display:flex;justify-content:space-between;padding:7px 0;
+    border-bottom:1px dashed rgba(255,255,255,0.07);font-size:11px}
+  .infocard .row2:last-child{border-bottom:none}
+  .infocard .row2 span:first-child{color:var(--mute);
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase}
+  .infocard .row2 span:last-child{color:var(--ink);font-weight:600}
+  .infocard .close{position:absolute;top:12px;right:12px;width:22px;height:22px;
+    border:1px solid rgba(255,255,255,0.15);background:transparent;color:var(--ink);
+    cursor:pointer;font-size:14px;line-height:1}
+  .infocard .close:hover{border-color:var(--accent);color:var(--accent)}
+
+  .hint{position:absolute;left:50%;top:60px;transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.24em;
+    color:var(--mute);z-index:7;pointer-events:none;
+    opacity:1;transition:opacity 0.6s ease 1.2s}
+  .hint.fade{opacity:0}
+
+  .scan{position:absolute;inset:0;pointer-events:none;z-index:6;mix-blend-mode:screen;opacity:0.5;
+    background:repeating-linear-gradient(0deg,rgba(255,255,255,0.012) 0 1px,transparent 1px 3px)}
+
+  @media (max-width:760px){
+    .topbar{left:18px;right:18px;font-size:9.5px}
+    .footbar{left:18px;right:18px;font-size:9px}
+    .infocard{width:240px;right:18px;bottom:130px}
+    .ctrl{padding:9px 11px;font-size:9px}
+    .lbl .card{min-width:118px;padding:7px 9px}
+    .lbl .nm{font-size:10.5px}
+    .hint{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="bracket tl"></div><div class="bracket tr"></div>
+  <div class="bracket bl"></div><div class="bracket br"></div>
+
+  <div class="topbar">
+    <div class="l">VEHICLE DIAGNOSTIC SIMULATOR · GT/01</div>
+    <div class="r">
+      <span class="live">SYS · LIVE</span><br>
+      <span style="font-size:9px;letter-spacing:0.22em">REV 04 · 2026</span>
+    </div>
+  </div>
+
+  <div class="hint" id="hint">DRAG TO ROTATE · CLICK A LABEL TO ISOLATE</div>
+
+  <canvas id="scene"></canvas>
+  <svg class="lines" id="lines"></svg>
+  <div class="scan"></div>
+  <div class="labels" id="labels"></div>
+
+  <div class="infocard" id="info">
+    <button class="close" id="infoClose">×</button>
+    <div class="head">
+      <div class="ix" id="iIx">SYSTEM 01</div>
+      <div class="ti" id="iTi">—</div>
+      <div class="st"><span class="d"></span><span id="iSt">OPERATIONAL</span></div>
+    </div>
+    <div class="body" id="iBody"></div>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl" id="bView"><span class="dot"></span>INTERIOR</button>
+    <button class="ctrl primary" id="bExplode"><span class="dot"></span>EXPLODE VIEW</button>
+    <button class="ctrl" id="bPlay">PAUSE</button>
+    <button class="ctrl" id="bReset">RESET</button>
+  </div>
+
+  <div class="footbar">
+    <div><span id="tAng">ANG 000.0°</span> · <span id="tFr">FR 00000</span> · <span id="tMd">MODE STANDARD</span></div>
+    <div></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const stage  = document.getElementById('stage');
+  const cvs    = document.getElementById('scene');
+  const ctx    = cvs.getContext('2d');
+  const labels = document.getElementById('labels');
+  const linesSvg = document.getElementById('lines');
+  const hint   = document.getElementById('hint');
+  const info   = document.getElementById('info');
+  const infoClose = document.getElementById('infoClose');
+  const bExpl  = document.getElementById('bExplode');
+  const bPlay  = document.getElementById('bPlay');
+  const bReset = document.getElementById('bReset');
+  const bView  = document.getElementById('bView');
+  const tAng = document.getElementById('tAng'), tFr = document.getElementById('tFr'), tMd = document.getElementById('tMd');
+
+  let W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2);
+  function resize(){
+    const r = stage.getBoundingClientRect();
+    W=r.width; H=r.height;
+    cvs.width=W*DPR; cvs.height=H*DPR;
+    cvs.style.width=W+'px'; cvs.style.height=H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    linesSvg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  }
+  window.addEventListener('resize', resize);
+
+  let frame=0, wRot=0;
+  let angle=0.62, autoRotate=true, rotSpeed=0.0035;
+  let exploded=false;
+  let view='exterior'; // 'exterior' | 'interior'
+  let viewT=0;         // 0..1 lerp into interior
+  /* per-system explode progress 0..1 (with stagger + bounce) */
+  let explProg = [0,0,0,0,0,0]; // 0=body, 1=power, 2=susp, 3=elec, 4=brake, 5=fuel
+  let explTarget = [0,0,0,0,0,0];
+  let isolated=null, isoT=0;
+  let dragging=false, lastX=0, vel=0;
+
+  function cam(){
+    const m=Math.min(W,H);
+    /* hero 3/4 view, zoomed out for breathing room */
+    return { fov:m*1.30, dist:8.0, ch:0.20 };
+  }
+  function proj(x,y,z){
+    const c=cam();
+    const cA=Math.cos(-angle), sA=Math.sin(-angle);
+    const rx=x*cA - z*sA, rz=x*sA + z*cA;
+    const dz=rz - c.dist;
+    if(dz>=-0.1) return null;
+    const sc=c.fov/(-dz);
+    /* horizon at vertical center; -y so positive y goes up */
+    return { x: W/2 + rx*sc, y: H*0.50 - (y-c.ch)*sc, scale:sc, z:rz };
+  }
+
+  function nrm(v){const l=Math.hypot(v[0],v[1],v[2]);return[v[0]/l,v[1]/l,v[2]/l]}
+  function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}
+  const KL=nrm([0.55,0.95,0.35]), FL=nrm([-0.7,0.4,-0.35]), RL=nrm([0.15,0.2,0.95]);
+  function fNorm(p){
+    const ax=p[1][0]-p[0][0], ay=p[1][1]-p[0][1], az=p[1][2]-p[0][2];
+    const bx=p[2][0]-p[0][0], by=p[2][1]-p[0][1], bz=p[2][2]-p[0][2];
+    const nx=ay*bz-az*by, ny=az*bx-ax*bz, nz=ax*by-ay*bx;
+    const l=Math.hypot(nx,ny,nz); return l<1e-7?[0,1,0]:[nx/l,ny/l,nz/l];
+  }
+  function bright(pts){
+    const n=fNorm(pts); let b=0.18;
+    const dk=dot(n,KL); b+=Math.max(dk,dk*0.08)*0.82;
+    const df=dot(n,FL); b+=Math.max(df,df*0.08)*0.20;
+    const dr=dot(n,RL); b+=Math.max(dr,dr*0.08)*0.10;
+    return Math.min(1.22, Math.max(0.06,b));
+  }
+  function tint(hex,br,al){
+    const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+    const R=Math.min(255,Math.round(r*br)), G=Math.min(255,Math.round(g*br)), B=Math.min(255,Math.round(b*br));
+    return al!=null?`rgba(${R},${G},${B},${al})`:`rgb(${R},${G},${B})`;
+  }
+
+  /* ── Material palette — premium metallic GT */
+  const C={
+    BODY :'#b8c2d2',  // cool metallic silver-blue
+    BLIT :'#e8eef8',  // highlight
+    BMID :'#7e8a9e',  // mid-tone for shoulder shadow
+    BDARK:'#2e3340',  // shadow plane
+    ROOF :'#0c0d12',
+    GLASS:'#0e1a26',
+    CHR  :'#a8aeba',
+    TRIM :'#0a0a0e',
+    GRLL :'#05060a',
+    HDLT :'#e2ecff',
+    TAIL :'#ff2418',
+    DRL  :'#ffd58b',
+    SKIRT:'#0b0b0f',
+    ACC  :'#ff7a18',
+    CARB :'#15161c'
+  };
+
+  /* ── GT silhouette landmarks — long hood, low fastback ── */
+  const xFN= 2.62, xFB= 2.42, xHF= 1.55,
+        xAP= 0.72, xCP=-0.78, xDP=-1.72,
+        xTK=-2.00, xRB=-2.24, xRN=-2.40;
+  const yBT=-0.34, ySL= 0.16, ySM= 0.30,
+        ySH= 0.42, yWB= 0.55, yAT= 0.74,
+        yRF= 0.75, yTK= 0.46, yHD= 0.49;
+  const zF = 0.94, zR = 0.86, zW = 0.74, zN = 0.62;
+
+  /* group ids for explode:
+     0 body (chassis shell)
+     1 powertrain  2 suspension  3 electrical  4 braking  5 fuel
+     Body shell explodes UPWARD; each system slides to its own offset.
+  */
+  const GROUP_OFFSETS = {
+    0: [0, 1.6, 0],        // body shell rises
+    1: [2.8, 0.4, 0],      // powertrain forward
+    2: [0,-1.0, 0],        // suspension drops
+    3: [0, 2.4, 0],        // electrical lifts way up
+    4: [-2.8, 0.4, 0],     // braking system rear
+    5: [0,-0.6, -1.9]      // fuel tank slides far-side under
+  };
+
+  /* face data: [col, alpha, pts, group] */
+  function buildCar(){
+    const F=[];
+    const Q=(col,al,a,b,c,d,g)=>F.push({col,al,pts:[a,b,c,d],g:g??0});
+    const T=(col,al,a,b,c,g)=>F.push({col,al,pts:[a,b,c],g:g??0});
+
+    /* ── Floor */
+    Q(C.TRIM,null,[xFB,yBT,-zF],[xFB,yBT,zF],[xRB,yBT,zF],[xRB,yBT,-zF],0);
+
+    /* ── Front bumper */
+    Q(C.TRIM,null,[xFB,yBT,-zF],[xFB,yBT,zF],[xFB,ySL,zF],[xFB,ySL,-zF],0);
+    /* fascia slope (sculpted: split into upper/lower for shading) */
+    Q(C.BMID,null,[xFB,ySL,-zF],[xFB,ySL,zF],[xFN-0.10,ySM,zF-0.06],[xFN-0.10,ySM,-zF+0.06],0);
+    Q(C.BLIT,null,[xFN-0.10,ySM,-zF+0.06],[xFN-0.10,ySM,zF-0.06],[xFN,ySH-0.04,zF-0.16],[xFN,ySH-0.04,-zF+0.16],0);
+    /* splitter / carbon front lip */
+    Q(C.CARB,null,[xFB+0.02,yBT-0.01,-zF+0.10],[xFB+0.02,yBT-0.01,zF-0.10],
+                  [xFN-0.04,yBT+0.04,zF-0.22],[xFN-0.04,yBT+0.04,-zF+0.22],1);
+
+    /* ── Side intakes (fuel breathing) */
+    Q(C.GRLL,null,[xFN-0.06,yBT+0.05,0.30],[xFN-0.06,yBT+0.05,0.86],
+                  [xFN-0.06,ySL,0.84],[xFN-0.06,ySL,0.34],5);
+    Q(C.GRLL,null,[xFN-0.06,yBT+0.05,-0.30],[xFN-0.06,yBT+0.05,-0.86],
+                  [xFN-0.06,ySL,-0.84],[xFN-0.06,ySL,-0.34],5);
+
+    /* ── Wide single-mouth grille (powertrain) */
+    Q(C.CHR,null,[xFN+0.001,ySL+0.02,-0.62],[xFN+0.001,ySL+0.02,0.62],
+                 [xFN+0.001,ySH-0.06,0.58],[xFN+0.001,ySH-0.06,-0.58],1);
+    Q(C.GRLL,null,[xFN+0.002,ySL+0.06,-0.56],[xFN+0.002,ySL+0.06,0.56],
+                  [xFN+0.002,ySH-0.10,0.52],[xFN+0.002,ySH-0.10,-0.52],1);
+    /* grille horizontal slats */
+    for(let i=0;i<5;i++){
+      const y0=ySL+0.10+i*0.05, y1=y0+0.018;
+      Q('#0d0d14',null,
+        [xFN+0.003,y0,-0.50],[xFN+0.003,y0,0.50],
+        [xFN+0.003,y1,0.50],[xFN+0.003,y1,-0.50],1);
+    }
+    /* center power crest */
+    Q(C.ACC,null,[xFN+0.004,ySL+0.09,-0.04],[xFN+0.004,ySL+0.09,0.04],
+                 [xFN+0.004,ySH-0.12,0.04],[xFN+0.004,ySH-0.12,-0.04],1);
+
+    /* ── Hood — dome with raised crease */
+    /* crown (slightly higher) */
+    Q(C.BLIT,null,[xFN,ySH-0.06,-0.18],[xFN,ySH-0.06,0.18],
+                  [xHF,yHD+0.03,0.14],[xHF,yHD+0.03,-0.14],0);
+    /* near hood plane (catches light) */
+    Q(C.BODY,null,[xFN,ySH-0.06,0.18],[xFN,ySH-0.06,zF-0.10],
+                  [xHF,yHD,zR-0.06],[xHF,yHD+0.03,0.14],0);
+    /* far hood plane (shadow) */
+    Q(C.BMID,null,[xFN,ySH-0.06,-0.18],[xFN,ySH-0.06,-zF+0.10],
+                  [xHF,yHD,-zR+0.06],[xHF,yHD+0.03,-0.14],0);
+    /* hood power-bulge sides */
+    Q(C.BLIT,null,[xFN-0.20,ySH-0.06,-0.06],[xFN-0.20,ySH-0.06,0.06],
+                  [xHF+0.10,yHD+0.04,0.06],[xHF+0.10,yHD+0.04,-0.06],0);
+    /* hood shut line / cowl */
+    Q(C.TRIM,null,[xHF-0.005,yHD,-zR+0.06],[xHF-0.005,yHD,zR-0.06],
+                  [xHF+0.005,yHD,zR-0.06],[xHF+0.005,yHD,-zR+0.06],0);
+    /* hood louvre vents (powertrain) */
+    Q(C.GRLL,null,[xFN-0.45,yHD+0.03,0.15],[xFN-0.45,yHD+0.03,0.34],
+                  [xFN-0.85,yHD+0.04,0.32],[xFN-0.85,yHD+0.04,0.17],1);
+    Q(C.GRLL,null,[xFN-0.45,yHD+0.03,-0.15],[xFN-0.45,yHD+0.03,-0.34],
+                  [xFN-0.85,yHD+0.04,-0.32],[xFN-0.85,yHD+0.04,-0.17],1);
+    /* fender peak ridge near */
+    Q(C.BLIT,null,[xFN-0.20,ySH-0.04,zF-0.04],[xHF+0.10,ySH-0.02,zF-0.02],
+                  [xHF+0.10,ySH+0.005,zF-0.02],[xFN-0.20,ySH-0.015,zF-0.04],0);
+
+    /* ── Windshield — heavily raked */
+    Q(C.GLASS,0.74,[xHF,yWB,-zW],[xHF,yWB,zW],
+                   [xAP,yAT,zW-0.06],[xAP,yAT,-zW+0.06],3);
+    /* A-pillars */
+    Q(C.BDARK,null,[xHF,yWB,zR],[xAP,yAT,zW-0.04],[xAP,ySH+0.04,zF],[xHF,ySH+0.04,zF],0);
+    Q(C.BDARK,null,[xHF,yWB,-zR],[xAP,yAT,-zW+0.04],[xAP,ySH+0.04,-zF],[xHF,ySH+0.04,-zF],0);
+
+    /* ── Roof — fastback curve */
+    /* central roof panel (gloss black) */
+    Q(C.ROOF,null,[xAP,yRF,-zR+0.02],[xAP,yRF,zR-0.02],
+                  [xCP,yRF-0.04,zR-0.05],[xCP,yRF-0.04,-zR+0.05],0);
+    /* roof side near */
+    Q(C.ROOF,null,[xAP,yAT,zW-0.04],[xCP,yAT-0.06,zW-0.08],
+                  [xCP,yRF-0.04,zR-0.05],[xAP,yRF,zR-0.02],0);
+    Q(C.BDARK,null,[xAP,yAT,-zW+0.04],[xCP,yAT-0.06,-zW+0.08],
+                   [xCP,yRF-0.04,-zR+0.05],[xAP,yRF,-zR+0.02],0);
+    /* carbon roof double stripe */
+    Q(C.CARB,null,[xAP+0.04,yRF+0.001,-0.16],[xAP+0.04,yRF+0.001,-0.04],
+                  [xCP-0.04,yRF-0.039,-0.04],[xCP-0.04,yRF-0.039,-0.14],0);
+    Q(C.CARB,null,[xAP+0.04,yRF+0.001,0.04],[xAP+0.04,yRF+0.001,0.16],
+                  [xCP-0.04,yRF-0.039,0.14],[xCP-0.04,yRF-0.039,0.04],0);
+
+    /* ── Rear glass (steeply raked fastback) */
+    Q(C.GLASS,0.66,[xCP,yAT-0.06,-zW+0.08],[xCP,yAT-0.06,zW-0.08],
+                   [xDP,yTK+0.04,zW-0.14],[xDP,yTK+0.04,-zW+0.14],3);
+    /* C-pillars (sail) */
+    Q(C.BDARK,null,[xCP,yAT-0.06,zW-0.08],[xDP,yTK+0.04,zF-0.06],
+                   [xDP,ySH-0.02,zF],[xCP,ySH,zF],0);
+    Q(C.BDARK,null,[xCP,yAT-0.06,-zW+0.08],[xDP,yTK+0.04,-zF+0.06],
+                   [xDP,ySH-0.02,-zF],[xCP,ySH,-zF],0);
+
+    /* ── Side windows */
+    T(C.GLASS,0.66,[xHF,yWB,zF],[xAP,yAT,zW-0.04],[xAP,ySH+0.04,zF],3);
+    Q(C.GLASS,0.68,[xAP,yAT,zW-0.04],[xCP,yAT-0.06,zW-0.08],
+                   [xCP,ySH+0.02,zF],[xAP,ySH+0.04,zF],3);
+    T(C.GLASS,0.62,[xCP,yAT-0.06,zW-0.08],[xDP,yTK+0.04,zF-0.06],[xCP,ySH+0.02,zF],3);
+
+    /* ── Body side NEAR (+Z) — sectioned + sculpted with mid-tone shoulder */
+    /* lower (skirt-adjacent) */
+    Q(C.BMID,null,[xFB,yBT,zF],[xRB,yBT,zF],[xRB,ySL,zF],[xFB,ySL,zF],0);
+    /* main door panel — bright */
+    Q(C.BODY,null,[xFB,ySL,zF],[xRB,ySL,zF],[xRB,ySM+0.05,zF-0.005],[xFB,ySM+0.05,zF-0.005],0);
+    /* shoulder concave (mid) */
+    Q(C.BMID,null,[xFB,ySM+0.05,zF-0.005],[xRB,ySM+0.05,zF-0.005],
+                  [xRB,ySH-0.04,zF-0.01],[xFB,ySH-0.04,zF-0.01],0);
+    /* upper shoulder (catches highlight) */
+    Q(C.BLIT,null,[xFB,ySH-0.04,zF-0.01],[xRB,ySH-0.04,zF-0.01],
+                  [xRB,ySH+0.02,zF-0.005],[xFB,ySH+0.02,zF-0.005],0);
+    /* greenhouse continuation */
+    Q(C.BODY,null,[xFB,ySH+0.02,zF-0.005],[xCP,ySH+0.02,zF-0.005],
+                  [xCP,ySH+0.04,zF],[xFB,ySH+0.04,zF],0);
+
+    /* rear haunch bulge — adds visual width */
+    Q(C.BLIT,null,[xCP+0.05,ySL+0.05,zF],[xDP,ySL+0.05,zF+0.02],
+                  [xDP,ySH-0.04,zF+0.02],[xCP+0.05,ySH-0.04,zF],0);
+
+    /* shoulder character line (light reflection edge) */
+    Q(C.BLIT,null,[xFB+0.10,ySH-0.03,zF],[xRB-0.10,ySH-0.07,zF],
+                  [xRB-0.10,ySH-0.045,zF],[xFB+0.10,ySH-0.005,zF],0);
+    /* amber accent stripe along skirt */
+    Q(C.ACC,null,[xFB+0.10,ySL+0.005,zF+0.003],[xRB-0.10,ySL+0.005,zF+0.003],
+                 [xRB-0.10,ySL+0.025,zF+0.003],[xFB+0.10,ySL+0.025,zF+0.003],0);
+    /* side skirt */
+    Q(C.SKIRT,null,[xFB+0.04,yBT,zF+0.002],[xRB-0.04,yBT,zF+0.002],
+                   [xRB-0.04,ySL,zF+0.002],[xFB+0.04,ySL,zF+0.002],0);
+    /* door seams */
+    Q(C.TRIM,null,[xHF,ySL,zF+0.002],[xHF,ySH+0.02,zF+0.002],
+                  [xHF+0.012,ySH+0.02,zF+0.002],[xHF+0.012,ySL,zF+0.002],0);
+    Q(C.TRIM,null,[xCP,ySL,zF+0.002],[xCP,ySH+0.02,zF+0.002],
+                  [xCP+0.012,ySH+0.02,zF+0.002],[xCP+0.012,ySL,zF+0.002],0);
+
+    /* fender flare front-near (subtle) */
+    Q(C.BLIT,null,[xHF-0.50,ySL,zF+0.01],[xHF+0.30,ySL,zF+0.01],
+                  [xHF+0.30,ySM,zF+0.01],[xHF-0.50,ySM,zF+0.01],0);
+
+    /* ── Body side FAR (-Z) */
+    Q(C.BDARK,null,[xFB,yBT,-zF],[xRB,yBT,-zF],[xRB,ySL,-zF],[xFB,ySL,-zF],0);
+    Q(C.BDARK,null,[xFB,ySL,-zF],[xRB,ySL,-zF],[xRB,ySM+0.05,-zF],[xFB,ySM+0.05,-zF],0);
+    Q(C.BDARK,null,[xFB,ySM+0.05,-zF],[xRB,ySM+0.05,-zF],
+                   [xRB,ySH+0.02,-zF],[xFB,ySH+0.02,-zF],0);
+    Q(C.ACC,null,[xFB+0.10,ySL+0.005,-zF-0.003],[xRB-0.10,ySL+0.005,-zF-0.003],
+                 [xRB-0.10,ySL+0.025,-zF-0.003],[xFB+0.10,ySL+0.025,-zF-0.003],0);
+
+    /* ── Door mirror */
+    Q(C.BDARK,null,[xHF-0.30,ySH+0.08,zF+0.02],[xHF-0.30,ySH+0.18,zF+0.02],
+                   [xHF-0.04,ySH+0.18,zF+0.015],[xHF-0.04,ySH+0.08,zF+0.015],3);
+    Q(C.GLASS,0.7,[xHF-0.29,ySH+0.10,zF+0.025],[xHF-0.29,ySH+0.16,zF+0.025],
+                  [xHF-0.06,ySH+0.16,zF+0.020],[xHF-0.06,ySH+0.10,zF+0.020],3);
+
+    /* ── Trunk / deck w/ ducktail */
+    Q(C.BODY,null,[xDP,yTK+0.04,-zW+0.14],[xDP,yTK+0.04,zW-0.14],
+                  [xTK,yTK,zR-0.10],[xTK,yTK,-zR+0.10],0);
+    Q(C.BMID,null,[xTK,yTK,-zR+0.06],[xTK,yTK,zR-0.06],
+                  [xTK,ySH-0.02,zF-0.02],[xTK,ySH-0.02,-zF+0.02],0);
+    Q(C.BDARK,null,[xTK,ySH-0.02,-zF+0.02],[xTK,ySH-0.02,zF-0.02],
+                   [xRB,ySH-0.10,zF-0.02],[xRB,ySH-0.10,-zF+0.02],0);
+    /* ducktail spoiler — carbon */
+    Q(C.CARB,null,[xDP,yTK+0.04,-zW+0.14],[xDP,yTK+0.04,zW-0.14],
+                  [xDP-0.05,yTK+0.10,zW-0.16],[xDP-0.05,yTK+0.10,-zW+0.16],0);
+
+    /* ── Rear bumper / diffuser */
+    Q(C.TRIM,null,[xRB,yBT,-zF],[xRB,yBT,zF],[xRB,ySL,zF],[xRB,ySL,-zF],0);
+    Q(C.BDARK,null,[xRB,ySL,-zF],[xRB,ySL,zF],[xRB,ySH-0.10,zF],[xRB,ySH-0.10,-zF],0);
+    /* carbon diffuser */
+    Q(C.CARB,null,[xRN,yBT,-zF+0.16],[xRN,yBT,zF-0.16],
+                  [xRN,ySL-0.04,zF-0.22],[xRN,ySL-0.04,-zF+0.22],4);
+    /* diffuser fins */
+    for(let i=-2;i<=2;i++){
+      const z0=i*0.20-0.04, z1=z0+0.05;
+      Q('#222227',null,
+        [xRN-0.02,yBT,z0],[xRN-0.02,yBT,z1],
+        [xRN-0.02,ySL-0.04,z1-0.02],[xRN-0.02,ySL-0.04,z0-0.02],4);
+    }
+    /* twin exhaust tips */
+    [[0.30,0.50],[-0.50,-0.30]].forEach(([z0,z1])=>{
+      Q('#3a3a3e',null,[xRN+0.001,ySL-0.10,z0],[xRN+0.001,ySL-0.10,z1],
+                       [xRN+0.001,ySL+0.02,z1],[xRN+0.001,ySL+0.02,z0],1);
+      Q('#1a1a1c',null,[xRN+0.002,ySL-0.08,z0+0.02],[xRN+0.002,ySL-0.08,z1-0.02],
+                       [xRN+0.002,ySL+0.00,z1-0.02],[xRN+0.002,ySL+0.00,z0+0.02],1);
+    });
+
+    /* ── Headlights (electrical) */
+    Q(C.HDLT,null,[xFN+0.001,ySH-0.10,0.36],[xFN+0.001,ySH-0.10,0.86],
+                  [xFN+0.001,ySH-0.04,0.84],[xFN+0.001,ySH-0.04,0.40],3);
+    Q(C.HDLT,null,[xFN+0.001,ySH-0.10,-0.36],[xFN+0.001,ySH-0.10,-0.86],
+                  [xFN+0.001,ySH-0.04,-0.84],[xFN+0.001,ySH-0.04,-0.40],3);
+    /* DRL slits */
+    Q(C.DRL,null,[xFN+0.001,ySL+0.04,0.32],[xFN+0.001,ySL+0.04,0.84],
+                 [xFN+0.001,ySL+0.07,0.84],[xFN+0.001,ySL+0.07,0.32],3);
+    Q(C.DRL,null,[xFN+0.001,ySL+0.04,-0.32],[xFN+0.001,ySL+0.04,-0.84],
+                 [xFN+0.001,ySL+0.07,-0.84],[xFN+0.001,ySL+0.07,-0.32],3);
+
+    /* ── Taillight strip */
+    Q(C.TAIL,null,[xRN+0.001,ySH-0.16,-0.86],[xRN+0.001,ySH-0.16,0.86],
+                  [xRN+0.001,ySH-0.06,0.84],[xRN+0.001,ySH-0.06,-0.84],3);
+    Q(C.CHR,null,[xRN+0.001,ySH-0.05,-0.80],[xRN+0.001,ySH-0.05,0.80],
+                 [xRN+0.001,ySH-0.02,0.78],[xRN+0.001,ySH-0.02,-0.78],0);
+
+    return F;
+  }
+  const CAR = buildCar();
+
+  /* wheels — group 2 (suspension) */
+  const WPOS=[
+    {x: 1.45, y:yBT+0.30, z: zF+0.06, near:true,  pos:'FR'},
+    {x: 1.45, y:yBT+0.30, z:-zF-0.06, near:false, pos:'FL'},
+    {x:-1.45, y:yBT+0.30, z: zF+0.06, near:true,  pos:'RR'},
+    {x:-1.45, y:yBT+0.30, z:-zF-0.06, near:false, pos:'RL'}
+  ];
+
+  function drawWheel(w,c){
+    const R=c.scale*0.32;
+    /* shadow */
+    ctx.beginPath(); ctx.ellipse(c.x,c.y+R*0.96,R*0.78,R*0.16,0,0,Math.PI*2);
+    ctx.fillStyle='rgba(0,0,0,0.45)'; ctx.fill();
+    /* tyre */
+    ctx.beginPath(); ctx.arc(c.x,c.y,R,0,Math.PI*2);
+    ctx.fillStyle='#0c0c0f'; ctx.fill();
+    if(w.near){
+      const tg=ctx.createRadialGradient(c.x-R*0.3,c.y-R*0.3,R*0.05,c.x,c.y,R);
+      tg.addColorStop(0,'rgba(140,140,140,0.22)'); tg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(c.x,c.y,R,0,Math.PI*2); ctx.fillStyle=tg; ctx.fill();
+    }
+    /* sidewall */
+    ctx.beginPath(); ctx.arc(c.x,c.y,R*0.86,0,Math.PI*2);
+    ctx.strokeStyle='#1d1d22'; ctx.lineWidth=R*0.04; ctx.stroke();
+    /* barrel */
+    ctx.beginPath(); ctx.arc(c.x,c.y,R*0.78,0,Math.PI*2);
+    ctx.fillStyle='#16161a'; ctx.fill();
+    /* rotor */
+    ctx.beginPath(); ctx.arc(c.x,c.y,R*0.50,0,Math.PI*2);
+    ctx.fillStyle='#2a2a2f'; ctx.fill();
+    for(let v=0;v<14;v++){
+      const va=wRot*0.6+(v/14)*Math.PI*2;
+      ctx.save(); ctx.translate(c.x,c.y); ctx.rotate(va);
+      ctx.fillStyle='#1a1a1d'; ctx.fillRect(R*0.30,-R*0.024,R*0.20,R*0.048);
+      ctx.restore();
+    }
+    /* caliper */
+    ctx.save(); ctx.translate(c.x,c.y); ctx.rotate(-Math.PI*0.25);
+    ctx.fillStyle='#c4b5fd';
+    ctx.beginPath(); ctx.arc(0,0,R*0.58,-0.55,0.55); ctx.lineTo(0,0); ctx.fill();
+    ctx.restore();
+    /* spokes */
+    for(let s=0;s<5;s++){
+      const sa=wRot+(s/5)*Math.PI*2, w1=sa-0.10, w2=sa+0.10;
+      ctx.beginPath();
+      ctx.moveTo(c.x+Math.cos(w1)*R*0.10,c.y+Math.sin(w1)*R*0.10);
+      ctx.lineTo(c.x+Math.cos(w1)*R*0.74,c.y+Math.sin(w1)*R*0.74);
+      ctx.arc(c.x,c.y,R*0.74,w1,w2);
+      ctx.lineTo(c.x+Math.cos(w2)*R*0.10,c.y+Math.sin(w2)*R*0.10);
+      ctx.arc(c.x,c.y,R*0.10,w2,w1,true);
+      ctx.closePath();
+      const sg=ctx.createLinearGradient(
+        c.x+Math.cos(sa)*R*0.10,c.y+Math.sin(sa)*R*0.10,
+        c.x+Math.cos(sa)*R*0.74,c.y+Math.sin(sa)*R*0.74);
+      sg.addColorStop(0,'#dadbe2'); sg.addColorStop(0.5,'#7d7d88'); sg.addColorStop(1,'#28282e');
+      ctx.fillStyle=sg; ctx.fill();
+      ctx.strokeStyle='#0c0c10'; ctx.lineWidth=R*0.020; ctx.stroke();
+    }
+    ctx.beginPath(); ctx.arc(c.x,c.y,R*0.78,0,Math.PI*2);
+    ctx.strokeStyle=w.near?'#5e5e6a':'#28282e'; ctx.lineWidth=R*0.052; ctx.stroke();
+    ctx.beginPath(); ctx.arc(c.x,c.y,R*0.16,0,Math.PI*2);
+    ctx.fillStyle='#9a9aa4'; ctx.fill();
+    ctx.beginPath(); ctx.arc(c.x,c.y,R*0.07,0,Math.PI*2);
+    ctx.fillStyle='#6ee7b7'; ctx.shadowColor='#6ee7b7'; ctx.shadowBlur=8; ctx.fill(); ctx.shadowBlur=0;
+  }
+
+  /* ── 5 systems ── */
+  const SYSTEMS=[
+    { id:1, gid:1, name:'POWERTRAIN', sub:'V8 BI-TURBO',
+      hex:'#ff7a18', anchor:[1.40, 0.30, 0],
+      stats:[['DISPLACEMENT','3.9 L V8'],['OUTPUT','620 BHP'],['TORQUE','590 Nm'],['REDLINE','8 250 RPM'],['STATUS','OPERATIONAL']]
+    },
+    { id:2, gid:2, name:'SUSPENSION', sub:'ADAPTIVE MAGNERIDE',
+      hex:'#6ee7b7', anchor:[1.45, yBT+0.30, zF+0.06],
+      stats:[['SETUP','DOUBLE WISHBONE'],['DAMPING','MR · 1 kHz'],['RIDE Δ','-25 mm SPORT'],['CAMBER F','-1.6°'],['STATUS','OPERATIONAL']]
+    },
+    { id:3, gid:3, name:'ELECTRICAL', sub:'48 V SYSTEM',
+      hex:'#60a5fa', anchor:[-0.10, 0.66, 0],
+      stats:[['ARCHITECTURE','48 V MILD-HYB'],['ALTERNATOR','7.5 kW ISG'],['CAN BUS','2× FD · 5 Mbps'],['HARNESS','ISO 6722'],['STATUS','OPERATIONAL']]
+    },
+    { id:4, gid:4, name:'BRAKING', sub:'CARBON-CERAMIC',
+      hex:'#c4b5fd', anchor:[-2.18, ySL, 0],
+      stats:[['ROTORS','410/390 mm CCM'],['CALIPERS','6/4 PISTON'],['ABS','BOSCH MK C1'],['100→0','31.4 m'],['STATUS','OPERATIONAL']]
+    },
+    { id:5, gid:5, name:'FUEL SYS.', sub:'DIRECT INJECTION',
+      hex:'#fbbf24', anchor:[1.20, ySL+0.04, 0.84],
+      stats:[['PRESSURE','350 bar DI'],['CAPACITY','82 L'],['EURO','VI-d'],['ECONOMY','11.3 L/100km'],['STATUS','OPERATIONAL']]
+    }
+  ];
+
+  /* DOM labels */
+  const labelEls=[];
+  SYSTEMS.forEach((s,i)=>{
+    const el=document.createElement('div');
+    el.className='lbl'; el.dataset.id=s.gid; el.style.setProperty('--col',s.hex);
+    el.innerHTML=`<div class="card">
+      <div class="ix">SYS · ${String(i+1).padStart(2,'0')}</div>
+      <div class="nm">${s.name}</div>
+      <div class="sub">${s.sub}</div>
+    </div>`;
+    el.addEventListener('click',()=>toggleIsolate(s.gid));
+    labels.appendChild(el);
+    labelEls.push(el);
+  });
+
+  /* SVG leader paths — one per system */
+  const linePaths=SYSTEMS.map((s,i)=>{
+    const ns='http://www.w3.org/2000/svg';
+    const g=document.createElementNS(ns,'g');
+    const path=document.createElementNS(ns,'path');
+    path.setAttribute('stroke', s.hex);
+    path.setAttribute('stroke-width','1');
+    path.setAttribute('fill','none');
+    path.setAttribute('stroke-dasharray','3,4');
+    path.setAttribute('opacity','0.85');
+    g.appendChild(path);
+    /* tiny circle endpoint at label side */
+    const c=document.createElementNS(ns,'circle');
+    c.setAttribute('r','3'); c.setAttribute('fill',s.hex);
+    c.setAttribute('stroke',s.hex); c.setAttribute('stroke-opacity','0.5');
+    c.setAttribute('stroke-width','5');
+    g.appendChild(c);
+    linesSvg.appendChild(g);
+    return {g, path, c};
+  });
+
+  /* ── Isolation/info card ── */
+  function setIsolated(gid){
+    isolated = gid;
+    labelEls.forEach((el,i)=>{
+      const lid=+el.dataset.id;
+      el.classList.toggle('dim', isolated!==null && lid!==isolated);
+      el.classList.toggle('iso', isolated===lid);
+    });
+    if(gid===null){ info.classList.remove('show'); return; }
+    const s=SYSTEMS.find(x=>x.gid===gid);
+    if(!s) return;
+    info.style.setProperty('--ac', s.hex);
+    document.getElementById('iIx').textContent = `SYSTEM ${String(s.id).padStart(2,'0')} · ${s.sub}`;
+    document.getElementById('iTi').textContent = s.name;
+    const sl=document.getElementById('iSt');
+    sl.textContent='OPERATIONAL · VERIFIED'; sl.style.color=s.hex;
+    info.querySelector('.head').style.boxShadow=`inset 3px 0 0 ${s.hex}`;
+    document.getElementById('iBody').innerHTML =
+      s.stats.map(([k,v])=>`<div class="row2"><span>${k}</span><span>${v}</span></div>`).join('');
+    info.classList.add('show');
+  }
+  function toggleIsolate(gid){
+    setIsolated(isolated===gid?null:gid);
+    hint.classList.add('fade');
+  }
+  infoClose.addEventListener('click',()=>setIsolated(null));
+
+  /* ── Buttons ── */
+  function setExploded(state){
+    exploded=state;
+    bExpl.classList.toggle('active',exploded);
+    bExpl.innerHTML = exploded
+      ? '<span class="dot"></span>RE-ASSEMBLE'
+      : '<span class="dot"></span>EXPLODE VIEW';
+    tMd.textContent='MODE '+(exploded?'EXPLODED':'STANDARD');
+    /* stagger targets so each system pops out at a different moment */
+    const order = [0, 2, 1, 5, 4, 3]; // body, susp, power, fuel, brake, elec
+    order.forEach((g,i)=>{
+      explTarget[g] = exploded ? 1 : 0;
+    });
+    hint.classList.add('fade');
+  }
+  bExpl.addEventListener('click',()=>setExploded(!exploded));
+  bPlay.addEventListener('click',()=>{ autoRotate=!autoRotate; bPlay.textContent=autoRotate?'PAUSE':'PLAY'; });
+  bReset.addEventListener('click',()=>{
+    setExploded(false); setIsolated(null);
+    angle=0.62; vel=0; autoRotate=true; bPlay.textContent='PAUSE';
+    tMd.textContent='MODE '+(view==='interior'?'COCKPIT':'STANDARD');
+  });
+  bView.addEventListener('click',()=>{
+    view = (view==='exterior') ? 'interior' : 'exterior';
+    bView.classList.toggle('primary', view==='interior');
+    bView.innerHTML = (view==='interior')
+      ? '<span class="dot"></span>EXTERIOR'
+      : '<span class="dot"></span>INTERIOR';
+    /* hide exterior chrome when in interior */
+    labels.style.display    = (view==='interior') ? 'none' : '';
+    linesSvg.style.display  = (view==='interior') ? 'none' : '';
+    bExpl.style.display     = (view==='interior') ? 'none' : '';
+    if(view==='interior') setIsolated(null);
+    tMd.textContent='MODE '+(view==='interior'?'COCKPIT':(exploded?'EXPLODED':'STANDARD'));
+    hint.classList.add('fade');
+  });
+
+  /* ── Drag rotate ── */
+  function onDown(e){
+    dragging=true; cvs.classList.add('dragging');
+    lastX=e.touches?e.touches[0].clientX:e.clientX;
+    autoRotate=false; bPlay.textContent='PLAY'; vel=0;
+    hint.classList.add('fade');
+  }
+  function onMove(e){
+    if(!dragging) return;
+    const x=e.touches?e.touches[0].clientX:e.clientX;
+    const dx=x-lastX; lastX=x;
+    const d=dx*0.008;
+    angle+=d; vel=d;
+  }
+  function onUp(){ dragging=false; cvs.classList.remove('dragging'); }
+  cvs.addEventListener('mousedown',onDown);
+  window.addEventListener('mousemove',onMove);
+  window.addEventListener('mouseup',onUp);
+  cvs.addEventListener('touchstart',onDown,{passive:true});
+  window.addEventListener('touchmove',onMove,{passive:true});
+  window.addEventListener('touchend',onUp);
+  cvs.addEventListener('click',(e)=>{
+    if(Math.abs(vel)>0.001) return;
+    if(isolated!==null) setIsolated(null);
+  });
+
+  /* ── Interior cockpit scene ── */
+  function drawInterior(){
+    ctx.clearRect(0,0,W,H);
+    /* deep cockpit background gradient */
+    const bgGrad=ctx.createLinearGradient(0,0,0,H);
+    bgGrad.addColorStop(0,'#020308');
+    bgGrad.addColorStop(0.45,'#070a14');
+    bgGrad.addColorStop(1,'#040510');
+    ctx.fillStyle=bgGrad; ctx.fillRect(0,0,W,H);
+
+    const cx=W/2, cy=H/2;
+    const u=Math.min(W,H)/1080; // unit scale
+
+    /* ── Windshield (visible road through glass) ── */
+    /* sky/road gradient seen through windshield */
+    const wsTop = cy - 380*u;
+    const wsBot = cy - 30*u;
+    const wsL   = cx - 720*u;
+    const wsR   = cx + 720*u;
+    /* glass shape: trapezoid */
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(wsL+90*u, wsTop);
+    ctx.lineTo(wsR-90*u, wsTop);
+    ctx.lineTo(wsR, wsBot);
+    ctx.lineTo(wsL, wsBot);
+    ctx.closePath();
+    ctx.clip();
+    /* sky */
+    const sky=ctx.createLinearGradient(0,wsTop,0,wsBot);
+    sky.addColorStop(0,'#1b2a4a'); sky.addColorStop(0.55,'#2d4373'); sky.addColorStop(1,'#5a6b8a');
+    ctx.fillStyle=sky; ctx.fillRect(wsL-20,wsTop-10,wsR-wsL+40,wsBot-wsTop+20);
+    /* horizon */
+    const hY = wsTop + (wsBot-wsTop)*0.55;
+    ctx.fillStyle='#0f1424';
+    ctx.fillRect(wsL-20, hY, wsR-wsL+40, wsBot-hY+10);
+    /* distant mountains */
+    ctx.fillStyle='#19223a';
+    ctx.beginPath(); ctx.moveTo(wsL,hY);
+    [0.1,0.22,0.35,0.5,0.62,0.78,0.92].forEach((p,i)=>{
+      const x=wsL+(wsR-wsL)*p, y=hY-(20+Math.sin(i*1.7)*22)*u;
+      ctx.lineTo(x,y);
+    });
+    ctx.lineTo(wsR,hY); ctx.closePath(); ctx.fill();
+    /* road */
+    ctx.fillStyle='#0a0c14';
+    ctx.beginPath();
+    ctx.moveTo(cx-30*u, hY);
+    ctx.lineTo(cx+30*u, hY);
+    ctx.lineTo(wsR-50*u, wsBot);
+    ctx.lineTo(wsL+50*u, wsBot);
+    ctx.closePath(); ctx.fill();
+    /* lane markings — animated */
+    const lanePhase=(frame*4)%80;
+    ctx.strokeStyle='rgba(255,200,90,0.65)'; ctx.lineWidth=3*u;
+    for(let i=0;i<10;i++){
+      const t=(i*80 - lanePhase)/600;
+      if(t<0||t>1) continue;
+      const y0=hY + (wsBot-hY)*t;
+      const y1=hY + (wsBot-hY)*Math.min(1,t+0.04);
+      const xL0=cx + (wsL+50*u-cx)*t;
+      const xL1=cx + (wsL+50*u-cx)*Math.min(1,t+0.04);
+      ctx.beginPath(); ctx.moveTo(xL0,y0); ctx.lineTo(xL1,y1); ctx.stroke();
+    }
+    /* HUD reticle on windshield */
+    const hudY = hY - 14*u;
+    ctx.strokeStyle='rgba(255,122,24,0.55)'; ctx.lineWidth=1.5*u;
+    ctx.beginPath(); ctx.arc(cx,hudY,18*u,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx-26*u,hudY); ctx.lineTo(cx-22*u,hudY);
+    ctx.moveTo(cx+22*u,hudY); ctx.lineTo(cx+26*u,hudY);
+    ctx.moveTo(cx,hudY-26*u); ctx.lineTo(cx,hudY-22*u);
+    ctx.moveTo(cx,hudY+22*u); ctx.lineTo(cx,hudY+26*u);
+    ctx.stroke();
+    /* HUD speed readout projected on glass */
+    ctx.fillStyle='rgba(255,180,90,0.85)';
+    ctx.font=`600 ${22*u}px 'JetBrains Mono', monospace`;
+    ctx.textAlign='center';
+    const spd=128 + Math.round(Math.sin(frame*0.04)*4);
+    ctx.fillText(spd+' KPH', cx, hudY+58*u);
+    ctx.font=`500 ${10*u}px 'JetBrains Mono', monospace`;
+    ctx.fillStyle='rgba(255,180,90,0.55)';
+    ctx.fillText('NAV · 4.2 KM AHEAD', cx, hudY+76*u);
+    ctx.restore();
+
+    /* ── Rearview mirror */
+    const mvW=160*u, mvH=44*u;
+    ctx.save();
+    ctx.translate(cx, wsTop+20*u);
+    ctx.fillStyle='#1a1c22';
+    ctx.fillRect(-mvW/2, -mvH/2, mvW, mvH);
+    /* mirror image — tiny dimming road behind */
+    ctx.fillStyle='#1d2740';
+    ctx.fillRect(-mvW/2+3, -mvH/2+3, mvW-6, mvH-6);
+    ctx.fillStyle='#0a0d18';
+    ctx.fillRect(-mvW/2+3, 0, mvW-6, mvH/2-3);
+    /* tail lights specks behind */
+    ctx.fillStyle='rgba(255,40,30,0.7)';
+    ctx.fillRect(-30*u,-3*u,4*u,3*u);
+    ctx.fillRect(26*u,-3*u,4*u,3*u);
+    ctx.strokeStyle='rgba(255,255,255,0.10)'; ctx.lineWidth=1;
+    ctx.strokeRect(-mvW/2,-mvH/2,mvW,mvH);
+    /* mount stem */
+    ctx.fillStyle='#0e0f14';
+    ctx.fillRect(-4*u,-mvH/2-12*u,8*u,12*u);
+    ctx.restore();
+
+    /* ── A-pillars + roof header */
+    /* roof header with stitching */
+    ctx.fillStyle='#0a0b10';
+    ctx.fillRect(0,0,W,wsTop);
+    /* gentle leather sheen */
+    const rh=ctx.createLinearGradient(0,0,0,wsTop);
+    rh.addColorStop(0,'rgba(40,42,52,0.6)');
+    rh.addColorStop(1,'rgba(15,16,22,0.95)');
+    ctx.fillStyle=rh; ctx.fillRect(0,0,W,wsTop);
+    /* stitch line */
+    ctx.strokeStyle='rgba(255,122,24,0.35)'; ctx.lineWidth=1; ctx.setLineDash([4,5]);
+    ctx.beginPath(); ctx.moveTo(0,wsTop-4); ctx.lineTo(W,wsTop-4); ctx.stroke();
+    ctx.setLineDash([]);
+
+    /* A-pillars (left) */
+    ctx.fillStyle='#0d0e14';
+    ctx.beginPath();
+    ctx.moveTo(0, wsTop);
+    ctx.lineTo(wsL+90*u, wsTop);
+    ctx.lineTo(wsL, wsBot);
+    ctx.lineTo(0, wsBot+30*u);
+    ctx.closePath(); ctx.fill();
+    /* A-pillar (right) */
+    ctx.beginPath();
+    ctx.moveTo(W, wsTop);
+    ctx.lineTo(wsR-90*u, wsTop);
+    ctx.lineTo(wsR, wsBot);
+    ctx.lineTo(W, wsBot+30*u);
+    ctx.closePath(); ctx.fill();
+
+    /* pillar inner highlight (soft) */
+    ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(wsL+90*u, wsTop); ctx.lineTo(wsL, wsBot); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(wsR-90*u, wsTop); ctx.lineTo(wsR, wsBot); ctx.stroke();
+
+    /* ── Side windows / door tops (small triangle peeks) */
+    ctx.save();
+    ctx.fillStyle='#1a2438';
+    ctx.beginPath();
+    ctx.moveTo(0, wsBot+10*u);
+    ctx.lineTo(wsL-30*u, wsBot+10*u);
+    ctx.lineTo(0, wsBot+90*u);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(W, wsBot+10*u);
+    ctx.lineTo(wsR+30*u, wsBot+10*u);
+    ctx.lineTo(W, wsBot+90*u);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+
+    /* ── Dashboard top — curved soft-touch */
+    const dashTop = wsBot;
+    const dashBot = cy + 220*u;
+    ctx.fillStyle='#0c0d12';
+    ctx.beginPath();
+    ctx.moveTo(0, dashTop);
+    ctx.bezierCurveTo(W*0.2, dashTop-6*u, W*0.8, dashTop-6*u, W, dashTop);
+    ctx.lineTo(W, dashBot);
+    ctx.lineTo(0, dashBot);
+    ctx.closePath(); ctx.fill();
+    /* dash gradient */
+    const dg=ctx.createLinearGradient(0,dashTop,0,dashBot);
+    dg.addColorStop(0,'rgba(35,38,48,0.85)');
+    dg.addColorStop(0.5,'rgba(15,16,22,1)');
+    dg.addColorStop(1,'rgba(8,9,14,1)');
+    ctx.fillStyle=dg;
+    ctx.beginPath();
+    ctx.moveTo(0, dashTop);
+    ctx.bezierCurveTo(W*0.2, dashTop-6*u, W*0.8, dashTop-6*u, W, dashTop);
+    ctx.lineTo(W, dashBot);
+    ctx.lineTo(0, dashBot);
+    ctx.closePath(); ctx.fill();
+    /* leather top stitch */
+    ctx.strokeStyle='rgba(255,122,24,0.45)'; ctx.lineWidth=1.2; ctx.setLineDash([3,5]);
+    ctx.beginPath();
+    ctx.moveTo(0, dashTop+4);
+    ctx.bezierCurveTo(W*0.2, dashTop-2*u, W*0.8, dashTop-2*u, W, dashTop+4);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    /* carbon trim strip */
+    ctx.fillStyle='#101116';
+    ctx.fillRect(0, dashTop+18*u, W, 22*u);
+    /* carbon weave pattern */
+    for(let x=0;x<W;x+=10){
+      for(let y=dashTop+18*u;y<dashTop+40*u;y+=4){
+        const k=((x/10+y/4)%2)<1;
+        ctx.fillStyle = k?'rgba(255,255,255,0.025)':'rgba(0,0,0,0.18)';
+        ctx.fillRect(x,y,10,4);
+      }
+    }
+    ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
+    ctx.strokeRect(0,dashTop+18*u,W,22*u);
+
+    /* ── Instrument cluster — three round gauges behind wheel */
+    const clusterCx = cx;
+    const clusterCy = cy + 30*u;
+    /* hood / cluster shroud */
+    ctx.fillStyle='#08090d';
+    ctx.beginPath();
+    ctx.moveTo(clusterCx-340*u, dashTop+10*u);
+    ctx.bezierCurveTo(clusterCx-340*u, clusterCy-130*u, clusterCx+340*u, clusterCy-130*u, clusterCx+340*u, dashTop+10*u);
+    ctx.lineTo(clusterCx+340*u, dashTop+50*u);
+    ctx.lineTo(clusterCx-340*u, dashTop+50*u);
+    ctx.closePath();
+    ctx.fill();
+
+    /* gauge ring helper */
+    function drawGauge(gx,gy,rad,arcStart,arcEnd,val,maxVal,unit,big,col,labels){
+      /* outer bezel */
+      ctx.beginPath(); ctx.arc(gx,gy,rad,0,Math.PI*2);
+      const bz=ctx.createRadialGradient(gx-rad*0.3,gy-rad*0.3,rad*0.1,gx,gy,rad);
+      bz.addColorStop(0,'#2a2c34'); bz.addColorStop(1,'#0a0b10');
+      ctx.fillStyle=bz; ctx.fill();
+      /* face */
+      ctx.beginPath(); ctx.arc(gx,gy,rad-8*u,0,Math.PI*2);
+      const fc=ctx.createRadialGradient(gx,gy,rad*0.2,gx,gy,rad);
+      fc.addColorStop(0,'#0d1018'); fc.addColorStop(1,'#03050b');
+      ctx.fillStyle=fc; ctx.fill();
+      /* outer ring tick arc background */
+      ctx.beginPath(); ctx.arc(gx,gy,rad-14*u,arcStart,arcEnd);
+      ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=10*u; ctx.stroke();
+      /* progress arc */
+      const progEnd = arcStart + (arcEnd-arcStart)*(val/maxVal);
+      ctx.beginPath(); ctx.arc(gx,gy,rad-14*u,arcStart,progEnd);
+      ctx.strokeStyle=col; ctx.lineWidth=10*u; ctx.shadowColor=col; ctx.shadowBlur=12; ctx.stroke();
+      ctx.shadowBlur=0;
+      /* major ticks */
+      const N=labels.length;
+      for(let i=0;i<N;i++){
+        const a = arcStart + (arcEnd-arcStart)*(i/(N-1));
+        const x1=gx+Math.cos(a)*(rad-22*u), y1=gy+Math.sin(a)*(rad-22*u);
+        const x2=gx+Math.cos(a)*(rad-32*u), y2=gy+Math.sin(a)*(rad-32*u);
+        ctx.strokeStyle='#cfd2dc'; ctx.lineWidth=2*u;
+        ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+        /* label */
+        const lx=gx+Math.cos(a)*(rad-46*u), ly=gy+Math.sin(a)*(rad-46*u);
+        ctx.fillStyle='#9aa1af'; ctx.font=`600 ${10*u}px 'JetBrains Mono', monospace`;
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillText(labels[i], lx, ly);
+      }
+      /* minor ticks */
+      const minorTotal = (N-1)*5;
+      for(let i=0;i<=minorTotal;i++){
+        if(i%5===0) continue;
+        const a = arcStart + (arcEnd-arcStart)*(i/minorTotal);
+        const x1=gx+Math.cos(a)*(rad-22*u), y1=gy+Math.sin(a)*(rad-22*u);
+        const x2=gx+Math.cos(a)*(rad-28*u), y2=gy+Math.sin(a)*(rad-28*u);
+        ctx.strokeStyle='rgba(207,210,220,0.45)'; ctx.lineWidth=1*u;
+        ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+      }
+      /* needle */
+      const nA = arcStart + (arcEnd-arcStart)*(val/maxVal);
+      ctx.save();
+      ctx.translate(gx,gy); ctx.rotate(nA);
+      ctx.fillStyle=col;
+      ctx.shadowColor=col; ctx.shadowBlur=10;
+      ctx.beginPath();
+      ctx.moveTo(-6*u,-2*u); ctx.lineTo(rad-26*u,-1*u);
+      ctx.lineTo(rad-22*u,0); ctx.lineTo(rad-26*u,1*u);
+      ctx.lineTo(-6*u,2*u); ctx.closePath(); ctx.fill();
+      ctx.shadowBlur=0;
+      ctx.fillStyle='#1c1d24';
+      ctx.beginPath(); ctx.arc(0,0,8*u,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=col;
+      ctx.beginPath(); ctx.arc(0,0,3*u,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+      /* digital readout */
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillStyle='#fff'; ctx.font=`700 ${big*u}px 'JetBrains Mono', monospace`;
+      ctx.fillText(Math.round(val), gx, gy+rad*0.45);
+      ctx.fillStyle='#7d8493'; ctx.font=`600 ${10*u}px 'JetBrains Mono', monospace`;
+      ctx.fillText(unit, gx, gy+rad*0.45+big*0.6*u+2*u);
+    }
+
+    /* simulated values */
+    const t = frame*0.04;
+    const rpm = 3500 + Math.sin(t)*1800 + Math.sin(t*2.3)*500;
+    const speed = 120 + Math.sin(t*0.6)*18;
+    const fuel = 72;
+
+    /* RPM gauge (left, large) */
+    drawGauge(clusterCx-220*u, clusterCy, 130*u, Math.PI*0.78, Math.PI*2.22,
+              Math.max(0,rpm)/1000, 9, 'RPM ×1000', 30,'#ff7a18',
+              ['0','1','2','3','4','5','6','7','8','9']);
+    /* Speed gauge (right, large) */
+    drawGauge(clusterCx+220*u, clusterCy, 130*u, Math.PI*0.78, Math.PI*2.22,
+              speed, 320, 'KM/H', 30,'#6ee7b7',
+              ['0','40','80','120','160','200','240','280','320']);
+
+    /* Center MFD between gauges */
+    const mfdW = 220*u, mfdH = 200*u;
+    const mfdX = clusterCx - mfdW/2;
+    const mfdY = clusterCy - mfdH/2;
+    ctx.fillStyle='#04060c';
+    ctx.fillRect(mfdX, mfdY, mfdW, mfdH);
+    ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
+    ctx.strokeRect(mfdX, mfdY, mfdW, mfdH);
+    /* MFD content */
+    ctx.fillStyle='#60a5fa';
+    ctx.font=`700 ${11*u}px 'JetBrains Mono', monospace`;
+    ctx.textAlign='left'; ctx.textBaseline='top';
+    ctx.fillText('TRIP COMPUTER', mfdX+12*u, mfdY+10*u);
+    ctx.fillStyle='#9aa1af'; ctx.font=`500 ${9*u}px 'JetBrains Mono', monospace`;
+    ctx.fillText('SESSION 04 · LIVE', mfdX+12*u, mfdY+24*u);
+
+    /* MFD rows */
+    const rows=[
+      ['DRIVE MODE','SPORT+'],
+      ['GEAR','5'],
+      ['BOOST','1.4 BAR'],
+      ['OIL TEMP','97°C'],
+      ['COOLANT','89°C'],
+      ['FUEL','72%'],
+      ['G-LAT','0.42 g'],
+      ['LAP','01:42.6']
+    ];
+    rows.forEach((r,i)=>{
+      const ry = mfdY + 46*u + i*18*u;
+      ctx.fillStyle='#7d8493';
+      ctx.font=`500 ${9.5*u}px 'JetBrains Mono', monospace`;
+      ctx.textAlign='left';
+      ctx.fillText(r[0], mfdX+12*u, ry);
+      ctx.fillStyle='#fff';
+      ctx.font=`700 ${10.5*u}px 'JetBrains Mono', monospace`;
+      ctx.textAlign='right';
+      ctx.fillText(r[1], mfdX+mfdW-12*u, ry);
+    });
+    /* MFD footer bar */
+    ctx.fillStyle='rgba(255,122,24,0.18)';
+    ctx.fillRect(mfdX, mfdY+mfdH-22*u, mfdW, 22*u);
+    ctx.fillStyle='#ff7a18';
+    ctx.font=`700 ${10*u}px 'JetBrains Mono', monospace`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('▲ SPORT+ ENGAGED', mfdX+mfdW/2, mfdY+mfdH-11*u);
+
+    /* gear indicator above MFD */
+    ctx.fillStyle='#fff';
+    ctx.font=`800 ${42*u}px 'Inter', sans-serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('5', mfdX+mfdW/2, mfdY+mfdH+34*u);
+    ctx.fillStyle='#7d8493';
+    ctx.font=`600 ${9*u}px 'JetBrains Mono', monospace`;
+    ctx.fillText('GEAR', mfdX+mfdW/2, mfdY+mfdH+58*u);
+
+    /* ── Steering wheel — three-spoke flat-bottom */
+    const swCy = H - 80*u;
+    const swCx = cx;
+    const swR  = 280*u;
+    /* wheel rim */
+    ctx.save();
+    ctx.translate(swCx, swCy);
+    /* slight rotation animation */
+    const swRot = Math.sin(frame*0.012)*0.05;
+    ctx.rotate(swRot);
+    /* outer rim */
+    ctx.beginPath();
+    ctx.arc(0,0,swR,Math.PI*1.08,Math.PI*1.92,false);   // top arc
+    ctx.arc(0,0,swR,Math.PI*0.08,Math.PI*0.92,false);   // bottom flat... actually we want flat bottom
+    ctx.closePath();
+    /* simpler approach: full circle then mask flat-bottom */
+    ctx.beginPath();
+    ctx.arc(0,0,swR,0,Math.PI*2);
+    ctx.fillStyle='#0a0b10';
+    ctx.fill();
+    /* flat bottom cut */
+    ctx.fillStyle='#070a14';
+    ctx.fillRect(-swR-10, swR*0.62, swR*2+20, swR);
+    /* rim ring */
+    ctx.beginPath();
+    ctx.arc(0,0,swR,Math.PI*1.05,Math.PI*1.95,false);
+    ctx.lineWidth=22*u; ctx.strokeStyle='#1a1c22'; ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(0,0,swR,Math.PI*0.05,Math.PI*0.5,false);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(0,0,swR,Math.PI*0.5,Math.PI*0.95,false);
+    ctx.stroke();
+    /* leather highlight */
+    ctx.beginPath();
+    ctx.arc(0,0,swR-4*u,Math.PI*1.10,Math.PI*1.90,false);
+    ctx.lineWidth=2*u; ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.stroke();
+    /* stitching at 12 */
+    ctx.strokeStyle='rgba(255,122,24,0.7)'; ctx.lineWidth=1.5*u;
+    for(let i=-6;i<=6;i++){
+      const a=Math.PI*1.5 + i*0.018;
+      const x1=Math.cos(a)*(swR-2*u), y1=Math.sin(a)*(swR-2*u);
+      const x2=Math.cos(a)*(swR-12*u), y2=Math.sin(a)*(swR-12*u);
+      ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    }
+    /* 12 o'clock marker */
+    ctx.fillStyle='#ff7a18';
+    ctx.shadowColor='#ff7a18'; ctx.shadowBlur=10;
+    ctx.fillRect(-3*u, -swR-2*u, 6*u, 14*u);
+    ctx.shadowBlur=0;
+
+    /* spokes — three: left, right, lower-left, lower-right (modern 3-spoke) */
+    ctx.fillStyle='#101218';
+    /* left horizontal spoke */
+    ctx.beginPath();
+    ctx.moveTo(-swR+8*u, -22*u); ctx.lineTo(-60*u, -36*u);
+    ctx.lineTo(-60*u, 30*u); ctx.lineTo(-swR+8*u, 22*u);
+    ctx.closePath(); ctx.fill();
+    /* right horizontal spoke */
+    ctx.beginPath();
+    ctx.moveTo(swR-8*u, -22*u); ctx.lineTo(60*u, -36*u);
+    ctx.lineTo(60*u, 30*u); ctx.lineTo(swR-8*u, 22*u);
+    ctx.closePath(); ctx.fill();
+    /* lower spoke */
+    ctx.beginPath();
+    ctx.moveTo(-44*u, 24*u); ctx.lineTo(44*u, 24*u);
+    ctx.lineTo(36*u, swR*0.62); ctx.lineTo(-36*u, swR*0.62);
+    ctx.closePath(); ctx.fill();
+
+    /* spoke carbon insets */
+    ctx.fillStyle='#15161c';
+    ctx.fillRect(-swR+30*u, -16*u, swR-100*u, 32*u);
+    ctx.fillRect(70*u, -16*u, swR-100*u, 32*u);
+
+    /* button clusters on spokes */
+    /* left cluster */
+    [['MODE','SPORT'],['VOL','+'],['VOL','-'],['CRUISE','SET']].forEach((b,i)=>{
+      const bx = -swR+50*u + (i%2)*40*u;
+      const by = -8*u + Math.floor(i/2)*16*u;
+      ctx.fillStyle='#1f212a';
+      ctx.fillRect(bx, by, 32*u, 12*u);
+      ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=0.5;
+      ctx.strokeRect(bx, by, 32*u, 12*u);
+      ctx.fillStyle=i===0?'#ff7a18':'#cfd2dc';
+      ctx.font=`700 ${7*u}px 'JetBrains Mono', monospace`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(b[1], bx+16*u, by+6*u);
+    });
+    /* right cluster */
+    [['CALL','◉'],['NAV','▲'],['NAV','▼'],['DRIVE','+']].forEach((b,i)=>{
+      const bx = 80*u + (i%2)*40*u;
+      const by = -8*u + Math.floor(i/2)*16*u;
+      ctx.fillStyle='#1f212a';
+      ctx.fillRect(bx, by, 32*u, 12*u);
+      ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=0.5;
+      ctx.strokeRect(bx, by, 32*u, 12*u);
+      ctx.fillStyle='#cfd2dc';
+      ctx.font=`700 ${7*u}px 'JetBrains Mono', monospace`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(b[1], bx+16*u, by+6*u);
+    });
+
+    /* center boss with logo */
+    ctx.beginPath(); ctx.arc(0,0,40*u,0,Math.PI*2);
+    ctx.fillStyle='#0a0b0f'; ctx.fill();
+    ctx.strokeStyle='#2a2c34'; ctx.lineWidth=2*u; ctx.stroke();
+    ctx.beginPath(); ctx.arc(0,0,32*u,0,Math.PI*2);
+    const bossG=ctx.createRadialGradient(-8*u,-8*u,2*u,0,0,32*u);
+    bossG.addColorStop(0,'#26282f'); bossG.addColorStop(1,'#0d0e13');
+    ctx.fillStyle=bossG; ctx.fill();
+    ctx.fillStyle='#ff7a18';
+    ctx.font=`800 ${15*u}px 'Inter', sans-serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('GT', 0, -2*u);
+    ctx.fillStyle='#9aa1af';
+    ctx.font=`600 ${7*u}px 'JetBrains Mono', monospace`;
+    ctx.fillText('· 01 ·', 0, 12*u);
+
+    /* paddle shifters behind wheel — left/right */
+    ctx.fillStyle='#1a1c22';
+    ctx.beginPath();
+    ctx.moveTo(-swR+30*u, -swR*0.4);
+    ctx.lineTo(-swR-20*u, -swR*0.5);
+    ctx.lineTo(-swR-20*u, -swR*0.2);
+    ctx.lineTo(-swR+30*u, -swR*0.15);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#ff7a18';
+    ctx.font=`700 ${10*u}px 'JetBrains Mono', monospace`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('-', -swR-2*u, -swR*0.3);
+
+    ctx.fillStyle='#1a1c22';
+    ctx.beginPath();
+    ctx.moveTo(swR-30*u, -swR*0.4);
+    ctx.lineTo(swR+20*u, -swR*0.5);
+    ctx.lineTo(swR+20*u, -swR*0.2);
+    ctx.lineTo(swR-30*u, -swR*0.15);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#6ee7b7';
+    ctx.font=`700 ${10*u}px 'JetBrains Mono', monospace`;
+    ctx.fillText('+', swR+2*u, -swR*0.3);
+
+    ctx.restore();
+
+    /* ── Center stack — infotainment + climate */
+    const csW = 220*u, csH = 280*u;
+    const csX = cx - csW/2;
+    const csY = dashTop + 46*u;
+    /* surround */
+    ctx.fillStyle='#0a0b10';
+    ctx.fillRect(csX-8*u, csY-4*u, csW+16*u, csH+8*u);
+    /* infotainment screen */
+    ctx.fillStyle='#04060c';
+    ctx.fillRect(csX, csY, csW, csH*0.55);
+    ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
+    ctx.strokeRect(csX, csY, csW, csH*0.55);
+    /* screen content — map */
+    ctx.fillStyle='#0a1224';
+    ctx.fillRect(csX+4*u, csY+22*u, csW-8*u, csH*0.55-26*u);
+    /* fake map road */
+    ctx.strokeStyle='#fbbf24'; ctx.lineWidth=2.5*u;
+    ctx.beginPath();
+    ctx.moveTo(csX+10*u, csY+csH*0.5);
+    ctx.bezierCurveTo(csX+csW*0.4, csY+csH*0.3, csX+csW*0.6, csY+csH*0.5, csX+csW-10*u, csY+csH*0.25);
+    ctx.stroke();
+    ctx.strokeStyle='rgba(96,165,250,0.6)'; ctx.lineWidth=1*u;
+    for(let i=0;i<3;i++){
+      ctx.beginPath();
+      ctx.moveTo(csX+10*u, csY+csH*0.4 - i*15*u);
+      ctx.lineTo(csX+csW-10*u, csY+csH*0.4 - i*15*u);
+      ctx.stroke();
+    }
+    /* car icon on map */
+    const carIconX = csX+csW*0.28 + Math.sin(frame*0.02)*8*u;
+    const carIconY = csY+csH*0.42 + Math.cos(frame*0.02)*4*u;
+    ctx.fillStyle='#ff7a18';
+    ctx.beginPath(); ctx.arc(carIconX, carIconY, 4*u, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(carIconX, carIconY, 8*u, 0, Math.PI*2);
+    ctx.strokeStyle='rgba(255,122,24,0.5)'; ctx.lineWidth=1*u; ctx.stroke();
+    /* screen header */
+    ctx.fillStyle='#fff'; ctx.font=`700 ${10*u}px 'JetBrains Mono', monospace`;
+    ctx.textAlign='left'; ctx.textBaseline='top';
+    ctx.fillText('NAVIGATION', csX+8*u, csY+6*u);
+    ctx.fillStyle='#6ee7b7';
+    ctx.textAlign='right';
+    ctx.fillText('● LIVE', csX+csW-8*u, csY+6*u);
+    /* screen footer */
+    ctx.fillStyle='#9aa1af'; ctx.font=`500 ${8.5*u}px 'JetBrains Mono', monospace`;
+    ctx.textAlign='left';
+    ctx.fillText('NÜRBURGRING NORDSCHLEIFE · 4.2 KM', csX+8*u, csY+csH*0.55-14*u);
+
+    /* climate vent below screen */
+    const vY = csY + csH*0.55 + 8*u;
+    const vH = 26*u;
+    ctx.fillStyle='#0e1015';
+    ctx.fillRect(csX, vY, csW, vH);
+    /* vent fins */
+    for(let i=0;i<8;i++){
+      ctx.fillStyle='#1c1e25';
+      ctx.fillRect(csX+6*u + i*((csW-12*u)/8), vY+4*u, 2*u, vH-8*u);
+    }
+    ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1; ctx.strokeRect(csX, vY, csW, vH);
+
+    /* climate panel */
+    const cpY = vY + vH + 8*u;
+    const cpH = csH - (cpY - csY) - 10*u;
+    ctx.fillStyle='#0a0b10';
+    ctx.fillRect(csX, cpY, csW, cpH);
+    /* drive mode dial (left) */
+    const dialR = 30*u;
+    const dialX = csX + 44*u, dialY = cpY + cpH/2;
+    ctx.beginPath(); ctx.arc(dialX, dialY, dialR, 0, Math.PI*2);
+    const dG=ctx.createRadialGradient(dialX-8,dialY-8,2,dialX,dialY,dialR);
+    dG.addColorStop(0,'#2c2f38'); dG.addColorStop(1,'#0a0b10');
+    ctx.fillStyle=dG; ctx.fill();
+    ctx.strokeStyle='#1a1c22'; ctx.lineWidth=2*u; ctx.stroke();
+    /* dial pointer (sport+) */
+    ctx.save();
+    ctx.translate(dialX, dialY);
+    ctx.rotate(Math.PI*0.6);
+    ctx.fillStyle='#ff7a18';
+    ctx.shadowColor='#ff7a18'; ctx.shadowBlur=8;
+    ctx.fillRect(-1.5*u, -dialR+4*u, 3*u, 10*u);
+    ctx.shadowBlur=0;
+    ctx.restore();
+    ctx.fillStyle='#7d8493';
+    ctx.font=`600 ${8*u}px 'JetBrains Mono', monospace`;
+    ctx.textAlign='center'; ctx.textBaseline='top';
+    ctx.fillText('DRIVE MODE', dialX, dialY+dialR+6*u);
+    ctx.fillStyle='#ff7a18';
+    ctx.font=`700 ${10*u}px 'JetBrains Mono', monospace`;
+    ctx.fillText('SPORT+', dialX, dialY+dialR+18*u);
+
+    /* climate temp dial (right) */
+    const dialX2 = csX + csW - 44*u, dialY2 = cpY + cpH/2;
+    ctx.beginPath(); ctx.arc(dialX2, dialY2, dialR, 0, Math.PI*2);
+    ctx.fillStyle=dG; ctx.fill();
+    ctx.strokeStyle='#1a1c22'; ctx.lineWidth=2*u; ctx.stroke();
+    ctx.save();
+    ctx.translate(dialX2, dialY2);
+    ctx.rotate(-Math.PI*0.3);
+    ctx.fillStyle='#60a5fa';
+    ctx.shadowColor='#60a5fa'; ctx.shadowBlur=8;
+    ctx.fillRect(-1.5*u, -dialR+4*u, 3*u, 10*u);
+    ctx.shadowBlur=0;
+    ctx.restore();
+    ctx.fillStyle='#7d8493';
+    ctx.font=`600 ${8*u}px 'JetBrains Mono', monospace`;
+    ctx.fillText('CLIMATE', dialX2, dialY2+dialR+6*u);
+    ctx.fillStyle='#60a5fa';
+    ctx.font=`700 ${10*u}px 'JetBrains Mono', monospace`;
+    ctx.fillText('21°C', dialX2, dialY2+dialR+18*u);
+
+    /* center small buttons between dials */
+    const bRow = cpY + 14*u;
+    ['HEAT','VENT','A/C','DEFROST'].forEach((lbl,i)=>{
+      const bx = csX + 86*u + (i%2)*40*u;
+      const by = bRow + Math.floor(i/2)*22*u;
+      ctx.fillStyle='#15171d';
+      ctx.fillRect(bx, by, 36*u, 18*u);
+      ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=0.5;
+      ctx.strokeRect(bx, by, 36*u, 18*u);
+      ctx.fillStyle=i===2?'#6ee7b7':'#9aa1af';
+      ctx.font=`700 ${7.5*u}px 'JetBrains Mono', monospace`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(lbl, bx+18*u, by+9*u);
+    });
+
+    /* ── Gear selector / shift knob (right of wheel base) */
+    const gsX = cx + 200*u;
+    const gsY = H - 110*u;
+    ctx.fillStyle='#0a0b10';
+    ctx.fillRect(gsX-30*u, gsY-50*u, 60*u, 110*u);
+    ctx.strokeStyle='rgba(255,255,255,0.06)';
+    ctx.strokeRect(gsX-30*u, gsY-50*u, 60*u, 110*u);
+    /* gate slot */
+    ctx.fillStyle='#04050a';
+    ctx.fillRect(gsX-6*u, gsY-44*u, 12*u, 96*u);
+    /* PRND markers */
+    ['P','R','N','D'].forEach((g,i)=>{
+      const gy = gsY - 36*u + i*24*u;
+      ctx.fillStyle = (g==='D')?'#ff7a18':'#7d8493';
+      ctx.font=`800 ${11*u}px 'JetBrains Mono', monospace`;
+      ctx.textAlign='left'; ctx.textBaseline='middle';
+      ctx.fillText(g, gsX+10*u, gy);
+    });
+    /* shift knob in D */
+    const knobY = gsY + 36*u;
+    ctx.fillStyle='#1c1e25';
+    ctx.beginPath(); ctx.arc(gsX, knobY, 14*u, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#ff7a18'; ctx.lineWidth=2*u; ctx.stroke();
+    ctx.fillStyle='#fff';
+    ctx.font=`700 ${10*u}px 'Inter', sans-serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('D', gsX, knobY);
+
+    /* drive mode buttons left of shifter */
+    const dmX = cx - 240*u;
+    ctx.fillStyle='#0a0b10';
+    ctx.fillRect(dmX-30*u, gsY-50*u, 60*u, 110*u);
+    ctx.strokeStyle='rgba(255,255,255,0.06)';
+    ctx.strokeRect(dmX-30*u, gsY-50*u, 60*u, 110*u);
+    [['ESP','ON'],['LAUNCH','◉'],['EXHAUST','■'],['LIFT','▲']].forEach((b,i)=>{
+      const bx = dmX-22*u, by = gsY-42*u + i*24*u;
+      ctx.fillStyle='#15171d';
+      ctx.fillRect(bx, by, 44*u, 18*u);
+      ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=0.5;
+      ctx.strokeRect(bx, by, 44*u, 18*u);
+      ctx.fillStyle=i===0?'#6ee7b7':'#9aa1af';
+      ctx.font=`700 ${6.5*u}px 'JetBrains Mono', monospace`;
+      ctx.textAlign='left'; ctx.textBaseline='middle';
+      ctx.fillText(b[0], bx+4*u, by+9*u);
+      ctx.textAlign='right';
+      ctx.fillStyle=i===0?'#6ee7b7':'#fff';
+      ctx.fillText(b[1], bx+40*u, by+9*u);
+    });
+
+    /* ── Door cards visible at bottom edges */
+    /* left door */
+    ctx.fillStyle='#0a0b10';
+    ctx.beginPath();
+    ctx.moveTo(0, dashBot);
+    ctx.lineTo(160*u, dashBot+10*u);
+    ctx.lineTo(120*u, H);
+    ctx.lineTo(0, H);
+    ctx.closePath(); ctx.fill();
+    /* armrest highlight */
+    ctx.fillStyle='#13141a';
+    ctx.beginPath();
+    ctx.moveTo(0, dashBot+50*u);
+    ctx.lineTo(140*u, dashBot+60*u);
+    ctx.lineTo(110*u, H-30*u);
+    ctx.lineTo(0, H-20*u);
+    ctx.closePath(); ctx.fill();
+    /* stitch */
+    ctx.strokeStyle='rgba(255,122,24,0.4)'; ctx.lineWidth=1; ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(0,dashBot+52*u); ctx.lineTo(140*u, dashBot+62*u); ctx.stroke();
+    ctx.setLineDash([]);
+
+    /* right door */
+    ctx.fillStyle='#0a0b10';
+    ctx.beginPath();
+    ctx.moveTo(W, dashBot);
+    ctx.lineTo(W-160*u, dashBot+10*u);
+    ctx.lineTo(W-120*u, H);
+    ctx.lineTo(W, H);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#13141a';
+    ctx.beginPath();
+    ctx.moveTo(W, dashBot+50*u);
+    ctx.lineTo(W-140*u, dashBot+60*u);
+    ctx.lineTo(W-110*u, H-30*u);
+    ctx.lineTo(W, H-20*u);
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle='rgba(255,122,24,0.4)'; ctx.lineWidth=1; ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(W,dashBot+52*u); ctx.lineTo(W-140*u, dashBot+62*u); ctx.stroke();
+    ctx.setLineDash([]);
+
+    /* ── Ambient lighting strip — orange under dash */
+    const ambG=ctx.createLinearGradient(0, dashBot, 0, dashBot+30*u);
+    ambG.addColorStop(0,'rgba(255,122,24,0.32)');
+    ambG.addColorStop(1,'rgba(255,122,24,0)');
+    ctx.fillStyle=ambG;
+    ctx.fillRect(0, dashBot, W, 40*u);
+
+    /* small badges in lower corners */
+    ctx.fillStyle='rgba(255,255,255,0.4)';
+    ctx.font=`600 ${9*u}px 'JetBrains Mono', monospace`;
+    ctx.textAlign='left'; ctx.textBaseline='bottom';
+    ctx.fillText('COCKPIT · DRIVER', 32*u, H-32*u);
+    ctx.textAlign='right';
+    ctx.fillText('GT/01 · LHD', W-32*u, H-32*u);
+
+    /* telemetry footer */
+    tAng.textContent = 'SPD '+Math.round(speed).toString().padStart(3,'0')+' KPH';
+    tFr.textContent  = 'RPM '+String(Math.round(rpm)).padStart(5,'0');
+  }
+
+  /* ── Background ── */
+  function drawBG(){
+    const yG=yBT-0.001;
+    const minor='rgba(120,150,210,0.10)';
+    const major='rgba(255,122,24,0.18)';
+    const range=10;
+    for(let gx=-range;gx<=range;gx++){
+      const isM=gx%4===0;
+      const a=proj(gx*0.6,yG,-range), b=proj(gx*0.6,yG,range);
+      if(a&&b){
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=isM?major:minor; ctx.lineWidth=isM?0.8:0.5; ctx.stroke();
+      }
+    }
+    for(let gz=-range;gz<=range;gz++){
+      const isM=gz%4===0;
+      const a=proj(-range,yG,gz*0.6), b=proj(range,yG,gz*0.6);
+      if(a&&b){
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=isM?major:minor; ctx.lineWidth=isM?0.8:0.5; ctx.stroke();
+      }
+    }
+    const cp=proj(0,yG,0);
+    if(cp){
+      ctx.strokeStyle='rgba(255,122,24,0.32)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(cp.x-14,cp.y); ctx.lineTo(cp.x+14,cp.y);
+      ctx.moveTo(cp.x,cp.y-14); ctx.lineTo(cp.x,cp.y+14); ctx.stroke();
+      const halo=ctx.createRadialGradient(cp.x,cp.y,8,cp.x,cp.y,280);
+      halo.addColorStop(0,'rgba(40,80,160,0.32)'); halo.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=halo; ctx.fillRect(0,0,W,H);
+    }
+  }
+
+  /* ── per-group offset with eased progress ── */
+  function offset(g){
+    const t=explProg[g];
+    if(t<=0.0001) return [0,0,0];
+    const o=GROUP_OFFSETS[g];
+    return [o[0]*t, o[1]*t, o[2]*t];
+  }
+
+  /* ── label fixed screen positions — kept clear of corners/telemetry ── */
+  function labelPositions(){
+    /* arrange 5 labels around the perimeter, away from corner brackets and topbar */
+    const pad=40;
+    const topY = 110;          /* below top header */
+    const midY = H*0.50 - 30;
+    const lowY = H - 200;      /* above controls */
+    /* default sane positions for any aspect */
+    return [
+      { x: W - 180 - pad, y: topY },   // POWERTRAIN — right top (well below corner)
+      { x: W - 180 - pad, y: lowY },   // SUSPENSION  — right bottom
+      { x: pad,           y: topY },   // ELECTRICAL — left top
+      { x: pad,           y: lowY },   // BRAKING    — left bottom
+      { x: pad,           y: midY }    // FUEL       — left middle
+    ];
+  }
+
+  /* spring/eased motion toward target */
+  function easeOutBack(t){
+    const c1=1.70158, c3=c1+1;
+    return 1 + c3*Math.pow(t-1,3) + c1*Math.pow(t-1,2);
+  }
+  function easeInOut(t){
+    return t<0.5? 2*t*t : 1 - Math.pow(-2*t+2,2)/2;
+  }
+
+  /* per-group internal eased value (0..1) */
+  let explLin = [0,0,0,0,0,0]; // raw lerp toward target
+
+  function step(){
+    /* view lerp */
+    viewT += ((view==='interior'?1:0) - viewT) * 0.10;
+
+    if(view==='interior' && viewT>0.5){
+      drawInterior();
+      frame++;
+      requestAnimationFrame(step);
+      return;
+    }
+
+    /* update raw lerp */
+    const stagger = [0, 0.0, 0.10, 0.20, 0.30, 0.40]; // each group starts a bit later when exploding
+    for(let g=0;g<6;g++){
+      const tg = explTarget[g];
+      const speed = exploded ? 0.06 : 0.10;
+      explLin[g] += (tg - explLin[g]) * speed;
+      /* stagger only when exploding outward */
+      let s = explLin[g];
+      if(exploded){
+        const offs = stagger[g];
+        s = Math.max(0, (explLin[0] - offs)/(1-offs+0.0001));
+        s = Math.min(1, s);
+      }
+      /* ease-out-back for a satisfying pop on the way out, ease-in-out on return */
+      const t = exploded ? Math.max(0,Math.min(1,s)) : Math.max(0,Math.min(1,explLin[g]));
+      explProg[g] = exploded ? easeOutBack(t)*0.6 + t*0.4 : easeInOut(t);
+      /* clamp because easeOutBack overshoots above 1 — that's the bounce we want */
+      if(explProg[g]<0) explProg[g]=0;
+      if(explProg[g]>1.15) explProg[g]=1.15;
+    }
+
+    /* iso lerp */
+    isoT += ((isolated!==null?1:0) - isoT) * 0.10;
+
+    if(autoRotate && !dragging) angle += rotSpeed;
+    else if(!dragging){ vel*=0.92; angle += vel; }
+
+    ctx.clearRect(0,0,W,H);
+    drawBG();
+
+    /* wheels with explode offset (suspension group=2) */
+    const cA=Math.cos(-angle), sA=Math.sin(-angle);
+    const wrz=(x,z)=>x*sA + z*cA;
+    const off2 = offset(2);
+    const wheelsProj = WPOS.map(w=>{
+      const x=w.x+off2[0], y=w.y+off2[1], z=w.z+off2[2];
+      const p=proj(x,y,z);
+      return {w,p,rz:wrz(x,z)};
+    });
+
+    /* far wheels first */
+    wheelsProj.forEach(wp=>{
+      if(wp.rz<=0 && wp.p){
+        const dim = (isoT>0.5 && isolated!==2)?0.18:1;
+        ctx.globalAlpha=dim; drawWheel(wp.w,wp.p); ctx.globalAlpha=1;
+      }
+    });
+
+    /* faces with offset */
+    const faces=[];
+    CAR.forEach(f=>{
+      const off=offset(f.g);
+      const ptsW=f.pts.map(p=>[p[0]+off[0],p[1]+off[1],p[2]+off[2]]);
+      const ps=ptsW.map(p=>proj(p[0],p[1],p[2]));
+      if(ps.some(p=>!p)) return;
+      const avgZ=ps.reduce((s,p)=>s+p.z,0)/ps.length;
+      faces.push({f,ps,ptsW,avgZ,br:bright(ptsW)});
+    });
+    faces.sort((a,b)=>a.avgZ-b.avgZ);
+
+    faces.forEach(item=>{
+      const ps=item.ps, f=item.f;
+      let dim=1;
+      if(isoT>0.5 && isolated!==null){
+        if(f.g===0) dim=0.10;
+        else if(f.g!==isolated) dim=0.16;
+      }
+      ctx.globalAlpha=dim;
+      ctx.beginPath(); ctx.moveTo(ps[0].x,ps[0].y);
+      for(let i=1;i<ps.length;i++) ctx.lineTo(ps[i].x,ps[i].y);
+      ctx.closePath();
+      ctx.fillStyle = f.al!=null?tint(f.col,item.br,f.al):tint(f.col,item.br);
+      ctx.fill();
+      if(f.col===C.GLASS){
+        const gs=ctx.createLinearGradient(ps[0].x,ps[0].y,ps[1]?.x||ps[0].x+20,ps[1]?.y||ps[0].y);
+        gs.addColorStop(0,'rgba(255,255,255,0.10)');
+        gs.addColorStop(0.5,'rgba(255,255,255,0.02)');
+        gs.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.beginPath(); ctx.moveTo(ps[0].x,ps[0].y);
+        for(let i=1;i<ps.length;i++) ctx.lineTo(ps[i].x,ps[i].y);
+        ctx.closePath(); ctx.fillStyle=gs; ctx.fill();
+      }
+      if(f.col===C.HDLT||f.col===C.DRL){
+        ctx.beginPath(); ctx.moveTo(ps[0].x,ps[0].y);
+        for(let i=1;i<ps.length;i++) ctx.lineTo(ps[i].x,ps[i].y);
+        ctx.closePath();
+        ctx.shadowColor='#aac8ff'; ctx.shadowBlur=20;
+        ctx.fillStyle=tint(f.col,item.br); ctx.fill(); ctx.shadowBlur=0;
+      }
+      if(f.col===C.TAIL){
+        ctx.beginPath(); ctx.moveTo(ps[0].x,ps[0].y);
+        for(let i=1;i<ps.length;i++) ctx.lineTo(ps[i].x,ps[i].y);
+        ctx.closePath();
+        ctx.shadowColor='#ff2418'; ctx.shadowBlur=24;
+        ctx.fillStyle=tint(f.col,item.br); ctx.fill(); ctx.shadowBlur=0;
+      }
+      if(f.col===C.ACC){
+        ctx.shadowColor='#ff7a18'; ctx.shadowBlur=14;
+        ctx.fill(); ctx.shadowBlur=0;
+      }
+      ctx.strokeStyle='rgba(0,0,4,0.32)'; ctx.lineWidth=0.4; ctx.stroke();
+    });
+    ctx.globalAlpha=1;
+
+    /* near wheels */
+    wheelsProj.forEach(wp=>{
+      if(wp.rz>0 && wp.p){
+        const dim=(isoT>0.5 && isolated!==2)?0.18:1;
+        ctx.globalAlpha=dim; drawWheel(wp.w,wp.p); ctx.globalAlpha=1;
+      }
+    });
+
+    /* ground reflection bar */
+    const gp=proj(0,yBT,0);
+    if(gp){
+      const rf=ctx.createLinearGradient(W/2,gp.y,W/2,gp.y+60);
+      rf.addColorStop(0,'rgba(50,80,160,0.14)'); rf.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=rf; ctx.fillRect(0,gp.y,W,60);
+    }
+
+    /* ── Anchors + leader lines + label placement ── */
+    const positions = labelPositions();
+    SYSTEMS.forEach((s,i)=>{
+      const off = offset(s.gid);
+      const ax = s.anchor[0]+off[0];
+      const ay = s.anchor[1]+off[1];
+      const az = s.anchor[2]+off[2];
+      const sp = proj(ax,ay,az);
+      const el = labelEls[i];
+      const lp = positions[i];
+      const lineG = linePaths[i];
+
+      if(!sp){ el.style.opacity=0; lineG.g.style.opacity=0; return; }
+      let visible = (isolated!==null && isolated!==s.gid) ? 0.22 : 1;
+
+      /* anchor pulse drawn on canvas */
+      ctx.globalAlpha = visible;
+      const pulse = 3 + Math.sin(frame*0.08+i)*1.4;
+      ctx.beginPath(); ctx.arc(sp.x,sp.y,pulse*2.2,0,Math.PI*2);
+      ctx.strokeStyle=s.hex+'33'; ctx.lineWidth=1; ctx.stroke();
+      ctx.beginPath(); ctx.arc(sp.x,sp.y,pulse,0,Math.PI*2);
+      ctx.strokeStyle=s.hex+'aa'; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.beginPath(); ctx.arc(sp.x,sp.y,3.4,0,Math.PI*2);
+      ctx.fillStyle=s.hex; ctx.shadowColor=s.hex; ctx.shadowBlur=14; ctx.fill(); ctx.shadowBlur=0;
+      ctx.globalAlpha=1;
+
+      /* place label at fixed screen position — never overlaps top corner */
+      el.style.left = lp.x+'px';
+      el.style.top  = lp.y+'px';
+      el.style.opacity = visible;
+
+      /* leader line — orthogonal L from anchor to label corner, on SVG layer (crisp) */
+      const labelRect = el.getBoundingClientRect();
+      const stageRect = stage.getBoundingClientRect();
+      const cardCx = labelRect.left - stageRect.left + labelRect.width/2;
+      const cardCy = labelRect.top  - stageRect.top  + labelRect.height/2;
+      const cardEdgeX = (sp.x < cardCx) ? labelRect.left - stageRect.left
+                                        : labelRect.left - stageRect.left + labelRect.width;
+      const cardEdgeY = cardCy;
+
+      /* path: anchor -> mid (orthogonal) -> card edge */
+      const midX = sp.x + (cardEdgeX - sp.x)*0.55;
+      const d = `M ${sp.x.toFixed(1)} ${sp.y.toFixed(1)}
+                 L ${midX.toFixed(1)} ${sp.y.toFixed(1)}
+                 L ${midX.toFixed(1)} ${cardEdgeY.toFixed(1)}
+                 L ${cardEdgeX.toFixed(1)} ${cardEdgeY.toFixed(1)}`;
+      lineG.path.setAttribute('d', d);
+      lineG.path.setAttribute('opacity', String(0.85*visible));
+      lineG.c.setAttribute('cx', cardEdgeX.toFixed(1));
+      lineG.c.setAttribute('cy', cardEdgeY.toFixed(1));
+      lineG.c.setAttribute('opacity', String(visible));
+      lineG.g.style.opacity = visible;
+    });
+
+    /* telemetry */
+    const degs = ((angle*180/Math.PI)%360+360)%360;
+    tAng.textContent = 'ANG '+degs.toFixed(1).padStart(5,'0')+'°';
+    tFr.textContent  = 'FR '+String(frame).padStart(5,'0');
+
+    wRot += 0.03; frame++;
+    requestAnimationFrame(step);
+  }
+
+  resize();
+  setTimeout(()=>hint.classList.add('fade'),5500);
+  step();
+})();
+</script>
+</body>
+</html>

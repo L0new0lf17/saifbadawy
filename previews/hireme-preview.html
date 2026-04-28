@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hire Me Button — Interaction Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07080e;--s1:#0d0e17;--s2:#13141f;
+  --border:rgba(255,255,255,0.07);--borderB:rgba(255,255,255,0.13);
+  --accent:#E8820C;--accent2:#F5A623;
+  --white:#f0ede8;--muted:rgba(240,237,232,0.5);
+  --bebas:'Bebas Neue',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+}
+html,body{background:var(--bg);color:var(--white);font-family:var(--sans);min-height:100vh;cursor:none}
+
+/* ── custom cursor ── */
+#cur{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s}
+#curR{position:fixed;width:38px;height:38px;border-radius:50%;border:1px solid var(--accent);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s;opacity:.5}
+
+/* ── preview nav ── */
+nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:.8rem 2.4rem;background:rgba(7,8,14,.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.logo{font-family:var(--bebas);font-size:1.2rem;letter-spacing:.22em;display:flex;align-items:center;gap:.5rem}
+.logoDot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.badge{font-family:var(--mono);font-size:.46rem;letter-spacing:.2em;text-transform:uppercase;padding:.3rem .9rem;border:1px solid rgba(232,130,12,.4);color:var(--accent);background:rgba(232,130,12,.05)}
+
+/* ── page layout ── */
+.page{max-width:900px;margin:0 auto;padding:3rem 2rem 6rem}
+.hdrEye{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem}
+.hdrLine{width:28px;height:1px;background:rgba(232,130,12,.4)}
+.hdrTag{font-family:var(--mono);font-size:.48rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+.hdrTitle{font-family:var(--bebas);font-size:2.6rem;letter-spacing:.04em;line-height:.94;margin-bottom:.5rem}
+.hdrSub{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;color:var(--muted);margin-bottom:3rem}
+
+/* ── stage ── */
+.stage{background:var(--s1);border:1px solid var(--border);padding:5rem 2rem;display:flex;flex-direction:column;align-items:center;gap:2rem;position:relative;overflow:hidden;margin-bottom:2rem}
+.stage::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2),transparent)}
+.stageLabel{font-family:var(--mono);font-size:.46rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.stageHint{font-family:var(--mono);font-size:.46rem;letter-spacing:.12em;color:rgba(232,130,12,.5);position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);white-space:nowrap}
+
+/* ── the Hire Me button ── */
+#hireMeBtn{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:var(--accent);color:#07080e;
+  font-family:var(--bebas);font-size:1.1rem;letter-spacing:.18em;
+  padding:1rem 2.4rem;border:none;cursor:none;
+  position:relative;overflow:hidden;
+  transition:background .2s, transform .08s linear, box-shadow .2s;
+  box-shadow:0 0 0 rgba(232,130,12,0);
+}
+#hireMeBtn:hover{background:var(--accent2)}
+#hireMeBtn .btnArrow{transition:transform .2s}
+#hireMeBtn:hover .btnArrow{transform:translateX(3px)}
+
+/* ── notes strip ── */
+.notes{background:rgba(232,130,12,.03);border:1px solid rgba(232,130,12,.15);padding:1.5rem 2rem;position:relative;margin-bottom:2.5rem}
+.notesLabel{position:absolute;top:-1px;left:1.5rem;font-family:var(--mono);font-size:.42rem;letter-spacing:.2em;text-transform:uppercase;background:rgba(232,130,12,.7);color:#07080e;padding:.18rem .55rem}
+.noteTitle{font-family:var(--mono);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:.9rem;margin-top:.5rem}
+.noteGrid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem 2rem}
+.note{font-family:var(--mono);font-size:.48rem;letter-spacing:.07em;line-height:1.7;color:var(--white);display:flex;gap:.5rem}
+.note::before{content:'→';color:var(--accent);flex-shrink:0}
+.confirmRow{display:flex;gap:1rem;margin-top:1.5rem}
+.btnConfirm{font-family:var(--bebas);font-size:.9rem;letter-spacing:.15em;padding:.7rem 1.8rem;background:var(--accent);color:#07080e;border:none;cursor:pointer;transition:background .2s,transform .15s}
+.btnConfirm:hover{background:var(--accent2);transform:scale(1.02)}
+.btnBack{font-family:var(--mono);font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--border);padding:.65rem 1.3rem;cursor:pointer;transition:all .2s}
+.btnBack:hover{border-color:var(--borderB);color:var(--white)}
+
+/* ── MODAL OVERLAY ── */
+#overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(7,7,7,0);backdrop-filter:blur(0px);
+  display:flex;align-items:center;justify-content:center;padding:2rem;
+  opacity:0;visibility:hidden;
+  transition:opacity .35s ease, visibility .35s ease, backdrop-filter .35s ease;
+}
+#overlay.open{opacity:1;visibility:visible;background:rgba(7,7,7,.88);backdrop-filter:blur(14px)}
+
+/* ── MODAL BOX ── */
+#modal{
+  background:var(--s1);
+  border:1px solid rgba(232,130,12,0.3);
+  max-width:520px;width:100%;
+  position:relative;
+  transform:translateY(32px) scale(0.96);
+  transition:transform .45s cubic-bezier(.16,1,.3,1);
+}
+#overlay.open #modal{transform:translateY(0) scale(1)}
+
+.mTopBar{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#E8820C,#F5A623,transparent)}
+.mClose{
+  position:absolute;top:.85rem;right:.85rem;
+  font-family:var(--mono);font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(240,237,232,0.4);background:none;border:1px solid rgba(255,255,255,0.08);
+  padding:.25rem .65rem;cursor:pointer;transition:color .2s,border-color .2s;
+}
+.mClose:hover{color:var(--accent);border-color:rgba(232,130,12,.5)}
+.mHead{padding:1.75rem 1.75rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.05)}
+.mEye{font-family:var(--mono);font-size:.48rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,130,12,.7);margin-bottom:.5rem}
+.mTitle{font-family:var(--bebas);font-size:1.8rem;letter-spacing:.06em;color:#f0ede8;line-height:1;margin-bottom:.4rem}
+.mSub{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,.4)}
+.mOptions{padding:1.25rem 1.75rem 1.75rem}
+
+/* ── OPTION ROWS ── */
+.optRow{
+  display:flex;align-items:flex-start;gap:1rem;
+  padding:1rem 1.1rem;margin-bottom:.6rem;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.07);
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:background .25s,border-color .25s,transform .2s;
+}
+.optRow:hover{background:rgba(232,130,12,.06);border-color:rgba(232,130,12,.35);transform:translateX(3px)}
+.optBar{position:absolute;left:0;top:0;bottom:0;width:2px;opacity:0;transition:opacity .25s}
+.optRow:hover .optBar{opacity:1}
+.optIcon{font-size:1.3rem;flex-shrink:0;margin-top:.1rem;width:28px;text-align:center}
+.optText{flex:1;min-width:0}
+.optTitle{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#f0ede8;margin-bottom:.2rem}
+.optSub{font-family:var(--mono);font-size:.48rem;letter-spacing:.08em;color:rgba(240,237,232,.38);text-transform:uppercase}
+.optArr{color:rgba(232,130,12,.5);font-size:.9rem;margin-top:.15rem;flex-shrink:0;transition:transform .2s,color .2s}
+.optRow:hover .optArr{transform:translateX(4px);color:var(--accent)}
+
+/* ── toast ── */
+#toast{
+  position:fixed;bottom:2.5rem;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--accent);color:#07080e;
+  font-family:var(--mono);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;
+  padding:.75rem 2rem;z-index:600;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1);
+  pointer-events:none;
+}
+#toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="curR"></div>
+
+<nav>
+  <div class="logo"><div class="logoDot"></div>SAIF BADAWY</div>
+  <div class="badge">⬡ PREVIEW MODE · HIRE ME BUTTON</div>
+</nav>
+
+<div class="page">
+
+  <div class="hdrEye"><div class="hdrLine"></div><span class="hdrTag">Interaction Preview</span></div>
+  <div class="hdrTitle">Hire Me — Button Flow</div>
+  <div class="hdrSub">Click the button below to experience the full interaction · Nothing is implemented on the main site yet</div>
+
+  <!-- STAGE -->
+  <div class="stage">
+    <div class="stageLabel">Hero section context</div>
+    <button id="hireMeBtn" onclick="triggerHireMe()">
+      <span id="btnLabel">Hire Me</span>
+      <svg class="btnArrow" width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="stageHint">↑ click to preview the full interaction</div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="notes">
+    <div class="notesLabel">What's happening & why</div>
+    <div class="noteTitle">The Two-Beat Flow</div>
+    <div class="noteGrid">
+      <div class="note">Button label swaps to "CONNECTING…" on click — gives immediate feedback that something is happening.</div>
+      <div class="note">After 420ms the modal opens. The short pause makes the opening feel earned, not instantaneous.</div>
+      <div class="note">Three clear action paths: LinkedIn message (pre-written), email (pre-filled), or book a call. Recruiter decides the channel.</div>
+      <div class="note">The nav "Hire Me" already opens this same modal — making the hero button match creates one consistent behaviour across the site.</div>
+      <div class="note">On modal close, button resets cleanly. No scroll jump, no state left behind.</div>
+      <div class="note">The current hero button just scrolls to #contact — this replaces a passive scroll with an active decision moment.</div>
+    </div>
+    <div class="confirmRow">
+      <button class="btnConfirm" onclick="doImplement()">✓ IMPLEMENT ON WEBSITE</button>
+      <button class="btnBack" onclick="doReject()">← ADJUST FIRST</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div id="overlay" onclick="if(event.target===this)closeModal()">
+  <div id="modal">
+    <div class="mTopBar"></div>
+    <button class="mClose" onclick="closeModal()">Close ✕</button>
+    <div class="mHead">
+      <div class="mEye">◉ Get in touch</div>
+      <div class="mTitle">Let's Work Together</div>
+      <div class="mSub">Choose how you'd like to reach out</div>
+    </div>
+    <div class="mOptions">
+
+      <div class="optRow" onclick="optClick('linkedin')">
+        <div class="optBar" style="background:#0077B5"></div>
+        <div class="optIcon">💼</div>
+        <div class="optText">
+          <div class="optTitle">Message on LinkedIn</div>
+          <div class="optSub">Pre-written opening, edit and send</div>
+        </div>
+        <div class="optArr">→</div>
+      </div>
+
+      <div class="optRow" onclick="optClick('email')">
+        <div class="optBar" style="background:#E8820C"></div>
+        <div class="optIcon">✉️</div>
+        <div class="optText">
+          <div class="optTitle">Send an Email</div>
+          <div class="optSub">Opens your email client, To field pre-filled</div>
+        </div>
+        <div class="optArr">→</div>
+      </div>
+
+      <div class="optRow" onclick="optClick('call')">
+        <div class="optBar" style="background:#4ade80"></div>
+        <div class="optIcon">📅</div>
+        <div class="optText">
+          <div class="optTitle">Book a Call</div>
+          <div class="optSub">Zoom or Google Meet, pick a time that suits you</div>
+        </div>
+        <div class="optArr">→</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="toast">Implementing on website…</div>
+
+<script>
+// Cursor
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+(function loop(){
+  rx+=(mx-rx)*.13;ry+=(my-ry)*.13;
+  curR.style.left=rx+'px';curR.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+
+// Magnetic on the button
+const btn=document.getElementById('hireMeBtn');
+document.addEventListener('mousemove',e=>{
+  const r=btn.getBoundingClientRect();
+  const cx=r.left+r.width/2,cy=r.top+r.height/2;
+  const dx=e.clientX-cx,dy=e.clientY-cy;
+  const dist=Math.sqrt(dx*dx+dy*dy);
+  const field=90;
+  const inside=e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;
+  const inField=dist<(Math.max(r.width,r.height)/2+field);
+  if(inField){
+    const str=inside?0.38:0.18*(1-(dist-Math.max(r.width,r.height)/2)/field);
+    const sc=inside?1.04:1.015;
+    btn.style.transition='transform .08s linear,background .2s,box-shadow .2s';
+    btn.style.transform=`translate(${dx*str}px,${dy*str}px) scale(${sc})`;
+    btn.style.boxShadow=`0 0 ${20+dist*0.1}px rgba(232,130,12,${0.2+str*0.3})`;
+    curR.style.width='52px';curR.style.height='52px';curR.style.borderColor='rgba(232,130,12,0.6)';
+  } else {
+    btn.style.transition='transform .45s cubic-bezier(.25,.46,.45,.94),background .2s,box-shadow .2s';
+    btn.style.transform='translate(0,0) scale(1)';
+    btn.style.boxShadow='0 0 0 rgba(232,130,12,0)';
+    curR.style.width='38px';curR.style.height='38px';curR.style.borderColor='var(--accent)';
+  }
+});
+
+// Two-beat trigger
+let firing=false;
+function triggerHireMe(){
+  if(firing)return;
+  firing=true;
+  const lbl=document.getElementById('btnLabel');
+
+  // Beat 1 — label swap + pulse
+  lbl.textContent='CONNECTING…';
+  btn.style.transition='transform .12s ease,background .15s,box-shadow .15s';
+  btn.style.transform='scale(0.96)';
+  btn.style.background='#c96e08';
+
+  setTimeout(()=>{
+    btn.style.transform='scale(1.05)';
+    btn.style.background='var(--accent)';
+  },120);
+
+  // Beat 2 — open modal
+  setTimeout(()=>{
+    btn.style.transform='translate(0,0) scale(1)';
+    lbl.textContent='Hire Me';
+    openModal();
+    firing=false;
+  },440);
+}
+
+function openModal(){
+  const ov=document.getElementById('overlay');
+  ov.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  const ov=document.getElementById('overlay');
+  ov.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function optClick(type){
+  const labels={linkedin:'LinkedIn — opening…',email:'Email — opening…',call:'Booking — opening…'};
+  const t=document.getElementById('toast');
+  t.textContent=labels[type];
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+  setTimeout(closeModal,300);
+}
+
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+function doImplement(){
+  const t=document.getElementById('toast');
+  t.textContent='Implementing on website now…';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+  if(window.sendPrompt) window.sendPrompt('Yes implement it — make the hero Hire Me button open the modal with the two-beat animation');
+}
+function doReject(){
+  if(window.sendPrompt) window.sendPrompt('Go back — I want to adjust the Hire Me button interaction before implementing');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final System Review — Saif Badawy</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0f0f0f;
+  color: #e8e4de;
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* Nav tabs */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: #0f0f0f;
+  border-bottom: 1px solid #222;
+  display: flex;
+  padding: 0 24px;
+  gap: 0;
+  overflow-x: auto;
+}
+.nav-tab {
+  padding: 13px 18px;
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.nav-tab:hover { color: #aaa; }
+.nav-tab.active { color: #e8e4de; border-bottom-color: #3b82f6; }
+
+.page { display: none; padding: 32px 24px 60px; max-width: 960px; margin: 0 auto; }
+.page.active { display: block; }
+
+/* Section headers */
+.page-title { font-size: 22px; font-weight: 700; color: #e8e4de; margin-bottom: 4px; }
+.page-sub { font-size: 12px; color: #555; margin-bottom: 28px; }
+
+.section-label {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: #444; margin: 28px 0 12px;
+}
+.section-label:first-child { margin-top: 0; }
+
+/* Pills */
+.pill {
+  display: inline-block; padding: 2px 9px; border-radius: 10px;
+  font-size: 10px; font-weight: 500; white-space: nowrap;
+}
+.pill-green { background: #0d2b1a; color: #4ade80; border: 1px solid #1a4a1a; }
+.pill-yellow { background: #2b1f00; color: #fbbf24; border: 1px solid #4a3500; }
+.pill-blue { background: #0d1a2b; color: #60a5fa; border: 1px solid #1a3050; }
+.pill-red { background: #2b0f0f; color: #f87171; border: 1px solid #4a1a1a; }
+.pill-purple { background: #1f1040; color: #c084fc; border: 1px solid #3d1a50; }
+.pill-gray { background: #252525; color: #888; border: 1px solid #333; }
+.pill-orange { background: #2b1500; color: #fb923c; border: 1px solid #4a2500; }
+.pill-teal { background: #0d2222; color: #2dd4bf; border: 1px solid #1a3d3d; }
+
+/* Cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.card { background: #141414; border: 1px solid #222; border-radius: 8px; padding: 11px 13px; }
+.card.highlight { border-color: #2a2a2a; background: #1a1a1a; }
+.card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.card-icon { font-size: 14px; }
+.card-name { font-size: 12px; font-weight: 600; color: #ddd; }
+.card-desc { font-size: 11px; color: #666; line-height: 1.55; }
+.card-badge { display: inline-block; font-size: 9px; padding: 2px 7px; border-radius: 8px; margin-top: 6px; }
+.cb-green { background: #0d2b1a; color: #4ade80; border: 1px solid #1a4a1a; }
+.cb-yellow { background: #2b1f00; color: #fbbf24; border: 1px solid #4a3500; }
+.cb-blue { background: #0d1a2b; color: #60a5fa; border: 1px solid #1a3050; }
+.cb-purple { background: #1f1040; color: #c084fc; border: 1px solid #3d1a50; }
+.cb-gray { background: #252525; color: #888; border: 1px solid #333; }
+
+/* Two column */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.col-card { border-radius: 8px; padding: 14px; }
+.col-auto { background: #0a1a0a; border: 1px solid #1a4a1a; }
+.col-manual { background: #150a1a; border: 1px solid #3d1a50; }
+.col-title { font-size: 11px; font-weight: 700; margin-bottom: 10px; }
+.col-auto .col-title { color: #4ade80; }
+.col-manual .col-title { color: #c084fc; }
+.col-item { font-size: 11px; color: #777; margin-bottom: 6px; display: flex; gap: 7px; line-height: 1.5; }
+.col-item-dot { flex-shrink: 0; margin-top: 4px; width: 5px; height: 5px; border-radius: 50%; }
+.col-auto .col-item-dot { background: #4ade80; }
+.col-manual .col-item-dot { background: #c084fc; }
+.col-item strong { color: #aaa; }
+
+/* Flow diagram */
+.flow-row {
+  display: flex; align-items: stretch; gap: 10px; margin-bottom: 8px;
+}
+.flow-box {
+  flex: 1; background: #141414; border: 1px solid #222; border-radius: 8px;
+  padding: 10px 13px; font-size: 11px;
+}
+.flow-box.green { border-color: #1a4a1a; background: #0a1a0a; }
+.flow-box.yellow { border-color: #4a3500; background: #1a1200; }
+.flow-box.blue { border-color: #1a3050; background: #0a0f1a; }
+.flow-box.orange { border-color: #4a2a00; background: #1a0f00; }
+.flow-box-title { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+.flow-box.green .flow-box-title { color: #4ade80; }
+.flow-box.yellow .flow-box-title { color: #fbbf24; }
+.flow-box.blue .flow-box-title { color: #60a5fa; }
+.flow-box.orange .flow-box-title { color: #fb923c; }
+.flow-box-desc { color: #666; line-height: 1.5; }
+.flow-arrow-mid { display: flex; align-items: center; color: #333; font-size: 16px; flex-shrink: 0; }
+
+/* Ops bar */
+.ops-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.ops-label { font-size: 11px; color: #777; width: 230px; flex-shrink: 0; }
+.ops-track { flex: 1; height: 5px; background: #1a1a1a; border-radius: 3px; overflow: hidden; }
+.ops-fill { height: 100%; border-radius: 3px; }
+.ops-val { font-size: 11px; color: #555; width: 55px; text-align: right; flex-shrink: 0; }
+.ops-total {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0 0; margin-top: 8px; border-top: 1px solid #222;
+}
+
+/* Cost table */
+.cost-box { background: #141414; border: 1px solid #222; border-radius: 10px; overflow: hidden; }
+.cost-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid #1a1a1a; font-size: 12px; }
+.cost-row:last-child { border-bottom: none; }
+.cost-row.total { background: #1a1a1a; padding: 14px 16px; }
+.cost-label { color: #888; }
+.cost-val-free { color: #4ade80; font-weight: 600; }
+.cost-val-paid { color: #fbbf24; font-weight: 600; }
+.cost-val-total { color: #4ade80; font-size: 18px; font-weight: 700; }
+.cost-note { font-size: 10px; color: #555; margin-top: 2px; }
+
+/* Constraints table */
+.constraint-box { background: #141414; border: 1px solid #222; border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+.constraint-row { display: flex; gap: 12px; padding: 10px 14px; border-bottom: 1px solid #1a1a1a; align-items: flex-start; }
+.constraint-row:last-child { border-bottom: none; }
+.constraint-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.constraint-body { flex: 1; }
+.constraint-title { font-size: 12px; font-weight: 600; color: #ddd; margin-bottom: 3px; }
+.constraint-desc { font-size: 11px; color: #666; line-height: 1.55; }
+.constraint-verdict { font-size: 10px; margin-top: 5px; font-weight: 600; }
+.verdict-ok { color: #4ade80; }
+.verdict-note { color: #fbbf24; }
+.verdict-limit { color: #f87171; }
+
+/* Notion DB grid */
+.db-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 8px; }
+.db-item { background: #141414; border: 1px solid #222; border-radius: 8px; padding: 10px 12px; }
+.db-item.new-db { border-color: #4a3500; background: #1a1200; }
+.db-num { font-size: 10px; color: #444; letter-spacing: 1px; margin-bottom: 3px; }
+.db-icon { font-size: 15px; margin-bottom: 4px; }
+.db-name { font-size: 12px; font-weight: 600; color: #ddd; margin-bottom: 3px; }
+.db-item.new-db .db-name { color: #fbbf24; }
+.db-desc { font-size: 10px; color: #666; line-height: 1.4; }
+.db-src { font-size: 9px; padding: 2px 6px; border-radius: 8px; display: inline-block; margin-top: 5px; }
+.src-d { background: #0d2b1a; color: #4ade80; border: 1px solid #1a4a1a; }
+.src-m { background: #2b1f00; color: #fbbf24; border: 1px solid #4a3500; }
+.src-a { background: #1f1040; color: #c084fc; border: 1px solid #3d1a50; }
+.src-both { background: #0d1a2b; color: #60a5fa; border: 1px solid #1a3050; }
+.new-tag { font-size: 9px; padding: 1px 5px; border-radius: 6px; background: #2b1f00; color: #fbbf24; border: 1px solid #4a3500; margin-left: 4px; }
+
+/* Summary bar */
+.summary-bar {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px;
+}
+.sum-card { background: #141414; border: 1px solid #222; border-radius: 8px; padding: 14px; text-align: center; }
+.sum-val { font-size: 22px; font-weight: 700; color: #e8e4de; }
+.sum-label { font-size: 10px; color: #555; margin-top: 3px; }
+.sum-note { font-size: 10px; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div class="nav">
+  <div class="nav-tab active" onclick="showPage('overview')">Overview</div>
+  <div class="nav-tab" onclick="showPage('notion')">Notion Databases</div>
+  <div class="nav-tab" onclick="showPage('automation')">Automation</div>
+  <div class="nav-tab" onclick="showPage('manual')">Manual vs Auto</div>
+  <div class="nav-tab" onclick="showPage('cost')">Cost</div>
+  <div class="nav-tab" onclick="showPage('limits')">Limits & Constraints</div>
+  <div class="nav-tab" onclick="showPage('roadmap')">Roadmap</div>
+</div>
+
+<!-- ══════════ OVERVIEW ══════════ -->
+<div id="page-overview" class="page active">
+  <div class="page-title">Full System Overview</div>
+  <div class="page-sub">Everything in one place before we build</div>
+
+  <div class="summary-bar">
+    <div class="sum-card">
+      <div class="sum-val">6</div>
+      <div class="sum-label">System Layers</div>
+      <div class="sum-note" style="color:#60a5fa;">End-to-end</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-val">10</div>
+      <div class="sum-label">Notion Databases</div>
+      <div class="sum-note" style="color:#60a5fa;">All free</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-val">10</div>
+      <div class="sum-label">Make.com Scenarios</div>
+      <div class="sum-note" style="color:#fbbf24;">$9/mo</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-val">$9</div>
+      <div class="sum-label">Total Monthly Cost</div>
+      <div class="sum-note" style="color:#4ade80;">Everything else free</div>
+    </div>
+  </div>
+
+  <div class="section-label">How data flows through the system</div>
+
+  <div class="flow-row">
+    <div class="flow-box green">
+      <div class="flow-box-title">01 · Website</div>
+      <div class="flow-box-desc">saifbadawy.com fires events. Tools (chatbot, ROI, 90-day, visits) go direct to Notion. Professional actions (contact form, Calendly) go to Make.com.</div>
+    </div>
+    <div class="flow-arrow-mid">→</div>
+    <div class="flow-box yellow">
+      <div class="flow-box-title">02 · Make.com</div>
+      <div class="flow-box-desc">10 scenarios handle all professional signals. Routes data to Notion, fires Telegram alerts, auto-creates pages, updates statuses.</div>
+    </div>
+  </div>
+  <div class="flow-row">
+    <div class="flow-box blue">
+      <div class="flow-box-title">03 · Notion</div>
+      <div class="flow-box-desc">10 databases. Central hub for everything — leads, visits, bookings, companies, people, applications, interview notes. All linked together.</div>
+    </div>
+    <div class="flow-arrow-mid">→</div>
+    <div class="flow-box orange">
+      <div class="flow-box-title">04 · Telegram</div>
+      <div class="flow-box-desc">Your phone. Instant alerts for every professional signal. Contact forms, bookings, hot visitors, weekly digest, site down.</div>
+    </div>
+  </div>
+  <div class="flow-row">
+    <div class="flow-box" style="border-color:#3d1a50;background:#150a1a;">
+      <div class="flow-box-title" style="color:#c084fc;">05 · Claude</div>
+      <div class="flow-box-desc" style="color:#666;">Weekly manual review. Paste Notion data into Claude — lead prioritisation, interview prep, company intel, site improvements.</div>
+    </div>
+    <div class="flow-arrow-mid">→</div>
+    <div class="flow-box" style="border-color:#1a3d3d;background:#0a1414;">
+      <div class="flow-box-title" style="color:#2dd4bf;">06 · Monitoring</div>
+      <div class="flow-box-desc" style="color:#666;">GA4, Clarity, LinkedIn Tag, Search Console, UptimeRobot. All passive, all free, always running.</div>
+    </div>
+  </div>
+
+  <div class="section-label">What the system does for you</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-head"><span class="card-icon">📱</span><span class="card-name">Real-time alerts</span></div>
+      <div class="card-desc">Every contact form, booking, and hot visitor pings your phone instantly via Telegram</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">🏢</span><span class="card-name">Company tracking</span></div>
+      <div class="card-desc">Shell visited in Jan 2025 and Jan 2026 — both linked to Shell's page automatically</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">👤</span><span class="card-name">Contact management</span></div>
+      <div class="card-desc">Every person who contacts you gets a page. Auto-created, auto-linked to their company</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">📋</span><span class="card-name">Applications tracker</span></div>
+      <div class="card-desc">Outbound applications auto-logged from Gmail. Status, company, role, outcome tracked</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">✅</span><span class="card-name">Auto follow-ups</span></div>
+      <div class="card-desc">Lead goes 3 days without follow-up — a task is automatically created for you</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">📊</span><span class="card-name">Weekly digest</span></div>
+      <div class="card-desc">Every Monday 8am — full week summary on your phone. Visitors, leads, bookings, sources</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">💬</span><span class="card-name">Full chat logs</span></div>
+      <div class="card-desc">Every chatbot conversation saved in full to Notion. Transcripts, source, outcome, duration</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">🎤</span><span class="card-name">Interview prep pages</span></div>
+      <div class="card-desc">Booking confirmed → interview notes page auto-created with company info pre-filled</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ NOTION ══════════ -->
+<div id="page-notion" class="page">
+  <div class="page-title">Notion — 10 Databases</div>
+  <div class="page-sub">All free · Unlimited API calls · Everything linked together</div>
+
+  <div class="db-grid">
+    <div class="db-item">
+      <div class="db-num">DB 01</div>
+      <div class="db-icon">👤</div>
+      <div class="db-name">Lead Pipeline</div>
+      <div class="db-desc">Every inbound contact. Name, company, source, type, status, notes. Core CRM.</div>
+      <span class="db-src src-m">Via Make.com</span>
+    </div>
+    <div class="db-item">
+      <div class="db-num">DB 02</div>
+      <div class="db-icon">👁</div>
+      <div class="db-name">Visitor Log</div>
+      <div class="db-desc">Every session. Source, country, pages viewed, duration, device type.</div>
+      <span class="db-src src-d">Direct from site</span>
+    </div>
+    <div class="db-item">
+      <div class="db-num">DB 03</div>
+      <div class="db-icon">📆</div>
+      <div class="db-name">Bookings</div>
+      <div class="db-desc">All Calendly calls. Name, company, date, topic, outcome after the call.</div>
+      <span class="db-src src-m">Via Make.com</span>
+    </div>
+    <div class="db-item">
+      <div class="db-num">DB 04</div>
+      <div class="db-icon">✅</div>
+      <div class="db-name">Follow-up Tasks</div>
+      <div class="db-desc">Auto-created when lead goes 3 days without follow-up. Kanban view.</div>
+      <span class="db-src src-m">Via Make.com</span>
+    </div>
+    <div class="db-item">
+      <div class="db-num">DB 05</div>
+      <div class="db-icon">💬</div>
+      <div class="db-name">Tool Interactions</div>
+      <div class="db-desc">Full chatbot transcripts, ROI inputs + results, 90-day plan outputs per session.</div>
+      <span class="db-src src-d">Direct from site</span>
+    </div>
+    <div class="db-item">
+      <div class="db-num">DB 06</div>
+      <div class="db-icon">📋</div>
+      <div class="db-name">Weekly Digest</div>
+      <div class="db-desc">Every Monday summary stored. Visitors, leads, bookings, top sources, week by week.</div>
+      <span class="db-src src-m">Via Make.com</span>
+    </div>
+    <div class="db-item new-db">
+      <div class="db-num">DB 07</div>
+      <div class="db-icon">🏢</div>
+      <div class="db-name">Companies <span class="new-tag">NEW</span></div>
+      <div class="db-desc">One page per company. Every visit, lead, booking, chatbot linked over time. Full history.</div>
+      <span class="db-src src-a">Auto-linked</span>
+    </div>
+    <div class="db-item new-db">
+      <div class="db-num">DB 08</div>
+      <div class="db-icon">🧑</div>
+      <div class="db-name">People <span class="new-tag">NEW</span></div>
+      <div class="db-desc">One page per individual contact. Auto-created when lead arrives. Linked to Companies.</div>
+      <span class="db-src src-a">Auto-created</span>
+    </div>
+    <div class="db-item new-db">
+      <div class="db-num">DB 09</div>
+      <div class="db-icon">📤</div>
+      <div class="db-name">Applications <span class="new-tag">NEW</span></div>
+      <div class="db-desc">Outbound job applications. Auto-logged from Gmail outbound/confirmations. Status, role, outcome.</div>
+      <span class="db-src src-both">Gmail + manual</span>
+    </div>
+    <div class="db-item new-db">
+      <div class="db-num">DB 10</div>
+      <div class="db-icon">🎤</div>
+      <div class="db-name">Interview Notes <span class="new-tag">NEW</span></div>
+      <div class="db-desc">Auto-created on every booking with company info pre-filled. You add notes after the call.</div>
+      <span class="db-src src-a">Auto-created</span>
+    </div>
+  </div>
+
+  <div style="background:#0a0f1a;border:1px solid #1a3050;border-radius:8px;padding:12px 14px;font-size:11px;color:#60a5fa;line-height:1.7;margin-top:14px;">
+    <strong>How linking works:</strong> Notion Relations connect everything. A lead from Sarah at Shell → linked to Shell in Companies, linked to Sarah in People. Her booking → linked to her People page, Shell's Companies page, and her Interview Notes page. One event, everything updated automatically. You always have the full picture from any angle.
+  </div>
+</div>
+
+<!-- ══════════ AUTOMATION ══════════ -->
+<div id="page-automation" class="page">
+  <div class="page-title">Make.com — 10 Scenarios</div>
+  <div class="page-sub">$9/month · Core Plan · ~3,219 ops used of 10,000 limit</div>
+
+  <div class="section-label">All 10 Scenarios</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-head"><span class="card-icon">📧</span><span class="card-name">Email Router</span></div>
+      <div class="card-desc">Watches Gmail every 15 min. Classifies, routes to Lead Pipeline + Telegram alert</div>
+      <span class="card-badge cb-yellow">~2,880 ops/mo · polling</span>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">📅</span><span class="card-name">Calendly Handler</span></div>
+      <div class="card-desc">Booking confirmed → Notion Bookings + Telegram with all details</div>
+      <span class="card-badge cb-green">~20 ops/mo · webhook</span>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">📝</span><span class="card-name">Contact Form</span></div>
+      <div class="card-desc">Form submitted → Lead Pipeline entry + instant Telegram with full message</div>
+      <span class="card-badge cb-green">~30 ops/mo · webhook</span>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">🎯</span><span class="card-name">High-Intent Visitor</span></div>
+      <div class="card-desc">LinkedIn/Google visitor only, 3+ min → Telegram ping. Direct traffic ignored.</div>
+      <span class="card-badge cb-green">~60 ops/mo · webhook</span>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">🚨</span><span class="card-name">Site Down Alert</span></div>
+      <div class="card-desc">UptimeRobot fires webhook → instant Telegram. Checks every 5 minutes.</div>
+      <span class="card-badge cb-green">~5 ops/mo · rare</span>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-icon">📊</span><span class="card-name">Weekly Digest</span></div>
+      <div class="card-desc">Every Monday 8am → pulls Notion data → formats summary → Telegram</div>
+      <span class="card-badge cb-green">~24 ops/mo · scheduled</span>
+    </div>
+    <div class="card" style="border-color:#4a3500;background:#1a1200;">
+      <div class="card-head"><span class="card-icon">🧑</span><span class="card-name" style="color:#fbbf24;">Auto-Create People</span></div>
+      <div class="card-desc">New lead arrives in Pipeline → People page auto-created + linked to Company</div>
+      <span class="card-badge cb-yellow">~30 ops/mo · new</span>
+    </div>
+    <div class="card" style="border-color:#4a3500;background:#1a1200;">
+      <div class="card-head"><span class="card-icon">🔄</span><span class="card-name" style="color:#fbbf24;">Lead Status Updates</span></div>
+      <div class="card-desc">Booking confirmed → "Meeting Booked". No reply 7 days → "No Reply". Auto-updates status.</div>
+      <span class="card-badge cb-yellow">~25 ops/mo · new</span>
+    </div>
+    <div class="card" style="border-color:#4a3500;background:#1a1200;">
+      <div class="card-head"><span class="card-icon">📤</span><span class="card-name" style="color:#fbbf24;">Application Logger</span></div>
+      <div class="card-desc">Detects outbound emails + confirmation emails in Gmail → auto-logs to Applications</div>
+      <span class="card-badge cb-yellow">~40 ops/mo · new</span>
+    </div>
+    <div class="card" style="border-color:#4a3500;background:#1a1200;">
+      <div class="card-head"><span class="card-icon">🎤</span><span class="card-name" style="color:#fbbf24;">Interview Notes Page</span></div>
+      <div class="card-desc">Calendly booking confirmed → Interview Notes page auto-created with company info pre-filled</div>
+      <span class="card-badge cb-yellow">~5 ops/mo · new</span>
+    </div>
+  </div>
+
+  <div class="section-label">Monthly Ops Breakdown</div>
+  <div style="background:#141414;border:1px solid #222;border-radius:10px;padding:14px 16px;">
+    <div class="ops-row"><span class="ops-label">Gmail watcher (polling every 15 min)</span><div class="ops-track"><div class="ops-fill" style="width:28.8%;background:#fbbf24;"></div></div><span class="ops-val">2,880</span></div>
+    <div class="ops-row"><span class="ops-label">Email processing (~50 emails)</span><div class="ops-track"><div class="ops-fill" style="width:2%;background:#fbbf24;"></div></div><span class="ops-val">200</span></div>
+    <div class="ops-row"><span class="ops-label">Contact form + Calendly + High-intent</span><div class="ops-track"><div class="ops-fill" style="width:1.1%;background:#60a5fa;"></div></div><span class="ops-val">110</span></div>
+    <div class="ops-row"><span class="ops-label">Auto-create People + Status updates</span><div class="ops-track"><div class="ops-fill" style="width:0.55%;background:#fbbf24;"></div></div><span class="ops-val">55</span></div>
+    <div class="ops-row"><span class="ops-label">Application logger</span><div class="ops-track"><div class="ops-fill" style="width:0.4%;background:#fbbf24;"></div></div><span class="ops-val">40</span></div>
+    <div class="ops-row"><span class="ops-label">Weekly digest + Interview notes + Alerts</span><div class="ops-track"><div class="ops-fill" style="width:0.3%;background:#c084fc;"></div></div><span class="ops-val">29</span></div>
+    <div class="ops-row"><span class="ops-label">Chatbot / ROI / 90-day / Visits (direct)</span><div class="ops-track"><div class="ops-fill" style="width:0%;"></div></div><span class="ops-val" style="color:#4ade80;">0</span></div>
+    <div class="ops-total">
+      <span style="font-size:11px;color:#777;">Total / month</span>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-size:11px;color:#444;">of 10,000 limit</span>
+        <span style="font-size:14px;font-weight:700;color:#4ade80;">~3,314 ops · 33%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MANUAL VS AUTO ══════════ -->
+<div id="page-manual" class="page">
+  <div class="page-title">What's Automatic vs Manual</div>
+  <div class="page-sub">The system handles almost everything — here's exactly what needs you</div>
+
+  <div class="two-col">
+    <div class="col-card col-auto">
+      <div class="col-title">⚡ FULLY AUTOMATIC — YOU DO NOTHING</div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Visitor Log</strong> — fills on every visit</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Chatbot transcripts</strong> — saved per session in full</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>ROI + 90-day logs</strong> — every input saved</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Lead Pipeline</strong> — contact forms + emails auto-added</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>People pages</strong> — auto-created on each new lead</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Companies linking</strong> — all activity auto-linked to company</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Bookings</strong> — Calendly fires to Notion automatically</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Interview Notes page</strong> — auto-created on every booking</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Follow-up Tasks</strong> — auto-created after 3 days no reply</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Lead status: Meeting Booked</strong> — auto on booking</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Lead status: No Reply</strong> — auto after 7 days</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Applications</strong> — auto-logged from Gmail confirmations</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Weekly Digest</strong> — sent every Monday 8am</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Telegram alerts</strong> — fire on every professional signal</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Site down alerts</strong> — fires within 5 min of outage</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>GA4, Clarity, Search Console</strong> — always running</div></div>
+    </div>
+    <div class="col-card col-manual">
+      <div class="col-title">🖊 NEEDS YOU — BUT MINIMAL</div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Interview notes content</strong> — page is auto-created, you write what was said after the call. ~5 min.</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Lead status: Negotiating / Won / Lost</strong> — only you know this. 2 clicks when it happens.</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Applications via online portals</strong> — if no confirmation email, you add a row. 30 seconds.</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Weekly Claude review</strong> — paste Notion data into Claude for lead analysis + suggestions. ~15 min/week.</div></div>
+      <div class="col-item"><div class="col-item-dot"></div><div><strong>Monthly site review</strong> — review chatbot questions + visitor data with Claude. ~30 min/month.</div></div>
+      <div style="margin-top:14px;background:#220d2b;border:1px solid #3d1a50;border-radius:6px;padding:8px 10px;font-size:10px;color:#c084fc;line-height:1.6;">
+        Total manual time: roughly <strong style="color:#e8e4de;">15–20 min per week</strong>. The rest runs itself 24/7.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ COST ══════════ -->
+<div id="page-cost" class="page">
+  <div class="page-title">Cost Breakdown</div>
+  <div class="page-sub">What you pay, what's free, and what you get for it</div>
+
+  <div class="cost-box">
+    <div class="cost-row" style="background:#1a1200;">
+      <div>
+        <div class="cost-label" style="color:#fbbf24;font-weight:600;">Make.com Core</div>
+        <div class="cost-note">10,000 ops/month · Unlimited scenarios · Your automation engine</div>
+      </div>
+      <div class="cost-val-paid">$9 / mo</div>
+    </div>
+    <div class="cost-row">
+      <div>
+        <div class="cost-label">Notion</div>
+        <div class="cost-note">10 databases · Unlimited API · Unlimited records</div>
+      </div>
+      <div class="cost-val-free">Free</div>
+    </div>
+    <div class="cost-row">
+      <div>
+        <div class="cost-label">Telegram Bot</div>
+        <div class="cost-note">Real-time alerts to your phone · Unlimited messages</div>
+      </div>
+      <div class="cost-val-free">Free</div>
+    </div>
+    <div class="cost-row">
+      <div>
+        <div class="cost-label">Google Analytics 4</div>
+        <div class="cost-note">Full traffic analytics · Always-on</div>
+      </div>
+      <div class="cost-val-free">Free</div>
+    </div>
+    <div class="cost-row">
+      <div>
+        <div class="cost-label">Microsoft Clarity</div>
+        <div class="cost-note">Session recordings, heatmaps · Unlimited</div>
+      </div>
+      <div class="cost-val-free">Free</div>
+    </div>
+    <div class="cost-row">
+      <div>
+        <div class="cost-label">LinkedIn Insight Tag</div>
+        <div class="cost-note">Company visitor data from LinkedIn traffic</div>
+      </div>
+      <div class="cost-val-free">Free</div>
+    </div>
+    <div class="cost-row">
+      <div>
+        <div class="cost-label">Google Search Console</div>
+        <div class="cost-note">Search rankings, clicks, impressions</div>
+      </div>
+      <div class="cost-val-free">Free</div>
+    </div>
+    <div class="cost-row">
+      <div>
+        <div class="cost-label">UptimeRobot</div>
+        <div class="cost-note">Site monitoring every 5 minutes</div>
+      </div>
+      <div class="cost-val-free">Free</div>
+    </div>
+    <div class="cost-row">
+      <div>
+        <div class="cost-label">EmailJS</div>
+        <div class="cost-note">Contact form delivery · 200 emails/mo free</div>
+      </div>
+      <div class="cost-val-free">Free</div>
+    </div>
+    <div class="cost-row">
+      <div>
+        <div class="cost-label">Calendly</div>
+        <div class="cost-note">Booking page · 1 event type free</div>
+      </div>
+      <div class="cost-val-free">Free</div>
+    </div>
+    <div class="cost-row">
+      <div>
+        <div class="cost-label">Claude (manual weekly review)</div>
+        <div class="cost-note">You use it manually — no API, no extra cost</div>
+      </div>
+      <div class="cost-val-free">Free</div>
+    </div>
+    <div class="cost-row total">
+      <div style="font-size:14px;font-weight:700;color:#e8e4de;">Total Monthly</div>
+      <div class="cost-val-total">$9 / month</div>
+    </div>
+  </div>
+
+  <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+    <div style="background:#0a1a0a;border:1px solid #1a4a1a;border-radius:8px;padding:12px 14px;font-size:11px;color:#4ade80;line-height:1.7;">
+      <strong>What $9/month gets you:</strong><br>
+      A fully automated professional backend system that tracks every visitor, logs every lead, fires real-time alerts, manages company + contact history, tracks outbound applications, auto-creates interview prep pages, and sends you a weekly digest — all running 24/7 without you touching it.
+    </div>
+    <div style="background:#0a0f1a;border:1px solid #1a3050;border-radius:8px;padding:12px 14px;font-size:11px;color:#60a5fa;line-height:1.7;">
+      <strong>When would cost increase?</strong><br>
+      Only if you outgrow Make.com Core (hitting 10k ops consistently). At current projections that requires 3x traffic growth. Notion stays free forever. Everything else has no upgrade path needed.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ LIMITS ══════════ -->
+<div id="page-limits" class="page">
+  <div class="page-title">Limits & Constraints</div>
+  <div class="page-sub">Honest assessment — nothing hidden</div>
+
+  <div class="section-label">Make.com</div>
+  <div class="constraint-box">
+    <div class="constraint-row">
+      <div class="constraint-icon">⚙️</div>
+      <div class="constraint-body">
+        <div class="constraint-title">10,000 ops/month cap</div>
+        <div class="constraint-desc">You're using ~3,314 ops/month (33%). You'd need traffic to triple before approaching the limit. If you ever hit it, Make.com pauses scenarios until next month or you upgrade to Pro ($16/mo for 20k ops).</div>
+        <div class="constraint-verdict verdict-ok">✓ Not a concern at current scale</div>
+      </div>
+    </div>
+    <div class="constraint-row">
+      <div class="constraint-icon">⏱</div>
+      <div class="constraint-body">
+        <div class="constraint-title">Gmail watcher polls every 15 minutes</div>
+        <div class="constraint-desc">Emails are not instant — they're picked up within 15 minutes of arriving. For a portfolio system this is completely acceptable. Contact forms and Calendly use webhooks so those are instant.</div>
+        <div class="constraint-verdict verdict-note">⚠ Minor — 15 min delay on emails only</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Notion</div>
+  <div class="constraint-box">
+    <div class="constraint-row">
+      <div class="constraint-icon">🔄</div>
+      <div class="constraint-body">
+        <div class="constraint-title">3 API requests per second</div>
+        <div class="constraint-desc">Notion's only real limit. Your system makes ~550 calls/month spread across all hours. You'd need multiple visitors simultaneously all using tools at the exact same second to approach this. Essentially impossible at your scale.</div>
+        <div class="constraint-verdict verdict-ok">✓ Never going to be an issue</div>
+      </div>
+    </div>
+    <div class="constraint-row">
+      <div class="constraint-icon">📅</div>
+      <div class="constraint-body">
+        <div class="constraint-title">7-day page history on free plan</div>
+        <div class="constraint-desc">Notion free plan only keeps 7 days of edit history. This means if you accidentally delete or change something, you can only restore it from within the last 7 days. Your actual data is never deleted — only the version history is limited.</div>
+        <div class="constraint-verdict verdict-note">⚠ Minor — backup manually monthly if concerned</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">LinkedIn Insight Tag</div>
+  <div class="constraint-box">
+    <div class="constraint-row">
+      <div class="constraint-icon">🔗</div>
+      <div class="constraint-body">
+        <div class="constraint-title">Requires LinkedIn Campaign Manager access</div>
+        <div class="constraint-desc">The Insight Tag needs a LinkedIn Company Page and Campaign Manager account to see company visitor data. For a personal portfolio, you can still install it and see aggregate data, but individual company identification requires running LinkedIn ads (even $1 minimum). Without that, you get traffic stats but not company names.</div>
+        <div class="constraint-verdict verdict-note">⚠ Company-level data requires minimal ad spend or Campaign Manager access</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Applications Logger</div>
+  <div class="constraint-box">
+    <div class="constraint-row">
+      <div class="constraint-icon">📤</div>
+      <div class="constraint-body">
+        <div class="constraint-title">Online portal applications may not auto-log</div>
+        <div class="constraint-desc">If you apply via LinkedIn Easy Apply, a company's careers portal, or any system that doesn't send a confirmation email, Make.com won't catch it. You'd add those manually — 30 seconds per application. Any application that sends a confirmation email to Gmail is caught automatically.</div>
+        <div class="constraint-verdict verdict-note">⚠ Portal applications without email confirmations need manual entry</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">EmailJS</div>
+  <div class="constraint-box">
+    <div class="constraint-row">
+      <div class="constraint-icon">📧</div>
+      <div class="constraint-body">
+        <div class="constraint-title">200 emails/month on free plan</div>
+        <div class="constraint-desc">EmailJS free tier allows 200 contact form submissions per month. For a personal portfolio this is more than enough — that's 6-7 form submissions per day. If you ever exceed this, EmailJS Personal plan is $9/mo for 1,000 emails. Very unlikely to hit this.</div>
+        <div class="constraint-verdict verdict-ok">✓ More than enough for a portfolio</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Calendly</div>
+  <div class="constraint-box">
+    <div class="constraint-row">
+      <div class="constraint-icon">📅</div>
+      <div class="constraint-body">
+        <div class="constraint-title">1 event type on free plan</div>
+        <div class="constraint-desc">Calendly free only allows one active event type (e.g. "30-min Discovery Call"). If you want multiple booking types (e.g. consulting vs job interview vs quick chat), you'd need Calendly Standard at $10/mo. For now, one type is perfectly sufficient.</div>
+        <div class="constraint-verdict verdict-ok">✓ One event type is enough to start</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;background:#0a1a0a;border:1px solid #1a4a1a;border-radius:8px;padding:14px 16px;font-size:11px;color:#4ade80;line-height:1.8;">
+    <strong>Summary:</strong> The only real constraints worth noting are the 15-minute Gmail polling delay (minor), Notion's 7-day history limit (minor), the LinkedIn Insight Tag needing Campaign Manager for company names, and online portal applications needing manual logging if there's no confirmation email. None of these affect the core system meaningfully. Everything else is effectively unlimited at your scale.
+  </div>
+</div>
+
+<!-- ══════════ ROADMAP ══════════ -->
+<div id="page-roadmap" class="page">
+  <div class="page-title">Roadmap</div>
+  <div class="page-sub">What gets built, when it happens, and what the system does once live — start to finish</div>
+
+  <!-- Phase toggle -->
+  <div style="display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;">
+    <div class="rm-phase-btn active" onclick="showPhase('build')">🔨 Build Phase</div>
+    <div class="rm-phase-btn" onclick="showPhase('live')">⚡ Once Live</div>
+    <div class="rm-phase-btn" onclick="showPhase('routine')">📅 Your Routine</div>
+    <div class="rm-phase-btn" onclick="showPhase('scenario')">🎬 Example Scenarios</div>
+  </div>
+
+  <!-- ── BUILD PHASE ── -->
+  <div id="rm-build" class="rm-panel active">
+    <div style="font-size:11px;color:#555;margin-bottom:20px;">One-time setup. Estimated total time: 3–5 hours spread across a few sessions.</div>
+
+    <div class="rm-step">
+      <div class="rm-step-left">
+        <div class="rm-step-num">01</div>
+        <div class="rm-step-line"></div>
+      </div>
+      <div class="rm-step-right">
+        <div class="rm-step-header">
+          <div class="rm-step-title">Create Notion Workspace & 10 Databases</div>
+          <span class="rm-tag rm-tag-time">~45 min</span>
+          <span class="rm-tag rm-tag-green">First</span>
+        </div>
+        <div class="rm-step-desc">Set up all 10 databases with the correct properties, views, and relations between them. Lead Pipeline links to Companies, People, Bookings, Applications. Bookings links to Interview Notes. This is the foundation everything else builds on.</div>
+        <div class="rm-step-items">
+          <span class="rm-item">👤 Lead Pipeline</span>
+          <span class="rm-item">👁 Visitor Log</span>
+          <span class="rm-item">📆 Bookings</span>
+          <span class="rm-item">✅ Follow-up Tasks</span>
+          <span class="rm-item">💬 Tool Interactions</span>
+          <span class="rm-item">📋 Weekly Digest</span>
+          <span class="rm-item">🏢 Companies</span>
+          <span class="rm-item">🧑 People</span>
+          <span class="rm-item">📤 Applications</span>
+          <span class="rm-item">🎤 Interview Notes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rm-step">
+      <div class="rm-step-left">
+        <div class="rm-step-num">02</div>
+        <div class="rm-step-line"></div>
+      </div>
+      <div class="rm-step-right">
+        <div class="rm-step-header">
+          <div class="rm-step-title">Create Notion Integration & API Key</div>
+          <span class="rm-tag rm-tag-time">~10 min</span>
+        </div>
+        <div class="rm-step-desc">Create a Notion integration at notion.so/my-integrations. This generates an API key that lets the website JS and Make.com both write to your Notion databases. Share each database with the integration.</div>
+      </div>
+    </div>
+
+    <div class="rm-step">
+      <div class="rm-step-left">
+        <div class="rm-step-num">03</div>
+        <div class="rm-step-line"></div>
+      </div>
+      <div class="rm-step-right">
+        <div class="rm-step-header">
+          <div class="rm-step-title">Set Up Telegram Bot</div>
+          <span class="rm-tag rm-tag-time">~10 min</span>
+        </div>
+        <div class="rm-step-desc">Message @BotFather on Telegram → create a new bot → get the bot token. Start a conversation with your bot → get your Chat ID. These two values are what Make.com uses to send messages directly to your phone.</div>
+      </div>
+    </div>
+
+    <div class="rm-step">
+      <div class="rm-step-left">
+        <div class="rm-step-num">04</div>
+        <div class="rm-step-line"></div>
+      </div>
+      <div class="rm-step-right">
+        <div class="rm-step-header">
+          <div class="rm-step-title">Add Direct Notion JS to Website</div>
+          <span class="rm-tag rm-tag-time">~30 min</span>
+        </div>
+        <div class="rm-step-desc">Add JavaScript to index_main.html that fires on chatbot messages, ROI submissions, 90-day plan generations, and page visits. Each event POSTs directly to the Notion API — bypassing Make.com entirely, costing zero ops.</div>
+        <div class="rm-step-items">
+          <span class="rm-item">Visitor log on page load</span>
+          <span class="rm-item">Chatbot message logger</span>
+          <span class="rm-item">ROI Calculator logger</span>
+          <span class="rm-item">90-Day Plan logger</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rm-step">
+      <div class="rm-step-left">
+        <div class="rm-step-num">05</div>
+        <div class="rm-step-line"></div>
+      </div>
+      <div class="rm-step-right">
+        <div class="rm-step-header">
+          <div class="rm-step-title">Create Make.com Account & Build 10 Scenarios</div>
+          <span class="rm-tag rm-tag-time">~2 hrs</span>
+          <span class="rm-tag" style="background:#2b1f00;color:#fbbf24;border:1px solid #4a3500;">Biggest step</span>
+        </div>
+        <div class="rm-step-desc">Sign up for Make.com Core ($9/mo). Build each scenario one by one, connecting Gmail, Notion, Telegram, Calendly, and your website webhooks. Each scenario is a visual drag-and-drop flow — no coding required.</div>
+        <div class="rm-step-items">
+          <span class="rm-item">📧 Email Router</span>
+          <span class="rm-item">📅 Calendly Handler</span>
+          <span class="rm-item">📝 Contact Form</span>
+          <span class="rm-item">🎯 High-Intent Visitor</span>
+          <span class="rm-item">🚨 Site Down Alert</span>
+          <span class="rm-item">📊 Weekly Digest</span>
+          <span class="rm-item">🧑 Auto-Create People</span>
+          <span class="rm-item">🔄 Lead Status Updates</span>
+          <span class="rm-item">📤 Application Logger</span>
+          <span class="rm-item">🎤 Interview Notes Page</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rm-step">
+      <div class="rm-step-left">
+        <div class="rm-step-num">06</div>
+        <div class="rm-step-line"></div>
+      </div>
+      <div class="rm-step-right">
+        <div class="rm-step-header">
+          <div class="rm-step-title">Set Up UptimeRobot</div>
+          <span class="rm-tag rm-tag-time">~10 min</span>
+        </div>
+        <div class="rm-step-desc">Create a free UptimeRobot account. Add saifbadawy.com as a monitor (HTTP check, every 5 minutes). Add the Make.com webhook URL as an alert contact so it fires automatically when your site goes down.</div>
+      </div>
+    </div>
+
+    <div class="rm-step">
+      <div class="rm-step-left">
+        <div class="rm-step-num">07</div>
+        <div class="rm-step-line"></div>
+      </div>
+      <div class="rm-step-right">
+        <div class="rm-step-header">
+          <div class="rm-step-title">Verify Google Analytics 4 & Search Console</div>
+          <span class="rm-tag rm-tag-time">~15 min</span>
+        </div>
+        <div class="rm-step-desc">Confirm GA4 tracking is firing correctly. Submit your sitemap to Search Console if not already done. These should already be partially set up — just verify data is flowing.</div>
+      </div>
+    </div>
+
+    <div class="rm-step">
+      <div class="rm-step-left">
+        <div class="rm-step-num">08</div>
+      </div>
+      <div class="rm-step-right">
+        <div class="rm-step-header">
+          <div class="rm-step-title">End-to-End Test</div>
+          <span class="rm-tag rm-tag-time">~30 min</span>
+          <span class="rm-tag rm-tag-green">Final</span>
+        </div>
+        <div class="rm-step-desc">Submit a test contact form → check Notion and Telegram. Book a test Calendly appointment → check Interview Notes was auto-created. Visit the site → check Visitor Log. Trigger all paths once and confirm everything lands correctly.</div>
+      </div>
+    </div>
+
+    <div style="background:#0a1a0a;border:1px solid #1a4a1a;border-radius:8px;padding:12px 14px;font-size:11px;color:#4ade80;line-height:1.7;margin-top:8px;">
+      <strong>After Step 08 — system is live.</strong> Everything runs automatically from this point forward. You don't touch the infrastructure again unless something breaks or you want to add something new.
+    </div>
+  </div>
+
+  <!-- ── ONCE LIVE ── -->
+  <div id="rm-live" class="rm-panel">
+    <div style="font-size:11px;color:#555;margin-bottom:20px;">What the system does automatically, 24 hours a day, 7 days a week — without you doing anything.</div>
+
+    <!-- Timeline by time of day / trigger -->
+    <div class="rm-timeline">
+
+      <div class="rm-tl-group">
+        <div class="rm-tl-group-label">Every 5 minutes</div>
+        <div class="rm-tl-event" style="border-color:#1a3d3d;">
+          <div class="rm-tl-icon">🟢</div>
+          <div class="rm-tl-body">
+            <div class="rm-tl-title">UptimeRobot pings saifbadawy.com</div>
+            <div class="rm-tl-desc">Checks if site is responding. If it fails → fires Make.com webhook → Telegram alert on your phone within 5 minutes of any outage.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rm-tl-group">
+        <div class="rm-tl-group-label">Every 15 minutes</div>
+        <div class="rm-tl-event" style="border-color:#4a3500;">
+          <div class="rm-tl-icon">📧</div>
+          <div class="rm-tl-body">
+            <div class="rm-tl-title">Gmail watcher checks for new emails</div>
+            <div class="rm-tl-desc">Make.com polls your inbox. New professional email detected → classified → added to Lead Pipeline in Notion → Telegram alert with sender, subject, preview.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rm-tl-group">
+        <div class="rm-tl-group-label">Instantly — when it happens</div>
+        <div class="rm-tl-event" style="border-color:#1a4a1a;">
+          <div class="rm-tl-icon">📝</div>
+          <div class="rm-tl-body">
+            <div class="rm-tl-title">Contact form submitted</div>
+            <div class="rm-tl-desc">Website fires webhook → Make.com receives it in under 1 second → Lead Pipeline entry created → People page created → Company linked → Telegram alert fired. All within 2–3 seconds of submission.</div>
+          </div>
+        </div>
+        <div class="rm-tl-event" style="border-color:#1a4a1a;">
+          <div class="rm-tl-icon">📅</div>
+          <div class="rm-tl-body">
+            <div class="rm-tl-title">Calendly booking confirmed</div>
+            <div class="rm-tl-desc">Calendly fires webhook → Bookings entry created → Interview Notes page auto-created with company info pre-filled → Lead status updated to "Meeting Booked" → Telegram alert with name, company, date, topic.</div>
+          </div>
+        </div>
+        <div class="rm-tl-event" style="border-color:#1a4a1a;">
+          <div class="rm-tl-icon">🎯</div>
+          <div class="rm-tl-body">
+            <div class="rm-tl-title">High-intent visitor detected (LinkedIn/Google only)</div>
+            <div class="rm-tl-desc">Visitor from LinkedIn or Google spends 3+ minutes → website fires webhook → Make.com checks referrer source → if professional source confirmed → Telegram ping with country, time on site, pages viewed.</div>
+          </div>
+        </div>
+        <div class="rm-tl-event" style="border-color:#1a3050;">
+          <div class="rm-tl-icon">👁</div>
+          <div class="rm-tl-body">
+            <div class="rm-tl-title">Any visit — logged directly to Notion</div>
+            <div class="rm-tl-desc">Website JS fires on page load → POSTs directly to Notion API → Visitor Log entry created. Source, country, pages, duration. No Make.com ops used. Includes family visits. Silent, instant, always.</div>
+          </div>
+        </div>
+        <div class="rm-tl-event" style="border-color:#1a3050;">
+          <div class="rm-tl-icon">💬</div>
+          <div class="rm-tl-body">
+            <div class="rm-tl-title">Chatbot / ROI / 90-day used</div>
+            <div class="rm-tl-desc">Each interaction posts directly to Notion. Chatbot — full transcript saved message by message. ROI — inputs + result saved. 90-day plan — role, company, output saved. Zero Make.com ops.</div>
+          </div>
+        </div>
+        <div class="rm-tl-event" style="border-color:#4a3500;">
+          <div class="rm-tl-icon">🔄</div>
+          <div class="rm-tl-body">
+            <div class="rm-tl-title">Lead goes 3 days without follow-up</div>
+            <div class="rm-tl-desc">Make.com checks lead timestamps → if 3 days have passed since last activity → Follow-up Task auto-created in Notion with lead name, company, and what action is needed.</div>
+          </div>
+        </div>
+        <div class="rm-tl-event" style="border-color:#4a3500;">
+          <div class="rm-tl-icon">📤</div>
+          <div class="rm-tl-body">
+            <div class="rm-tl-title">Application confirmation email arrives in Gmail</div>
+            <div class="rm-tl-desc">Make.com detects application-related email → parses company name, role, date → auto-creates row in Applications database → linked to Company page if it exists.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rm-tl-group">
+        <div class="rm-tl-group-label">Every Monday 8:00am</div>
+        <div class="rm-tl-event" style="border-color:#3d1a50;">
+          <div class="rm-tl-icon">📊</div>
+          <div class="rm-tl-body">
+            <div class="rm-tl-title">Weekly Digest generated and sent</div>
+            <div class="rm-tl-desc">Make.com reads Notion databases → calculates totals for the past 7 days → formats full summary → sends to Telegram → saves digest row to Weekly Digest database for future reference. Visitors, leads, bookings, top sources, overdue tasks.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── YOUR ROUTINE ── -->
+  <div id="rm-routine" class="rm-panel">
+    <div style="font-size:11px;color:#555;margin-bottom:20px;">What you actually do once the system is running. Total active time: roughly 20 minutes per week.</div>
+
+    <div class="rm-routine-block" style="border-color:#1a4a1a;background:#0a1a0a;">
+      <div class="rm-routine-header">
+        <div class="rm-routine-icon">📱</div>
+        <div>
+          <div class="rm-routine-title" style="color:#4ade80;">Throughout the day — as alerts arrive</div>
+          <div class="rm-routine-time">~2 min per alert · passive</div>
+        </div>
+      </div>
+      <div class="rm-routine-items">
+        <div class="rm-routine-item">Read Telegram alert when it pings</div>
+        <div class="rm-routine-item">If it's a contact form — decide whether to reply now or later</div>
+        <div class="rm-routine-item">If it's a hot visitor — check Notion if they booked or disappeared</div>
+        <div class="rm-routine-item">If it's a booking — note the time, check the Interview Notes page was created</div>
+      </div>
+    </div>
+
+    <div class="rm-routine-block" style="border-color:#4a3500;background:#1a1200;">
+      <div class="rm-routine-header">
+        <div class="rm-routine-icon">📊</div>
+        <div>
+          <div class="rm-routine-title" style="color:#fbbf24;">Monday morning — read your digest</div>
+          <div class="rm-routine-time">~5 min · arrives automatically on Telegram</div>
+        </div>
+      </div>
+      <div class="rm-routine-items">
+        <div class="rm-routine-item">Read the weekly summary on Telegram — visitors, leads, bookings</div>
+        <div class="rm-routine-item">Check if any overdue follow-up tasks flagged</div>
+        <div class="rm-routine-item">Open Notion Follow-up Tasks board — action anything overdue</div>
+      </div>
+    </div>
+
+    <div class="rm-routine-block" style="border-color:#3d1a50;background:#150a1a;">
+      <div class="rm-routine-header">
+        <div class="rm-routine-icon">🧠</div>
+        <div>
+          <div class="rm-routine-title" style="color:#c084fc;">Weekly — Claude lead review</div>
+          <div class="rm-routine-time">~15 min · whenever suits you</div>
+        </div>
+      </div>
+      <div class="rm-routine-items">
+        <div class="rm-routine-item">Open Lead Pipeline in Notion — copy all active leads</div>
+        <div class="rm-routine-item">Paste into Claude — ask for priority ranking and reply suggestions</div>
+        <div class="rm-routine-item">Update lead statuses based on what you've actioned</div>
+        <div class="rm-routine-item">Check Companies page for any company showing increased activity</div>
+      </div>
+    </div>
+
+    <div class="rm-routine-block" style="border-color:#1a3050;background:#0a0f1a;">
+      <div class="rm-routine-header">
+        <div class="rm-routine-icon">🎤</div>
+        <div>
+          <div class="rm-routine-title" style="color:#60a5fa;">Before each call — interview prep</div>
+          <div class="rm-routine-time">~10 min · day before or morning of</div>
+        </div>
+      </div>
+      <div class="rm-routine-items">
+        <div class="rm-routine-item">Open Interview Notes page in Notion — already has company + contact info</div>
+        <div class="rm-routine-item">Paste company name and role into Claude — get tailored talking points</div>
+        <div class="rm-routine-item">Add your prep notes to the Interview Notes page</div>
+        <div class="rm-routine-item">After the call — write what was discussed, next steps, your impression</div>
+      </div>
+    </div>
+
+    <div class="rm-routine-block" style="border-color:#222;background:#141414;">
+      <div class="rm-routine-header">
+        <div class="rm-routine-icon">📈</div>
+        <div>
+          <div class="rm-routine-title" style="color:#aaa;">Monthly — site + system review</div>
+          <div class="rm-routine-time">~30 min · first Monday of the month</div>
+        </div>
+      </div>
+      <div class="rm-routine-items">
+        <div class="rm-routine-item">Review chatbot questions in Tool Interactions — spot gaps in your site</div>
+        <div class="rm-routine-item">Check Companies database — who's been visiting repeatedly without contacting</div>
+        <div class="rm-routine-item">Review ROI Calculator inputs — what numbers are visitors entering</div>
+        <div class="rm-routine-item">Paste patterns into Claude — get suggestions to improve site or outreach</div>
+        <div class="rm-routine-item">Check Applications database — close out old ones, update statuses</div>
+      </div>
+    </div>
+
+    <div style="background:#141414;border:1px solid #222;border-radius:8px;padding:12px 16px;margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center;">
+      <div><div style="font-size:20px;font-weight:700;color:#e8e4de;">~2 min</div><div style="font-size:10px;color:#555;margin-top:3px;">Per alert received</div></div>
+      <div><div style="font-size:20px;font-weight:700;color:#e8e4de;">~20 min</div><div style="font-size:10px;color:#555;margin-top:3px;">Per week total</div></div>
+      <div><div style="font-size:20px;font-weight:700;color:#e8e4de;">~30 min</div><div style="font-size:10px;color:#555;margin-top:3px;">Per month deep review</div></div>
+    </div>
+  </div>
+
+  <!-- ── EXAMPLE SCENARIOS ── -->
+  <div id="rm-scenario" class="rm-panel">
+    <div style="font-size:11px;color:#555;margin-bottom:20px;">Step-by-step walkthroughs of exactly what happens in real situations.</div>
+
+    <div class="rm-scenario-block">
+      <div class="rm-scenario-title">🏢 Scenario A — Recruiter from Shell visits and contacts you</div>
+      <div class="rm-scenario-steps">
+        <div class="rm-ss"><div class="rm-ss-num">1</div><div class="rm-ss-text">Sarah at Shell clicks your LinkedIn profile link → lands on saifbadawy.com</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">2</div><div class="rm-ss-text">Website JS fires → Visitor Log entry created in Notion with source: LinkedIn, country: UK, time: 9min 14s</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">3</div><div class="rm-ss-text">She opens your chatbot → asks 4 questions → full transcript saved to Tool Interactions in Notion</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">4</div><div class="rm-ss-text">She's been on site 3+ minutes from LinkedIn → High-Intent scenario fires → Telegram ping on your phone</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">5</div><div class="rm-ss-text">She submits contact form → Contact Form scenario fires → Lead Pipeline entry created → People page created for Sarah → linked to Shell's Companies page → Telegram alert with her message</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">6</div><div class="rm-ss-text">You reply within the hour. 3 days pass without her responding → Follow-up Task auto-created in Notion</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">7</div><div class="rm-ss-text">She books a Calendly call → Bookings entry created → Interview Notes page auto-created with Shell's info → Lead status auto-updated to "Meeting Booked" → Telegram confirms the booking</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">8</div><div class="rm-ss-text">You prep using Claude + the Interview Notes page → take the call → write notes after → update lead status to "Negotiating"</div></div>
+      </div>
+    </div>
+
+    <div class="rm-scenario-block">
+      <div class="rm-scenario-title">📤 Scenario B — You apply for a role at Halliburton</div>
+      <div class="rm-scenario-steps">
+        <div class="rm-ss"><div class="rm-ss-num">1</div><div class="rm-ss-text">You send a CV application email to a Halliburton recruiter</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">2</div><div class="rm-ss-text">Halliburton sends an auto-confirmation email back to your Gmail</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">3</div><div class="rm-ss-text">Make.com Gmail watcher detects it within 15 min → Application Logger scenario fires → row created in Applications database: Halliburton, PM Role, date sent, status: Applied</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">4</div><div class="rm-ss-text">Halliburton already exists in Companies (James booked a call) → application auto-linked to their company page</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">5</div><div class="rm-ss-text">7 days pass with no reply → Lead Status scenario flags it as "No Reply" in Applications</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">6</div><div class="rm-ss-text">James then contacts you via contact form → Lead Pipeline and People + Companies all update → you can see the full Halliburton history in one place</div></div>
+      </div>
+    </div>
+
+    <div class="rm-scenario-block">
+      <div class="rm-scenario-title">👨‍👩‍👧 Scenario C — Family uses the site all day</div>
+      <div class="rm-scenario-steps">
+        <div class="rm-ss"><div class="rm-ss-num">1</div><div class="rm-ss-text">Your cousin visits saifbadawy.com directly (not via LinkedIn/Google) and plays with the chatbot for 20 minutes</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">2</div><div class="rm-ss-text">Visitor Log entry created → source: Direct, duration: 20min, pages: Hero, 90-Day Plan, ROI Calculator</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">3</div><div class="rm-ss-text">Chatbot transcript saved to Tool Interactions — all 15 messages logged</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">4</div><div class="rm-ss-text">High-Intent scenario does NOT fire — referrer is Direct, not LinkedIn/Google. No Telegram alert.</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">5</div><div class="rm-ss-text">ROI Calculator used 3 times → 3 entries in Tool Interactions. 0 Make.com ops used for any of it.</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">6</div><div class="rm-ss-text">Your phone never buzzed. The system correctly treated it as casual browsing. Data is in Notion but never surfaced as a lead.</div></div>
+      </div>
+    </div>
+
+    <div class="rm-scenario-block">
+      <div class="rm-scenario-title">🚨 Scenario D — Your site goes down at 2am</div>
+      <div class="rm-scenario-steps">
+        <div class="rm-ss"><div class="rm-ss-num">1</div><div class="rm-ss-text">GitHub Pages has an outage at 02:14am</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">2</div><div class="rm-ss-text">UptimeRobot pings saifbadawy.com at 02:15am → no response → marks as down</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">3</div><div class="rm-ss-text">UptimeRobot fires webhook to Make.com → Site Down Alert scenario triggers → Telegram message sent to your phone at 02:15am</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">4</div><div class="rm-ss-text">GitHub Pages recovers at 02:31am → UptimeRobot detects recovery → sends recovery Telegram message</div></div>
+        <div class="rm-ss"><div class="rm-ss-num">5</div><div class="rm-ss-text">You wake up in the morning → see both alerts → site already back up → total downtime: 16 minutes → no action needed</div></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+/* Roadmap styles */
+.rm-phase-btn {
+  padding: 6px 14px; background: #1a1a1a; border: 1px solid #2a2a2a;
+  border-radius: 20px; font-size: 11px; color: #666; cursor: pointer;
+  transition: all 0.15s;
+}
+.rm-phase-btn:hover { background: #222; color: #aaa; }
+.rm-phase-btn.active { background: #0d1a2b; border-color: #1a3050; color: #60a5fa; }
+
+.rm-panel { display: none; }
+.rm-panel.active { display: block; }
+
+/* Build steps */
+.rm-step { display: flex; gap: 0; margin-bottom: 0; }
+.rm-step-left { display: flex; flex-direction: column; align-items: center; width: 48px; flex-shrink: 0; }
+.rm-step-num {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: #1a1a1a; border: 2px solid #3b82f6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #60a5fa; flex-shrink: 0;
+}
+.rm-step-line { width: 2px; flex: 1; background: #222; min-height: 20px; }
+.rm-step:last-child .rm-step-line { display: none; }
+.rm-step-right { padding: 0 0 20px 14px; flex: 1; }
+.rm-step-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.rm-step-title { font-size: 13px; font-weight: 600; color: #e8e4de; }
+.rm-tag { font-size: 10px; padding: 2px 8px; border-radius: 8px; }
+.rm-tag-time { background: #252525; color: #666; border: 1px solid #333; }
+.rm-tag-green { background: #0d2b1a; color: #4ade80; border: 1px solid #1a4a1a; }
+.rm-step-desc { font-size: 11px; color: #666; line-height: 1.65; margin-bottom: 8px; }
+.rm-step-items { display: flex; flex-wrap: wrap; gap: 5px; }
+.rm-item { font-size: 10px; padding: 2px 8px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; color: #888; }
+
+/* Live timeline */
+.rm-timeline { display: flex; flex-direction: column; gap: 16px; }
+.rm-tl-group-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #444; margin-bottom: 8px; }
+.rm-tl-event { display: flex; gap: 12px; background: #141414; border: 1px solid #222; border-radius: 8px; padding: 10px 12px; margin-bottom: 6px; }
+.rm-tl-event:last-child { margin-bottom: 0; }
+.rm-tl-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.rm-tl-title { font-size: 12px; font-weight: 600; color: #ddd; margin-bottom: 3px; }
+.rm-tl-desc { font-size: 11px; color: #666; line-height: 1.55; }
+
+/* Routine */
+.rm-routine-block { border-radius: 8px; padding: 14px; margin-bottom: 8px; border: 1px solid #222; }
+.rm-routine-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+.rm-routine-icon { font-size: 20px; flex-shrink: 0; }
+.rm-routine-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.rm-routine-time { font-size: 10px; color: #555; }
+.rm-routine-item { font-size: 11px; color: #777; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; gap: 8px; line-height: 1.5; }
+.rm-routine-item:last-child { border-bottom: none; }
+.rm-routine-item::before { content: '→'; color: #444; flex-shrink: 0; }
+
+/* Scenarios */
+.rm-scenario-block { background: #141414; border: 1px solid #222; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+.rm-scenario-title { font-size: 12px; font-weight: 700; color: #e8e4de; margin-bottom: 12px; }
+.rm-scenario-steps { display: flex; flex-direction: column; gap: 6px; }
+.rm-ss { display: flex; gap: 10px; align-items: flex-start; }
+.rm-ss-num {
+  width: 20px; height: 20px; border-radius: 50%; background: #1a1a1a; border: 1px solid #333;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: #60a5fa; flex-shrink: 0; margin-top: 1px;
+}
+.rm-ss-text { font-size: 11px; color: #777; line-height: 1.6; }
+</style>
+
+<script>
+function showPhase(id) {
+  document.querySelectorAll('.rm-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.rm-phase-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('rm-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

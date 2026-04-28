@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>40 Jaw-Dropping Ideas — Vol. III · Saif Badawy Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#07080e;--s1:#0d0e16;--s2:#13141f;--border:rgba(255,255,255,0.07);--accent:#E8820C;--a2:#F5A623;--white:#f0ede8;--muted:rgba(240,237,232,0.5);--bebas:'Bebas Neue',sans-serif;--mono:'JetBrains Mono',monospace;--sans:'DM Sans',sans-serif}
+html,body{background:var(--bg);color:var(--white);font-family:var(--sans);min-height:100vh}
+nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:.8rem 2.4rem;background:rgba(7,8,14,.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.logo{font-family:var(--bebas);font-size:1.25rem;letter-spacing:.22em;display:flex;align-items:center;gap:.5rem}
+.logoDot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.badge{font-family:var(--mono);font-size:.46rem;letter-spacing:.2em;text-transform:uppercase;padding:.3rem .9rem;border:1px solid rgba(232,130,12,.4);color:var(--accent);background:rgba(232,130,12,.05)}
+.page{max-width:1320px;margin:0 auto;padding:2.4rem 2rem 7rem}
+.hdr{margin-bottom:2rem}
+.hdrEye{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem}
+.hdrLine{width:28px;height:1px;background:rgba(232,130,12,.4)}
+.hdrTag{font-family:var(--mono);font-size:.48rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+.hdrTitle{font-family:var(--bebas);font-size:clamp(2.4rem,4vw,3.2rem);letter-spacing:.04em;line-height:.94;margin-bottom:.5rem}
+.hdrSub{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;color:var(--muted);line-height:1.7}
+.filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem}
+.filt{font-family:var(--mono);font-size:.46rem;letter-spacing:.14em;text-transform:uppercase;padding:.32rem .85rem;border:1px solid var(--border);color:var(--muted);background:none;cursor:pointer;transition:all .15s}
+.filt:hover,.filt.on{border-color:rgba(232,130,12,.5);color:var(--accent);background:rgba(232,130,12,.05)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:11px}
+.card{background:var(--s1);border:1px solid var(--border);cursor:pointer;transition:border-color .2s,transform .15s,box-shadow .2s;overflow:hidden}
+.card:hover{border-color:rgba(232,130,12,.4);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.prev{width:100%;height:138px;overflow:hidden;position:relative;background:#02030a}
+.card-foot{padding:9px 11px 11px}
+.card-num{font-family:var(--mono);font-size:.4rem;letter-spacing:.16em;color:var(--accent);margin-bottom:2px}
+.card-title{font-family:var(--bebas);font-size:.98rem;letter-spacing:.05em;line-height:1.1;margin-bottom:3px}
+.card-sub{font-family:var(--mono);font-size:.4rem;letter-spacing:.08em;color:var(--muted);line-height:1.4}
+.pill{display:inline-block;font-family:var(--mono);font-size:.36rem;letter-spacing:.12em;text-transform:uppercase;padding:.13rem .48rem;margin-bottom:4px}
+.p-narr{background:rgba(251,191,36,.08);color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
+.p-phys{background:rgba(96,165,250,.08);color:#60a5fa;border:1px solid rgba(96,165,250,.2)}
+.p-gen{background:rgba(232,130,12,.08);color:#E8820C;border:1px solid rgba(232,130,12,.2)}
+.p-sculpt{background:rgba(110,231,183,.08);color:#6ee7b7;border:1px solid rgba(110,231,183,.2)}
+.p-tech{background:rgba(196,181,253,.08);color:#c4b5fd;border:1px solid rgba(196,181,253,.2)}
+#modal{position:fixed;inset:0;z-index:500;background:rgba(3,4,10,.95);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:2rem}
+#modal.open{display:flex}
+#mbox{background:var(--s1);border:1px solid rgba(232,130,12,.22);width:100%;max-width:900px;max-height:90vh;overflow-y:auto;position:relative}
+.mtop{background:rgba(232,130,12,.035);border-bottom:1px solid rgba(232,130,12,.13);padding:.65rem 1.2rem;display:flex;align-items:center;justify-content:space-between}
+.mtop-l{font-family:var(--mono);font-size:.48rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+.mclose{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;background:none;border:1px solid var(--border);color:var(--muted);padding:.28rem .65rem;cursor:pointer;transition:all .15s}
+.mclose:hover{color:var(--accent);border-color:rgba(232,130,12,.4)}
+#mscene{width:100%;min-height:400px;background:#02030a;overflow:hidden;position:relative}
+#minfo{padding:1.3rem 1.5rem 1.5rem}
+#minfo h2{font-family:var(--bebas);font-size:1.75rem;letter-spacing:.06em;margin-bottom:.45rem}
+#minfo p{font-size:.87rem;line-height:1.82;color:var(--white);margin-bottom:1.1rem;max-width:680px}
+.mbuild{font-family:var(--bebas);font-size:.88rem;letter-spacing:.16em;padding:.68rem 1.7rem;background:var(--accent);color:#07080e;border:none;cursor:pointer;transition:background .18s}
+.mbuild:hover{background:var(--a2)}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo"><div class="logoDot"></div>SAIF BADAWY</div>
+  <div class="badge">VOL. III · 40 WOW-FACTOR IDEAS</div>
+</nav>
+<div class="page">
+  <div class="hdr">
+    <div class="hdrEye"><div class="hdrLine"></div><span class="hdrTag">Volume III — Never Done Before</span></div>
+    <div class="hdrTitle">40 Ideas That Make<br>Anyone Say "Wow."</div>
+    <div class="hdrSub">Narrative · Physics · Generative · Data Sculpture · Immersive Tech<br>Every idea built from Saif's real projects, roles, and content — click any card to preview</div>
+  </div>
+  <div class="filters">
+    <button class="filt on" onclick="filt('all',this)">All 40</button>
+    <button class="filt" onclick="filt('narr',this)">Narrative</button>
+    <button class="filt" onclick="filt('phys',this)">Physics</button>
+    <button class="filt" onclick="filt('gen',this)">Generative</button>
+    <button class="filt" onclick="filt('sculpt',this)">Data Sculpture</button>
+    <button class="filt" onclick="filt('tech',this)">Immersive Tech</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+<div id="modal" onclick="if(event.target===this)closeModal()">
+  <div id="mbox">
+    <div class="mtop"><span class="mtop-l" id="mtopL">PREVIEW</span><button class="mclose" onclick="closeModal()">CLOSE ✕</button></div>
+    <div id="mscene"></div>
+    <div id="minfo"><h2 id="mtitle"></h2><p id="mdesc"></p><button class="mbuild" id="mbuild">BUILD THIS ON MY WEBSITE</button></div>
+  </div>
+</div>
+<script>
+const IDEAS=[
+{n:1,cat:'narr',title:'Cinematic Career Reel',sub:'Portfolio opens like a Netflix title sequence',desc:'The page opens with a black screen and a dramatic sound-sync title card — "SAIF BADAWY · ENGINEERING PROJECT MANAGER". Then each section animates in like a film sequence: slow zoom, ken burns on project photos, subtitle captions. A portfolio that feels like a trailer for a person.',pill:'p-narr',label:'Narrative'},
+{n:2,cat:'narr',title:'The Mission Briefing Board',sub:'CV as a spy mission board — red string & all',desc:'The hero is a corkboard with pinned documents, photographs, hand-drawn maps, and red string connecting projects to outcomes. Hover a pin to read the briefing. The whole CV becomes a mission dossier. Every project is an operation.',pill:'p-narr',label:'Narrative'},
+{n:3,cat:'narr',title:'Career Time Scrubber',sub:'Drag a slider to travel through Saif\'s career',desc:'A horizontal timeline scrubber at the top of the page. Dragging left or right literally changes what year you\'re viewing — skills, job titles, projects, photo, and page colour all morph in real time. Watch a 10-year career in 10 seconds.',pill:'p-narr',label:'Narrative'},
+{n:4,cat:'narr',title:'DNA Milestone Helix',sub:'Career milestones wound into a rotating double helix',desc:'Every project milestone, qualification, and role is a base pair on a rotating 3D DNA double helix. The two strands are "Technical Achievements" and "Leadership Milestones". Drag to rotate. Hover a base pair to see the milestone detail.',pill:'p-narr',label:'Narrative'},
+{n:5,cat:'narr',title:'Breaking News Portfolio',sub:'Entire CV styled as a live news broadcast',desc:'The portfolio IS a live news channel. A ticker runs real project stats. A "Breaking News" banner appears as you scroll: "ENGINEER DELIVERS £340M NEOM PROJECT AHEAD OF SCHEDULE". Weather map replaced by a risk map. The full CV as broadcast journalism.',pill:'p-narr',label:'Narrative'},
+{n:6,cat:'narr',title:'Morse Code Transmission',sub:'CV transmits across the screen as Morse code',desc:'A telegraph aesthetic: the entire CV encodes itself as animated Morse code dots and dashes across the hero, then decodes into readable text letter by letter. The audio-visual rhythm becomes hypnotic. A nod to engineering\'s communication heritage.',pill:'p-narr',label:'Narrative'},
+{n:7,cat:'narr',title:'Classified Intelligence File',sub:'Redacted document that reveals on hover/click',desc:'The portfolio arrives looking like a declassified government file — heavy redaction bars over key facts. Hover any bar to lift the redaction and reveal the content beneath: project values, client names, technical details. The reveal is addictive.',pill:'p-narr',label:'Narrative'},
+{n:8,cat:'narr',title:'Mission Control Dashboard',sub:'Career presented as a NASA control room',desc:'A full Mission Control aesthetic — multiple screen panels showing different "mission" data: comms log (work history), telemetry (skills), flight plan (education), crew manifest (teams led). Status lights, countdown timers. The engineer\'s career as a space programme.',pill:'p-narr',label:'Narrative'},
+{n:9,cat:'phys',title:'Gravity Skill System',sub:'Skills orbit like planets with real gravitational physics',desc:'Skills are planetary bodies orbiting "Saif" at the centre. Larger skills have more mass and stronger orbits. Smaller adjacent skills get captured into binary pairs. The mouse creates a gravity well that warps trajectories. Real n-body simulation.',pill:'p-phys',label:'Physics'},
+{n:10,cat:'phys',title:'Seismic Project Impact',sub:'Click a project — shockwaves radiate across the page',desc:'Click any project card and seismic P-waves and S-waves radiate outward across the page — the bigger the project, the bigger the quake. Richter scale appears in the corner. The £340M NEOM project registers 7.2. A visceral sense of scale.',pill:'p-phys',label:'Physics'},
+{n:11,cat:'phys',title:'Mercury Budget Pools',sub:'Project budgets as liquid mercury that merges & splits',desc:'Project budgets are rendered as mercury pools at the bottom of the page — realistic surface tension, reflections, and viscosity. Hover to split a pool. Drag two together to merge budgets. The total budget counter updates with realistic fluid physics.',pill:'p-phys',label:'Physics'},
+{n:12,cat:'phys',title:'Magnetic Cursor Field',sub:'Every element on the page responds to your mouse',desc:'The cursor emits a magnetic field. Text characters, cards, and icons drift toward or away from it based on their "polarity" — skills attract, risks repel. The whole page is alive with invisible forces. Move fast and watch the whole layout breathe.',pill:'p-phys',label:'Physics'},
+{n:13,cat:'phys',title:'Entropy Reversal Scroll',sub:'Page starts as chaos — scroll creates order',desc:'On load the page appears as scattered, disorganised particles — CV text broken into floating atoms. As you scroll down, entropy reverses: particles snap into formation, text assembles, structure emerges. The act of reading the CV mirrors the engineer\'s job: bringing order to chaos.',pill:'p-phys',label:'Physics'},
+{n:14,cat:'phys',title:'Tectonic Career Plates',sub:'Industry transitions as colliding tectonic plates',desc:'Career transitions are tectonic events. Plates labelled Oil & Gas, Infrastructure, Sustainability slowly drift and collide — mountain ranges (expertise) rise at collision zones. Subduction zones show where older skills descended into deeper capability. Geological metaphor as biography.',pill:'p-phys',label:'Physics'},
+{n:15,cat:'phys',title:'Spring Network Cards',sub:'All section cards connected by visible springs',desc:'Every project card, skill badge, and section header is connected to adjacent elements by visible elastic springs. Drag any element and the entire connected graph oscillates with damped harmonic motion. The CV becomes a physical network you can pluck.',pill:'p-phys',label:'Physics'},
+{n:16,cat:'phys',title:'Pendulum Clockwork Timeline',sub:'Career timeline driven by real pendulum mechanics',desc:'A giant clockwork mechanism where the main pendulum drives a timeline hand around a clock face. Each hour = one year of career. Cogs and escapements show the progress. The ticking rhythm is real pendulum physics — satisfying, precise, engineering-grade.',pill:'p-phys',label:'Physics'},
+{n:17,cat:'gen',title:'Blueprint Self-Drawing',sub:'Technical drawing of Saif\'s profile draws itself',desc:'An engineering blueprint of a floor plan or P&ID draws itself from scratch — drafting lines appear, annotations are typed, dimension arrows extend. But the floor plan IS Saif\'s career path: each room a role, each corridor a transition. Watch the engineer\'s life drafted in real time.',pill:'p-gen',label:'Generative'},
+{n:18,cat:'gen',title:'Project Data Fingerprints',sub:'Each project generates a unique radial biometric',desc:'Every project in the portfolio generates a unique visual fingerprint — a radial pattern computed from its budget, duration, team size, risk score, and outcome. No two are alike. The fingerprint is verifiably derived from the real project data. A biometric identity for each achievement.',pill:'p-gen',label:'Generative'},
+{n:19,cat:'gen',title:'Topographic Skills Map',sub:'Expertise rendered as a 3D terrain: height = mastery',desc:'All skills are plotted on a 2D map and a 3D terrain is computed where height = proficiency. PM skills form the mountain range. Technical skills are foothills. Specialisms are peaks. Fly over it with the mouse. The skills landscape as geography.',pill:'p-gen',label:'Generative'},
+{n:20,cat:'gen',title:'Career Coral Reef',sub:'Each role grows as a new coral species',desc:'The career timeline grows from seafloor upward as a coral reef. Each new role spawns a new coral species — shape and colour encoded from role type, duration, and industry. The reef is alive: it sways, fish swim through (team members), and light rays filter from above.',pill:'p-gen',label:'Generative'},
+{n:21,cat:'gen',title:'Crystal Skill Formation',sub:'Skills crystallise from solution on page load',desc:'On load, the skills section is a supersaturated solution — formless. Then nucleation begins: first one crystal grows, then another, until the entire skills lattice has crystallised. Each crystal\'s shape is determined by the skill category. A chemistry metaphor for expertise.',pill:'p-gen',label:'Generative'},
+{n:22,cat:'gen',title:'Procedural City Builder',sub:'Career timeline as a city being built in real time',desc:'A top-down city grid where each year of career is a new district being built — roads, buildings, and infrastructure procedurally placed. The city\'s density reflects career intensity. The skyline on the right becomes more complex over time. A SimCity of one man\'s career.',pill:'p-gen',label:'Generative'},
+{n:23,cat:'gen',title:'Living Organisation Chart',sub:'Org chart breathes, reorganises, and pulses',desc:'The teams Saif has managed are rendered as a living org chart — it breathes in and out, periodically reorganises itself, and individual nodes pulse with activity based on their project contribution. Hover a node to see the person\'s brief story. Org charts have never been alive before.',pill:'p-gen',label:'Generative'},
+{n:24,cat:'gen',title:'Erosion Scroll Reveal',sub:'Content is hidden under sediment — scroll erodes it',desc:'Each section starts covered in digital sediment — rock texture over content. Scrolling acts as water erosion: the sediment wears away at the scroll position, revealing the content beneath. Geological time compressed into a scroll gesture. Ancient and futuristic simultaneously.',pill:'p-gen',label:'Generative'},
+{n:25,cat:'sculpt',title:'3D Career Spiral',sub:'Timeline spirals upward through 3D space',desc:'The career timeline is a 3D helix spiralling upward in WebGL. Each rotation = one year. Project markers glow at their coordinates. The helix rises from the seafloor (2015) to the stratosphere (2026). Drag to rotate the entire spiral. Depth creates a physical sense of time passing.',pill:'p-sculpt',label:'Data Sculpture'},
+{n:26,cat:'sculpt',title:'Budget Mountain Range',sub:'Project budgets as a dramatic mountain silhouette',desc:'Every project\'s budget is a peak in an animated mountain range. £340M NEOM is Everest. Smaller projects are hills. The mountains scroll in parallax layers — fog in the valleys, sunrise colours. The fiscal landscape of an engineering career as physical geography.',pill:'p-sculpt',label:'Data Sculpture'},
+{n:27,cat:'sculpt',title:'Heartbeat Career Monitor',sub:'Each project is a heartbeat event on a live ECG',desc:'A hospital ECG monitor shows Saif\'s career heart rate. Steady baseline during learning periods. Sharp QRS complexes at major project milestones. ST elevation during high-risk project phases. The career as a vital signs readout — the engineering heart is always beating.',pill:'p-sculpt',label:'Data Sculpture'},
+{n:28,cat:'sculpt',title:'Risk Weather System',sub:'Project risks as live synoptic weather chart',desc:'A real synoptic weather map where each project is a weather system — pressure isobars show risk concentration, fronts show risk type (cost/schedule/safety), storm cells for critical risks. The map animates as the career progresses. Engineering risk as meteorology.',pill:'p-sculpt',label:'Data Sculpture'},
+{n:29,cat:'sculpt',title:'Career Sankey River',sub:'Skills and methodologies flow through roles as a river',desc:'A Sankey diagram where input streams are education and early skills, tributaries merge into larger competency rivers, and the flow widens with each major role. The river branches into specialisms. See exactly how PM expertise flows from engineering foundations. A career hydrograph.',pill:'p-sculpt',label:'Data Sculpture'},
+{n:30,cat:'sculpt',title:'Bubble Universe',sub:'Every project a soap bubble — size=value, colour=sector',desc:'A universe of soap bubbles, each one a project. Bubble size = project value. Colour = industry sector. Bubbles drift gently, occasionally merging. Hover to see project details appear inside the bubble\'s iridescent surface. Burst one to reveal the next project. Delicate and powerful.',pill:'p-sculpt',label:'Data Sculpture'},
+{n:31,cat:'sculpt',title:'Sound Spectrum CV',sub:'Career data encoded as an audio waveform sculpture',desc:'The CV data is encoded as a visual audio waveform — each section a frequency band. Education is bass. Technical skills are mid. Soft skills are treble. The waveform is interactive: click any frequency band and that section scrolls into view. The CV as music.',pill:'p-sculpt',label:'Data Sculpture'},
+{n:32,cat:'sculpt',title:'Project Constellation Map',sub:'Projects mapped as stars — connect the constellations',desc:'All 20+ projects are plotted as stars, their position determined by sector (x-axis) and impact (y-axis), brightness by complexity. As your mouse moves, proximity lines draw between related projects forming constellations: the "NEOM Cluster", the "Infrastructure Arm". The career as a star chart.',pill:'p-sculpt',label:'Data Sculpture'},
+{n:33,cat:'tech',title:'"What Would Saif Build?" AI',sub:'Type your problem — get a bespoke project proposal',desc:'A text box at the bottom of the portfolio: "Describe your engineering challenge." Type anything. AI generates a structured project proposal in Saif\'s actual methodology: objectives, WBS, risk register, team, cost estimate. Real output, instantly. Turns a portfolio into a sales tool.',pill:'p-tech',label:'Immersive Tech'},
+{n:34,cat:'tech',title:'Adaptive Industry Mode',sub:'Portfolio detects your industry and reframes itself',desc:'UTM parameters, referrer headers, or a simple self-select menu let the portfolio reframe all content for the visitor\'s world. Oil & gas visitor? Projects reframe to process safety and lifecycle. Construction? Same projects reframed to delivery and programme. One CV, infinite audiences.',pill:'p-tech',label:'Immersive Tech'},
+{n:35,cat:'tech',title:'CV Compression Engine',sub:'Watch CV compress to 1 page → 1 para → 1 sentence → 1 word',desc:'An interactive compression visualiser. Start at the full CV. Press compress: it collapses to a one-pager. Press again: one paragraph. Again: one sentence. Again: one word. The word is "DELIVERS". Then it expands back. The essential core of the CV made visceral.',pill:'p-tech',label:'Immersive Tech'},
+{n:36,cat:'tech',title:'Live Digital Twin Project',sub:'A fictional live project updating in real time',desc:'A permanent fixture on the portfolio: a fictional "Project Saif is currently managing" — a live dashboard showing stage (currently: Design Development), % complete (updating by the second), today\'s risk register item, latest milestone. It\'s fake but looks 100% real. The always-on engineer.',pill:'p-tech',label:'Immersive Tech'},
+{n:37,cat:'tech',title:'Reverse Interview Mode',sub:'The portfolio interviews the recruiter instead',desc:'A mode where the portfolio turns the tables: it asks the recruiter questions about their project. "What\'s your biggest delivery risk?" "How mature is your PMO?" Based on answers, it tells the recruiter why Saif is exactly what they need. The portfolio as a consultant.',pill:'p-tech',label:'Immersive Tech'},
+{n:38,cat:'tech',title:'Global Visitor Constellation',sub:'See where in the world every visitor came from',desc:'A globe at the bottom of the portfolio with glowing dots where every visitor has come from. Real data, privacy-safe (city-level only). As new visitors arrive, their dot pulses into existence. The portfolio\'s reach, made visible. Recruiters in London, Dubai, Riyadh, Houston.',pill:'p-tech',label:'Immersive Tech'},
+{n:39,cat:'tech',title:'The Hidden Last Page',sub:'Scroll past the footer — find something unexpected',desc:'Scroll past the last footer element and the page continues: a completely different aesthetic — dark matter, floating equations, a handwritten note from Saif, a secret contact form that bypasses the main one. Only people curious enough to scroll further than expected find it.',pill:'p-tech',label:'Immersive Tech'},
+{n:40,cat:'tech',title:'Portfolio Stress Test',sub:'Apply engineering loads to the page itself',desc:'A toolbar appears with load controls: "Apply thermal load", "Apply seismic force", "Apply wind pressure". Click them and the page itself deforms — text bends under load, sections bow, colour temperature shifts with heat. Then click "Remove load" and everything springs back. Meta engineering.',pill:'p-tech',label:'Immersive Tech'},
+];
+
+function filt(cat,el){
+  document.querySelectorAll('.filt').forEach(b=>b.classList.remove('on'));el.classList.add('on');
+  document.querySelectorAll('.card').forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'':'none';});
+}
+function buildGrid(){
+  const g=document.getElementById('grid');
+  IDEAS.forEach(id=>{
+    const d=document.createElement('div');d.className='card';d.dataset.cat=id.cat;d.onclick=()=>openModal(id.n);
+    d.innerHTML=`<div class="prev" id="p${id.n}"></div><div class="card-foot"><span class="pill ${id.pill}">${id.label}</span><div class="card-num">${String(id.n).padStart(2,'0')}</div><div class="card-title">${id.title}</div><div class="card-sub">${id.sub}</div></div>`;
+    g.appendChild(d);
+  });
+}
+buildGrid();
+
+let mRaf=null;
+function openModal(n){
+  const idea=IDEAS.find(i=>i.n===n);
+  document.getElementById('mtopL').textContent=`IDEA ${String(n).padStart(2,'0')} · ${idea.label.toUpperCase()}`;
+  document.getElementById('mtitle').textContent=idea.title;
+  document.getElementById('mdesc').textContent=idea.desc;
+  document.getElementById('mbuild').onclick=()=>{if(window.sendPrompt)window.sendPrompt(`Build idea from Vol3 #${n}: ${idea.title} on my portfolio website`);};
+  const sc=document.getElementById('mscene');sc.innerHTML='';
+  if(mRaf){cancelAnimationFrame(mRaf);mRaf=null;}
+  buildModal(n,sc);
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');if(mRaf){cancelAnimationFrame(mRaf);mRaf=null;}}
+
+// ══════════════════════════════════════════════════
+// THUMBNAIL RENDERERS
+// ══════════════════════════════════════════════════
+function drawThumb(n,el){
+  const c=document.createElement('canvas');
+  const W=el.offsetWidth||215,H=138;
+  c.width=W;c.height=H;c.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%';
+  el.style.position='relative';el.appendChild(c);
+  const ctx=c.getContext('2d');
+  let t=0;
+  const A='#E8820C',BG='#02030a';
+
+  function loop(){
+    requestAnimationFrame(loop);t+=0.016;
+    ctx.fillStyle=BG;ctx.fillRect(0,0,W,H);
+
+    if(n===1){ // Cinematic reel — film grain + title card
+      // Film grain
+      for(let i=0;i<200;i++){ctx.fillStyle=`rgba(255,255,255,${Math.random()*0.04})`;ctx.fillRect(Math.random()*W,Math.random()*H,1,1);}
+      // Letterbox bars
+      ctx.fillStyle='#000';ctx.fillRect(0,0,W,18);ctx.fillRect(0,H-18,W,18);
+      // Cinematic title
+      ctx.font='bold 14px Bebas Neue,sans-serif';
+      const fade=0.6+Math.sin(t*0.5)*0.3;
+      ctx.fillStyle=`rgba(240,237,232,${fade})`;
+      ctx.fillText('SAIF BADAWY',W/2-38,H/2+5);
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle=`rgba(232,130,12,${fade*0.8})`;
+      ctx.fillText('ENGINEERING PROJECT MANAGER',W/2-46,H/2+18);
+      // Scan line
+      const sl=(t*40)%H;ctx.fillStyle='rgba(255,255,255,0.04)';ctx.fillRect(0,sl,W,1);
+    }
+    else if(n===2){ // Mission board — corkboard + pins
+      // Cork texture
+      ctx.fillStyle='#2a1a0a';ctx.fillRect(0,0,W,H);
+      for(let i=0;i<60;i++){ctx.fillStyle=`rgba(${180+Math.random()*30},${120+Math.random()*20},${50+Math.random()*20},0.12)`;ctx.fillRect(Math.random()*W,Math.random()*H,Math.random()*8+2,Math.random()*3+1);}
+      // Papers
+      const papers=[{x:12,y:15,w:55,h:38,r:-.04,c:'rgba(240,230,200,0.9)'},{x:75,y:20,w:48,h:35,r:.03,c:'rgba(235,225,195,0.85)'},{x:W-70,y:12,w:50,h:42,r:-.02,c:'rgba(242,232,205,0.9)'}];
+      papers.forEach(p=>{ctx.save();ctx.translate(p.x+p.w/2,p.y+p.h/2);ctx.rotate(p.r+Math.sin(t*0.3)*0.005);ctx.fillStyle=p.c;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();});
+      // Red string
+      ctx.strokeStyle='rgba(220,50,50,0.7)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(35,34);ctx.lineTo(99,37);ctx.lineTo(W-45,33);ctx.stroke();
+      // Pins
+      [[35,34],[99,37],[W-45,33]].forEach(([px,py])=>{ctx.fillStyle='rgba(232,130,12,0.9)';ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fill();});
+    }
+    else if(n===3){ // Time Scrubber — morphing career
+      const yr=2015+((Math.sin(t*0.3)+1)/2)*11;
+      const hue=Math.floor(yr-2015)*15;
+      ctx.fillStyle=`hsla(${200+hue},40%,8%,1)`;ctx.fillRect(0,0,W,H);
+      // Year number
+      ctx.font='bold 36px Bebas Neue,sans-serif';
+      ctx.fillStyle=`rgba(232,130,12,0.9)`;ctx.fillText(Math.floor(yr),W/2-22,H/2+10);
+      // Slider track
+      const sx=14+(W-28)*(yr-2015)/11;
+      ctx.fillStyle='rgba(255,255,255,0.08)';ctx.fillRect(14,H-20,W-28,2);
+      ctx.fillStyle=A;ctx.fillRect(14,H-21,(W-28)*(yr-2015)/11,4);
+      ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(sx,H-19,5,0,Math.PI*2);ctx.fill();
+      // Morphing text
+      const roles=['Intern','Graduate Eng','Site Engineer','Project Eng','Project Manager','Senior PM','Lead PM'];
+      const ri=Math.floor((yr-2015)/11*roles.length);
+      ctx.font='6px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.5)';
+      ctx.fillText(roles[Math.min(ri,roles.length-1)]||'',W/2-25,H/2+28);
+    }
+    else if(n===4){ // DNA Helix
+      const pairs=8;
+      for(let i=0;i<pairs;i++){
+        const phase=i/pairs*Math.PI*2-t*1.5;
+        const x1=W/2+Math.cos(phase)*25,x2=W/2+Math.cos(phase+Math.PI)*25;
+        const y=15+i*(H-30)/pairs;
+        ctx.strokeStyle=`rgba(96,165,250,0.7)`;ctx.lineWidth=2;
+        ctx.beginPath();ctx.moveTo(x1,y);ctx.lineTo(x2,y);ctx.stroke();
+        ctx.fillStyle='rgba(110,231,183,0.8)';ctx.beginPath();ctx.arc(x1,y,3,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='rgba(232,130,12,0.8)';ctx.beginPath();ctx.arc(x2,y,3,0,Math.PI*2);ctx.fill();
+      }
+      // Backbone strands
+      ctx.strokeStyle='rgba(96,165,250,0.25)';ctx.lineWidth=1.5;
+      for(let strand=0;strand<2;strand++){
+        ctx.beginPath();
+        for(let y=0;y<H;y+=3){
+          const phase=-t*1.5+y/H*Math.PI*2*(pairs/2);
+          const x=W/2+Math.cos(phase+(strand?Math.PI:0))*25;
+          y===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+      }
+    }
+    else if(n===5){ // Breaking News
+      ctx.fillStyle='#0a0a12';ctx.fillRect(0,0,W,H);
+      // Header bar
+      ctx.fillStyle=A;ctx.fillRect(0,0,W,22);
+      ctx.font='bold 10px Bebas Neue,sans-serif';ctx.fillStyle='#000';ctx.fillText('● SAIF BADAWY LIVE',6,15);
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.5)';ctx.fillText(new Date().toLocaleTimeString(),W-52,14);
+      // Breaking news bar
+      ctx.fillStyle='rgba(220,30,30,0.9)';ctx.fillRect(0,H-22,W,22);
+      ctx.font='bold 7px Bebas Neue,sans-serif';ctx.fillStyle='#fff';ctx.fillText('BREAKING:',4,H-8);
+      // Ticker
+      const ticker='£340M NEOM PROJECT DELIVERED · 5 COUNTRIES · 14 SUBCONT. · NET ZERO · ';
+      const x=W-(t*40%(ticker.length*5+W));
+      ctx.font='6px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.9)';ctx.fillText(ticker,x+40,H-8);
+      // Body
+      ctx.font='6px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.4)';
+      ctx.fillText('INFRASTRUCTURE ENGINEER SAIF BADAWY',8,38);
+      ctx.font='bold 7px Bebas Neue,sans-serif';ctx.fillStyle='rgba(255,255,255,0.8)';
+      ctx.fillText('DELIVERS AHEAD OF SCHEDULE',8,50);
+      ctx.fillText('FOR THIRD CONSECUTIVE PROJECT',8,62);
+    }
+    else if(n===6){ // Morse code
+      const morse={'S':'...','A':'.-','I':'..','F':'..-.',' ':'/'};
+      const code=Object.entries(morse).flatMap(([,v])=>[...v,' ']).join('');
+      ctx.font='10px JetBrains Mono,monospace';
+      const chars=[...code];
+      const totalLen=chars.length;
+      const progress=Math.floor((t*8)%totalLen);
+      let x=8,y=22;
+      chars.forEach((ch,i)=>{
+        if(i>progress)return;
+        const alpha=i===progress?1:0.5;
+        ctx.fillStyle=`rgba(232,130,12,${alpha})`;
+        if(x+10>W-8){x=8;y+=16;}
+        ctx.fillText(ch,x,y);x+=10;
+      });
+      // Radio wave
+      ctx.strokeStyle='rgba(232,130,12,0.2)';ctx.lineWidth=1;
+      ctx.beginPath();
+      for(let x2=0;x2<W;x2+=2){ctx.lineTo(x2,H-20+Math.sin(x2*0.2+t*5)*8*Math.exp(-Math.abs(x2-W/2)/40));}
+      ctx.stroke();
+    }
+    else if(n===7){ // Classified / redacted
+      ctx.fillStyle='#f0ede8';ctx.fillRect(0,0,W,H);
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(0,0,0,0.5)';
+      const lines=['SUBJECT: SAIF BADAWY · ENG. PM','CLEARANCE: TOP SECRET','','PROJECTS: [REDACTED]','VALUE: [REDACTED]','LOCATION: [REDACTED]','','RECOMMENDATION: HIRE'];
+      lines.forEach((l,i)=>ctx.fillText(l,8,18+i*15));
+      // Animated redaction bars
+      const bars=[[8,26,80],[8,56,95],[8,71,70],[8,86,55]];
+      bars.forEach(([bx,by,bw],i)=>{
+        const peel=Math.max(0,Math.sin(t*0.8+i)*0.4);
+        ctx.fillStyle='rgba(0,0,0,0.92)';ctx.fillRect(bx,by-10,bw*(1-peel*0.2),10);
+      });
+      ctx.fillStyle='rgba(220,30,30,0.7)';ctx.font='bold 18px Bebas Neue,sans-serif';
+      ctx.save();ctx.translate(W-30,H-10);ctx.rotate(-0.3);ctx.fillText('CLASSIFIED',0,0);ctx.restore();
+    }
+    else if(n===8){ // Mission control
+      ctx.fillStyle='#010408';ctx.fillRect(0,0,W,H);
+      // Grid lines
+      ctx.strokeStyle='rgba(0,200,100,0.08)';ctx.lineWidth=0.5;
+      for(let x=0;x<W;x+=16){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+      for(let y=0;y<H;y+=12){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+      // Panels
+      const panels=[{x:8,y:8,w:60,h:38,lbl:'COMMS'},{x:76,y:8,w:55,h:38,lbl:'TELEM'},{x:W-70,y:8,w:58,h:38,lbl:'STATUS'}];
+      panels.forEach(p=>{
+        ctx.strokeStyle='rgba(0,200,100,0.4)';ctx.lineWidth=0.8;ctx.strokeRect(p.x,p.y,p.w,p.h);
+        ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(0,200,100,0.7)';ctx.fillText(p.lbl,p.x+3,p.y+8);
+        // mini waveform
+        ctx.strokeStyle='rgba(0,200,100,0.3)';ctx.lineWidth=0.8;ctx.beginPath();
+        for(let x2=0;x2<p.w-6;x2+=2){ctx.lineTo(p.x+3+x2,p.y+24+Math.sin(x2*0.3+t*2+p.x)*4);}
+        ctx.stroke();
+      });
+      // Status light
+      ctx.fillStyle=`rgba(0,200,100,${0.6+Math.sin(t*2)*0.3})`;ctx.beginPath();ctx.arc(W-15,H-15,4,0,Math.PI*2);ctx.fill();
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(0,200,100,0.5)';ctx.fillText('ALL SYS GO',8,H-8);
+    }
+    else if(n===9){ // Gravity skill system
+      if(!c._nb){c._nb=[ {x:W/2,y:H/2,m:8,vx:0,vy:0,l:'PM',fixed:true}, ...['BIM','CAD','RISK','WBS','ISO','MSP','CDM','LEAN'].map((l,i)=>({x:W/2+Math.cos(i/8*Math.PI*2)*55,y:H/2+Math.sin(i/8*Math.PI*2)*40,m:2+Math.random()*2,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5,l})) ];}
+      c._nb.forEach((a,i)=>{
+        if(a.fixed)return;
+        c._nb.forEach((b,j)=>{if(i===j)return;const dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)+5;const f=b.m*a.m/(d*d)*0.8;a.vx+=dx/d*f;a.vy+=dy/d*f;});
+        a.vx*=0.97;a.vy*=0.97;a.x+=a.vx;a.y+=a.vy;
+        a.x=Math.max(14,Math.min(W-14,a.x));a.y=Math.max(10,Math.min(H-10,a.y));
+      });
+      // Orbit rings
+      ctx.strokeStyle='rgba(232,130,12,0.06)';ctx.lineWidth=0.5;
+      [35,55,70].forEach(r=>{ctx.beginPath();ctx.ellipse(W/2,H/2,r,r*0.72,0,0,Math.PI*2);ctx.stroke();});
+      c._nb.forEach(body=>{
+        ctx.fillStyle=body.fixed?A:'rgba(96,165,250,0.8)';
+        ctx.beginPath();ctx.arc(body.x,body.y,body.fixed?7:3+body.m*0.5,0,Math.PI*2);ctx.fill();
+        ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.6)';ctx.fillText(body.l,body.x+5,body.y+3);
+      });
+    }
+    else if(n===10){ // Seismic waves
+      if(!c._quake){c._quake={t:0,waves:[]};}
+      c._quake.t+=0.016;
+      if(c._quake.t>3){c._quake.t=0;c._quake.waves=[];}
+      if(c._quake.t<0.1&&c._quake.waves.length===0){for(let i=0;i<5;i++)c._quake.waves.push({r:0,type:i%2===0?'P':'S',speed:60+i*15,alpha:1});}
+      c._quake.waves.forEach(w=>{
+        w.r+=w.speed*0.016;w.alpha=Math.max(0,1-w.r/Math.max(W,H)*1.5);
+        ctx.strokeStyle=w.type==='P'?`rgba(232,130,12,${w.alpha*0.6})`:`rgba(96,165,250,${w.alpha*0.4})`;
+        ctx.lineWidth=w.type==='P'?2:1;
+        ctx.beginPath();ctx.ellipse(W/2,H/2,w.r,w.r*0.6,0,0,Math.PI*2);ctx.stroke();
+      });
+      ctx.font='bold 10px Bebas Neue,sans-serif';ctx.fillStyle=A;ctx.fillText('NEOM PHASE 3',W/2-35,H/2+4);
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(232,130,12,0.5)';ctx.fillText('M 7.2 · £340M IMPACT',W/2-36,H/2+16);
+    }
+    else if(n===11){ // Mercury pools
+      if(!c._pool){c._pool=[{x:W*0.25,y:H*0.72,r:22,vx:0.3},{x:W*0.55,y:H*0.75,r:18,vx:-0.2},{x:W*0.78,y:H*0.7,r:14,vx:0.15}];}
+      c._pool.forEach(p=>{p.x+=p.vx;if(p.x<p.r+10||p.x>W-p.r-10)p.vx*=-1;
+        const grad=ctx.createRadialGradient(p.x-p.r*0.3,p.y-p.r*0.3,0,p.x,p.y,p.r);
+        grad.addColorStop(0,'rgba(220,230,255,0.95)');grad.addColorStop(0.4,'rgba(140,160,200,0.85)');grad.addColorStop(1,'rgba(80,100,150,0.6)');
+        ctx.fillStyle=grad;ctx.beginPath();ctx.ellipse(p.x,p.y,p.r,p.r*0.6,0,0,Math.PI*2);ctx.fill();
+      });
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(140,180,255,0.6)';ctx.fillText('£340M · £28M · £22M',14,H-8);
+    }
+    else if(n===12){ // Magnetic cursor
+      const mx=W/2+Math.cos(t*0.7)*W*0.3,my=H/2+Math.sin(t*0.5)*H*0.3;
+      const words=['PM','BIM','RISK','WBS','ISO','LEAN','EPC','FEED'];
+      if(!c._mg)c._mg=words.map((w,i)=>({x:W/2+Math.cos(i/8*Math.PI*2)*60,y:H/2+Math.sin(i/8*Math.PI*2)*40,ox:W/2+Math.cos(i/8*Math.PI*2)*60,oy:H/2+Math.sin(i/8*Math.PI*2)*40,w}));
+      c._mg.forEach(el=>{
+        const dx=mx-el.x,dy=my-el.y,d=Math.sqrt(dx*dx+dy*dy)+1;
+        const force=Math.min(800,15000/(d*d));
+        el.x+=(el.ox-el.x)*0.05+(dx/d)*force*0.008;
+        el.y+=(el.oy-el.y)*0.05+(dy/d)*force*0.008;
+        ctx.font='7px JetBrains Mono,monospace';ctx.fillStyle=A;ctx.fillText(el.w,el.x,el.y);
+      });
+      ctx.strokeStyle='rgba(232,130,12,0.3)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(mx,my,8,0,Math.PI*2);ctx.stroke();
+    }
+    else if(n===13){ // Entropy reversal
+      const order=Math.min(1,(t*0.2)%1);
+      const letters='SAIF BADAWY · ENGINEERING PM';
+      ctx.font='7px JetBrains Mono,monospace';
+      letters.split('').forEach((ch,i)=>{
+        const targetX=14+(i%20)*8,targetY=H/2-10+Math.floor(i/20)*14;
+        const chaosX=targetX+(1-order)*(Math.sin(i*2.3+t*0.1)*40);
+        const chaosY=targetY+(1-order)*(Math.cos(i*1.7+t*0.13)*30);
+        const alpha=0.3+order*0.6;
+        ctx.fillStyle=`rgba(232,130,12,${alpha})`;ctx.fillText(ch,chaosX,chaosY);
+      });
+      ctx.fillStyle='rgba(232,130,12,0.2)';ctx.font='5px JetBrains Mono,monospace';
+      ctx.fillText('ENTROPY: '+(((1-order)*100)).toFixed(0)+'%',14,H-8);
+    }
+    else if(n===14){ // Tectonic plates
+      const offset=Math.sin(t*0.3)*8;
+      // Plate 1 (Oil & Gas)
+      ctx.fillStyle='rgba(232,130,12,0.15)';
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(W*0.5+offset,0);ctx.lineTo(W*0.45+offset,H);ctx.lineTo(0,H);ctx.closePath();ctx.fill();
+      ctx.strokeStyle='rgba(232,130,12,0.5)';ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(W*0.5+offset,0);ctx.lineTo(W*0.45+offset,H);ctx.stroke();
+      // Mountain range at boundary
+      ctx.strokeStyle='rgba(232,130,12,0.6)';ctx.lineWidth=2;ctx.beginPath();
+      for(let y=0;y<H;y+=4){const bump=Math.sin(y*0.3)*6+Math.sin(y*0.7)*3;ctx.lineTo(W*0.47+offset+bump,y);}
+      ctx.stroke();
+      // Labels
+      ctx.font='6px JetBrains Mono,monospace';ctx.fillStyle='rgba(232,130,12,0.6)';ctx.fillText('OIL &',10,H/2-6);ctx.fillText('GAS',10,H/2+6);
+      ctx.fillStyle='rgba(96,165,250,0.6)';ctx.fillText('INFRA',W*0.6,H/2-6);ctx.fillText('STRUCT',W*0.6,H/2+6);
+    }
+    else if(n===15){ // Spring network
+      if(!c._sp){c._sp=Array.from({length:6},(_,i)=>({x:30+i*(W-40)/5,y:H/2+(i%2?-20:20),vx:0,vy:0,ox:30+i*(W-40)/5,oy:H/2+(i%2?-20:20)}));}
+      const pull=Math.sin(t*0.6)*25;
+      c._sp[2].x=c._sp[2].ox+pull;c._sp[2].y=c._sp[2].oy+Math.sin(t*0.8)*15;
+      c._sp.forEach((p,i)=>{
+        if(i===2)return;
+        const prev=i>0?c._sp[i-1]:null,next=i<c._sp.length-1?c._sp[i+1]:null;
+        let fx=0,fy=0;
+        [prev,next].forEach(nb=>{if(!nb)return;const dx=nb.x-p.x,dy=nb.y-p.y,d=Math.sqrt(dx*dx+dy*dy)+1;const f=(d-60)*0.15;fx+=dx/d*f;fy+=dy/d*f;});
+        fx+=(p.ox-p.x)*0.05;fy+=(p.oy-p.y)*0.05;
+        p.vx=(p.vx+fx)*0.9;p.vy=(p.vy+fy)*0.9;p.x+=p.vx;p.y+=p.vy;
+      });
+      ctx.strokeStyle='rgba(110,231,183,0.5)';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
+      for(let i=0;i<c._sp.length-1;i++){ctx.beginPath();ctx.moveTo(c._sp[i].x,c._sp[i].y);ctx.lineTo(c._sp[i+1].x,c._sp[i+1].y);ctx.stroke();}
+      ctx.setLineDash([]);
+      c._sp.forEach(p=>{ctx.fillStyle='rgba(110,231,183,0.8)';ctx.beginPath();ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.fill();});
+    }
+    else if(n===16){ // Pendulum clockwork
+      // Clock face
+      ctx.strokeStyle='rgba(232,130,12,0.3)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(W/2,H/2-10,42,0,Math.PI*2);ctx.stroke();
+      // Tick marks
+      for(let i=0;i<12;i++){
+        const a=i/12*Math.PI*2;
+        ctx.strokeStyle='rgba(232,130,12,0.5)';ctx.lineWidth=i%3===0?2:0.8;
+        ctx.beginPath();ctx.moveTo(W/2+Math.cos(a)*38,H/2-10+Math.sin(a)*38);ctx.lineTo(W/2+Math.cos(a)*42,H/2-10+Math.sin(a)*42);ctx.stroke();
+      }
+      // Hour hand (year)
+      const yearAngle=((t*0.05)%(Math.PI*2))-Math.PI/2;
+      ctx.strokeStyle=A;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W/2,H/2-10);ctx.lineTo(W/2+Math.cos(yearAngle)*28,H/2-10+Math.sin(yearAngle)*28);ctx.stroke();
+      // Pendulum
+      const pAngle=Math.sin(t*3)*0.5;
+      const px=W/2+Math.sin(pAngle)*30,py=H-12;
+      ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2,H/2+32);ctx.lineTo(px,py);ctx.stroke();
+      ctx.fillStyle='rgba(232,130,12,0.7)';ctx.beginPath();ctx.arc(px,py,5,0,Math.PI*2);ctx.fill();
+    }
+    else if(n===17){ // Blueprint self-drawing
+      ctx.fillStyle='#001428';ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle='rgba(100,180,255,0.6)';ctx.lineWidth=0.8;
+      // Grid
+      for(let x=0;x<W;x+=12){ctx.globalAlpha=0.15;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+      for(let y=0;y<H;y+=12){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+      ctx.globalAlpha=1;
+      // Drawing line by line
+      const prog=Math.min(1,t/4);
+      const lines2=[[20,30,W-20,30],[20,30,20,H-20],[W-20,30,W-20,H-20],[20,H-20,W-20,H-20],[W/2,30,W/2,H-20],[20,H/2,W-20,H/2]];
+      lines2.forEach((l,i)=>{
+        const lp=Math.max(0,Math.min(1,(prog-i*0.12)*8));
+        if(lp<=0)return;
+        ctx.strokeStyle='rgba(100,180,255,0.8)';ctx.lineWidth=1;
+        ctx.beginPath();ctx.moveTo(l[0],l[1]);ctx.lineTo(l[0]+(l[2]-l[0])*lp,l[1]+(l[3]-l[1])*lp);ctx.stroke();
+      });
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(100,180,255,0.5)';ctx.fillText('SAIF BADAWY · ENG. PM · DRAWING 01',8,H-8);
+    }
+    else if(n===18){ // Project fingerprints
+      const projects=[{budget:340,dur:24,team:14,c:'rgba(232,130,12,'},{budget:28,dur:18,c:'rgba(96,165,250,'},{budget:22,dur:12,c:'rgba(110,231,183,'}];
+      projects.forEach((p,pi)=>{
+        const cx=22+pi*(W-30)/3,cy=H/2;
+        const r=12+p.budget/340*18;
+        const spokes=Math.floor(6+p.dur/4);
+        for(let s=0;s<spokes;s++){
+          const a=s/spokes*Math.PI*2+t*0.3*(pi%2?1:-1);
+          const ripple=Math.sin(t*2+s*0.8)*(p.budget/100)*3;
+          ctx.strokeStyle=p.c+'0.5)';ctx.lineWidth=0.8;
+          ctx.beginPath();ctx.moveTo(cx,cy);
+          ctx.lineTo(cx+Math.cos(a)*(r+ripple),cy+Math.sin(a)*(r+ripple));ctx.stroke();
+        }
+        ctx.strokeStyle=p.c+'0.7)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,3,0,Math.PI*2);ctx.stroke();
+      });
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(232,130,12,0.4)';ctx.fillText('UNIQUE PROJECT SIGNATURES',6,H-8);
+    }
+    else if(n===19){ // Topographic skills map
+      for(let y=0;y<H;y+=4){
+        for(let x=0;x<W;x+=4){
+          const elev=Math.sin(x*0.08+t*0.1)*0.5+Math.cos(y*0.06+t*0.07)*0.3+Math.sin((x+y)*0.04)*0.5;
+          const hue=100+elev*60,l=20+elev*35;
+          ctx.fillStyle=`hsl(${hue},60%,${l}%)`;ctx.fillRect(x,y,4,4);
+        }
+      }
+      // Contour lines
+      ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=0.5;
+      for(let c2=0;c2<5;c2++){
+        ctx.beginPath();
+        for(let x=0;x<W;x+=2){const y=H*0.2+c2*(H*0.12)+Math.sin(x*0.08+t*0.1)*10+Math.sin(x*0.04)*8;ctx.lineTo(x,y);}
+        ctx.stroke();
+      }
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.5)';ctx.fillText('PM EXPERTISE',W/2-22,H/2);
+    }
+    else if(n===20){ // Coral reef
+      // Ocean background gradient
+      const grad=ctx.createLinearGradient(0,0,0,H);
+      grad.addColorStop(0,'rgba(0,50,100,1)');grad.addColorStop(1,'rgba(0,20,50,1)');
+      ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+      // Light rays
+      for(let r=0;r<5;r++){ctx.fillStyle=`rgba(100,180,255,${0.03+Math.sin(t*0.5+r)*0.015})`;ctx.beginPath();ctx.moveTo(W*(r+1)/6,0);ctx.lineTo(W*(r+1)/6-20,H);ctx.lineTo(W*(r+1)/6+20,H);ctx.closePath();ctx.fill();}
+      // Coral branches
+      const corals=[{x:W*0.15,h:50,c:'rgba(232,130,12,'},{x:W*0.35,h:65,c:'rgba(110,231,183,'},{x:W*0.55,h:55,c:'rgba(251,191,36,'},{x:W*0.75,h:48,c:'rgba(196,181,253,'}];
+      corals.forEach(co=>{
+        for(let b=0;b<5;b++){
+          const bx=co.x+Math.sin(b*1.2)*16,by=H-co.h+b*8;
+          ctx.strokeStyle=co.c+'0.7)';ctx.lineWidth=2-b*0.3;
+          ctx.beginPath();ctx.moveTo(bx,by);
+          ctx.quadraticCurveTo(bx+Math.sin(t+b)*5,by-12,bx+Math.cos(b*0.8)*10,by-18+Math.sin(t*0.5)*3);ctx.stroke();
+        }
+      });
+    }
+    else if(n===21){ // Crystal formation
+      if(!c._cry){c._cry={seeds:[],t:0};
+        c._cry.seeds=Array.from({length:5},(_,i)=>({x:W*(0.1+i*0.2),y:H*0.6,crystals:[]}));
+      }
+      c._cry.t+=0.016;
+      c._cry.seeds.forEach((seed,si)=>{
+        if(seed.crystals.length<8&&c._cry.t>si*0.5&&Math.random()<0.08){
+          const a=Math.random()*Math.PI*2,len=5+Math.random()*20;
+          seed.crystals.push({a,len,born:c._cry.t});
+        }
+        seed.crystals.forEach(cr=>{
+          const age=Math.min(1,(c._cry.t-cr.born)*2);
+          ctx.strokeStyle=`rgba(96,200,255,${age*0.7})`;ctx.lineWidth=1;
+          ctx.beginPath();ctx.moveTo(seed.x,seed.y);
+          ctx.lineTo(seed.x+Math.cos(cr.a)*cr.len*age,seed.y+Math.sin(cr.a)*cr.len*age);ctx.stroke();
+          // sub branches
+          if(age>0.5){ctx.strokeStyle=`rgba(96,200,255,${(age-0.5)*0.5})`;ctx.lineWidth=0.5;
+          ctx.beginPath();ctx.moveTo(seed.x+Math.cos(cr.a)*cr.len*0.6*age,seed.y+Math.sin(cr.a)*cr.len*0.6*age);
+          ctx.lineTo(seed.x+Math.cos(cr.a+0.8)*cr.len*0.4*age+Math.cos(cr.a)*cr.len*0.6*age,seed.y+Math.sin(cr.a+0.8)*cr.len*0.4*age+Math.sin(cr.a)*cr.len*0.6*age);ctx.stroke();}
+        });
+        ctx.fillStyle='rgba(96,200,255,0.8)';ctx.beginPath();ctx.arc(seed.x,seed.y,2,0,Math.PI*2);ctx.fill();
+      });
+    }
+    else if(n===22){ // City builder
+      const year=2015+((t*0.3)%11);
+      // Sky
+      ctx.fillStyle='#03040a';ctx.fillRect(0,0,W,H*0.55);
+      // Grid base
+      ctx.strokeStyle='rgba(232,130,12,0.15)';ctx.lineWidth=0.5;
+      for(let x=0;x<W;x+=16){ctx.beginPath();ctx.moveTo(x,H*0.55);ctx.lineTo(x,H);ctx.stroke();}
+      // Buildings growing over time
+      const numBlocks=Math.floor((year-2015)*4);
+      for(let b=0;b<numBlocks;b++){
+        const bx=8+(b%22)*9,bh=8+((b*7+13)%30),by=H*0.55-bh;
+        ctx.fillStyle=`rgba(232,130,12,${0.3+b%3*0.1})`;ctx.fillRect(bx,by,7,bh);
+        if(Math.sin(t+b)>0.8){ctx.fillStyle='rgba(255,240,100,0.6)';ctx.fillRect(bx+1,by+2,2,2);}
+      }
+      ctx.font='7px JetBrains Mono,monospace';ctx.fillStyle=A;ctx.fillText(Math.floor(year),W-30,H-8);
+    }
+    else if(n===23){ // Living org chart
+      const nodes=[{x:W/2,y:22,l:'SAIF',r:7},{x:W*0.25,y:60,l:'CIVIL',r:4},{x:W*0.5,y:60,l:'MEP',r:4},{x:W*0.75,y:60,l:'HSE',r:4},{x:W*0.18,y:100,l:'Sub A',r:3},{x:W*0.32,y:100,l:'Sub B',r:3},{x:W*0.5,y:100,l:'Sub C',r:3},{x:W*0.68,y:100,l:'Sub D',r:3},{x:W*0.82,y:100,l:'Sub E',r:3}];
+      const edges=[[0,1],[0,2],[0,3],[1,4],[1,5],[2,6],[3,7],[3,8]];
+      edges.forEach(([a,b])=>{
+        const pulse=(Math.sin(t*1.5-a*0.5))>0;
+        ctx.strokeStyle=pulse?'rgba(110,231,183,0.5)':'rgba(110,231,183,0.12)';ctx.lineWidth=pulse?1.5:0.5;
+        ctx.beginPath();ctx.moveTo(nodes[a].x,nodes[a].y);ctx.lineTo(nodes[b].x,nodes[b].y);ctx.stroke();
+      });
+      nodes.forEach((nd,i)=>{
+        const bob=Math.sin(t*0.8+i*0.5)*2;
+        ctx.fillStyle=i===0?A:'rgba(110,231,183,0.7)';ctx.beginPath();ctx.arc(nd.x,nd.y+bob,nd.r,0,Math.PI*2);ctx.fill();
+        ctx.font='4px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.5)';ctx.fillText(nd.l,nd.x-8,nd.y+bob+nd.r+6);
+      });
+    }
+    else if(n===24){ // Erosion reveal
+      // Render text underneath
+      ctx.font='bold 12px Bebas Neue,sans-serif';ctx.fillStyle='rgba(240,237,232,0.8)';
+      ['SAIF BADAWY','PROJECT MANAGER','£340M+ DELIVERED','14 SUBCONTRACTORS'].forEach((l,i)=>ctx.fillText(l,14,28+i*26));
+      // Sediment layer eroding from scroll-like motion
+      const erodeX=W*(0.5+Math.sin(t*0.4)*0.4),erodeR=30+Math.sin(t*0.5)*15;
+      ctx.save();ctx.beginPath();ctx.arc(erodeX,H/2,erodeR+20,0,Math.PI*2);ctx.clip();
+      // Noise sediment
+      for(let i=0;i<400;i++){const sx=Math.random()*W,sy=Math.random()*H;ctx.fillStyle=`rgba(80,60,40,${0.5+Math.random()*0.3})`;ctx.fillRect(sx,sy,3,2);}
+      ctx.restore();
+      // Rock texture over rest
+      for(let i=0;i<200;i++){const sx=Math.random()*W,sy=Math.random()*H;const d=Math.sqrt(Math.pow(sx-erodeX,2)+Math.pow(sy-H/2,2));if(d>erodeR+20){ctx.fillStyle=`rgba(60,45,30,${0.7+Math.random()*0.2})`;ctx.fillRect(sx,sy,2,1);}}
+    }
+    else if(n===25){ // 3D Career Spiral
+      const turns=6;
+      ctx.strokeStyle='rgba(232,130,12,0.6)';ctx.lineWidth=1.5;ctx.beginPath();
+      for(let i=0;i<=200;i++){
+        const prog=i/200,angle=prog*turns*Math.PI*2+t*0.3;
+        const r=10+prog*30,y=H-15-prog*(H-30);
+        const x=W/2+Math.cos(angle)*r;
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      // Project markers
+      [0.1,0.25,0.4,0.6,0.75,0.9].forEach((prog,i)=>{
+        const angle=prog*turns*Math.PI*2+t*0.3;
+        const r=10+prog*30,y=H-15-prog*(H-30),x=W/2+Math.cos(angle)*r;
+        const pulse=0.6+Math.sin(t*2+i)*0.3;
+        ctx.fillStyle=`rgba(232,130,12,${pulse})`;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();
+      });
+    }
+    else if(n===26){ // Budget mountains
+      const peaks=[{x:W*0.15,h:55,l:'£22M'},{x:W*0.3,h:70,l:'£28M'},{x:W*0.5,h:110,l:'£340M'},{x:W*0.68,h:48,l:'£15M'},{x:W*0.83,h:62,l:'£18M'}];
+      // Sky gradient
+      const sky=ctx.createLinearGradient(0,0,0,H);
+      sky.addColorStop(0,'rgba(3,10,30,1)');sky.addColorStop(1,'rgba(10,30,60,1)');
+      ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+      // Parallax snow line
+      ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=0.5;
+      ctx.beginPath();peaks.forEach(p=>ctx.lineTo(p.x,H-p.h*0.7));ctx.stroke();
+      // Mountains
+      ctx.beginPath();ctx.moveTo(0,H);
+      peaks.forEach(p=>{ctx.lineTo(p.x-p.h*0.7,H);ctx.lineTo(p.x,H-p.h+Math.sin(t*0.3)*3);ctx.lineTo(p.x+p.h*0.7,H);});
+      ctx.lineTo(W,H);ctx.closePath();
+      const mGrad=ctx.createLinearGradient(0,0,0,H);
+      mGrad.addColorStop(0,'rgba(232,130,12,0.6)');mGrad.addColorStop(1,'rgba(232,130,12,0.15)');
+      ctx.fillStyle=mGrad;ctx.fill();
+      peaks.forEach(p=>{ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.5)';ctx.fillText(p.l,p.x-8,H-p.h+Math.sin(t*0.3)*3-6);});
+    }
+    else if(n===27){ // Heartbeat / ECG
+      if(!c._ecg)c._ecg={pts:[],t:0};
+      c._ecg.t+=0.016;
+      const x=((c._ecg.t*60)%(W+100))-50;
+      // QRS complex
+      const qrs=(t%2)-0.5;
+      let y=H/2;
+      if(qrs>-0.05&&qrs<0)y+=qrs*200;
+      else if(qrs>=0&&qrs<0.05)y+=qrs*600-60;
+      else if(qrs>=0.05&&qrs<0.1)y+=qrs*-400+80;
+      else y+=Math.sin(qrs*40)*2;
+      c._ecg.pts.push({x,y});if(c._ecg.pts.length>80)c._ecg.pts.shift();
+      ctx.strokeStyle='rgba(110,231,183,0.9)';ctx.lineWidth=1.5;ctx.beginPath();
+      c._ecg.pts.forEach((p,i)=>{i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y);});
+      ctx.stroke();
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(110,231,183,0.5)';ctx.fillText('HR: 60bpm · SYS NOMINAL',8,H-8);
+    }
+    else if(n===28){ // Risk weather map
+      // Isobars
+      for(let p=1;p<6;p++){
+        ctx.strokeStyle=`rgba(96,165,250,${p*0.06})`;ctx.lineWidth=0.8;ctx.beginPath();
+        ctx.ellipse(W*0.35,H*0.4,p*18+Math.sin(t*0.2)*3,p*12,0,0,Math.PI*2);ctx.stroke();
+        ctx.ellipse(W*0.7,H*0.6,p*14+Math.cos(t*0.3)*2,p*10,0,0,Math.PI*2);ctx.stroke();
+      }
+      // Fronts
+      ctx.strokeStyle='rgba(220,50,50,0.5)';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
+      ctx.beginPath();ctx.moveTo(0,H*0.35+Math.sin(t*0.2)*8);ctx.bezierCurveTo(W*0.3,H*0.3,W*0.6,H*0.55,W,H*0.45);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font='7px JetBrains Mono,monospace';
+      ctx.fillStyle='rgba(220,50,50,0.7)';ctx.fillText('H',W*0.32,H*0.38);
+      ctx.fillStyle='rgba(96,165,250,0.7)';ctx.fillText('L',W*0.66,H*0.58);
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.3)';ctx.fillText('RISK SYNOPTIC CHART',8,H-8);
+    }
+    else if(n===29){ // Sankey river
+      const streams=[[0.1,0.3],[0.25,0.35],[0.15,0.35],[0.2,0.5],[0.1,0.5]];
+      let outX=W*0.7,outW=70;
+      ctx.strokeStyle='rgba(96,165,250,0.3)';ctx.lineWidth=20;
+      streams.forEach(([sy,ey],i)=>{
+        ctx.globalAlpha=0.3;ctx.strokeStyle=`hsl(${200+i*30},70%,55%)`;ctx.lineWidth=8+i*2;
+        ctx.beginPath();ctx.moveTo(0,H*sy);ctx.bezierCurveTo(W*0.4,H*sy,W*0.4,H*0.5,W*0.7,H*0.5);ctx.stroke();
+      });
+      ctx.globalAlpha=1;
+      ctx.strokeStyle='rgba(232,130,12,0.7)';ctx.lineWidth=35;
+      ctx.beginPath();ctx.moveTo(W*0.7,H*0.5);ctx.lineTo(W,H*0.5);ctx.stroke();
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle=A;ctx.fillText('PM EXPERTISE →',W*0.72,H*0.48);
+    }
+    else if(n===30){ // Bubble universe
+      if(!c._bub)c._bub=Array.from({length:6},(_,i)=>({x:30+i*(W-40)/5+Math.random()*20-10,y:H/2+Math.random()*30-15,r:8+i*6,vy:(Math.random()-0.5)*0.3,vx:(Math.random()-0.5)*0.2,c:`hsl(${i*55},70%,55%)`}));
+      c._bub.forEach(b=>{b.y+=b.vy+Math.sin(t*0.5+b.x*0.02)*0.2;b.x+=b.vx;if(b.x<b.r||b.x>W-b.r)b.vx*=-1;if(b.y<b.r||b.y>H-b.r)b.vy*=-1;
+        const grad=ctx.createRadialGradient(b.x-b.r*0.3,b.y-b.r*0.3,0,b.x,b.y,b.r);
+        grad.addColorStop(0,b.c.replace('hsl(','hsla(').replace(')',',0.3)'));
+        grad.addColorStop(0.7,b.c.replace('hsl(','hsla(').replace(')',',0.1)'));
+        grad.addColorStop(1,b.c.replace('hsl(','hsla(').replace(')',',0.4)'));
+        ctx.fillStyle=grad;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle=b.c.replace('hsl(','hsla(').replace(')',',0.5)');ctx.lineWidth=0.8;ctx.stroke();
+      });
+    }
+    else if(n===31){ // Sound spectrum CV
+      const bands=[{y:0.3,f:0.5,l:'EDU'},{y:0.45,f:1,l:'ENG'},{y:0.6,f:2,l:'PM'},{y:0.75,f:3,l:'SOFT'}];
+      bands.forEach((b,bi)=>{
+        ctx.strokeStyle=`hsl(${200+bi*30},70%,55%)`;ctx.lineWidth=2;ctx.beginPath();
+        for(let x=0;x<W;x+=2){ctx.lineTo(x,H*b.y+Math.sin(x*0.06*b.f+t*b.f*2)*10+Math.sin(x*0.1*b.f-t)*5);}
+        ctx.stroke();
+        ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle=`hsl(${200+bi*30},70%,65%)`;ctx.fillText(b.l,4,H*b.y-6);
+      });
+    }
+    else if(n===32){ // Constellation map
+      const stars=[{x:W*0.15,y:H*0.3,s:'NEOM',m:3},{x:W*0.35,y:H*0.2,s:'CRL',m:2},{x:W*0.55,y:H*0.35,s:'NS',m:2},{x:W*0.7,y:H*0.25,s:'UAE',m:2.5},{x:W*0.2,y:H*0.6,s:'GEN',m:1.5},{x:W*0.45,y:H*0.65,s:'SUS',m:2},{x:W*0.75,y:H*0.6,s:'RISK',m:1.5},{x:W*0.1,y:H*0.5,s:'CDM',m:1}];
+      // Draw stars
+      stars.forEach(s=>{
+        const pulse=s.m+Math.sin(t*1.5+s.x*0.1)*0.5;
+        ctx.fillStyle=`rgba(255,255,255,${0.5+Math.sin(t+s.x)*0.3})`;ctx.beginPath();ctx.arc(s.x,s.y,pulse,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='rgba(232,130,12,0.6)';ctx.font='4px JetBrains Mono,monospace';ctx.fillText(s.s,s.x+s.m+1,s.y+3);
+      });
+      // Constellation lines on hover simulation
+      [[0,1],[1,2],[2,3],[0,4],[4,5],[5,6],[6,3]].forEach(([a,b])=>{
+        const d=Math.sqrt(Math.pow(stars[a].x-stars[b].x,2)+Math.pow(stars[a].y-stars[b].y,2));
+        ctx.strokeStyle=`rgba(232,130,12,${Math.max(0,0.3-d/300)})`;ctx.lineWidth=0.5;
+        ctx.beginPath();ctx.moveTo(stars[a].x,stars[a].y);ctx.lineTo(stars[b].x,stars[b].y);ctx.stroke();
+      });
+    }
+    else if(n===33){ // AI "What Would Saif Build?"
+      // Terminal-style input
+      ctx.fillStyle='rgba(110,231,183,0.06)';ctx.fillRect(12,H*0.3,W-24,22);
+      ctx.strokeStyle='rgba(110,231,183,0.4)';ctx.lineWidth=0.8;ctx.strokeRect(12,H*0.3,W-24,22);
+      ctx.font='6px JetBrains Mono,monospace';ctx.fillStyle='rgba(110,231,183,0.5)';ctx.fillText('>',14,H*0.3+14);
+      const q='Our pipeline needs replacing…';
+      ctx.fillStyle='rgba(110,231,183,0.8)';ctx.fillText(q.substring(0,Math.floor(t*10)%q.length+1),22,H*0.3+14);
+      if(Math.sin(t*3)>0)ctx.fillRect(22+ctx.measureText(q.substring(0,Math.floor(t*10)%q.length+1)).width,H*0.3+5,1,10);
+      // AI response lines
+      ctx.fillStyle='rgba(196,181,253,0.5)';ctx.font='5px JetBrains Mono,monospace';
+      ['GENERATING PROJECT PROPOSAL...','OBJECTIVES: 3 DEFINED','WBS: 47 WORK PACKAGES','RISK REGISTER: 12 RISKS','ESTIMATED COST: £18M'].forEach((l,i)=>{
+        if(t>1+i*0.3)ctx.fillText(l,14,H*0.62+i*12);
+      });
+    }
+    else if(n===34){ // Adaptive industry mode
+      const modes=['OIL & GAS','INFRASTRUCTURE','SUSTAINABILITY','CONSTRUCTION'];
+      const idx=Math.floor(t*0.4)%modes.length;
+      const colors=['rgba(232,130,12,','rgba(96,165,250,','rgba(110,231,183,','rgba(251,191,36,'];
+      const fade=Math.sin((t*0.4%1)*Math.PI);
+      ctx.fillStyle=colors[idx]+'0.08)';ctx.fillRect(0,0,W,H);
+      ctx.font='bold 16px Bebas Neue,sans-serif';ctx.fillStyle=colors[idx]+fade+')';
+      ctx.fillText(modes[idx],W/2-40,H/2+6);
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle=colors[idx]+'0.5)';
+      ctx.fillText('REFRAMING PORTFOLIO FOR YOUR INDUSTRY',W/2-68,H/2+22);
+      // Morphing bar
+      ctx.fillStyle=colors[idx]+'0.3)';ctx.fillRect(0,H-8,W*fade,4);
+    }
+    else if(n===35){ // CV Compression
+      const stages=['FULL CV','ONE PAGE','ONE PARA','ONE LINE','ONE WORD'];
+      const idx=Math.floor(t*0.5)%stages.length;
+      const lines=[[8,6],[4,3],[2,1],[1,1],[0,0]];
+      const [numL]=lines[idx];
+      for(let i=0;i<numL;i++){
+        const w=(W-24)*(1-idx*0.15);
+        ctx.fillStyle='rgba(240,237,232,0.15)';ctx.fillRect(12,20+i*14,w,9);
+        if(i===0)ctx.fillRect(12,20,w*0.6,9);
+      }
+      if(idx===4){ctx.font='bold 24px Bebas Neue,sans-serif';ctx.fillStyle=A;ctx.fillText('DELIVERS',W/2-36,H/2+8);}
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(232,130,12,0.5)';
+      ctx.fillText('↓ '+stages[idx],W/2-20,H-8);
+    }
+    else if(n===36){ // Live digital twin
+      ctx.fillStyle='#010810';ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle='rgba(96,165,250,0.2)';ctx.lineWidth=0.5;
+      for(let x=0;x<W;x+=20)for(let y=0;y<H;y+=12){ctx.strokeRect(x,y,20,12);}
+      ctx.font='5px JetBrains Mono,monospace';
+      const data=[['PROJECT','RIYADH METRO EAST'],['STAGE','DESIGN DEV'],['COMPLETE','73.'+Math.floor(t*10%100)+'%'],['TODAY','RISK REV. #14'],['RISK STATUS','AMBER ▲']];
+      data.forEach(([k,v],i)=>{
+        ctx.fillStyle='rgba(96,165,250,0.4)';ctx.fillText(k,8,16+i*20);
+        ctx.fillStyle='rgba(255,255,255,0.7)';ctx.fillText(v,75,16+i*20);
+      });
+      const pulse=0.6+Math.sin(t*2)*0.3;
+      ctx.fillStyle=`rgba(110,231,183,${pulse})`;ctx.beginPath();ctx.arc(W-10,10,3,0,Math.PI*2);ctx.fill();
+    }
+    else if(n===37){ // Reverse interview
+      const questions=['What\'s your biggest\ndelivery risk?','How mature is\nyour PMO?','Do you have the\nright risk culture?'];
+      const qi=Math.floor(t*0.4)%questions.length;
+      const fade=Math.min(1,(t*0.4%1)*4);
+      ctx.font='7px JetBrains Mono,monospace';ctx.fillStyle=`rgba(251,191,36,${fade*0.85})`;
+      questions[qi].split('\n').forEach((l,i)=>ctx.fillText(l,14,50+i*16));
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(251,191,36,0.4)';ctx.fillText('SAIF IS ASKING YOU.',14,H-8);
+      // Arrow pointing at viewer
+      ctx.strokeStyle=`rgba(251,191,36,${fade*0.6})`;ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(W/2,H*0.7);ctx.lineTo(W/2,H*0.85);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(W/2-6,H*0.8);ctx.lineTo(W/2,H*0.88);ctx.lineTo(W/2+6,H*0.8);ctx.stroke();
+    }
+    else if(n===38){ // Globe visitor map
+      const cx=W/2,cy=H/2,r=38;
+      ctx.strokeStyle='rgba(96,165,250,0.2)';ctx.lineWidth=0.5;
+      // Globe grid
+      for(let lat=-60;lat<=60;lat+=30){const ry=r*Math.cos(lat*Math.PI/180);const cy2=cy+r*Math.sin(lat*Math.PI/180);ctx.beginPath();ctx.ellipse(cx,cy2,ry*Math.abs(Math.cos(lat*Math.PI/180*0.5)),ry*0.15,0,0,Math.PI*2);ctx.stroke();}
+      for(let lon=0;lon<360;lon+=30){ctx.beginPath();ctx.ellipse(cx,cy,r*Math.abs(Math.cos((lon+t*20)*Math.PI/180))*0.3+1,r,0,0,Math.PI*2);ctx.stroke();}
+      // Visitor dots
+      const dots=[{x:cx+15,y:cy-12},{x:cx-18,y:cy+5},{x:cx+5,y:cy+18},{x:cx-5,y:cy-18},{x:cx+22,y:cy+8}];
+      dots.forEach((d,i)=>{
+        const pulse=(t*2+i)%3;
+        ctx.fillStyle=A;ctx.beginPath();ctx.arc(d.x,d.y,1.5,0,Math.PI*2);ctx.fill();
+        if(pulse<1){ctx.strokeStyle=`rgba(232,130,12,${1-pulse})`;ctx.lineWidth=0.8;ctx.beginPath();ctx.arc(d.x,d.y,pulse*8,0,Math.PI*2);ctx.stroke();}
+      });
+    }
+    else if(n===39){ // Hidden last page
+      ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+      for(let i=0;i<100;i++){ctx.fillStyle=`rgba(255,255,255,${Math.random()*0.15})`;ctx.fillRect(Math.random()*W,Math.random()*H,Math.random()<0.9?1:2,1);}
+      const a=0.5+Math.sin(t*0.5)*0.4;
+      ctx.font='8px JetBrains Mono,monospace';ctx.fillStyle=`rgba(232,130,12,${a})`;ctx.fillText('↓ KEEP SCROLLING ↓',W/2-50,H/2);
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle=`rgba(255,255,255,${a*0.5})`;ctx.fillText('something\'s down here...',W/2-44,H/2+16);
+      // Footer blur
+      ctx.fillStyle='rgba(232,130,12,0.04)';ctx.fillRect(0,H-30,W,30);
+    }
+    else if(n===40){ // Portfolio stress test
+      ctx.fillStyle='#07080e';ctx.fillRect(0,0,W,H);
+      // Page content bending
+      const load=Math.sin(t*0.5)*0.5+0.5;
+      const deform=load*15;
+      ctx.save();
+      ctx.transform(1,0,Math.sin(t*0.3)*0.03,1+load*0.02,0,deform*0.5);
+      ctx.font='bold 11px Bebas Neue,sans-serif';ctx.fillStyle='rgba(240,237,232,0.7)';
+      ctx.fillText('SAIF BADAWY · PM',14,30);
+      for(let i=0;i<4;i++){ctx.fillStyle='rgba(240,237,232,0.12)';ctx.fillRect(14,45+i*18,W-60,(i===0?8:5));}
+      ctx.restore();
+      // Load arrow + heat
+      ctx.fillStyle=`rgba(255,${Math.floor(100-load*80)},0,${load*0.6})`;ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle='rgba(255,80,0,0.8)';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(W/2,5);ctx.lineTo(W/2,25+deform);ctx.stroke();
+      ctx.font='5px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,150,0,0.7)';
+      ctx.fillText('LOAD: '+(load*100).toFixed(0)+'kN/m²',8,H-8);
+    }
+    else{
+      ctx.fillStyle='rgba(232,130,12,0.3)';
+      for(let i=0;i<40;i++){ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,2,0,Math.PI*2);ctx.fill();}
+    }
+  }
+  requestAnimationFrame(loop);
+}
+
+setTimeout(()=>{IDEAS.forEach(id=>{const el=document.getElementById('p'+id.n);if(el)drawThumb(id.n,el);});},120);
+
+// ═══════════════════════════════════════════════════
+// MODAL BUILDERS
+// ═══════════════════════════════════════════════════
+function buildModal(n,sc){
+  const W=sc.offsetWidth||900,H=420;
+  const c=document.createElement('canvas');
+  c.width=W;c.height=H;c.style.cssText='width:100%;height:420px;display:block';
+  sc.appendChild(c);
+  const ctx=c.getContext('2d');
+  const A='#E8820C';let t=0;
+
+  function frame(){
+    mRaf=requestAnimationFrame(frame);t+=0.012;
+    ctx.fillStyle='#02030a';ctx.fillRect(0,0,W,H);
+
+    if(n===1){ // Cinematic — full letterbox
+      for(let i=0;i<500;i++){ctx.fillStyle=`rgba(255,255,255,${Math.random()*0.025})`;ctx.fillRect(Math.random()*W,Math.random()*H,1,1);}
+      ctx.fillStyle='#000';ctx.fillRect(0,0,W,50);ctx.fillRect(0,H-50,W,50);
+      const fade=0.7+Math.sin(t*0.4)*0.25;
+      ctx.font='bold 64px Bebas Neue,sans-serif';ctx.fillStyle=`rgba(240,237,232,${fade})`;
+      ctx.fillText('SAIF BADAWY',W/2-180,H/2+18);
+      ctx.font='16px JetBrains Mono,monospace';ctx.fillStyle=`rgba(232,130,12,${fade})`;
+      ctx.fillText('ENGINEERING PROJECT MANAGER · 2015 — PRESENT',W/2-230,H/2+46);
+      const sl=(t*50)%H;ctx.fillStyle='rgba(255,255,255,0.02)';ctx.fillRect(0,sl,W,2);
+    }
+    else if(n===5){ // Breaking news full
+      ctx.fillStyle='#08080f';ctx.fillRect(0,0,W,H);
+      ctx.fillStyle=A;ctx.fillRect(0,0,W,55);
+      ctx.font='bold 28px Bebas Neue,sans-serif';ctx.fillStyle='#000';ctx.fillText('● SAIF BADAWY ENGINEERING NETWORK  LIVE',16,38);
+      ctx.fillStyle='rgba(220,30,30,0.95)';ctx.fillRect(0,H-45,W,45);
+      ctx.font='bold 14px Bebas Neue,sans-serif';ctx.fillStyle='#fff';ctx.fillText('⬡ BREAKING:',10,H-18);
+      const ticker='£340M NEOM PROJECT DELIVERED AHEAD OF SCHEDULE  ·  SUSTAINABILITY TARGETS EXCEEDED BY 12%  ·  14 SUBCONTRACTORS MANAGED  ·  ZERO LOST TIME INCIDENTS  ·  ';
+      const tx=W-(t*80%(ticker.length*7.5+W));
+      ctx.font='13px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.9)';ctx.save();ctx.rect(90,H-40,W-90,30);ctx.clip();ctx.fillText(ticker,tx+90,H-18);ctx.restore();
+      // Body panels
+      const panels=[{x:20,y:70,w:W*0.55,h:H-140,t:'INFRASTRUCTURE ENGINEER\nCONFIRMS THIRD CONSECUTIVE\nPROJECT DELIVERED\nAHEAD OF SCHEDULE',c:'rgba(255,255,255,0.8)'},{x:W*0.58,y:70,w:W*0.4,h:H-140,t:'PROJECT VALUE:\n£340,000,000\n\nTEAM SIZE: 14\nSUBCONTRACTORS\n\nRATING: ★★★★★'}];
+      panels.forEach(p=>{ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=0.5;ctx.strokeRect(p.x,p.y,p.w,p.h);ctx.font='18px Bebas Neue,sans-serif';ctx.fillStyle=p.c;p.t.split('\n').forEach((l,i)=>ctx.fillText(l,p.x+10,p.y+26+i*22));});
+    }
+    else if(n===10){ // Seismic — large map
+      if(!c._q2){c._q2={waves:[],t:0,projects:[{x:W*0.35,y:H*0.45,m:340,n:'NEOM',c:'#E8820C'},{x:W*0.65,y:H*0.3,m:28,n:'CROSSRAIL',c:'#60a5fa'},{x:W*0.2,y:H*0.65,m:22,n:'NORTH SEA',c:'#6ee7b7'}]};}
+      c._q2.t+=0.012;
+      c._q2.projects.forEach(p=>{
+        const phase=(c._q2.t*0.5+p.x*0.001)%3;
+        for(let ring=1;ring<8;ring++){
+          const r=ring*30*phase,alpha=Math.max(0,0.6-ring*0.08-phase*0.2);
+          ctx.strokeStyle=p.c+Math.floor(alpha*255).toString(16).padStart(2,'0');
+          ctx.lineWidth=ring===1?2:0.8;
+          ctx.beginPath();ctx.ellipse(p.x,p.y,r,r*0.6,0,0,Math.PI*2);ctx.stroke();
+        }
+        ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.fill();
+        ctx.font='11px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.7)';ctx.fillText(p.n+' £'+p.m+'M',p.x+8,p.y-6);
+        const richter=(Math.log(p.m/5)/Math.log(10)*2+4).toFixed(1);
+        ctx.font='9px JetBrains Mono,monospace';ctx.fillStyle='rgba(255,255,255,0.4)';ctx.fillText('M'+richter,p.x+8,p.y+8);
+      });
+      ctx.font='11px JetBrains Mono,monospace';ctx.fillStyle='rgba(232,130,12,0.3)';ctx.fillText('PROJECT IMPACT SEISMOGRAPH · RICHTER EQUIVALENT',W*0.05,H-15);
+    }
+    else if(n===13){ // Entropy reversal — large
+      const order=Math.min(1,(t*0.15)%1);
+      const text='SAIF BADAWY · ENGINEERING PROJECT MANAGER · £340M DELIVERED · ZERO INCIDENTS · 14 TEAMS · 5 COUNTRIES';
+      ctx.font='13px JetBrains Mono,monospace';
+      text.split('').forEach((ch,i)=>{
+        const cols=Math.floor(W/8),row=Math.floor(i/cols),col=i%cols;
+        const tx=16+col*8,ty=50+row*18;
+        const ox=tx+(1-order)*(Math.sin(i*2.1+1)*150);
+        const oy=ty+(1-order)*(Math.cos(i*1.5+0.5)*100);
+        ctx.fillStyle=`rgba(232,130,12,${0.3+order*0.65})`;ctx.fillText(ch,ox,oy);
+      });
+      ctx.font='11px JetBrains Mono,monospace';ctx.fillStyle='rgba(232,130,12,0.25)';
+      ctx.fillText('ENTROPY: '+((1-order)*100).toFixed(0)+'%  ·  ORDER: '+(order*100).toFixed(0)+'%',W*0.05,H-15);
+    }
+    else if(n===27){ // ECG — big monitor
+      ctx.fillStyle='#000';ctx.fillRect(20,20,W-40,H-40);
+      ctx.strokeStyle='rgba(0,200,80,0.2)';ctx.lineWidth=0.4;
+      for(let x=20;x<W-20;x+=20){ctx.beginPath();ctx.moveTo(x,20);ctx.lineTo(x,H-20);ctx.stroke();}
+      for(let y=20;y<H-20;y+=16){ctx.beginPath();ctx.moveTo(20,y);ctx.lineTo(W-20,y);ctx.stroke();}
+      if(!c._ecg2)c._ecg2={pts:[],t:0};
+      for(let step=0;step<3;step++){
+        c._ecg2.t+=0.016;
+        const x=20+(((c._ecg2.t*55)%(W-40)));
+        const qrs=(c._ecg2.t%2.5)-0.5;
+        let y=H/2;
+        if(qrs>-0.06&&qrs<0)y+=qrs*250;
+        else if(qrs>=0&&qrs<0.06)y+=qrs*900-80;
+        else if(qrs>=0.06&&qrs<0.12)y+=qrs*-550+100;
+        else if(qrs>=0.12&&qrs<0.3)y+=Math.sin((qrs-0.12)*20)*8;
+        else y+=Math.sin(qrs*15)*2;
+        c._ecg2.pts.push({x,y});if(c._ecg2.pts.length>200)c._ecg2.pts.shift();
+      }
+      ctx.strokeStyle='rgba(0,255,80,0.95)';ctx.lineWidth=2;ctx.beginPath();
+      c._ecg2.pts.forEach((p,i)=>{i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y);});ctx.stroke();
+      ctx.font='14px JetBrains Mono,monospace';ctx.fillStyle='rgba(0,255,80,0.6)';
+      ctx.fillText('HR: 60 bpm',30,H-30);ctx.fillText('CAREER: OPERATIONAL',W/2-70,H-30);
+      const major=[{t:'NEOM',x:W*0.2},{t:'INFRA',x:W*0.45},{t:'SUSTbility',x:W*0.72}];
+      major.forEach(m=>{ctx.strokeStyle='rgba(232,130,12,0.3)';ctx.lineWidth=0.8;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(m.x,30);ctx.lineTo(m.x,H-30);ctx.stroke();ctx.setLineDash([]);ctx.font='9px JetBrains Mono,monospace';ctx.fillStyle='rgba(232,130,12,0.5)';ctx.fillText(m.t,m.x-18,45);});
+    }
+    else if(n===35){ // Compression — animated
+      const stages=[{label:'FULL CV',lines:24,fade:1},{label:'ONE PAGE',lines:10,fade:1},{label:'ONE PARAGRAPH',lines:4,fade:1},{label:'ONE SENTENCE',lines:1,fade:1},{label:'ONE WORD',lines:0,fade:1,word:'DELIVERS'}];
+      const si=Math.floor(t*0.5)%stages.length;
+      const stage=stages[si];
+      const blend=Math.min(1,(t*0.5%1)*4);
+      ctx.font='11px JetBrains Mono,monospace';ctx.fillStyle=`rgba(232,130,12,${blend*0.6})`;
+      ctx.fillText('→ '+stage.label,W/2-60,60);
+      if(stage.word){
+        ctx.font='bold 80px Bebas Neue,sans-serif';ctx.fillStyle=`rgba(232,130,12,${blend})`;
+        ctx.fillText(stage.word,W/2-110,H/2+28);
+      } else {
+        for(let i=0;i<stage.lines;i++){
+          const lw=(W-120)*(i===0?0.9:0.6+Math.random()*0.35);
+          ctx.fillStyle=`rgba(240,237,232,${blend*0.2})`;ctx.fillRect(60,80+i*(H-100)/Math.max(stage.lines,1),lw,i===0?14:9);
+        }
+      }
+      ctx.fillStyle='rgba(232,130,12,0.2)';ctx.font='10px JetBrains Mono,monospace';ctx.fillText('COMPRESSION '+((si+1)*20)+'%',W/2-44,H-20);
+    }
+    else if(n===40){ // Stress test full
+      const load=(Math.sin(t*0.4)+1)/2;
+      const heat=`rgba(255,${Math.floor(80-load*60)},0,${load*0.12})`;
+      ctx.fillStyle=heat;ctx.fillRect(0,0,W,H);
+      // Deforming page elements
+      const deform=load*22,shear=Math.sin(t*0.3)*load*0.04;
+      ctx.save();ctx.transform(1,shear,0,1+load*0.015,0,deform/2);
+      ['SAIF BADAWY · ENGINEERING PROJECT MANAGER','━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━','NEOM PROGRAMME  ·  £340M  ·  2023—2025','CROSSRAIL SYSTEMS  ·  £28M  ·  2021—2022','NORTH SEA UPGRADE  ·  £22M  ·  2019—2020','',`CURRENT LOAD: ${(load*100).toFixed(0)}kN/m²  TEMP: ${(20+load*180).toFixed(0)}°C`].forEach((l,i)=>{
+        ctx.font=i===0?'bold 18px Bebas Neue,sans-serif':'12px JetBrains Mono,monospace';
+        ctx.fillStyle=i===6?`rgba(255,${Math.floor(150-load*100)},50,0.8)`:'rgba(240,237,232,0.75)';
+        ctx.fillText(l,W*0.05,60+i*40);
+      });
+      ctx.restore();
+      // Load arrows
+      for(let x=W*0.1;x<W*0.9;x+=80){
+        ctx.strokeStyle=`rgba(255,100,0,${load*0.7})`;ctx.lineWidth=2;
+        ctx.beginPath();ctx.moveTo(x,10);ctx.lineTo(x,30+deform/2);ctx.stroke();
+        ctx.fillStyle=`rgba(255,100,0,${load*0.7})`;
+        ctx.beginPath();ctx.moveTo(x-5,25+deform/2);ctx.lineTo(x,35+deform/2);ctx.lineTo(x+5,25+deform/2);ctx.fill();
+      }
+      ctx.font='11px JetBrains Mono,monospace';ctx.fillStyle=`rgba(255,${Math.floor(150-load*100)},50,0.6)`;
+      ctx.fillText('APPLYING '+['THERMAL','SEISMIC','WIND PRESSURE'][Math.floor(t*0.3)%3]+' LOAD · STRUCTURAL RESPONSE LIVE',W*0.05,H-15);
+    }
+    else {
+      // Category-themed default scene
+      const cat=IDEAS.find(i=>i.n===n)?.cat;
+      const cols={narr:'rgba(251,191,36,',phys:'rgba(96,165,250,',gen:'rgba(232,130,12,',sculpt:'rgba(110,231,183,',tech:'rgba(196,181,253,'};
+      const col=cols[cat]||'rgba(232,130,12,';
+      for(let i=0;i<80;i++){
+        const px=W*((Math.sin(i*2.1+t*0.25)*0.5+0.5)*0.88+0.06);
+        const py=H*((Math.cos(i*1.6+t*0.18)*0.5+0.5)*0.78+0.1);
+        const sz=2.5+Math.sin(i+t*1.5)*2;
+        ctx.fillStyle=col+(0.35+Math.sin(i*0.8+t)*0.2)+')';
+        ctx.beginPath();ctx.arc(px,py,sz,0,Math.PI*2);ctx.fill();
+        if(i%5===0&&i>0){ctx.strokeStyle=col+0.08+')';ctx.lineWidth=0.6;const px2=W*((Math.sin((i-5)*2.1+t*0.25)*0.5+0.5)*0.88+0.06),py2=H*((Math.cos((i-5)*1.6+t*0.18)*0.5+0.5)*0.78+0.1);ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px2,py2);ctx.stroke();}
+      }
+      ctx.font='bold 38px Bebas Neue,sans-serif';ctx.fillStyle=col+'0.1)';
+      ctx.fillText((IDEAS.find(i=>i.n===n)?.title||'').toUpperCase(),W*0.05,H/2+12);
+      ctx.font='11px JetBrains Mono,monospace';ctx.fillStyle=col+'0.35)';
+      ctx.fillText('FULL INTERACTIVE VERSION IN BUILT IMPLEMENTATION',W*0.05,H-18);
+    }
+  }
+  mRaf=requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>

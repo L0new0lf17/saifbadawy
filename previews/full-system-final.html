@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Backend System — Saif Badawy</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0f0f0f;
+  color: #e8e4de;
+  min-height: 100vh;
+  padding: 32px 20px 60px;
+}
+.title { text-align:center; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#555; margin-bottom:6px; }
+.subtitle { text-align:center; font-size:22px; font-weight:700; color:#e8e4de; margin-bottom:4px; }
+.sub-meta { text-align:center; font-size:12px; color:#555; margin-bottom:36px; }
+
+.flow { display:flex; flex-direction:column; align-items:center; gap:0; max-width:920px; margin:0 auto; }
+
+.arrow { display:flex; flex-direction:column; align-items:center; padding:4px 0; }
+.arrow-line { width:2px; height:24px; background:#2a2a2a; }
+.arrow-head { width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:8px solid #2a2a2a; }
+.arrow-label { font-size:10px; color:#444; letter-spacing:1px; text-transform:uppercase; margin:2px 0; }
+
+.layer { width:100%; border-radius:12px; border:1px solid #222; overflow:hidden; }
+.layer-head {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 18px; cursor:pointer; user-select:none;
+}
+.layer-num { font-size:10px; letter-spacing:2px; color:#444; min-width:28px; }
+.layer-title { font-size:14px; font-weight:700; flex:1; }
+.layer-tag { font-size:10px; padding:3px 10px; border-radius:20px; }
+.layer-chevron { font-size:11px; color:#444; transition:transform 0.3s; }
+.layer-chevron.open { transform:rotate(180deg); }
+.layer-body { display:none; border-top:1px solid #1a1a1a; padding:16px 18px; }
+.layer-body.open { display:block; }
+
+.l1 .layer-head { background:#0a1a0a; }
+.l1 .layer-title { color:#4ade80; }
+.l1 .layer-tag { background:#0d2b0d; color:#4ade80; border:1px solid #1a4a1a; }
+
+.l2 .layer-head { background:#1a1200; }
+.l2 .layer-title { color:#fbbf24; }
+.l2 .layer-tag { background:#2b1f00; color:#fbbf24; border:1px solid #4a3500; }
+
+.l3 .layer-head { background:#0a0f1a; }
+.l3 .layer-title { color:#60a5fa; }
+.l3 .layer-tag { background:#0d1a2b; color:#60a5fa; border:1px solid #1a3050; }
+
+.l4 .layer-head { background:#1a0f00; }
+.l4 .layer-title { color:#fb923c; }
+.l4 .layer-tag { background:#2b1800; color:#fb923c; border:1px solid #4a2a00; }
+
+.l5 .layer-head { background:#150a1a; }
+.l5 .layer-title { color:#c084fc; }
+.l5 .layer-tag { background:#220d2b; color:#c084fc; border:1px solid #3d1a50; }
+
+.l6 .layer-head { background:#0a1414; }
+.l6 .layer-title { color:#2dd4bf; }
+.l6 .layer-tag { background:#0d2222; color:#2dd4bf; border:1px solid #1a3d3d; }
+
+.split { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.split-card { border-radius:8px; padding:12px 14px; }
+.split-zero { background:#0a1a0a; border:1px solid #1a4a1a; }
+.split-make { background:#1a1200; border:1px solid #4a3500; }
+.split-title { font-size:11px; font-weight:700; margin-bottom:8px; }
+.split-zero .split-title { color:#4ade80; }
+.split-make .split-title { color:#fbbf24; }
+.split-item { font-size:11px; color:#777; margin-bottom:5px; display:flex; align-items:flex-start; gap:6px; line-height:1.5; }
+.split-item::before { content:'→'; flex-shrink:0; margin-top:1px; }
+.split-zero .split-item::before { color:#4ade80; }
+.split-make .split-item::before { color:#fbbf24; }
+.split-note { font-size:10px; margin-top:8px; padding:6px 10px; border-radius:6px; line-height:1.5; }
+.split-zero .split-note { background:#0d2b0d; color:#4ade80; border:1px solid #1a4a1a; }
+.split-make .split-note { background:#2b1f00; color:#fbbf24; border:1px solid #4a3500; }
+
+.cards { display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:8px; }
+.card { background:#141414; border:1px solid #222; border-radius:8px; padding:10px 12px; }
+.card-head { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+.card-icon { font-size:14px; }
+.card-name { font-size:12px; font-weight:600; color:#ddd; }
+.card-desc { font-size:11px; color:#666; line-height:1.5; }
+.badge { display:inline-block; font-size:9px; padding:2px 7px; border-radius:10px; margin-top:6px; }
+.badge-green { background:#0d2b0d; color:#4ade80; border:1px solid #1a4a1a; }
+.badge-yellow { background:#2b1f00; color:#fbbf24; border:1px solid #4a3500; }
+.badge-blue { background:#0d1a2b; color:#60a5fa; border:1px solid #1a3050; }
+.badge-purple { background:#1f1040; color:#c084fc; border:1px solid #3d1a50; }
+
+.tg-msg { background:#141414; border:1px solid #222; border-radius:10px; padding:10px 12px; margin-bottom:8px; }
+.tg-msg:last-child { margin-bottom:0; }
+.tg-label { font-size:10px; color:#555; margin-bottom:5px; letter-spacing:0.5px; }
+.tg-bubble { background:#1e3a5f; border-radius:8px 8px 8px 2px; padding:8px 12px; font-size:11px; color:#ccc; line-height:1.6; display:inline-block; max-width:100%; }
+.tg-bubble strong { color:#60a5fa; }
+.tg-time { font-size:10px; color:#444; margin-top:4px; text-align:right; }
+
+/* Notion databases — 7 total */
+.dbs { display:grid; grid-template-columns:repeat(auto-fill, minmax(185px, 1fr)); gap:8px; }
+.db-card { background:#141414; border:1px solid #222; border-radius:8px; padding:10px 12px; }
+.db-card.highlight { border-color:#fbbf24; background:#1a1200; }
+.db-icon { font-size:16px; margin-bottom:4px; }
+.db-name { font-size:12px; font-weight:600; color:#ddd; margin-bottom:3px; }
+.db-card.highlight .db-name { color:#fbbf24; }
+.db-desc { font-size:11px; color:#666; line-height:1.4; }
+.db-source { font-size:10px; margin-top:5px; padding:2px 7px; border-radius:10px; display:inline-block; }
+.src-direct { background:#0d2b0d; color:#4ade80; border:1px solid #1a4a1a; }
+.src-make { background:#2b1f00; color:#fbbf24; border:1px solid #4a3500; }
+.src-both { background:#0d1a2b; color:#60a5fa; border:1px solid #1a3050; }
+.src-auto { background:#1f1040; color:#c084fc; border:1px solid #3d1a50; }
+
+.new-badge { font-size:9px; padding:1px 6px; border-radius:8px; background:#2b1f00; color:#fbbf24; border:1px solid #4a3500; margin-left:6px; vertical-align:middle; }
+
+.ops-section { margin-top:14px; }
+.ops-row { display:flex; align-items:center; gap:10px; margin-bottom:5px; }
+.ops-label { font-size:11px; color:#777; width:220px; flex-shrink:0; }
+.ops-track { flex:1; height:4px; background:#222; border-radius:2px; overflow:hidden; }
+.ops-fill { height:100%; border-radius:2px; }
+.ops-val { font-size:11px; color:#555; width:55px; text-align:right; flex-shrink:0; }
+.ops-total-row { display:flex; justify-content:space-between; align-items:center; padding-top:10px; margin-top:6px; border-top:1px solid #222; }
+.ops-total-label { font-size:11px; color:#777; }
+.ops-total-val { font-size:14px; font-weight:700; color:#4ade80; }
+.ops-limit { font-size:11px; color:#444; }
+
+.body-section { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#444; margin:14px 0 8px; }
+.body-section:first-child { margin-top:0; }
+
+.cost-table { width:100%; border-collapse:collapse; margin-top:4px; }
+.cost-table td { padding:7px 10px; border-bottom:1px solid #1a1a1a; font-size:12px; }
+.cost-table tr:last-child td { border-bottom:none; }
+.cost-name { color:#888; }
+.cost-free { color:#4ade80; font-weight:600; }
+.cost-paid { color:#fbbf24; font-weight:600; }
+.cost-total { font-size:15px; font-weight:700; color:#4ade80; }
+
+.notion-note { background:#0a0f1a; border:1px solid #1a3050; border-radius:8px; padding:10px 14px; font-size:11px; color:#60a5fa; line-height:1.7; margin-top:10px; }
+</style>
+</head>
+<body>
+
+<div class="title">saifbadawy.com</div>
+<div class="subtitle">Full Backend System</div>
+<div class="sub-meta">Final architecture · $9/month total · All decisions finalised · Click any layer to expand</div>
+
+<div class="flow">
+
+  <!-- LAYER 1 -->
+  <div class="layer l1">
+    <div class="layer-head" onclick="tog('l1')">
+      <span class="layer-num">01</span>
+      <span class="layer-title">Website Triggers</span>
+      <span class="layer-tag">saifbadawy.com</span>
+      <span class="layer-chevron" id="c-l1">▼</span>
+    </div>
+    <div class="layer-body" id="l1">
+      <div class="split">
+        <div class="split-card split-zero">
+          <div class="split-title">⚡ DIRECT TO NOTION — 0 OPS</div>
+          <div class="split-item">Chatbot — full transcript saved per session</div>
+          <div class="split-item">ROI Calculator — all inputs + result saved</div>
+          <div class="split-item">90-Day Plan — role, company, plan output saved</div>
+          <div class="split-item">Visitor log — source, country, pages, duration</div>
+          <div class="split-note">Family, repeat visitors, anyone browsing — all land here. No Telegram. No ops. Data stored silently in Notion. No tagging needed — they'll never submit a contact form or book a Calendly call.</div>
+        </div>
+        <div class="split-card split-make">
+          <div class="split-title">🔀 THROUGH MAKE.COM — TRIGGERS ALERT</div>
+          <div class="split-item">Contact form submitted</div>
+          <div class="split-item">Calendly booking confirmed</div>
+          <div class="split-item">High-intent visitor from LinkedIn or Google only</div>
+          <div class="split-item">Site goes down (via UptimeRobot webhook)</div>
+          <div class="split-item">New email received in Gmail</div>
+          <div class="split-note">Only genuine professional signals reach here. Each one logs to Notion AND fires an instant Telegram alert to your phone.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div><div class="arrow-label">routes to</div><div class="arrow-head"></div></div>
+
+  <!-- LAYER 2 -->
+  <div class="layer l2">
+    <div class="layer-head" onclick="tog('l2')">
+      <span class="layer-num">02</span>
+      <span class="layer-title">Make.com — Automation Engine</span>
+      <span class="layer-tag">$9/month · Core · 10k ops · 6 scenarios</span>
+      <span class="layer-chevron" id="c-l2">▼</span>
+    </div>
+    <div class="layer-body" id="l2">
+      <div class="body-section">6 Scenarios</div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-head"><span class="card-icon">📧</span><span class="card-name">Email Router</span></div>
+          <div class="card-desc">Watches Gmail every 15 min. Classifies email type, routes to Notion Lead Pipeline + Telegram alert</div>
+          <span class="badge badge-yellow">~2,880 ops/mo</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">📅</span><span class="card-name">Calendly Handler</span></div>
+          <div class="card-desc">Booking confirmed → Notion Bookings entry + Telegram with name, company, date, topic</div>
+          <span class="badge badge-green">~20 ops/mo</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">📝</span><span class="card-name">Contact Form</span></div>
+          <div class="card-desc">Form submitted → Notion Lead Pipeline + instant Telegram with full message preview</div>
+          <span class="badge badge-green">~30 ops/mo</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">🎯</span><span class="card-name">High-Intent Visitor</span></div>
+          <div class="card-desc">LinkedIn/Google visitor only, 3+ min on site → Telegram ping. Direct traffic ignored entirely.</div>
+          <span class="badge badge-green">~60 ops/mo</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">🚨</span><span class="card-name">Site Down Alert</span></div>
+          <div class="card-desc">UptimeRobot webhook fires → instant Telegram. Checks every 5 minutes around the clock.</div>
+          <span class="badge badge-green">~5 ops/mo</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">📊</span><span class="card-name">Weekly Digest</span></div>
+          <div class="card-desc">Every Monday 8am: pulls Notion data → formats weekly summary → sends to Telegram</div>
+          <span class="badge badge-green">~24 ops/mo</span>
+        </div>
+      </div>
+      <div class="ops-section">
+        <div class="body-section">Monthly Ops — You use 32% of your limit</div>
+        <div class="ops-row">
+          <span class="ops-label">Gmail watcher (background polling)</span>
+          <div class="ops-track"><div class="ops-fill" style="width:28.8%;background:#fbbf24;"></div></div>
+          <span class="ops-val">2,880</span>
+        </div>
+        <div class="ops-row">
+          <span class="ops-label">Email processing (~50 emails/mo)</span>
+          <div class="ops-track"><div class="ops-fill" style="width:2%;background:#fbbf24;"></div></div>
+          <span class="ops-val">200</span>
+        </div>
+        <div class="ops-row">
+          <span class="ops-label">Contact forms + Calendly + High-intent</span>
+          <div class="ops-track"><div class="ops-fill" style="width:1.1%;background:#60a5fa;"></div></div>
+          <span class="ops-val">110</span>
+        </div>
+        <div class="ops-row">
+          <span class="ops-label">Weekly digest + Site alerts</span>
+          <div class="ops-track"><div class="ops-fill" style="width:0.3%;background:#c084fc;"></div></div>
+          <span class="ops-val">29</span>
+        </div>
+        <div class="ops-row">
+          <span class="ops-label">Chatbot / ROI / 90-day / Visits</span>
+          <div class="ops-track"><div class="ops-fill" style="width:0%;background:#4ade80;"></div></div>
+          <span class="ops-val" style="color:#4ade80;">0</span>
+        </div>
+        <div class="ops-total-row">
+          <span class="ops-total-label">Total / month</span>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span class="ops-limit">of 10,000 limit</span>
+            <span class="ops-total-val">~3,219 ops · 32%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div><div class="arrow-label">stores everything</div><div class="arrow-head"></div></div>
+
+  <!-- LAYER 3 -->
+  <div class="layer l3">
+    <div class="layer-head" onclick="tog('l3')">
+      <span class="layer-num">03</span>
+      <span class="layer-title">Notion — Central Hub</span>
+      <span class="layer-tag">Free · 7 databases · Unlimited API · All data lives here</span>
+      <span class="layer-chevron" id="c-l3">▼</span>
+    </div>
+    <div class="layer-body" id="l3">
+      <div class="body-section">7 Databases</div>
+      <div class="dbs">
+        <div class="db-card">
+          <div class="db-icon">👤</div>
+          <div class="db-name">Lead Pipeline</div>
+          <div class="db-desc">Every contact form, email, recruiter. Name, company, source, status, follow-up notes.</div>
+          <span class="db-source src-make">Via Make.com</span>
+        </div>
+        <div class="db-card">
+          <div class="db-icon">👁</div>
+          <div class="db-name">Visitor Log</div>
+          <div class="db-desc">Source, country, pages viewed, duration, device. Every session including family.</div>
+          <span class="db-source src-direct">Direct from site JS</span>
+        </div>
+        <div class="db-card">
+          <div class="db-icon">📆</div>
+          <div class="db-name">Bookings</div>
+          <div class="db-desc">All Calendly calls. Name, company, date, topic, outcome after the call.</div>
+          <span class="db-source src-make">Via Make.com</span>
+        </div>
+        <div class="db-card">
+          <div class="db-icon">✅</div>
+          <div class="db-name">Follow-up Tasks</div>
+          <div class="db-desc">Auto-created when a lead goes 3 days without follow-up. Kanban view.</div>
+          <span class="db-source src-make">Via Make.com</span>
+        </div>
+        <div class="db-card">
+          <div class="db-icon">💬</div>
+          <div class="db-name">Tool Interactions</div>
+          <div class="db-desc">Full chatbot transcripts per session. ROI inputs + results. 90-day plan outputs.</div>
+          <span class="db-source src-direct">Direct from site JS</span>
+        </div>
+        <div class="db-card">
+          <div class="db-icon">📋</div>
+          <div class="db-name">Weekly Digest</div>
+          <div class="db-desc">Every Monday summary stored. Leads, visits, bookings, top sources — week by week.</div>
+          <span class="db-source src-make">Via Make.com</span>
+        </div>
+        <div class="db-card highlight">
+          <div class="db-icon">🏢</div>
+          <div class="db-name">Companies <span class="new-badge">NEW</span></div>
+          <div class="db-desc">One page per company. Shell, BP, Halliburton — every visit, lead, booking, chatbot session linked and tracked over time automatically.</div>
+          <span class="db-source src-auto">Auto-linked · all sources</span>
+        </div>
+      </div>
+      <div class="notion-note">
+        <strong>How Companies works:</strong> When a visitor from Shell logs a visit, or a Shell lead comes in via contact form, it automatically links to the Shell page in Companies. Over time that page builds a full history — first visit Jan 2025, email Sep 2025, chatbot Jun 2025, contact form Apr 2026. Everything in one place, organised by company, forever. Notion API is unlimited — no caps, no cost.
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div><div class="arrow-label">instant alerts</div><div class="arrow-head"></div></div>
+
+  <!-- LAYER 4 -->
+  <div class="layer l4">
+    <div class="layer-head" onclick="tog('l4')">
+      <span class="layer-num">04</span>
+      <span class="layer-title">Telegram — Your Phone</span>
+      <span class="layer-tag">Free · Real-time · Only professional signals</span>
+      <span class="layer-chevron" id="c-l4">▼</span>
+    </div>
+    <div class="layer-body" id="l4">
+      <div class="body-section">What lands on your phone</div>
+      <div class="tg-msg">
+        <div class="tg-label">📝 Contact Form — Sarah Mitchell · Shell</div>
+        <div class="tg-bubble"><strong>New contact from Sarah Mitchell</strong><br>Company: Shell<br>Subject: HSE Consulting Opportunity<br>Message: "We have a 6-month contract opening in Aberdeen..."<br><br>→ Saved to Notion Lead Pipeline</div>
+        <div class="tg-time">26 Apr · 14:32</div>
+      </div>
+      <div class="tg-msg">
+        <div class="tg-label">📅 Calendly Booking Confirmed</div>
+        <div class="tg-bubble"><strong>James Al-Rashid booked a call</strong><br>Company: Halliburton<br>Date: Tuesday 29 Apr · 14:00<br>Topic: PM Role — Iraq Operations<br><br>→ Saved to Notion Bookings</div>
+        <div class="tg-time">25 Apr · 09:15</div>
+      </div>
+      <div class="tg-msg">
+        <div class="tg-label">👀 Hot Visitor — LinkedIn · 🇬🇧 UK</div>
+        <div class="tg-bubble"><strong>High-intent visitor on your site</strong><br>Source: LinkedIn · United Kingdom<br>Time on site: 9 min 14 sec<br>Pages: Hero → Experience → Contact<br><br>→ No action yet</div>
+        <div class="tg-time">26 Apr · 11:08</div>
+      </div>
+      <div class="tg-msg">
+        <div class="tg-label">📊 Weekly Digest — Every Monday 8am</div>
+        <div class="tg-bubble"><strong>Week of 21 Apr — Summary</strong><br>Visitors: 47 · New Leads: 3 · Bookings: 1<br>Top source: LinkedIn (62%)<br>Chatbot sessions: 4 · ROI calcs: 3<br>Overdue follow-ups: 2<br><br>→ Full digest in Notion</div>
+        <div class="tg-time">Mon 28 Apr · 08:00</div>
+      </div>
+      <div class="tg-msg">
+        <div class="tg-label">🚨 Site Down — UptimeRobot</div>
+        <div class="tg-bubble"><strong>saifbadawy.com is unreachable</strong><br>Down for: 3 minutes · Detected: UptimeRobot<br>Likely cause: GitHub Pages outage<br><br>→ Check GitHub Status page</div>
+        <div class="tg-time">Rare — only fires when it happens</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div><div class="arrow-label">you + claude weekly</div><div class="arrow-head"></div></div>
+
+  <!-- LAYER 5 -->
+  <div class="layer l5">
+    <div class="layer-head" onclick="tog('l5')">
+      <span class="layer-num">05</span>
+      <span class="layer-title">Claude — Intelligence Layer</span>
+      <span class="layer-tag">Manual · No API cost · You review Notion weekly</span>
+      <span class="layer-chevron" id="c-l5">▼</span>
+    </div>
+    <div class="layer-body" id="l5">
+      <div class="cards">
+        <div class="card">
+          <div class="card-head"><span class="card-icon">🧠</span><span class="card-name">Lead Review</span></div>
+          <div class="card-desc">Paste Notion leads into Claude → reply suggestions, priority ranking, talking points</div>
+          <span class="badge badge-purple">Weekly</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">🏢</span><span class="card-name">Company Intel</span></div>
+          <div class="card-desc">Open a company page in Notion → paste into Claude → get pattern analysis and next steps</div>
+          <span class="badge badge-purple">As needed</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">🎤</span><span class="card-name">Interview Prep</span></div>
+          <div class="card-desc">Booking confirmed → paste company + role into Claude → tailored prep in minutes</div>
+          <span class="badge badge-purple">Per booking</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">💬</span><span class="card-name">Chatbot Mining</span></div>
+          <div class="card-desc">Review chatbot questions in Notion → spot gaps in your site → improve content</div>
+          <span class="badge badge-purple">Monthly</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">📈</span><span class="card-name">Site Optimisation</span></div>
+          <div class="card-desc">Review visitor patterns, ROI inputs, bounce points → Claude suggests what to improve</div>
+          <span class="badge badge-purple">Monthly</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div><div class="arrow-label">always on</div><div class="arrow-head"></div></div>
+
+  <!-- LAYER 6 -->
+  <div class="layer l6">
+    <div class="layer-head" onclick="tog('l6')">
+      <span class="layer-num">06</span>
+      <span class="layer-title">Passive Monitoring</span>
+      <span class="layer-tag">Free · Silent · No action needed</span>
+      <span class="layer-chevron" id="c-l6">▼</span>
+    </div>
+    <div class="layer-body" id="l6">
+      <div class="cards">
+        <div class="card">
+          <div class="card-head"><span class="card-icon">📉</span><span class="card-name">Google Analytics 4</span></div>
+          <div class="card-desc">Traffic, sources, devices, page views. Always-on dashboard.</div>
+          <span class="badge badge-green">Free</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">🎥</span><span class="card-name">Microsoft Clarity</span></div>
+          <div class="card-desc">Session recordings, heatmaps, rage clicks. See exactly what visitors do.</div>
+          <span class="badge badge-green">Free</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">🔗</span><span class="card-name">LinkedIn Insight Tag</span></div>
+          <div class="card-desc">Which companies visit from LinkedIn. Industry and seniority breakdowns.</div>
+          <span class="badge badge-green">Free</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">🔍</span><span class="card-name">Google Search Console</span></div>
+          <div class="card-desc">Your Google search rankings, clicks, impressions for your name and keywords.</div>
+          <span class="badge badge-green">Free</span>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-icon">🟢</span><span class="card-name">UptimeRobot</span></div>
+          <div class="card-desc">Pings your site every 5 min. Triggers Make.com webhook if it goes down.</div>
+          <span class="badge badge-green">Free</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COST -->
+  <div style="width:100%;margin-top:28px;">
+    <div style="background:#141414;border:1px solid #222;border-radius:12px;padding:18px 20px;">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:14px;">Total Monthly Cost</div>
+      <table class="cost-table">
+        <tr><td class="cost-name">Make.com Core (10k ops, unlimited scenarios)</td><td style="text-align:right" class="cost-paid">$9/mo</td></tr>
+        <tr><td class="cost-name">Notion (7 databases, unlimited API calls)</td><td style="text-align:right" class="cost-free">Free</td></tr>
+        <tr><td class="cost-name">Telegram Bot</td><td style="text-align:right" class="cost-free">Free</td></tr>
+        <tr><td class="cost-name">Google Analytics 4</td><td style="text-align:right" class="cost-free">Free</td></tr>
+        <tr><td class="cost-name">Microsoft Clarity</td><td style="text-align:right" class="cost-free">Free</td></tr>
+        <tr><td class="cost-name">LinkedIn Insight Tag</td><td style="text-align:right" class="cost-free">Free</td></tr>
+        <tr><td class="cost-name">Google Search Console</td><td style="text-align:right" class="cost-free">Free</td></tr>
+        <tr><td class="cost-name">UptimeRobot</td><td style="text-align:right" class="cost-free">Free</td></tr>
+        <tr><td class="cost-name">EmailJS</td><td style="text-align:right" class="cost-free">Free</td></tr>
+        <tr><td class="cost-name">Calendly</td><td style="text-align:right" class="cost-free">Free</td></tr>
+        <tr><td class="cost-name">Claude (manual use, no API)</td><td style="text-align:right" class="cost-free">Free</td></tr>
+        <tr style="border-top:1px solid #2a2a2a;">
+          <td style="padding-top:12px;font-size:14px;font-weight:700;color:#e8e4de;">Total</td>
+          <td style="text-align:right;padding-top:12px;" class="cost-total">$9 / month</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function tog(id) {
+  const body = document.getElementById(id);
+  const chev = document.getElementById('c-' + id);
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+['l1','l2','l3','l4','l5','l6'].forEach(id => {
+  document.getElementById(id).classList.add('open');
+  document.getElementById('c-' + id).classList.add('open');
+});
+</script>
+</body>
+</html>

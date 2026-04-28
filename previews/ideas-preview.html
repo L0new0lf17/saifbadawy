@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>40 Ideas — Visual Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#07080e;--s1:#0f1018;--s2:#161820;--border:rgba(255,255,255,0.07);--borderB:rgba(255,255,255,0.14);--accent:#E8820C;--accent2:#F5A623;--white:#f0ede8;--muted:rgba(240,237,232,0.55);--bebas:'Bebas Neue',sans-serif;--mono:'JetBrains Mono',monospace;--sans:'DM Sans',sans-serif}
+html,body{background:var(--bg);color:var(--white);font-family:var(--sans);min-height:100vh}
+nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:.8rem 2rem;background:rgba(7,8,14,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.logo{font-family:var(--bebas);font-size:1.2rem;letter-spacing:.2em;display:flex;align-items:center;gap:.5rem}
+.logoDot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.navR{font-family:var(--mono);font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.page{max-width:1280px;margin:0 auto;padding:2.5rem 2rem 6rem}
+.hdr{margin-bottom:2rem}
+.hdrEye{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem}
+.hdrLine{width:28px;height:1px;background:rgba(232,130,12,.4)}
+.hdrTag{font-family:var(--mono);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.hdrTitle{font-family:var(--bebas);font-size:2.8rem;letter-spacing:.04em;line-height:.95;margin-bottom:.5rem}
+.hdrSub{font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;color:var(--muted)}
+.filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem}
+.filt{font-family:var(--mono);font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;padding:.35rem .9rem;border:1px solid var(--border);color:var(--muted);background:none;cursor:pointer;transition:all .15s}
+.filt:hover,.filt.on{border-color:rgba(232,130,12,.5);color:var(--accent);background:rgba(232,130,12,.05)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.card{background:var(--s1);border:1px solid var(--border);cursor:pointer;transition:border-color .2s,transform .15s;overflow:hidden}
+.card:hover{border-color:rgba(232,130,12,.35);transform:translateY(-2px)}
+.prev{width:100%;height:130px;overflow:hidden;position:relative;background:#04050a}
+.card-foot{padding:10px 12px 12px}
+.card-num{font-family:var(--mono);font-size:.42rem;letter-spacing:.15em;color:var(--accent);margin-bottom:3px}
+.card-title{font-family:var(--bebas);font-size:1rem;letter-spacing:.05em;line-height:1.1;margin-bottom:3px}
+.card-sub{font-family:var(--mono);font-size:.42rem;letter-spacing:.08em;color:var(--muted);line-height:1.4}
+.catpill{display:inline-block;font-family:var(--mono);font-size:.38rem;letter-spacing:.12em;text-transform:uppercase;padding:.15rem .5rem;margin-bottom:5px}
+.cp-wow{background:rgba(232,130,12,.12);color:var(--accent);border:1px solid rgba(232,130,12,.25)}
+.cp-vis{background:rgba(96,165,250,.1);color:#60a5fa;border:1px solid rgba(96,165,250,.2)}
+.cp-story{background:rgba(196,181,253,.1);color:#c4b5fd;border:1px solid rgba(196,181,253,.2)}
+.cp-tool{background:rgba(110,231,183,.1);color:#6ee7b7;border:1px solid rgba(110,231,183,.2)}
+.cp-egg{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
+/* MODAL */
+#modal{position:fixed;inset:0;z-index:500;background:rgba(4,5,10,.92);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;padding:2rem}
+#modal.open{display:flex}
+#mbox{background:var(--s1);border:1px solid rgba(232,130,12,.25);width:100%;max-width:820px;max-height:90vh;overflow-y:auto;position:relative}
+#mbox .mtop{background:rgba(232,130,12,.04);border-bottom:1px solid rgba(232,130,12,.14);padding:.7rem 1.2rem;display:flex;align-items:center;justify-content:space-between}
+#mbox .mtop-l{font-family:var(--mono);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+#mbox .mclose{font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;background:none;border:1px solid var(--border);color:var(--muted);padding:.3rem .7rem;cursor:pointer;transition:color .2s,border-color .2s}
+#mbox .mclose:hover{color:var(--accent);border-color:rgba(232,130,12,.4)}
+#mscene{width:100%;min-height:380px;background:#04050a;position:relative;overflow:hidden}
+#minfo{padding:1.4rem 1.6rem 1.6rem}
+#minfo h2{font-family:var(--bebas);font-size:1.8rem;letter-spacing:.06em;margin-bottom:.5rem}
+#minfo p{font-size:.88rem;line-height:1.8;color:var(--white);margin-bottom:1.2rem}
+.mbuild{font-family:var(--bebas);font-size:.9rem;letter-spacing:.15em;padding:.7rem 1.8rem;background:var(--accent);color:#07080e;border:none;cursor:pointer;transition:background .2s}
+.mbuild:hover{background:var(--accent2)}
+</style>
+</head>
+<body>
+<nav><div class="logo"><div class="logoDot"></div>SAIF BADAWY</div><div class="navR">40 Ideas Visual Preview</div></nav>
+<div class="page">
+<div class="hdr">
+  <div class="hdrEye"><div class="hdrLine"></div><span class="hdrTag">Proposals</span></div>
+  <div class="hdrTitle">40 Ideas.<br>See Before You Build.</div>
+  <div class="hdrSub">Click any card to see a full interactive preview · then hit "Build This" to implement</div>
+</div>
+<div class="filters">
+  <button class="filt on" onclick="filt('all',this)">All 40</button>
+  <button class="filt" onclick="filt('wow',this)">First impression</button>
+  <button class="filt" onclick="filt('vis',this)">Visualisations</button>
+  <button class="filt" onclick="filt('story',this)">Storytelling</button>
+  <button class="filt" onclick="filt('tool',this)">Recruiter tools</button>
+  <button class="filt" onclick="filt('egg',this)">Easter eggs</button>
+</div>
+<div class="grid" id="grid"></div>
+</div>
+
+<div id="modal" onclick="if(event.target===this)closeModal()">
+  <div id="mbox">
+    <div class="mtop"><span class="mtop-l" id="mtopL">PREVIEW</span><button class="mclose" onclick="closeModal()">CLOSE ✕</button></div>
+    <div id="mscene"></div>
+    <div id="minfo">
+      <h2 id="mtitle"></h2>
+      <p id="mdesc"></p>
+      <button class="mbuild" id="mbuild">BUILD THIS ON THE WEBSITE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const IDEAS=[
+{n:1,cat:'wow',title:'Mission Control Boot',sub:'Terminal loads before site reveals',desc:'Before the portfolio renders, a full-screen terminal runs a system-check sequence — HERO ✓, SKILLS ✓, PROJECTS ✓ — then fades out. Engineers the first impression literally.',
+ pill:'cp-wow',label:'First impression'},
+{n:2,cat:'wow',title:'Recruiter / Explorer Mode',sub:'Toggle between fast-read & full experience',desc:'A nav toggle: Recruiter Mode collapses animations and surfaces only key stats + CTA. Explorer Mode is the full cinematic portfolio. Visitors self-select what they need.',
+ pill:'cp-wow',label:'First impression'},
+{n:3,cat:'wow',title:'Cursor Particle Trail',sub:'Blueprint dots fade behind the cursor',desc:'Beyond the amber dot cursor, a trail of 12 tiny blueprint-coloured particles dissolves in 0.4s behind every mouse move. Subtle, premium, instantly signals this is not a template.',
+ pill:'cp-wow',label:'First impression'},
+{n:4,cat:'wow',title:'Magnetic Buttons',sub:'CTAs pull the cursor within 80px',desc:'Primary CTA buttons subtly attract the cursor when it passes nearby — the element nudges ~8px toward the mouse pointer. A micro-interaction used on top-tier agency sites.',
+ pill:'cp-wow',label:'First impression'},
+{n:5,cat:'wow',title:'Ambient Soundscape',sub:'Control room hum — fully optional',desc:'When the sound toggle is on: faint industrial ambience — ventilation hum, data bleeps — like sitting in a North Sea operations room. Toggle already wired in the codebase.',
+ pill:'cp-wow',label:'First impression'},
+{n:6,cat:'wow',title:'Text Scramble Headlines',sub:'Section titles decode on scroll entry',desc:'Section headings scramble through random characters before resolving to the correct text, like a cypher being cracked in real time. Amplifies the existing Bebas Neue headlines.',
+ pill:'cp-wow',label:'First impression'},
+{n:7,cat:'wow',title:'Idle "System Dormant"',sub:'Site reacts when visitor goes still',desc:'After 30s of no mouse movement, a subtle message appears bottom-left in mono: "SYSTEM DORMANT — AWAITING INPUT". Fades the moment the visitor moves again. Site feels alive.',
+ pill:'cp-wow',label:'First impression'},
+{n:8,cat:'wow',title:'Time-Based Greeting',sub:'Copy changes by visitor\'s local time',desc:'"Good morning — early riser. That\'s the kind of thing Saif respects." The hero swaps a one-liner based on the visitor\'s local time. 3 lines of JS, memorable for every visitor.',
+ pill:'cp-wow',label:'First impression'},
+{n:9,cat:'vis',title:'3D Rotating Globe',sub:'Project pins on Dubai, North Sea, UK',desc:'A Three.js globe with clickable location pins. Click Dubai → Al Habtoor card. Click North Sea → ExxonMobil. Shows global footprint in 3 seconds without a single word.',
+ pill:'cp-vis',label:'Visualisation'},
+{n:10,cat:'vis',title:'P&ID Career Flowchart',sub:'Career mapped as a process diagram',desc:'An actual piping-and-instrumentation diagram where every vessel is a job, valves are decision points, instruments are skills. No other engineer has done this on their portfolio.',
+ pill:'cp-vis',label:'Visualisation'},
+{n:11,cat:'vis',title:'Interactive Gantt Chart',sub:'Career timeline styled like Primavera P6',desc:'A live, clickable Gantt chart of the full career — styled to look like the tools Saif actually uses. Click a bar to expand project details. Shows mastery by demonstrating it on himself.',
+ pill:'cp-vis',label:'Visualisation'},
+{n:12,cat:'vis',title:'Skills DNA Double Helix',sub:'Rotating 3D helix of paired skills',desc:'A canvas-drawn rotating double helix where each base pair is a skill pairing: Technical + Management, Engineering + ESG. Replaces the static engineering genome grid.',
+ pill:'cp-vis',label:'Visualisation'},
+{n:13,cat:'vis',title:'Live Metrics Dashboard',sub:'Bloomberg terminal-style counters',desc:'A section styled like a Bloomberg terminal: years of experience, projects delivered, budget managed — all counting up from zero on scroll. Engineering data theatre at its finest.',
+ pill:'cp-vis',label:'Visualisation'},
+{n:14,cat:'vis',title:'CO₂ Impact Counter',sub:'Tonnes saved — live animated number',desc:'A large animated number showing total CO₂ saved / renewable capacity delivered. Visceral and impossible to ignore for any sustainability-focused recruiter or client.',
+ pill:'cp-vis',label:'Visualisation'},
+{n:15,cat:'vis',title:'Radar + Hover Link',sub:'Hover a skill → radar axis pulses',desc:'Hovering any skill tag elsewhere on the page highlights and pulses the corresponding axis on the radar chart in skills. Connects scattered page elements into one living system.',
+ pill:'cp-vis',label:'Visualisation'},
+{n:16,cat:'vis',title:'Skill Heat Map',sub:'GitHub-style grid by year × domain',desc:'A contribution-style heat map where columns = years 2015–2025, rows = skill domains. Colour intensity shows usage depth. Career history as data density.',
+ pill:'cp-vis',label:'Visualisation'},
+{n:17,cat:'vis',title:'Site Heartbeat Monitor',sub:'EKG line pulses with interactions',desc:'A subtle EKG-style heartbeat line running along the bottom of the viewport. Flatlines when idle, pulses with scroll and clicks. Makes the portfolio literally feel alive.',
+ pill:'cp-vis',label:'Visualisation'},
+{n:18,cat:'vis',title:'Schematic Transitions',sub:'Blueprint draws between sections',desc:'Scrolling between major sections triggers a full-screen engineering schematic that draws itself — P&ID symbols, dimension lines — then dissolves into the next section.',
+ pill:'cp-vis',label:'Visualisation'},
+{n:19,cat:'story',title:'Mission Briefing Section',sub:'Classified dossier aesthetic',desc:'"OPERATIVE: SAIF BADAWY — MISSION: DECARBONISE UK ENERGY INFRASTRUCTURE." A section styled as a classified briefing document. James Bond meets engineering PM.',
+ pill:'cp-story',label:'Storytelling'},
+{n:20,cat:'story',title:'Horizontal Chapter Scroll',sub:'Cinematic full-screen career chapters',desc:'Between timeline and skills, a horizontal-scroll carousel of 5 career chapters — each full-bleed with a defining quote and stat. Adds rhythm and pacing to the experience.',
+ pill:'cp-story',label:'Storytelling'},
+{n:21,cat:'story',title:'Before / After Sliders',sub:'Drag to reveal project impact',desc:'Cards with a drag divider: left = problem state, right = outcome after intervention. Perfect for the North Sea decommissioning and ExxonMobil projects. Impact made visual.',
+ pill:'cp-story',label:'Storytelling'},
+{n:22,cat:'story',title:'"Classified" Redacted Reveals',sub:'Hover black bars to reveal stats',desc:'Key numbers blacked out like a CIA document. Hover to reveal. "Managed ████ budget" → "Managed £47M budget". Turns passive reading into active discovery.',
+ pill:'cp-story',label:'Storytelling'},
+{n:23,cat:'story',title:'Letter to a Recruiter',sub:'Personal human letter, hidden door',desc:'A section labelled "PRIVATE: FOR RECRUITERS ONLY" — clicking reveals a short first-person letter from Saif. The contrast with the technical design is striking and memorable.',
+ pill:'cp-story',label:'Storytelling'},
+{n:24,cat:'story',title:'Career Time-Lapse',sub:'Map draws itself 2015 → 2025',desc:'An animation that starts at 2015 Dubai and plays through to 2025, drawing the career path like a route being mapped. Makes the journey feel earned and intentional.',
+ pill:'cp-story',label:'Storytelling'},
+{n:25,cat:'story',title:'Split-Screen Project View',sub:'Toggle: technical vs business lens',desc:'Each project card has a toggle: Technical View (standards, specs) vs Business View (ROI, stakeholders). Same project, two lenses. Speaks to both engineering and commercial interviewers.',
+ pill:'cp-story',label:'Storytelling'},
+{n:26,cat:'story',title:'"Day in the Life" Clock',sub:'24h animated schedule visualisation',desc:'An interactive 24h clock playing through a typical senior PM day — colour coded by activity: site visits, risk reviews, stakeholder calls. Humanises the CV entry.',
+ pill:'cp-story',label:'Storytelling'},
+{n:27,cat:'story',title:'Fullscreen Case Studies',sub:'Click project → full mini-site overlay',desc:'Clicking a project opens a fullscreen overlay functioning as a complete case study: challenge, approach, outcome, technical specs. A proper portfolio piece, not a 3-line summary.',
+ pill:'cp-story',label:'Storytelling'},
+{n:28,cat:'tool',title:'"Match to JD" Analyser',sub:'Paste job description → live highlights',desc:'A text area where recruiters paste a job description. Keywords matching Saif\'s skills glow amber across the page in real time. Pure JS keyword matching — no AI needed.',
+ pill:'cp-tool',label:'Recruiter tool'},
+{n:29,cat:'tool',title:'"Build Your Brief" Filter',sub:'Filter page by industry + project type',desc:'Recruiter selects: industry, project size, challenge type. The page re-weights and highlights the most relevant experience cards. Personalises the portfolio to each viewer.',
+ pill:'cp-tool',label:'Recruiter tool'},
+{n:30,cat:'tool',title:'One-Click Recruiter Pack',sub:'CV + plan + case study → single ZIP',desc:'One "Download Recruiter Pack" button compiles CV PDF + 90-day plan + top project case study + contact card, zips them, and downloads instantly. Zero friction.',
+ pill:'cp-tool',label:'Recruiter tool'},
+{n:31,cat:'tool',title:'Availability Status Badge',sub:'Real-time "available from" date',desc:'A prominent badge Saif can update: "AVAILABLE FROM: 01 JUN 2025" with a live countdown. Transparency that high-demand candidates never show. Signals confidence.',
+ pill:'cp-tool',label:'Recruiter tool'},
+{n:32,cat:'tool',title:'ROI Impact Calculator',sub:'Input project size → estimated value',desc:'Recruiter inputs budget and duration. Calculator outputs estimated efficiency gains based on Saif\'s track record. Turns the portfolio into a business case, not just a CV.',
+ pill:'cp-tool',label:'Recruiter tool'},
+{n:33,cat:'tool',title:'Smart 90-Day Plan Builder',sub:'Customise by industry + challenge',desc:'Upgrade the existing 90-day PDF: recruiter selects industry, team size, top challenge — plan text dynamically adjusts before export. Hyper-relevant for every role.',
+ pill:'cp-tool',label:'Recruiter tool'},
+{n:34,cat:'tool',title:'Notify-When-Available',sub:'Email capture for future recruiters',desc:'"Not hiring now but interested?" Simple email input lets recruiters subscribe for updates. Builds a pipeline. Almost no one does this on a personal portfolio.',
+ pill:'cp-tool',label:'Recruiter tool'},
+{n:35,cat:'egg',title:'Type "HIRE ME" Trigger',sub:'Keyboard easter egg → confetti',desc:'Typing "hire me" anywhere on the page triggers amber confetti explosion + the Hire Me modal opens. Hilarious, memorable, and 10 lines of JS to implement.',
+ pill:'cp-egg',label:'Easter egg'},
+{n:36,cat:'egg',title:'Secret Terminal Mode',sub:'?mode=terminal → full CLI interface',desc:'Visiting with ?mode=terminal replaces the visual site with a command-line interface: type `experience`, `skills`, `download cv`. Every command has a response. Deeply on-brand.',
+ pill:'cp-egg',label:'Easter egg'},
+{n:37,cat:'egg',title:'Section-Specific Cursors',sub:'Wrench, crosshair, spark per section',desc:'As you scroll into different sections the cursor changes shape: precision crosshair for skills, wrench for experience, lightning bolt for projects. Makes re-scrolling feel like a game.',
+ pill:'cp-egg',label:'Easter egg'},
+{n:38,cat:'egg',title:'Social Proof Badge',sub:'"4 recruiters viewed today" pill',desc:'A subtle "3 recruiters viewed this today" pill in the corner — even if estimated. Social proof creates urgency in a hiring context. Easy with a simple hit counter.',
+ pill:'cp-egg',label:'Easter egg'},
+{n:39,cat:'egg',title:'Equation Parallax Layer',sub:'Faint physics formulas drift in bg',desc:'Bernoulli\'s equation, stress formulae, energy balance equations float faintly at different parallax depths. Invisible until you look. Signals domain depth without a word.',
+ pill:'cp-egg',label:'Easter egg'},
+{n:40,cat:'egg',title:'Dark / Light Dual Personality',sub:'Light mode = corporate CV aesthetic',desc:'Light mode is not a colour flip — it becomes a traditional CV layout: conservative, clean, serif fonts. Dark mode is the engineering dashboard. Two audiences, two moods.',
+ pill:'cp-egg',label:'Easter egg'},
+];
+
+function filt(cat,el){
+  document.querySelectorAll('.filt').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.card').forEach(c=>{
+    c.style.display=(cat==='all'||c.dataset.cat===cat)?'':'none';
+  });
+}
+
+function buildGrid(){
+  const g=document.getElementById('grid');
+  IDEAS.forEach(id=>{
+    const d=document.createElement('div');
+    d.className='card'; d.dataset.cat=id.cat;
+    d.onclick=()=>openModal(id.n);
+    d.innerHTML=`<div class="prev" id="p${id.n}"></div>
+    <div class="card-foot">
+      <div><span class="catpill ${id.pill}">${id.label}</span></div>
+      <div class="card-num">${String(id.n).padStart(2,'0')}</div>
+      <div class="card-title">${id.title}</div>
+      <div class="card-sub">${id.sub}</div>
+    </div>`;
+    g.appendChild(d);
+  });
+}
+
+buildGrid();
+setTimeout(initPreviews,200);
+
+/* ── MODAL ── */
+let modalRaf=null;
+function openModal(n){
+  const idea=IDEAS.find(i=>i.n===n);
+  document.getElementById('mtopL').textContent=`IDEA ${String(n).padStart(2,'0')} · ${idea.label.toUpperCase()}`;
+  document.getElementById('mtitle').textContent=idea.title;
+  document.getElementById('mdesc').textContent=idea.desc;
+  document.getElementById('mbuild').onclick=()=>{
+    if(window.sendPrompt) window.sendPrompt(`Build idea #${n}: ${idea.title} on my portfolio website`);
+  };
+  const sc=document.getElementById('mscene');
+  sc.innerHTML='';
+  if(modalRaf){cancelAnimationFrame(modalRaf);modalRaf=null;}
+  buildModalScene(n,sc);
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  if(modalRaf){cancelAnimationFrame(modalRaf);modalRaf=null;}
+}
+</script>
+<script>
+/* ══════════════════════════════════════════
+   THUMBNAIL PREVIEWS
+══════════════════════════════════════════ */
+function initPreviews(){
+  IDEAS.forEach(id=>{ try{ drawThumb(id.n); }catch(e){} });
+}
+
+function css(el,s){ Object.assign(el.style,s); return el; }
+function mk(tag,s,html){ const e=document.createElement(tag); if(s)css(e,s); if(html)e.innerHTML=html; return e; }
+function mono(txt,col,sz){ return mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:sz||'9px',color:col||'rgba(240,237,232,0.6)',letterSpacing:'.1em'}); }
+
+function drawThumb(n){
+  const p=document.getElementById('p'+n);
+  if(!p)return;
+  p.innerHTML='';
+  const W=p.offsetWidth||220, H=130;
+
+  /* ─ 1: Boot screen ─ */
+  if(n===1){
+    css(p,{background:'#02030a',display:'flex',flexDirection:'column',justifyContent:'center',padding:'14px 16px',gap:'5px'});
+    const lines=['> INITIALISING SAIF BADAWY PORTFOLIO','> HERO MODULE............. ✓','> EXPERIENCE DATA......... ✓','> SKILLS ENGINE........... ✓','> PROJECTS RENDER......... ✓','> LAUNCHING...'];
+    lines.forEach((l,i)=>{
+      const d=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'9px',color:i<lines.length-1?'#6ee7b7':'#E8820C',letterSpacing:'.05em',opacity:'0',transition:'opacity .3s'});
+      d.textContent=l; p.appendChild(d);
+      setTimeout(()=>d.style.opacity='1',i*280+300);
+    });
+  }
+
+  /* ─ 2: Mode toggle ─ */
+  if(n===2){
+    css(p,{display:'flex',flexDirection:'column',gap:'6px',padding:'10px',background:'#02030a'});
+    const mk2=(label,col,items)=>{
+      const w=mk('div',{border:'1px solid '+(col||'rgba(255,255,255,0.1)'),background:'rgba(255,255,255,0.02)',padding:'5px 8px'});
+      const t=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:col||'rgba(240,237,232,0.4)',letterSpacing:'.15em',marginBottom:'5px'});
+      t.textContent=label; w.appendChild(t);
+      const row=mk('div',{display:'flex',gap:'6px'});
+      items.forEach(i=>{ const b=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',padding:'2px 6px',border:'1px solid rgba(255,255,255,0.12)',color:'rgba(240,237,232,0.6)'}); b.textContent=i; row.appendChild(b); });
+      w.appendChild(row); return w;
+    };
+    p.appendChild(mk2('RECRUITER MODE','#6ee7b7',['CV','HIRE','CONTACT']));
+    p.appendChild(mk2('EXPLORER MODE','#E8820C',['ABOUT','EXPERIENCE','SKILLS','PROJECTS','PLAN','CONTACT']));
+  }
+
+  /* ─ 3: Cursor trail ─ */
+  if(n===3){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    css(cv,{display:'block'}); p.appendChild(cv);
+    const ctx=cv.getContext('2d');
+    let t=0,trail=[];
+    (function loop(){
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle='#02030a'; ctx.fillRect(0,0,W,H);
+      t+=0.04;
+      const mx=W/2+Math.cos(t)*70, my=H/2+Math.sin(t*0.7)*40;
+      trail.push({x:mx,y:my,a:1});
+      if(trail.length>18)trail.shift();
+      trail.forEach((pt,i)=>{
+        const r=2.5*(i/trail.length);
+        ctx.beginPath(); ctx.arc(pt.x,pt.y,r,0,Math.PI*2);
+        ctx.fillStyle=`rgba(96,165,250,${(i/trail.length)*0.7})`; ctx.fill();
+      });
+      ctx.beginPath(); ctx.arc(mx,my,4,0,Math.PI*2);
+      ctx.fillStyle='#E8820C'; ctx.shadowColor='#E8820C'; ctx.shadowBlur=8; ctx.fill(); ctx.shadowBlur=0;
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ─ 4: Magnetic button ─ */
+  if(n===4){
+    css(p,{display:'flex',alignItems:'center',justifyContent:'center',background:'#02030a',flexDirection:'column',gap:'10px'});
+    const btn=mk('div',{fontFamily:"'Bebas Neue',sans-serif",fontSize:'1rem',letterSpacing:'.15em',padding:'10px 28px',background:'#E8820C',color:'#07080e',cursor:'pointer',transition:'transform .15s'});
+    btn.textContent='HIRE ME';
+    p.appendChild(btn);
+    const lbl=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'8px',color:'rgba(240,237,232,0.4)',letterSpacing:'.12em'});
+    lbl.textContent='hover — feel the pull'; p.appendChild(lbl);
+    p.addEventListener('mousemove',e=>{
+      const r=btn.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
+      const dx=(e.clientX-cx)*0.25, dy=(e.clientY-cy)*0.25;
+      btn.style.transform=`translate(${dx}px,${dy}px)`;
+    });
+    p.addEventListener('mouseleave',()=>btn.style.transform='');
+  }
+
+  /* ─ 5: Sound toggle / waveform ─ */
+  if(n===5){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    css(cv,{display:'block'}); p.appendChild(cv);
+    const ctx=cv.getContext('2d'); let t=0;
+    (function loop(){
+      ctx.fillStyle='#02030a'; ctx.fillRect(0,0,W,H);
+      ctx.beginPath();
+      for(let x=0;x<W;x++){
+        const y=H/2+Math.sin((x/W)*Math.PI*6+t)*18+Math.sin((x/W)*Math.PI*3+t*1.3)*8;
+        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle='#E8820C'; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.font="9px 'JetBrains Mono',monospace"; ctx.fillStyle='rgba(232,130,12,0.7)';
+      ctx.fillText('◉ AMBIENT ON',10,18);
+      t+=0.06; requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ─ 6: Text scramble ─ */
+  if(n===6){
+    css(p,{display:'flex',alignItems:'center',justifyContent:'center',background:'#02030a'});
+    const d=mk('div',{fontFamily:"'Bebas Neue',sans-serif",fontSize:'1.5rem',letterSpacing:'.1em',color:'#E8820C'});
+    d.textContent='SAIF BADAWY'; p.appendChild(d);
+    const chars='!@#$%^&*ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef0123456789';
+    const target='SAIF BADAWY'; let frame=0;
+    setInterval(()=>{
+      if(frame>40){frame=0;}
+      const progress=frame/40;
+      d.textContent=target.split('').map((c,i)=>{
+        if(c===' ')return ' ';
+        return Math.random()<progress?c:chars[Math.floor(Math.random()*chars.length)];
+      }).join('');
+      frame++;
+    },50);
+  }
+
+  /* ─ 7: Idle dormant ─ */
+  if(n===7){
+    css(p,{background:'#02030a',display:'flex',alignItems:'flex-end',justifyContent:'flex-start',padding:'10px 14px'});
+    const d=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'9px',color:'rgba(240,237,232,0.4)',letterSpacing:'.1em',borderLeft:'2px solid rgba(232,130,12,0.4)',paddingLeft:'8px',lineHeight:'1.5'});
+    d.innerHTML='SYSTEM DORMANT<br><span style="color:rgba(232,130,12,0.6)">AWAITING INPUT ▮</span>';
+    p.appendChild(d);
+    let vis=true; setInterval(()=>{ d.style.opacity=vis?'1':'0'; vis=!vis; },800);
+  }
+
+  /* ─ 8: Time greeting ─ */
+  if(n===8){
+    css(p,{background:'#02030a',display:'flex',flexDirection:'column',gap:'8px',padding:'12px 14px',justifyContent:'center'});
+    const greets=[
+      {t:'GOOD MORNING','msg':'"Early riser. That\'s the kind of thing Saif respects."',c:'#fbbf24'},
+      {t:'GOOD AFTERNOON','msg':'"Peak hours. Make them count."',c:'#E8820C'},
+      {t:'GOOD EVENING','msg':'"Still at it? Dedication noted."',c:'#c4b5fd'}
+    ];
+    greets.forEach(g=>{
+      const row=mk('div',{display:'flex',gap:'8px',alignItems:'baseline'});
+      const t=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:g.c,letterSpacing:'.12em',flexShrink:'0'});
+      t.textContent=g.t;
+      const m=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:'rgba(240,237,232,0.5)',letterSpacing:'.04em'});
+      m.textContent=g.msg;
+      row.appendChild(t); row.appendChild(m); p.appendChild(row);
+    });
+  }
+
+  /* ─ 9: Globe ─ */
+  if(n===9){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    css(cv,{display:'block'}); p.appendChild(cv);
+    const ctx=cv.getContext('2d'); let t=0;
+    const cx=W/2, cy=H/2, R=48;
+    const pins=[{lat:25,lng:55,label:'Dubai'},{lat:57,lng:-2,label:'UK'},{lat:61,lng:2,label:'N.Sea'}];
+    (function loop(){
+      ctx.fillStyle='#02030a'; ctx.fillRect(0,0,W,H);
+      for(let lat=-80;lat<=80;lat+=20){
+        for(let lng=0;lng<360;lng+=15){
+          const phi=(90-lat)*Math.PI/180, theta=(lng+t*20)*Math.PI/180;
+          const x3=R*Math.sin(phi)*Math.cos(theta), y3=R*Math.cos(phi), z3=R*Math.sin(phi)*Math.sin(theta);
+          if(z3>-5){ ctx.beginPath(); ctx.arc(cx+x3,cy-y3,0.8,0,Math.PI*2); ctx.fillStyle=`rgba(96,165,250,${0.2+(z3/R)*0.3})`; ctx.fill(); }
+        }
+      }
+      pins.forEach(pin=>{
+        const phi=(90-pin.lat)*Math.PI/180, theta=(pin.lng+t*20)*Math.PI/180;
+        const x3=R*Math.sin(phi)*Math.cos(theta), y3=R*Math.cos(phi), z3=R*Math.sin(phi)*Math.sin(theta);
+        if(z3>0){
+          ctx.beginPath(); ctx.arc(cx+x3,cy-y3,3,0,Math.PI*2);
+          ctx.fillStyle='#E8820C'; ctx.shadowColor='#E8820C'; ctx.shadowBlur=6; ctx.fill(); ctx.shadowBlur=0;
+          ctx.font="7px 'JetBrains Mono',monospace"; ctx.fillStyle='rgba(240,237,232,0.7)';
+          ctx.fillText(pin.label,cx+x3+5,cy-y3+3);
+        }
+      });
+      t+=0.005; requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ─ 10: P&ID ─ */
+  if(n===10){
+    css(p,{background:'#02030a',display:'flex',alignItems:'center',justifyContent:'center'});
+    p.innerHTML=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+      <line x1="30" y1="65" x2="80" y2="65" stroke="#60a5fa" stroke-width="1.5"/>
+      <rect x="80" y="50" width="30" height="30" fill="none" stroke="#E8820C" stroke-width="1.2"/>
+      <text x="95" y="69" font-family="JetBrains Mono" font-size="7" fill="#E8820C" text-anchor="middle">2015</text>
+      <line x1="110" y1="65" x2="150" y2="65" stroke="#60a5fa" stroke-width="1.5"/>
+      <circle cx="158" cy="65" r="14" fill="none" stroke="#6ee7b7" stroke-width="1.2"/>
+      <text x="158" y="69" font-family="JetBrains Mono" font-size="6" fill="#6ee7b7" text-anchor="middle">WOOD</text>
+      <line x1="172" y1="65" x2="205" y2="65" stroke="#60a5fa" stroke-width="1.5"/>
+      <rect x="205" y="50" width="30" height="30" fill="none" stroke="#fbbf24" stroke-width="1.2"/>
+      <text x="220" y="69" font-family="JetBrains Mono" font-size="6" fill="#fbbf24" text-anchor="middle">EXXON</text>
+      <line x1="235" y1="65" x2="270" y2="65" stroke="#60a5fa" stroke-width="1.5"/>
+      <polygon points="270,55 290,65 270,75" fill="none" stroke="#c4b5fd" stroke-width="1.2"/>
+      <text x="290" y="88" font-family="JetBrains Mono" font-size="6" fill="#c4b5fd" text-anchor="middle">NOW</text>
+      <text x="10" y="30" font-family="JetBrains Mono" font-size="7" fill="rgba(240,237,232,0.35)" letter-spacing="2">P&amp;ID — CAREER FLOW</text>
+    </svg>`;
+  }
+
+  /* ─ 11: Gantt ─ */
+  if(n===11){
+    css(p,{background:'#02030a',padding:'10px 14px',display:'flex',flexDirection:'column',justifyContent:'center',gap:'5px'});
+    const bars=[
+      {label:'Al Habtoor',start:0,len:10,col:'#fbbf24'},
+      {label:'Wood PLC',start:30,len:25,col:'#6ee7b7'},
+      {label:'ExxonMobil',start:50,len:20,col:'#60a5fa'},
+      {label:'Phantom',start:70,len:18,col:'#c4b5fd'},
+      {label:'Freelance',start:82,len:18,col:'#E8820C'},
+    ];
+    bars.forEach(b=>{
+      const row=mk('div',{display:'flex',alignItems:'center',gap:'6px'});
+      const lbl=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:'rgba(240,237,232,0.5)',width:'55px',flexShrink:'0',textAlign:'right'});
+      lbl.textContent=b.label;
+      const track=mk('div',{flex:'1',height:'8px',background:'rgba(255,255,255,0.04)',position:'relative'});
+      const fill=mk('div',{position:'absolute',left:b.start+'%',width:b.len+'%',height:'100%',background:b.col,opacity:'.7'});
+      track.appendChild(fill); row.appendChild(lbl); row.appendChild(track); p.appendChild(row);
+    });
+  }
+
+  /* ─ 12: DNA helix ─ */
+  if(n===12){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    css(cv,{display:'block'}); p.appendChild(cv);
+    const ctx=cv.getContext('2d'); let t=0;
+    (function loop(){
+      ctx.fillStyle='#02030a'; ctx.fillRect(0,0,W,H);
+      const n=16, amp=28, ys=H/2;
+      for(let i=0;i<=n;i++){
+        const x=(i/n)*W, phase=t+(i/n)*Math.PI*4;
+        const y1=ys+Math.sin(phase)*amp, y2=ys-Math.sin(phase)*amp;
+        if(i>0){
+          ctx.beginPath(); ctx.moveTo(((i-1)/n)*W, ys+Math.sin(t+((i-1)/n)*Math.PI*4)*amp);
+          ctx.lineTo(x,y1); ctx.strokeStyle='#E8820C'; ctx.lineWidth=2; ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(((i-1)/n)*W, ys-Math.sin(t+((i-1)/n)*Math.PI*4)*amp);
+          ctx.lineTo(x,y2); ctx.strokeStyle='#60a5fa'; ctx.lineWidth=2; ctx.stroke();
+        }
+        if(i%2===0){
+          ctx.beginPath(); ctx.moveTo(x,y1); ctx.lineTo(x,y2);
+          ctx.strokeStyle='rgba(110,231,183,0.4)'; ctx.lineWidth=1; ctx.stroke();
+          ctx.beginPath(); ctx.arc(x,y1,2.5,0,Math.PI*2); ctx.fillStyle='#E8820C'; ctx.fill();
+          ctx.beginPath(); ctx.arc(x,y2,2.5,0,Math.PI*2); ctx.fillStyle='#60a5fa'; ctx.fill();
+        }
+      }
+      t+=0.04; requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ─ 13: Metrics dashboard ─ */
+  if(n===13){
+    css(p,{background:'#02030a',display:'flex',gap:'6px',padding:'10px',alignItems:'center',justifyContent:'center'});
+    const metrics=[{val:10,label:'YRS EXP',col:'#E8820C'},{val:47,label:'£M BUDGET',col:'#6ee7b7'},{val:5,label:'CERTS',col:'#60a5fa'}];
+    metrics.forEach(m=>{
+      const card=mk('div',{flex:'1',border:'1px solid rgba(255,255,255,0.08)',padding:'8px 6px',textAlign:'center',background:'rgba(255,255,255,0.02)'});
+      const num=mk('div',{fontFamily:"'Bebas Neue',sans-serif",fontSize:'1.8rem',color:m.col,lineHeight:'1'});
+      num.textContent='0';
+      const lbl=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'6px',color:'rgba(240,237,232,0.4)',letterSpacing:'.1em',marginTop:'2px'});
+      lbl.textContent=m.label;
+      card.appendChild(num); card.appendChild(lbl); p.appendChild(card);
+      let cur=0; const step=()=>{ if(cur<m.val){ cur++; num.textContent=cur; setTimeout(step,50); } };
+      setTimeout(step,500);
+    });
+  }
+
+  /* ─ 14: CO2 counter ─ */
+  if(n===14){
+    css(p,{background:'#02030a',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'4px'});
+    const num=mk('div',{fontFamily:"'Bebas Neue',sans-serif",fontSize:'2.5rem',color:'#6ee7b7',letterSpacing:'.05em',lineHeight:'1'});
+    num.textContent='0';
+    const lbl=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'8px',color:'rgba(110,231,183,0.6)',letterSpacing:'.15em'});
+    lbl.textContent='TONNES CO₂ SAVED';
+    p.appendChild(num); p.appendChild(lbl);
+    let c=0; const target=2840;
+    const step=()=>{ if(c<target){ c=Math.min(c+42,target); num.textContent=c.toLocaleString(); requestAnimationFrame(step); } };
+    setTimeout(step,400);
+  }
+
+  /* ─ 15: Radar hover ─ */
+  if(n===15){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    css(cv,{display:'block'}); p.appendChild(cv);
+    const ctx=cv.getContext('2d'); let t=0, hov=0;
+    const axes=6, R=40, cx=W*0.6, cy=H/2;
+    const vals=[0.9,0.85,0.78,0.92,0.75,0.88];
+    (function loop(){
+      ctx.fillStyle='#02030a'; ctx.fillRect(0,0,W,H);
+      hov=(hov+0.02)%axes;
+      for(let i=0;i<axes;i++){
+        const a=(i/axes)*Math.PI*2-Math.PI/2;
+        const glow=Math.abs(Math.sin((hov-i)*Math.PI/2));
+        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);
+        ctx.strokeStyle=`rgba(232,130,12,${0.2+glow*0.6})`; ctx.lineWidth=1+glow; ctx.stroke();
+      }
+      ctx.beginPath();
+      for(let i=0;i<axes;i++){
+        const a=(i/axes)*Math.PI*2-Math.PI/2;
+        const x=cx+Math.cos(a)*R*vals[i], y=cy+Math.sin(a)*R*vals[i];
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.closePath(); ctx.fillStyle='rgba(232,130,12,0.15)'; ctx.fill();
+      ctx.strokeStyle='#E8820C'; ctx.lineWidth=1.5; ctx.stroke();
+      const pill=mk('div'); // draw label on left
+      ctx.font="8px 'JetBrains Mono',monospace"; ctx.fillStyle='rgba(240,237,232,0.5)';
+      ctx.fillText('HOVER SKILL TAG',8,20); ctx.fillText('→ AXIS PULSES',8,32);
+      t+=0.03; requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ─ 16: Heat map ─ */
+  if(n===16){
+    css(p,{background:'#02030a',padding:'8px 10px',overflow:'hidden'});
+    const years=['15','16','17','18','19','20','21','22','23','24','25'];
+    const skills=['PM','ENG','ESG','RISK','TECH'];
+    const data=skills.map(()=>years.map(()=>Math.random()));
+    const table=mk('table',{borderCollapse:'collapse',width:'100%'});
+    skills.forEach((s,si)=>{
+      const tr=document.createElement('tr');
+      const td0=mk('td',{fontFamily:"'JetBrains Mono',monospace",fontSize:'6px',color:'rgba(240,237,232,0.4)',paddingRight:'6px',whiteSpace:'nowrap'});
+      td0.textContent=s; tr.appendChild(td0);
+      years.forEach((y,yi)=>{
+        const v=data[si][yi];
+        const td=mk('td',{width:'16px',height:'14px',background:`rgba(232,130,12,${0.08+v*0.75})`,border:'1px solid rgba(0,0,0,0.3)',cursor:'pointer'});
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+    const yrow=document.createElement('tr');
+    const empty=mk('td'); yrow.appendChild(empty);
+    years.forEach(y=>{ const td=mk('td',{fontFamily:"'JetBrains Mono',monospace",fontSize:'5px',color:'rgba(240,237,232,0.3)',textAlign:'center'}); td.textContent=y; yrow.appendChild(td); });
+    table.appendChild(yrow);
+    p.appendChild(table);
+  }
+
+  /* ─ 17: Heartbeat ─ */
+  if(n===17){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    css(cv,{display:'block'}); p.appendChild(cv);
+    const ctx=cv.getContext('2d'); let offset=0;
+    function ekg(x){ const t=x*0.18; return Math.exp(-Math.pow((t%6.28)-3.14,2)*0.8)*Math.sin((t%6.28)*2)*60; }
+    (function loop(){
+      ctx.fillStyle='rgba(2,3,10,0.15)'; ctx.fillRect(0,0,W,H);
+      ctx.beginPath();
+      for(let x=0;x<W;x++){
+        const y=H/2-ekg(x+offset);
+        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=1.5;
+      ctx.shadowColor='#6ee7b7'; ctx.shadowBlur=4; ctx.stroke(); ctx.shadowBlur=0;
+      ctx.font="8px 'JetBrains Mono',monospace"; ctx.fillStyle='rgba(110,231,183,0.6)';
+      ctx.fillText('● LIVE',W-44,14);
+      offset+=2; requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ─ 18: Schematic transition ─ */
+  if(n===18){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    css(cv,{display:'block'}); p.appendChild(cv);
+    const ctx=cv.getContext('2d'); let prog=0,dir=1;
+    (function loop(){
+      ctx.fillStyle='#02030a'; ctx.fillRect(0,0,W,H);
+      prog+=dir*0.008; if(prog>=1||prog<=0)dir*=-1;
+      const drawLen=prog*W*4;
+      ctx.strokeStyle='rgba(96,165,250,0.5)'; ctx.lineWidth=0.8; ctx.setLineDash([3,4]);
+      const lines=[[0,30,W,30],[0,65,W,65],[0,100,W,100],[40,0,40,H],[W/2,0,W/2,H],[W-40,0,W-40,H]];
+      lines.forEach(([x1,y1,x2,y2])=>{
+        const len=Math.hypot(x2-x1,y2-y1), drawn=Math.min(drawLen,len);
+        ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x1+(x2-x1)*(drawn/len),y1+(y2-y1)*(drawn/len)); ctx.stroke();
+      });
+      ctx.setLineDash([]);
+      ctx.font="7px 'JetBrains Mono',monospace"; ctx.fillStyle='rgba(96,165,250,0.5)';
+      ctx.fillText('SECTION TRANSITION',8,H-10);
+      requestAnimationFrame(loop);
+    })();
+  }
+}
+</script>
+<script>
+/* continue initPreviews for 19-40 */
+const _origInit=initPreviews;
+window.addEventListener('DOMContentLoaded',()=>{});
+(function extendPreviews(){
+  const orig=window.initPreviews||function(){};
+  window.initPreviews=function(){
+    orig();
+    IDEAS.forEach(id=>{ if(id.n>=19) try{ drawThumb2(id.n); }catch(e){} });
+  };
+})();
+
+function drawThumb2(n){
+  const p=document.getElementById('p'+n);
+  if(!p||p.children.length>0)return;
+
+  /* ─ 19: Mission briefing ─ */
+  if(n===19){
+    css(p,{background:'#02030a',padding:'12px 16px',fontFamily:"'JetBrains Mono',monospace"});
+    p.innerHTML=`<div style="border:1px solid rgba(196,181,253,0.3);padding:8px 10px;position:relative">
+      <div style="position:absolute;top:4px;right:6px;font-size:8px;color:rgba(196,181,253,0.5);letter-spacing:.1em;border:1px solid rgba(196,181,253,0.3);padding:1px 4px">CLASSIFIED</div>
+      <div style="font-size:7px;color:rgba(196,181,253,0.6);letter-spacing:.15em;margin-bottom:5px">OPERATIVE DOSSIER · REF: GT-01</div>
+      <div style="font-size:9px;color:#f0ede8;letter-spacing:.05em;margin-bottom:4px">OPERATIVE: SAIF BADAWY</div>
+      <div style="font-size:7px;color:rgba(240,237,232,0.5);margin-bottom:2px">MISSION: DECARBONISE UK ENERGY INFRASTRUCTURE</div>
+      <div style="font-size:7px;color:#6ee7b7;letter-spacing:.1em">STATUS: ● ONGOING</div>
+    </div>`;
+  }
+
+  /* ─ 20: Horizontal chapters ─ */
+  if(n===20){
+    css(p,{background:'#02030a',display:'flex',alignItems:'stretch',overflow:'hidden',gap:'0'});
+    const chaps=[{year:'2015',title:'FIRST CONTACT',col:'#fbbf24'},{year:'2020',title:'NORTH SEA',col:'#60a5fa'},{year:'2022',title:'SCALE UP',col:'#6ee7b7'}];
+    chaps.forEach((c,i)=>{
+      const ch=mk('div',{flex:'0 0 33.33%',borderRight:'1px solid rgba(255,255,255,0.05)',padding:'12px 10px',display:'flex',flexDirection:'column',justifyContent:'flex-end',position:'relative',overflow:'hidden'});
+      const bg=mk('div',{position:'absolute',inset:'0',background:`linear-gradient(135deg,${c.col}08,transparent)`,pointerEvents:'none'});
+      ch.appendChild(bg);
+      const yr=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:c.col,letterSpacing:'.15em',marginBottom:'3px',position:'relative'});
+      yr.textContent=c.year;
+      const tt=mk('div',{fontFamily:"'Bebas Neue',sans-serif",fontSize:'1rem',letterSpacing:'.05em',color:'#f0ede8',position:'relative',lineHeight:'1.1'});
+      tt.textContent=c.title;
+      ch.appendChild(yr); ch.appendChild(tt); p.appendChild(ch);
+    });
+    const arr=mk('div',{position:'absolute',right:'8px',top:'50%',transform:'translateY(-50%)',fontFamily:"'JetBrains Mono',monospace",fontSize:'12px',color:'rgba(232,130,12,0.6)'});
+    arr.textContent='→'; p.style.position='relative'; p.appendChild(arr);
+  }
+
+  /* ─ 21: Before / After ─ */
+  if(n===21){
+    css(p,{background:'#02030a',position:'relative',overflow:'hidden',cursor:'col-resize'});
+    let split=50;
+    const before=mk('div',{position:'absolute',inset:'0',background:'linear-gradient(135deg,#1a0a02,#0d0d0d)',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:'4px'});
+    before.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(255,80,60,0.7);letter-spacing:.12em">BEFORE</div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(240,237,232,0.4)">Project in crisis</div>`;
+    const after=mk('div',{position:'absolute',inset:'0',background:'linear-gradient(135deg,#02100a,#0d0d0d)',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:'4px'});
+    after.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:#6ee7b7;letter-spacing:.12em">AFTER</div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(240,237,232,0.4)">Delivered on time</div>`;
+    const handle=mk('div',{position:'absolute',top:'0',bottom:'0',width:'2px',background:'#E8820C',cursor:'col-resize',zIndex:'3'});
+    const mask=mk('div',{position:'absolute',inset:'0',zIndex:'2',pointerEvents:'none',background:'#02030a'});
+    p.appendChild(before); p.appendChild(after); p.appendChild(mask); p.appendChild(handle);
+    function update(s){ handle.style.left=s+'%'; mask.style.clipPath=`inset(0 ${100-s}% 0 0)`; after.style.clipPath=`inset(0 0 0 ${s}%)`; }
+    update(40);
+    p.addEventListener('mousemove',e=>{ const r=p.getBoundingClientRect(); update(Math.max(10,Math.min(90,((e.clientX-r.left)/r.width)*100))); });
+  }
+
+  /* ─ 22: Redacted reveals ─ */
+  if(n===22){
+    css(p,{background:'#02030a',padding:'16px',display:'flex',flexDirection:'column',gap:'10px',justifyContent:'center'});
+    const items=[
+      {pre:'Managed',val:'£47M budget',post:'across 3 sites'},
+      {pre:'Delivered',val:'23% under cost',post:'on schedule'},
+    ];
+    items.forEach(item=>{
+      const row=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'9px',color:'rgba(240,237,232,0.7)',lineHeight:'1.6'});
+      const redact=mk('span',{background:'rgba(240,237,232,0.85)',color:'transparent',borderRadius:'2px',padding:'0 4px',cursor:'pointer',transition:'all .3s',userSelect:'none'});
+      redact.textContent=item.val;
+      redact.onmouseenter=()=>{ css(redact,{background:'rgba(232,130,12,0.15)',color:'#E8820C'}); };
+      redact.onmouseleave=()=>{ css(redact,{background:'rgba(240,237,232,0.85)',color:'transparent'}); };
+      row.appendChild(document.createTextNode(item.pre+' '));
+      row.appendChild(redact);
+      row.appendChild(document.createTextNode(' '+item.post));
+      p.appendChild(row);
+    });
+    const hint=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:'rgba(240,237,232,0.25)',letterSpacing:'.1em'});
+    hint.textContent='hover to declassify'; p.appendChild(hint);
+  }
+
+  /* ─ 23: Letter ─ */
+  if(n===23){
+    css(p,{background:'#02030a',padding:'12px 14px'});
+    p.innerHTML=`<div style="border-left:2px solid rgba(232,130,12,0.4);padding-left:10px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:6px;color:rgba(232,130,12,0.6);letter-spacing:.15em;margin-bottom:6px">PRIVATE · FOR RECRUITERS ONLY</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:8px;color:rgba(240,237,232,0.7);line-height:1.6;font-style:italic">"If you've made it this far, you're probably not filling a box on a spreadsheet. Neither am I. Let's talk properly..."</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(232,130,12,0.6);margin-top:6px">— Saif</div>
+    </div>`;
+  }
+
+  /* ─ 24: Time-lapse ─ */
+  if(n===24){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    css(cv,{display:'block'}); p.appendChild(cv);
+    const ctx=cv.getContext('2d');
+    const stops=[{x:0.78,y:0.45,yr:'2015',col:'#fbbf24'},{x:0.70,y:0.25,yr:'2020',col:'#60a5fa'},{x:0.68,y:0.22,yr:'2022',col:'#6ee7b7'},{x:0.70,y:0.24,yr:'2024',col:'#c4b5fd'},{x:0.72,y:0.20,yr:'2025',col:'#E8820C'}];
+    let shown=0;
+    (function draw(){
+      ctx.fillStyle='#02030a'; ctx.fillRect(0,0,W,H);
+      ctx.font="7px 'JetBrains Mono',monospace"; ctx.fillStyle='rgba(240,237,232,0.2)';
+      ctx.fillText('CAREER PATH 2015 → 2025',8,14);
+      for(let i=1;i<shown;i++){
+        const a=stops[i-1], b=stops[i];
+        ctx.beginPath(); ctx.moveTo(a.x*W,a.y*H); ctx.lineTo(b.x*W,b.y*H);
+        ctx.strokeStyle='rgba(232,130,12,0.4)'; ctx.lineWidth=1.5; ctx.setLineDash([3,4]); ctx.stroke(); ctx.setLineDash([]);
+      }
+      for(let i=0;i<shown;i++){
+        const s=stops[i];
+        ctx.beginPath(); ctx.arc(s.x*W,s.y*H,4,0,Math.PI*2);
+        ctx.fillStyle=s.col; ctx.shadowColor=s.col; ctx.shadowBlur=8; ctx.fill(); ctx.shadowBlur=0;
+        ctx.font="7px 'JetBrains Mono',monospace"; ctx.fillStyle=s.col;
+        ctx.fillText(s.yr,s.x*W+6,s.y*H-4);
+      }
+    })();
+    let idx=0;
+    setInterval(()=>{ if(idx<stops.length){ idx++; shown=idx; draw(); } else { idx=0; shown=0; } },600);
+  }
+
+  /* ─ 25: Split view toggle ─ */
+  if(n===25){
+    css(p,{background:'#02030a',display:'flex',flexDirection:'column',padding:'8px'});
+    const tabs=mk('div',{display:'flex',gap:'4px',marginBottom:'6px'});
+    ['TECHNICAL','BUSINESS'].forEach((t,i)=>{
+      const btn=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',letterSpacing:'.1em',padding:'3px 8px',border:'1px solid rgba(255,255,255,0.12)',color:i===0?'#E8820C':'rgba(240,237,232,0.4)',borderColor:i===0?'rgba(232,130,12,0.4)':'rgba(255,255,255,0.08)',cursor:'pointer',transition:'all .2s'});
+      btn.textContent=t; tabs.appendChild(btn);
+    });
+    p.appendChild(tabs);
+    const content=mk('div',{border:'1px solid rgba(255,255,255,0.06)',padding:'8px',flex:'1'});
+    content.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(232,130,12,0.7);margin-bottom:4px">ASME B31.3 · API 650 · HAZOP · SIL 2</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,237,232,0.5)">Delivery framework: PRINCE2 + EVM<br>Risk register: 48 items mitigated</div>`;
+    p.appendChild(content);
+    let active=0;
+    const views=[
+      `<div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(232,130,12,0.7);margin-bottom:4px">ASME B31.3 · API 650 · HAZOP · SIL 2</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,237,232,0.5)">Delivery: PRINCE2 + EVM<br>Risk register: 48 mitigated</div>`,
+      `<div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(110,231,183,0.7);margin-bottom:4px">£47M BUDGET · 14% UNDER</div><div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,237,232,0.5)">3 stakeholder groups aligned<br>Delivered 6 weeks early</div>`
+    ];
+    tabs.querySelectorAll('div').forEach((btn,i)=>{
+      btn.onclick=()=>{ active=i; content.innerHTML=views[i]; tabs.querySelectorAll('div').forEach((b,j)=>{ b.style.color=j===i?'#E8820C':'rgba(240,237,232,0.4)'; b.style.borderColor=j===i?'rgba(232,130,12,0.4)':'rgba(255,255,255,0.08)'; }); };
+    });
+  }
+
+  /* ─ 26: Day clock ─ */
+  if(n===26){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    css(cv,{display:'block'}); p.appendChild(cv);
+    const ctx=cv.getContext('2d'); let t=0;
+    const segments=[
+      {start:7,end:9,col:'#fbbf24',label:'Site visit'},
+      {start:9,end:12,col:'#60a5fa',label:'Stakeholders'},
+      {start:12,end:13,col:'rgba(255,255,255,0.1)',label:''},
+      {start:13,end:16,col:'#E8820C',label:'Risk reviews'},
+      {start:16,end:18,col:'#6ee7b7',label:'Reporting'},
+      {start:18,end:22,col:'rgba(255,255,255,0.05)',label:''},
+    ];
+    const cx=W*0.38, cy=H/2, R=42;
+    (function loop(){
+      ctx.fillStyle='#02030a'; ctx.fillRect(0,0,W,H);
+      segments.forEach(s=>{
+        const a1=(s.start/24)*Math.PI*2-Math.PI/2, a2=(s.end/24)*Math.PI*2-Math.PI/2;
+        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,a1,a2); ctx.closePath();
+        ctx.fillStyle=s.col; ctx.fill();
+      });
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.strokeStyle='rgba(255,255,255,0.1)'; ctx.lineWidth=1; ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy,12,0,Math.PI*2); ctx.fillStyle='#02030a'; ctx.fill();
+      const hr=((t*2+8)%24), a=(hr/24)*Math.PI*2-Math.PI/2;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a)*R*0.75,cy+Math.sin(a)*R*0.75);
+      ctx.strokeStyle='#f0ede8'; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.font="7px 'JetBrains Mono',monospace"; ctx.fillStyle='rgba(240,237,232,0.5)';
+      let ly=14;
+      [{col:'#fbbf24',l:'Site'},{col:'#60a5fa',l:'Meetings'},{col:'#E8820C',l:'Risk'},{col:'#6ee7b7',l:'Reports'}].forEach(s=>{ ctx.fillStyle=s.col; ctx.fillText('▪ '+s.l,W*0.65,ly); ly+=12; });
+      t+=0.01; requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ─ 27: Case study overlay ─ */
+  if(n===27){
+    css(p,{background:'#02030a',display:'flex',flexDirection:'column'});
+    const bg=mk('div',{flex:'1',background:'linear-gradient(135deg,#0a0f1a,#060810)',display:'flex',alignItems:'center',justifyContent:'center',position:'relative',overflow:'hidden'});
+    const content=mk('div',{padding:'10px 14px',zIndex:'1',position:'relative'});
+    content.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:6px;color:rgba(232,130,12,0.6);letter-spacing:.15em;margin-bottom:4px">PROJECT CASE STUDY · EXXONMOBIL 2021</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.05em;color:#f0ede8;margin-bottom:4px">NORTH SEA DECOMMISSION</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,237,232,0.4);line-height:1.5">Challenge · Approach · Outcome · Specs</div>`;
+    const overlay=mk('div',{position:'absolute',inset:'0',background:'linear-gradient(to top,#02030a,transparent)',pointerEvents:'none'});
+    bg.appendChild(content); bg.appendChild(overlay); p.appendChild(bg);
+    const btn=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',letterSpacing:'.12em',color:'#E8820C',padding:'5px 12px',borderTop:'1px solid rgba(232,130,12,0.15)',background:'rgba(232,130,12,0.04)',cursor:'pointer'});
+    btn.textContent='↗ OPEN FULL CASE STUDY'; p.appendChild(btn);
+  }
+
+  /* ─ 28: Match JD ─ */
+  if(n===28){
+    css(p,{background:'#02030a',padding:'10px 12px',display:'flex',flexDirection:'column',gap:'6px',justifyContent:'center'});
+    const ta=mk('textarea',{width:'100%',height:'38px',background:'rgba(255,255,255,0.03)',border:'1px solid rgba(255,255,255,0.1)',color:'rgba(240,237,232,0.6)',fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',padding:'5px',resize:'none',outline:'none'});
+    ta.placeholder='Paste job description here...'; p.appendChild(ta);
+    const text=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'8px',lineHeight:'1.7',color:'rgba(240,237,232,0.7)'});
+    text.innerHTML=`Required: <span style="background:rgba(232,130,12,0.25);color:#E8820C;padding:0 3px">PRINCE2</span>, <span style="background:rgba(232,130,12,0.25);color:#E8820C;padding:0 3px">Risk Management</span>, <span style="background:rgba(232,130,12,0.25);color:#E8820C;padding:0 3px">P6</span> experience`;
+    p.appendChild(text);
+  }
+
+  /* ─ 29: Build brief ─ */
+  if(n===29){
+    css(p,{background:'#02030a',padding:'10px 12px',display:'flex',flexDirection:'column',gap:'6px',justifyContent:'center'});
+    [['INDUSTRY','Oil & Gas','Renewables','Construction'],['PROJECT SIZE','£1M–10M','£10M–100M','£100M+']].forEach(([label,...opts])=>{
+      const row=mk('div',{display:'flex',gap:'4px',alignItems:'center'});
+      const lbl=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'6px',color:'rgba(240,237,232,0.4)',letterSpacing:'.1em',width:'60px',flexShrink:'0'});
+      lbl.textContent=label;
+      row.appendChild(lbl);
+      opts.forEach((o,i)=>{
+        const btn=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'6px',padding:'2px 6px',border:'1px solid rgba(255,255,255,0.1)',color:i===0?'#E8820C':'rgba(240,237,232,0.4)',borderColor:i===0?'rgba(232,130,12,0.4)':'rgba(255,255,255,0.08)',cursor:'pointer'});
+        btn.textContent=o; row.appendChild(btn);
+      });
+      p.appendChild(row);
+    });
+    const result=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:'#6ee7b7',marginTop:'4px',letterSpacing:'.05em'});
+    result.textContent='↳ Highlighting 3 matching experience cards...'; p.appendChild(result);
+  }
+
+  /* ─ 30: Recruiter pack ─ */
+  if(n===30){
+    css(p,{background:'#02030a',padding:'12px 14px',display:'flex',flexDirection:'column',gap:'6px',justifyContent:'center'});
+    const files=[{icon:'📄',name:'CV_Saif_Badawy_2025.pdf',col:'#60a5fa'},{icon:'📋',name:'90_Day_Plan.pdf',col:'#6ee7b7'},{icon:'📊',name:'ExxonMobil_Case_Study.pdf',col:'#c4b5fd'}];
+    files.forEach(f=>{
+      const row=mk('div',{display:'flex',alignItems:'center',gap:'6px'});
+      const ico=mk('div',{fontSize:'10px',lineHeight:'1',width:'14px',textAlign:'center'}); ico.textContent='▪';
+      ico.style.color=f.col;
+      const nm=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:'rgba(240,237,232,0.5)'}); nm.textContent=f.name;
+      row.appendChild(ico); row.appendChild(nm); p.appendChild(row);
+    });
+    const btn=mk('div',{fontFamily:"'Bebas Neue',sans-serif",fontSize:.9+'rem',letterSpacing:'.12em',background:'#E8820C',color:'#07080e',padding:'6px 14px',textAlign:'center',marginTop:'4px',cursor:'pointer'});
+    btn.textContent='⬇ DOWNLOAD ALL (1 CLICK)'; p.appendChild(btn);
+  }
+
+  /* ─ 31: Availability badge ─ */
+  if(n===31){
+    css(p,{background:'#02030a',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:'8px'});
+    const badge=mk('div',{border:'1px solid rgba(110,231,183,0.4)',padding:'10px 20px',textAlign:'center',background:'rgba(110,231,183,0.04)'});
+    badge.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(110,231,183,0.6);letter-spacing:.2em;margin-bottom:4px">● CURRENTLY AVAILABLE</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.1em;color:#f0ede8">FROM 01 JUN 2025</div>`;
+    p.appendChild(badge);
+    const cd=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:'rgba(240,237,232,0.35)',letterSpacing:'.1em'});
+    cd.textContent='37 DAYS REMAINING'; p.appendChild(cd);
+  }
+
+  /* ─ 32: ROI calculator ─ */
+  if(n===32){
+    css(p,{background:'#02030a',padding:'10px 14px',display:'flex',flexDirection:'column',gap:'8px',justifyContent:'center'});
+    const lbl=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:'rgba(240,237,232,0.4)',letterSpacing:'.1em'});
+    lbl.textContent='PROJECT BUDGET (£M)';
+    const slider=mk('input',{width:'100%',accentColor:'#E8820C'});
+    slider.type='range'; slider.min='1'; slider.max='100'; slider.value='47';
+    const result=mk('div',{fontFamily:"'Bebas Neue',sans-serif",fontSize:'1.8rem',color:'#6ee7b7',letterSpacing:'.05em',lineHeight:'1'});
+    result.textContent='£5.2M SAVED';
+    slider.oninput=()=>{ result.textContent='£'+((+slider.value)*0.11).toFixed(1)+'M SAVED'; };
+    p.appendChild(lbl); p.appendChild(slider); p.appendChild(result);
+  }
+
+  /* ─ 33: Smart 90-day ─ */
+  if(n===33){
+    css(p,{background:'#02030a',padding:'10px 12px',display:'flex',flexDirection:'column',gap:'5px',justifyContent:'center'});
+    [['Industry','Oil & Gas ▾'],['Top Challenge','Safety Culture ▾'],['Team Size','50+ Engineers ▾']].forEach(([l,v])=>{
+      const row=mk('div',{display:'flex',alignItems:'center',justifyContent:'space-between',border:'1px solid rgba(255,255,255,0.07)',padding:'4px 8px'});
+      const lbl=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:'rgba(240,237,232,0.4)',letterSpacing:'.08em'}); lbl.textContent=l;
+      const val=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:'#E8820C'}); val.textContent=v;
+      row.appendChild(lbl); row.appendChild(val); p.appendChild(row);
+    });
+    const btn=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'7px',color:'#6ee7b7',padding:'4px 8px',border:'1px solid rgba(110,231,183,0.3)',textAlign:'center',marginTop:'2px',cursor:'pointer'});
+    btn.textContent='↗ GENERATE CUSTOM PLAN'; p.appendChild(btn);
+  }
+
+  /* ─ 34: Notify ─ */
+  if(n===34){
+    css(p,{background:'#02030a',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:'10px',padding:'16px'});
+    const box=mk('div',{border:'1px solid var(--border)',padding:'12px 14px',width:'100%',background:'rgba(255,255,255,0.01)'});
+    box.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,237,232,0.4);letter-spacing:.12em;margin-bottom:8px">NOT HIRING NOW? GET NOTIFIED.</div>
+    <div style="display:flex;gap:4px">
+      <div style="flex:1;border:1px solid rgba(255,255,255,0.1);padding:4px 8px;font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(240,237,232,0.4)">your@email.com</div>
+      <div style="background:#E8820C;color:#07080e;font-family:'JetBrains Mono',monospace;font-size:7px;padding:4px 8px;cursor:pointer">NOTIFY</div>
+    </div>`;
+    p.appendChild(box);
+  }
+
+  /* ─ 35: HIRE ME confetti ─ */
+  if(n===35){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    css(cv,{display:'block'}); p.appendChild(cv);
+    const ctx=cv.getContext('2d');
+    let particles=[];
+    function burst(){ particles=[]; for(let i=0;i<60;i++) particles.push({x:W/2,y:H/2,vx:(Math.random()-0.5)*8,vy:(Math.random()-0.5)*8-3,col:['#E8820C','#F5A623','#fbbf24','#6ee7b7','#60a5fa','#c4b5fd'][Math.floor(Math.random()*6)],life:1,r:Math.random()*4+2}); }
+    burst(); setInterval(burst,2200);
+    ctx.font="bold 11px 'JetBrains Mono',monospace"; ctx.fillStyle='#E8820C'; ctx.textAlign='center';
+    ctx.fillText('TYPE "HIRE ME" ANYWHERE',W/2,H-12);
+    (function loop(){
+      ctx.fillStyle='rgba(2,3,10,0.25)'; ctx.fillRect(0,0,W,H);
+      particles.forEach((pt,i)=>{
+        pt.x+=pt.vx; pt.y+=pt.vy; pt.vy+=0.15; pt.life-=0.018;
+        if(pt.life<0)return;
+        ctx.globalAlpha=pt.life; ctx.beginPath(); ctx.arc(pt.x,pt.y,pt.r,0,Math.PI*2);
+        ctx.fillStyle=pt.col; ctx.fill(); ctx.globalAlpha=1;
+      });
+      ctx.font="bold 11px 'JetBrains Mono',monospace"; ctx.fillStyle='rgba(232,130,12,0.7)';
+      ctx.textAlign='center'; ctx.fillText('TYPE "HIRE ME" ANYWHERE',W/2,H-10);
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ─ 36: Terminal mode ─ */
+  if(n===36){
+    css(p,{background:'#010308',padding:'10px 12px',fontFamily:"'JetBrains Mono',monospace",fontSize:'8px',overflow:'hidden'});
+    const lines=['$ saif --mode=terminal','> Loading portfolio CLI...','','$ experience','↳ 10 years · 5 roles · 4 countries','','$ skills','↳ PRINCE2 · HAZOP · Primavera P6','','$ download cv ▮'];
+    p.innerHTML='';
+    lines.forEach((l,i)=>{
+      const d=mk('div',{color:l.startsWith('$')?'#E8820C':l.startsWith('>')?'#6ee7b7':l.startsWith('↳')?'rgba(240,237,232,0.6)':'rgba(240,237,232,0.3)',lineHeight:'1.6',opacity:'0',transition:'opacity .2s'});
+      d.textContent=l||' '; p.appendChild(d);
+      setTimeout(()=>d.style.opacity='1',i*120+200);
+    });
+  }
+
+  /* ─ 37: Section cursors ─ */
+  if(n===37){
+    css(p,{background:'#02030a',display:'flex',alignItems:'stretch',gap:'0'});
+    const sections=[
+      {label:'SKILLS',cursor:'⊕',col:'#60a5fa',desc:'crosshair'},
+      {label:'EXPERIENCE',cursor:'⚙',col:'#E8820C',desc:'wrench'},
+      {label:'PROJECTS',cursor:'⚡',col:'#fbbf24',desc:'spark'},
+    ];
+    sections.forEach(s=>{
+      const col=mk('div',{flex:'1',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'6px',borderRight:'1px solid rgba(255,255,255,0.05)',padding:'10px 6px'});
+      const icon=mk('div',{fontSize:'20px',lineHeight:'1',filter:'grayscale(0)'}); icon.textContent=s.cursor; icon.style.color=s.col;
+      const lbl=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'6px',color:s.col,letterSpacing:'.1em'}); lbl.textContent=s.label;
+      const sub=mk('div',{fontFamily:"'JetBrains Mono',monospace",fontSize:'5px',color:'rgba(240,237,232,0.3)'}); sub.textContent=s.desc;
+      col.appendChild(icon); col.appendChild(lbl); col.appendChild(sub); p.appendChild(col);
+    });
+  }
+
+  /* ─ 38: Social proof ─ */
+  if(n===38){
+    css(p,{background:'#02030a',display:'flex',alignItems:'flex-start',justifyContent:'flex-end',padding:'10px',flexDirection:'column',gap:'8px'});
+    const badge=mk('div',{display:'inline-flex',alignItems:'center',gap:'6px',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.1)',padding:'5px 10px'});
+    badge.innerHTML=`<span style="width:6px;height:6px;border-radius:50%;background:#6ee7b7;box-shadow:0 0 6px #6ee7b7;flex-shrink:0"></span><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(240,237,232,0.7);letter-spacing:.06em">4 recruiters viewed today</span>`;
+    const badge2=mk('div',{display:'inline-flex',alignItems:'center',gap:'6px',background:'rgba(232,130,12,0.05)',border:'1px solid rgba(232,130,12,0.2)',padding:'5px 10px'});
+    badge2.innerHTML=`<span style="width:6px;height:6px;border-radius:50%;background:#E8820C;flex-shrink:0"></span><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(232,130,12,0.8);letter-spacing:.06em">12 views this week</span>`;
+    p.appendChild(badge); p.appendChild(badge2);
+  }
+
+  /* ─ 39: Equation parallax ─ */
+  if(n===39){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    css(cv,{display:'block'}); p.appendChild(cv);
+    const ctx=cv.getContext('2d'); let t=0;
+    const eqs=[{t:'P₁ + ½ρv₁² = P₂ + ½ρv₂²',x:0.1,y:0.2,spd:0.3,a:0.15},{t:'σ = F/A',x:0.5,y:0.5,spd:0.5,a:0.2},{t:'Q = mcΔT',x:0.2,y:0.75,spd:0.4,a:0.12},{t:'ΔG = ΔH − TΔS',x:0.55,y:0.3,spd:0.35,a:0.18},{t:'F = ma',x:0.7,y:0.7,spd:0.6,a:0.2}];
+    (function loop(){
+      ctx.fillStyle='#02030a'; ctx.fillRect(0,0,W,H);
+      eqs.forEach((e,i)=>{
+        const y=((e.y+t*e.spd*0.01)%1)*H;
+        ctx.font=`9px 'JetBrains Mono',monospace`; ctx.fillStyle=`rgba(96,165,250,${e.a})`; ctx.textAlign='left';
+        ctx.fillText(e.t,e.x*W,y);
+      });
+      ctx.font="8px 'JetBrains Mono',monospace"; ctx.fillStyle='rgba(240,237,232,0.3)'; ctx.textAlign='center';
+      ctx.fillText('equations drift at different depths',W/2,H-8);
+      t+=0.5; requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ─ 40: Dark/light dual personality ─ */
+  if(n===40){
+    css(p,{display:'flex',overflow:'hidden'});
+    const dark=mk('div',{flex:'1',background:'#07080e',padding:'10px',borderRight:'1px solid rgba(232,130,12,0.3)'});
+    dark.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:6px;color:rgba(232,130,12,0.6);letter-spacing:.15em;margin-bottom:4px">DARK · EXPLORER</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:#f0ede8;letter-spacing:.05em">SAIF BADAWY</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:6px;color:rgba(240,237,232,0.4);margin-top:4px">Engineering PM · 10 years</div>
+    <div style="width:100%;height:1px;background:rgba(232,130,12,0.3);margin:6px 0"></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:5px;color:rgba(240,237,232,0.25);letter-spacing:.08em">BLUEPRINT CANVAS · AMBER ACCENTS</div>`;
+    const light=mk('div',{flex:'1',background:'#f8f6f1',padding:'10px'});
+    light.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:6px;color:#888;letter-spacing:.12em;margin-bottom:4px">LIGHT · RECRUITER</div>
+    <div style="font-family:'Georgia',serif;font-size:.9rem;color:#111;letter-spacing:.02em">Saif Badawy</div>
+    <div style="font-family:'Georgia',serif;font-size:6px;color:#555;margin-top:3px">Engineering Project Manager</div>
+    <div style="width:100%;height:1px;background:#ddd;margin:6px 0"></div>
+    <div style="font-family:'Georgia',serif;font-size:5px;color:#aaa">Clean · Traditional · CV-style</div>`;
+    p.appendChild(dark); p.appendChild(light);
+  }
+}
+
+/* Patch init to call both sets */
+const _baseInit=initPreviews;
+initPreviews=function(){ IDEAS.forEach(id=>{ try{ drawThumb(id.n); }catch(e){} try{ drawThumb2(id.n); }catch(e){} }); };
+setTimeout(initPreviews,200);
+</script>
+<script>
+/* ══════════════════════════════════════════
+   MODAL SCENES — full interactive previews
+══════════════════════════════════════════ */
+function buildModalScene(n, sc){
+  const idea=IDEAS.find(i=>i.n===n);
+  sc.style.minHeight='380px';
+
+  /* helpers */
+  const div=(s,h)=>{ const e=document.createElement('div'); if(s)Object.assign(e.style,s); if(h)e.innerHTML=h; return e; };
+  const W=sc.offsetWidth||820, H=380;
+
+  if(n===1){
+    Object.assign(sc.style,{background:'#010308',padding:'40px 60px',display:'flex',flexDirection:'column',justifyContent:'center',gap:'8px'});
+    const lines=[
+      {t:'> INITIALISING SAIF BADAWY PORTFOLIO v2025',c:'rgba(240,237,232,0.5)'},
+      {t:'> CHECKING HERO MODULE................. ✓',c:'#6ee7b7'},
+      {t:'> LOADING EXPERIENCE DATA............. ✓',c:'#6ee7b7'},
+      {t:'> CALIBRATING SKILLS ENGINE........... ✓',c:'#6ee7b7'},
+      {t:'> VERIFYING PROJECTS MODULE........... ✓',c:'#6ee7b7'},
+      {t:'> CONNECTING CONTACT INTERFACE........ ✓',c:'#6ee7b7'},
+      {t:'',c:''},
+      {t:'> ALL SYSTEMS OPERATIONAL.',c:'#E8820C'},
+      {t:'> LAUNCHING PORTFOLIO...',c:'#E8820C'},
+    ];
+    lines.forEach((l,i)=>{
+      const d=div({fontFamily:"'JetBrains Mono',monospace",fontSize:'13px',color:l.c,letterSpacing:'.06em',opacity:'0',transition:'opacity .25s'});
+      d.textContent=l.t||' '; sc.appendChild(d);
+      setTimeout(()=>d.style.opacity='1',i*220+300);
+    });
+    setTimeout(()=>{
+      sc.style.transition='opacity .6s'; sc.style.opacity='0';
+      setTimeout(()=>{ sc.style.opacity='1'; sc.style.background='#07080e'; sc.innerHTML='';
+        const d=div({fontFamily:"'Bebas Neue',sans-serif",fontSize:'3rem',color:'#f0ede8',textAlign:'center',paddingTop:'80px',letterSpacing:'.1em'});
+        d.textContent='SAIF BADAWY'; sc.appendChild(d); }, 700);
+    }, lines.length*220+600);
+  }
+
+  else if(n===6){
+    Object.assign(sc.style,{background:'#07080e',display:'flex',alignItems:'center',justifyContent:'center'});
+    const d=div({fontFamily:"'Bebas Neue',sans-serif",fontSize:'3.5rem',letterSpacing:'.08em',color:'#E8820C',userSelect:'none'});
+    d.textContent='SAIF BADAWY'; sc.appendChild(d);
+    const chars='!@#$%^&*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const target='SAIF BADAWY'; let f=0;
+    const iv=setInterval(()=>{ if(f>60)f=0; const pr=f/60; d.textContent=target.split('').map((c,i)=>c===' '?' ':Math.random()<pr?c:chars[Math.floor(Math.random()*chars.length)]).join(''); f+=2; },40);
+    modalRaf={cancel:()=>clearInterval(iv)};
+  }
+
+  else if(n===9){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H; cv.style.display='block'; sc.appendChild(cv);
+    const ctx=cv.getContext('2d'); let t=0;
+    const R=120, cx=W/2, cy=H/2;
+    const pins=[{lat:25,lng:55,label:'Al Habtoor · Dubai 2015',col:'#fbbf24'},{lat:57,lng:-3,label:'Wood PLC · Aberdeen 2022',col:'#6ee7b7'},{lat:61,lng:2,label:'ExxonMobil · North Sea 2021',col:'#60a5fa'},{lat:51.5,lng:-.1,label:'Freelance · London 2025',col:'#E8820C'}];
+    function loop(){
+      ctx.fillStyle='#04050a'; ctx.fillRect(0,0,W,H);
+      for(let lat=-80;lat<=80;lat+=15){ for(let lng=0;lng<360;lng+=10){
+        const phi=(90-lat)*Math.PI/180, theta=(lng+t*15)*Math.PI/180;
+        const x3=R*Math.sin(phi)*Math.cos(theta), y3=R*Math.cos(phi), z3=R*Math.sin(phi)*Math.sin(theta);
+        if(z3>-5){ ctx.beginPath(); ctx.arc(cx+x3,cy-y3,1,0,Math.PI*2); ctx.fillStyle=`rgba(96,165,250,${0.15+(z3/R)*0.25})`; ctx.fill(); }
+      }}
+      pins.forEach(pin=>{
+        const phi=(90-pin.lat)*Math.PI/180, theta=(pin.lng+t*15)*Math.PI/180;
+        const x3=R*Math.sin(phi)*Math.cos(theta), y3=R*Math.cos(phi), z3=R*Math.sin(phi)*Math.sin(theta);
+        if(z3>0){
+          ctx.beginPath(); ctx.arc(cx+x3,cy-y3,5,0,Math.PI*2);
+          ctx.fillStyle=pin.col; ctx.shadowColor=pin.col; ctx.shadowBlur=10; ctx.fill(); ctx.shadowBlur=0;
+          ctx.font="10px 'JetBrains Mono',monospace"; ctx.fillStyle=pin.col;
+          ctx.fillText(pin.label,cx+x3+8,cy-y3+4);
+        }
+      });
+      t+=0.004; modalRaf=requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  else if(n===13){
+    Object.assign(sc.style,{background:'#04050a',display:'flex',gap:'1px',padding:'30px'});
+    const metrics=[
+      {label:'YEARS EXPERIENCE',val:10,suffix:'',col:'#E8820C'},
+      {label:'PROJECTS DELIVERED',val:24,suffix:'',col:'#6ee7b7'},
+      {label:'BUDGET MANAGED',val:47,suffix:'M+',col:'#60a5fa'},
+      {label:'CERTIFICATIONS',val:8,suffix:'',col:'#c4b5fd'},
+    ];
+    metrics.forEach(m=>{
+      const card=div({flex:'1',border:'1px solid rgba(255,255,255,0.06)',background:'rgba(255,255,255,0.02)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'30px 10px',gap:'8px'});
+      const num=div({fontFamily:"'Bebas Neue',sans-serif",fontSize:'3.5rem',color:m.col,lineHeight:'1'}); num.textContent='0';
+      const lbl=div({fontFamily:"'JetBrains Mono',monospace",fontSize:'8px',color:'rgba(240,237,232,0.4)',letterSpacing:'.14em',textAlign:'center'}); lbl.textContent=m.label;
+      card.appendChild(num); card.appendChild(lbl); sc.appendChild(card);
+      let c=0; const step=()=>{ if(c<m.val){ c++; num.textContent=c+m.suffix; setTimeout(step,60); } };
+      setTimeout(step,600);
+    });
+  }
+
+  else if(n===21){
+    Object.assign(sc.style,{position:'relative',overflow:'hidden',cursor:'col-resize',userSelect:'none'});
+    const before=div({position:'absolute',inset:'0',background:'linear-gradient(135deg,#1a0805,#0c0909)',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:'12px'});
+    before.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,80,60,0.7);letter-spacing:.2em">BEFORE INTERVENTION</div><div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:rgba(240,237,232,0.5)">PROJECT IN CRISIS</div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(240,237,232,0.3)">+18% over budget · 6 weeks behind · 3 disputes open</div>`;
+    const after=div({position:'absolute',inset:'0',background:'linear-gradient(135deg,#021208,#050c0a)',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:'12px'});
+    after.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6ee7b7;letter-spacing:.2em">AFTER — SAIF BADAWY</div><div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#f0ede8">DELIVERED ON TIME</div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(110,231,183,0.6)">14% under budget · 2 weeks early · all disputes resolved</div>`;
+    const handle=div({position:'absolute',top:'0',bottom:'0',width:'3px',background:'#E8820C',cursor:'col-resize',zIndex:'3'});
+    handle.innerHTML=`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;background:#E8820C;display:flex;align-items:center;justify-content:center;font-size:11px;color:#07080e">⟺</div>`;
+    after.style.clipPath='inset(0 0 0 45%)';
+    handle.style.left='45%';
+    sc.appendChild(before); sc.appendChild(after); sc.appendChild(handle);
+    let drag=false;
+    sc.addEventListener('mousedown',()=>drag=true);
+    window.addEventListener('mouseup',()=>drag=false);
+    sc.addEventListener('mousemove',e=>{ if(!drag)return; const r=sc.getBoundingClientRect(); const pct=Math.max(10,Math.min(90,((e.clientX-r.left)/r.width)*100)); handle.style.left=pct+'%'; after.style.clipPath=`inset(0 0 0 ${pct}%)`; });
+  }
+
+  else if(n===22){
+    Object.assign(sc.style,{background:'#04050a',padding:'50px 60px',display:'flex',flexDirection:'column',gap:'20px',justifyContent:'center'});
+    const items=[
+      {pre:'Successfully managed a ',val:'£47M capital budget',post:' across three concurrent project sites.'},
+      {pre:'Achieved ',val:'23% cost reduction',post:' against original baseline through value engineering.'},
+      {pre:'Delivered ',val:'6 weeks ahead of schedule',post:' with zero LTIs recorded across the programme.'},
+    ];
+    items.forEach(item=>{
+      const row=div({fontFamily:"'DM Sans',sans-serif",fontSize:'14px',color:'rgba(240,237,232,0.8)',lineHeight:'1.7'});
+      const span=document.createElement('span');
+      Object.assign(span.style,{background:'rgba(240,237,232,0.9)',color:'transparent',borderRadius:'3px',padding:'1px 6px',cursor:'pointer',transition:'all .3s',userSelect:'none'});
+      span.textContent=item.val;
+      span.onmouseenter=()=>Object.assign(span.style,{background:'rgba(232,130,12,0.2)',color:'#E8820C'});
+      span.onmouseleave=()=>Object.assign(span.style,{background:'rgba(240,237,232,0.9)',color:'transparent'});
+      row.appendChild(document.createTextNode(item.pre)); row.appendChild(span); row.appendChild(document.createTextNode(item.post));
+      sc.appendChild(row);
+    });
+    const hint=div({fontFamily:"'JetBrains Mono',monospace",fontSize:'9px',color:'rgba(240,237,232,0.2)',letterSpacing:'.12em',marginTop:'10px'});
+    hint.textContent='HOVER OVER REDACTED TEXT TO DECLASSIFY'; sc.appendChild(hint);
+  }
+
+  else if(n===28){
+    Object.assign(sc.style,{background:'#04050a',padding:'30px 40px',display:'flex',flexDirection:'column',gap:'16px'});
+    const lbl=div({fontFamily:"'JetBrains Mono',monospace",fontSize:'9px',color:'rgba(240,237,232,0.4)',letterSpacing:'.14em'}); lbl.textContent='PASTE A JOB DESCRIPTION BELOW:';
+    const ta=document.createElement('textarea');
+    Object.assign(ta.style,{width:'100%',height:'90px',background:'rgba(255,255,255,0.03)',border:'1px solid rgba(255,255,255,0.1)',color:'rgba(240,237,232,0.8)',fontFamily:"'JetBrains Mono',monospace",fontSize:'11px',padding:'10px',resize:'none',outline:'none',lineHeight:'1.6'});
+    ta.placeholder='e.g. "Seeking an experienced Project Manager with PRINCE2, HAZOP, and Primavera P6 experience in Oil & Gas..."';
+    const result=div({fontFamily:"'DM Sans',sans-serif",fontSize:'13px',lineHeight:'1.8',color:'rgba(240,237,232,0.7)'});
+    result.innerHTML='Skills matched: <span style="background:rgba(232,130,12,0.2);color:#E8820C;padding:1px 5px;border-radius:2px">PRINCE2 ✓</span> <span style="background:rgba(96,165,250,0.2);color:#60a5fa;padding:1px 5px;border-radius:2px">Primavera P6 ✓</span> <span style="background:rgba(110,231,183,0.2);color:#6ee7b7;padding:1px 5px;border-radius:2px">HAZOP ✓</span> <span style="background:rgba(251,191,36,0.2);color:#fbbf24;padding:1px 5px;border-radius:2px">Oil & Gas ✓</span>';
+    const keywords=['PRINCE2','PMP','HAZOP','Primavera P6','Oil & Gas','Risk Management','PRINCE2 Practitioner','Lean Six Sigma','EVM','Earned Value'];
+    ta.addEventListener('input',()=>{
+      const v=ta.value.toLowerCase();
+      const matched=keywords.filter(k=>v.includes(k.toLowerCase()));
+      if(matched.length)result.innerHTML='Skills matched: '+matched.map(k=>`<span style="background:rgba(232,130,12,0.2);color:#E8820C;padding:1px 5px;border-radius:2px">${k} ✓</span>`).join(' ');
+      else result.innerHTML='<span style="color:rgba(240,237,232,0.3)">Start typing to see matches...</span>';
+    });
+    sc.appendChild(lbl); sc.appendChild(ta); sc.appendChild(result);
+  }
+
+  else if(n===32){
+    Object.assign(sc.style,{background:'#04050a',padding:'40px 60px',display:'flex',flexDirection:'column',gap:'20px',justifyContent:'center'});
+    const lbl1=div({fontFamily:"'JetBrains Mono',monospace",fontSize:'10px',color:'rgba(240,237,232,0.5)',letterSpacing:'.12em'}); lbl1.textContent='PROJECT BUDGET';
+    const slider=document.createElement('input'); slider.type='range'; slider.min='1'; slider.max='200'; slider.value='47'; Object.assign(slider.style,{width:'100%',accentColor:'#E8820C',height:'4px'});
+    const bval=div({fontFamily:"'Bebas Neue',sans-serif",fontSize:'1.2rem',color:'#E8820C',letterSpacing:'.1em'}); bval.textContent='£47M';
+    const result=div({fontFamily:"'Bebas Neue',sans-serif",fontSize:'3.5rem',color:'#6ee7b7',letterSpacing:'.04em',lineHeight:'1'});
+    result.textContent='£5.2M SAVED';
+    const sub=div({fontFamily:"'JetBrains Mono',monospace",fontSize:'9px',color:'rgba(110,231,183,0.5)',letterSpacing:'.1em'});
+    sub.textContent='ESTIMATED VALUE DELIVERED BASED ON TRACK RECORD';
+    slider.oninput=()=>{ const v=+slider.value; bval.textContent='£'+v+'M'; result.textContent='£'+(v*0.11).toFixed(1)+'M SAVED'; };
+    sc.appendChild(lbl1); sc.appendChild(slider); sc.appendChild(bval); sc.appendChild(result); sc.appendChild(sub);
+  }
+
+  else if(n===35){
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H; cv.style.cssText='display:block;width:100%;height:100%'; sc.appendChild(cv);
+    const ctx=cv.getContext('2d'); let particles=[];
+    function burst(){ for(let i=0;i<120;i++) particles.push({x:W/2,y:H/2,vx:(Math.random()-0.5)*14,vy:(Math.random()-0.5)*14-5,col:['#E8820C','#F5A623','#fbbf24','#6ee7b7','#60a5fa','#c4b5fd','#f0ede8'][Math.floor(Math.random()*7)],life:1,r:Math.random()*5+2,rot:Math.random()*Math.PI}); }
+    burst(); setInterval(burst,2000);
+    (function loop(){
+      ctx.fillStyle='rgba(4,5,10,0.2)'; ctx.fillRect(0,0,W,H);
+      ctx.font="bold 20px 'JetBrains Mono',monospace"; ctx.fillStyle='rgba(232,130,12,0.9)'; ctx.textAlign='center';
+      ctx.fillText('TYPE "HIRE ME" ANYWHERE ON THE PAGE',W/2,H*0.7);
+      ctx.font="13px 'JetBrains Mono',monospace"; ctx.fillStyle='rgba(240,237,232,0.35)';
+      ctx.fillText('→ triggers confetti + hire me modal automatically',W/2,H*0.7+28);
+      particles.forEach(pt=>{ pt.x+=pt.vx; pt.y+=pt.vy; pt.vy+=0.2; pt.life-=0.015; if(pt.life<0)return;
+        ctx.globalAlpha=pt.life; ctx.beginPath(); ctx.arc(pt.x,pt.y,pt.r,0,Math.PI*2); ctx.fillStyle=pt.col; ctx.fill(); ctx.globalAlpha=1; });
+      modalRaf=requestAnimationFrame(loop);
+    })();
+  }
+
+  else if(n===36){
+    Object.assign(sc.style,{background:'#010308',padding:'30px 40px',fontFamily:"'JetBrains Mono',monospace",display:'flex',flexDirection:'column',gap:'0'});
+    const output=div({fontSize:'12px',lineHeight:'1.8',flex:'1',overflow:'hidden'});
+    const welcome=[
+      {t:'SAIF BADAWY PORTFOLIO — TERMINAL MODE v1.0',c:'#E8820C'},
+      {t:'Type a command. Try: experience · skills · projects · download cv · contact · help',c:'rgba(240,237,232,0.4)'},
+      {t:'',c:''},
+    ];
+    const commands={
+      'experience':[{t:'↳ 10 years experience across 5 roles',c:'#6ee7b7'},{t:'  2015 · Al Habtoor Engineering · Dubai',c:'rgba(240,237,232,0.6)'},{t:'  2020 · ExxonMobil · North Sea UKCS',c:'rgba(240,237,232,0.6)'},{t:'  2022 · Wood PLC · Oil & Gas Projects',c:'rgba(240,237,232,0.6)'},{t:'  2024 · Phantom Energy · Wind Portfolio',c:'rgba(240,237,232,0.6)'},{t:'  2025 · Freelance · London',c:'rgba(240,237,232,0.6)'}],
+      'skills':[{t:'↳ PRINCE2 Practitioner · PMP · Lean Six Sigma Black Belt',c:'#6ee7b7'},{t:'  Primavera P6 · Power BI · HAZOP · ASME B31.3',c:'rgba(240,237,232,0.5)'}],
+      'projects':[{t:'↳ 24 major projects delivered',c:'#6ee7b7'},{t:'  Total portfolio value: £200M+',c:'rgba(240,237,232,0.5)'}],
+      'download cv':[{t:'↳ Downloading CV_Saif_Badawy_2025.pdf...',c:'#fbbf24'},{t:'  ████████████████████ 100%',c:'#6ee7b7'}],
+      'contact':[{t:'↳ saifehabbadawy@gmail.com',c:'#6ee7b7'},{t:'  LinkedIn: /in/saif-badawy | London, UK',c:'rgba(240,237,232,0.5)'}],
+      'help':[{t:'↳ Available commands:',c:'#E8820C'},{t:'  experience · skills · projects · download cv · contact · clear',c:'rgba(240,237,232,0.4)'}],
+      'clear':[]
+    };
+    let lines=[...welcome];
+    function renderLines(){ output.innerHTML=lines.map(l=>`<div style="color:${l.c}">${l.t||'&nbsp;'}</div>`).join(''); }
+    renderLines();
+    const inputRow=div({display:'flex',alignItems:'center',gap:'8px',borderTop:'1px solid rgba(255,255,255,0.06)',paddingTop:'12px',marginTop:'8px'});
+    const prompt=div({color:'#E8820C',fontSize:'12px',flexShrink:'0'}); prompt.textContent='$';
+    const inp=document.createElement('input'); Object.assign(inp.style,{flex:'1',background:'transparent',border:'none',outline:'none',color:'#f0ede8',fontFamily:"'JetBrains Mono',monospace",fontSize:'12px',caretColor:'#E8820C'});
+    inp.autofocus=true;
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ const cmd=inp.value.trim().toLowerCase();
+      lines.push({t:'$ '+inp.value,c:'rgba(240,237,232,0.5)'}); inp.value='';
+      const resp=cmd==='clear'?[]:commands[cmd]||[{t:'Command not found. Try: help',c:'rgba(255,80,60,0.7)'}];
+      if(cmd==='clear')lines=[...welcome]; else lines=[...lines,...resp,{t:'',c:''}];
+      renderLines(); } });
+    inputRow.appendChild(prompt); inputRow.appendChild(inp); sc.appendChild(output); sc.appendChild(inputRow);
+    setTimeout(()=>inp.focus(),100);
+  }
+
+  else {
+    /* default: just show a nice styled placeholder for ideas without a custom modal */
+    Object.assign(sc.style,{background:'#04050a',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:'16px'});
+    const ico=div({fontFamily:"'Bebas Neue',sans-serif",fontSize:'4rem',color:'rgba(232,130,12,0.15)',letterSpacing:'.1em'});
+    ico.textContent=String(n).padStart(2,'0');
+    const tt=div({fontFamily:"'Bebas Neue',sans-serif",fontSize:'1.8rem',color:'#f0ede8',letterSpacing:'.06em',textAlign:'center'});
+    tt.textContent=idea.title;
+    const sub=div({fontFamily:"'JetBrains Mono',monospace",fontSize:'10px',color:'rgba(240,237,232,0.4)',letterSpacing:'.1em',textAlign:'center',maxWidth:'500px',lineHeight:'1.7'});
+    sub.textContent=idea.sub;
+    sc.appendChild(ico); sc.appendChild(tt); sc.appendChild(sub);
+  }
+}
+</script>
+</body>
+</html>

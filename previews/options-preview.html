@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 Options Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#07080e;--s1:#0d0f18;--s2:#12141f;
+  --border:rgba(240,237,232,0.08);
+  --accent:#E8820C;--accent2:#F5A623;
+  --white:rgba(240,237,232,1);--muted:rgba(240,237,232,0.45);
+  --faint:rgba(240,237,232,0.15);
+  --bebas:'Bebas Neue',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+body{background:var(--black);font-family:var(--mono);color:var(--white);padding:3rem 2rem;min-height:100vh}
+h1{font-family:var(--bebas);font-size:2.5rem;letter-spacing:.08em;color:var(--accent);margin-bottom:.4rem}
+.subtitle{font-size:.52rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:3rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:2.5rem}
+.option{display:flex;flex-direction:column;gap:.75rem}
+.opt-label{font-size:.45rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(232,130,12,.5);padding:.2rem .6rem;border:1px solid rgba(232,130,12,.2);align-self:flex-start}
+.opt-num{color:var(--accent)}
+.opt-btn{margin-top:.5rem;padding:.55rem 1.2rem;background:rgba(232,130,12,.08);border:1px solid rgba(232,130,12,.3);color:rgba(232,130,12,.9);font-family:var(--mono);font-size:.46rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:background .2s,border-color .2s;align-self:flex-start}
+.opt-btn:hover{background:rgba(232,130,12,.18);border-color:rgba(232,130,12,.7)}
+
+/* ═══ 1. TERMINAL ═══ */
+.terminal{width:280px;background:#050608;border:1px solid rgba(255,255,255,.1);border-radius:0;overflow:hidden;font-family:var(--mono)}
+.term-bar{background:#1a1a2e;padding:.5rem .75rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.term-dot{width:8px;height:8px;border-radius:50%}
+.term-title{font-size:.42rem;letter-spacing:.12em;color:rgba(255,255,255,.3);text-transform:uppercase;margin-left:.4rem}
+.term-body{padding:.75rem .9rem;font-size:.55rem;line-height:2;color:rgba(200,200,200,.85)}
+.term-prompt{color:#E8820C}.term-cmd{color:#fff}
+.term-out{color:rgba(200,200,200,.7);padding-left:.5rem}
+.term-key{color:#F5A623;min-width:80px;display:inline-block}
+.term-val{color:#e2e8f0}
+.term-green{color:#4ade80}
+.term-cursor{display:inline-block;width:7px;height:1em;background:#E8820C;animation:blink .9s step-end infinite;vertical-align:text-bottom}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ═══ 2. BLUEPRINT SPEC ═══ */
+.blueprint{width:280px;border:2px solid rgba(100,160,255,.35);background:#020814;position:relative;overflow:hidden}
+.blueprint::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(100,160,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(100,160,255,.04) 1px,transparent 1px);background-size:20px 20px}
+.bp-border{position:absolute;inset:6px;border:1px solid rgba(100,160,255,.15);pointer-events:none}
+.bp-title-block{border-top:1px solid rgba(100,160,255,.25);margin-top:0}
+.bp-header{background:rgba(100,160,255,.08);border-bottom:1px solid rgba(100,160,255,.2);padding:.5rem .75rem;display:flex;align-items:center;justify-content:space-between}
+.bp-htext{font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(100,160,255,.8)}
+.bp-logo{font-family:var(--bebas);font-size:.9rem;letter-spacing:.12em;color:rgba(100,160,255,.6)}
+.bp-rows{padding:.1rem 0}
+.bp-row{display:grid;grid-template-columns:100px 1fr;border-bottom:1px solid rgba(100,160,255,.1)}
+.bp-row:last-child{border-bottom:none}
+.bp-field{font-size:.4rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(100,160,255,.5);padding:.45rem .65rem;border-right:1px solid rgba(100,160,255,.1)}
+.bp-data{font-size:.54rem;letter-spacing:.04em;color:rgba(200,220,255,.85);padding:.45rem .65rem}
+.bp-data.hi{color:#E8820C}
+.bp-stamp{position:absolute;bottom:.8rem;right:.8rem;border:2px solid rgba(74,222,128,.3);padding:.2rem .5rem;font-size:.4rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(74,222,128,.6);transform:rotate(-8deg)}
+
+/* ═══ 3. CAREER GRAPH ═══ */
+.cgraph-wrap{width:280px;background:var(--s1);border:1px solid var(--border);overflow:hidden;position:relative}
+.cgraph-header{padding:.5rem .75rem;border-bottom:1px solid var(--border);font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,130,12,.6)}
+.cgraph-canvas{display:block;width:100%}
+
+/* ═══ 4. CODE BLOCK ═══ */
+.code-wrap{width:280px;background:#0a0c12;border:1px solid rgba(139,92,246,.2);overflow:hidden}
+.code-bar{background:rgba(139,92,246,.08);border-bottom:1px solid rgba(139,92,246,.15);padding:.45rem .75rem;display:flex;align-items:center;gap:.5rem;justify-content:space-between}
+.code-lang{font-size:.42rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(139,92,246,.7)}
+.code-icon{width:8px;height:8px;border-radius:50%;background:rgba(139,92,246,.4)}
+pre.code-body{padding:.75rem .9rem;font-size:.52rem;line-height:1.85;overflow:hidden;font-family:var(--mono)}
+.c-kw{color:#c084fc}.c-str{color:#86efac}.c-num{color:#F5A623}.c-key{color:#7dd3fc}.c-brace{color:rgba(255,255,255,.35)}
+
+/* ═══ 5. WORLD MAP ═══ */
+.map-wrap{width:280px;background:var(--s1);border:1px solid var(--border);overflow:hidden}
+.map-header{padding:.5rem .75rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.map-title{font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,130,12,.6)}
+.map-count{font-size:.44rem;letter-spacing:.1em;color:var(--muted)}
+.map-svg{display:block;width:100%;padding:.5rem .75rem .25rem}
+.map-pins{padding:.25rem .75rem .6rem;display:flex;flex-wrap:wrap;gap:.35rem}
+.map-pin{font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .5rem;border:1px solid rgba(232,130,12,.2);color:rgba(232,130,12,.75);display:flex;align-items:center;gap:.3rem}
+.pin-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+/* ═══ 6. AVAILABILITY CALENDAR ═══ */
+.cal-wrap{width:280px;background:var(--s1);border:1px solid var(--border)}
+.cal-header{padding:.55rem .75rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cal-month{font-family:var(--bebas);font-size:1.1rem;letter-spacing:.08em;color:var(--white)}
+.cal-status{font-size:.42rem;letter-spacing:.14em;text-transform:uppercase;color:#4ade80;display:flex;align-items:center;gap:.3rem}
+.cal-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:livePulse2 2s ease-in-out infinite}
+@keyframes livePulse2{0%,100%{opacity:1}50%{opacity:.3}}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:.5rem .75rem .6rem}
+.cal-day-hdr{font-size:.38rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center;padding:.2rem 0}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:.44rem;color:var(--muted);border-radius:0;transition:background .2s;position:relative}
+.cal-day.avail{background:rgba(232,130,12,.12);color:var(--accent);border:1px solid rgba(232,130,12,.2)}
+.cal-day.today{background:var(--accent);color:var(--black);font-weight:700}
+.cal-day.busy{background:rgba(255,255,255,.03);color:rgba(255,255,255,.15)}
+.cal-legend{padding:.35rem .75rem .6rem;display:flex;gap:.75rem}
+.cal-leg-item{display:flex;align-items:center;gap:.3rem;font-size:.4rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cal-leg-dot{width:8px;height:8px;flex-shrink:0}
+
+/* ═══ 7. CLASSIFIED ═══ */
+.classified-wrap{width:280px;background:#0a0604;border:2px solid rgba(220,50,50,.3);position:relative;overflow:hidden}
+.cl-top{background:rgba(220,50,50,.12);border-bottom:2px solid rgba(220,50,50,.3);padding:.5rem .75rem;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.cl-top-text{font-family:var(--bebas);font-size:.85rem;letter-spacing:.28em;color:rgba(220,50,50,.9)}
+.cl-body{padding:.6rem .75rem}
+.cl-row{display:flex;align-items:baseline;gap:.5rem;padding:.4rem 0;border-bottom:1px solid rgba(220,50,50,.08)}
+.cl-row:last-child{border-bottom:none}
+.cl-field{font-size:.42rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(220,100,80,.6);min-width:80px;flex-shrink:0}
+.cl-value{font-size:.54rem;letter-spacing:.04em;color:rgba(240,220,210,.85)}
+.cl-redact{background:rgba(220,50,50,.25);color:transparent;border-radius:1px;user-select:none;letter-spacing:0;font-size:.54rem}
+.cl-stamp{position:absolute;top:50%;right:.6rem;transform:translateY(-50%) rotate(12deg);border:2px solid rgba(74,222,128,.4);padding:.2rem .5rem;font-family:var(--bebas);font-size:.75rem;letter-spacing:.2em;color:rgba(74,222,128,.5);pointer-events:none}
+.cl-footer{border-top:2px solid rgba(220,50,50,.2);padding:.4rem .75rem;font-size:.4rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(220,50,50,.4);text-align:center}
+
+/* ═══ 8. CERT STACK ═══ */
+.cert-wrap{width:280px;background:var(--s1);border:1px solid var(--border);padding:.75rem;overflow:hidden}
+.cert-header{font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,130,12,.6);margin-bottom:.65rem}
+.cert-stack{position:relative;height:120px}
+.cert-card{position:absolute;left:0;right:0;border:1px solid var(--border);padding:.6rem .8rem;display:flex;align-items:center;gap:.65rem;background:var(--s2);transition:transform .3s, box-shadow .3s;cursor:default}
+.cert-card:nth-child(1){top:0;z-index:5;background:var(--s1);border-color:rgba(232,130,12,.3)}
+.cert-card:nth-child(2){top:18px;z-index:4;opacity:.85}
+.cert-card:nth-child(3){top:36px;z-index:3;opacity:.7}
+.cert-card:nth-child(4){top:54px;z-index:2;opacity:.55}
+.cert-card:nth-child(5){top:72px;z-index:1;opacity:.4}
+.cert-stack:hover .cert-card:nth-child(1){transform:translateY(-8px);box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.cert-stack:hover .cert-card:nth-child(2){transform:translateY(-4px)}
+.cert-icon{width:24px;height:24px;border:1px solid rgba(232,130,12,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.6rem;color:var(--accent)}
+.cert-name{font-family:var(--bebas);font-size:.85rem;letter-spacing:.06em;line-height:1;color:var(--white)}
+.cert-body{font-size:.42rem;letter-spacing:.08em;color:var(--muted);margin-top:.15rem;text-transform:uppercase}
+.cert-count{margin-top:.75rem;font-size:.42rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center}
+
+/* ═══ 9. WAVEFORM ═══ */
+.wave-wrap{width:280px;background:var(--s1);border:1px solid var(--border);overflow:hidden}
+.wave-header{padding:.5rem .75rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.wave-title{font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,130,12,.6)}
+.wave-range{font-size:.42rem;letter-spacing:.1em;color:var(--muted)}
+.wave-canvas{display:block;width:100%}
+.wave-events{padding:.4rem .75rem .6rem;display:grid;grid-template-columns:1fr 1fr;gap:.3rem}
+.wave-event{display:flex;align-items:center;gap:.35rem;font-size:.42rem;letter-spacing:.06em;color:var(--muted)}
+.wave-event-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ═══ 10. ROTATING FACTS ═══ */
+.facts-wrap{width:280px;background:var(--s1);border:1px solid var(--border);overflow:hidden;position:relative}
+.facts-header{padding:.5rem .75rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.facts-title{font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,130,12,.6)}
+.facts-counter{font-size:.42rem;letter-spacing:.1em;color:var(--muted)}
+.facts-body{padding:1.1rem .9rem .9rem;min-height:88px;display:flex;flex-direction:column;justify-content:center;position:relative}
+.fact-item{position:absolute;inset:0;padding:1.1rem .9rem .9rem;display:flex;flex-direction:column;justify-content:center;opacity:0;transition:opacity .5s}
+.fact-item.active{opacity:1}
+.fact-num{font-family:var(--bebas);font-size:2.2rem;letter-spacing:.03em;color:var(--accent);line-height:1}
+.fact-label{font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.25rem;line-height:1.5}
+.fact-context{font-size:.44rem;letter-spacing:.06em;color:rgba(232,130,12,.5);margin-top:.3rem}
+.facts-bar{height:2px;background:var(--border)}
+.facts-progress{height:100%;background:var(--accent);transition:width .1s linear;width:0}
+.facts-dots{padding:.45rem .75rem;display:flex;gap:.35rem}
+.facts-dot{width:5px;height:5px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s}
+.facts-dot.on{background:var(--accent)}
+
+/* actions */
+.actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border)}
+.btn-pick{font-family:var(--bebas);font-size:.85rem;letter-spacing:.12em;padding:.6rem 1.4rem;background:rgba(232,130,12,.1);border:1px solid rgba(232,130,12,.35);color:var(--accent);cursor:pointer;transition:background .2s}
+.btn-pick:hover{background:rgba(232,130,12,.22)}
+</style>
+</head>
+<body>
+
+<h1>10 Creative Options</h1>
+<p class="subtitle">What to replace the mini stats table with · Choose one to implement</p>
+
+<div class="grid">
+
+  <!-- ── 1. TERMINAL ── -->
+  <div class="option">
+    <div class="opt-label"><span class="opt-num">01 ·</span> Terminal CLI Readout</div>
+    <div class="terminal">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#ff5f57"></div>
+        <div class="term-dot" style="background:#febc2e;margin-left:4px"></div>
+        <div class="term-dot" style="background:#28c840;margin-left:4px"></div>
+        <span class="term-title">saif@portfolio ~ zsh</span>
+      </div>
+      <div class="term-body">
+        <div><span class="term-prompt">❯ </span><span class="term-cmd">saif --profile</span></div>
+        <div class="term-out"><span class="term-key">name</span><span class="term-val">Saif Badawy</span></div>
+        <div class="term-out"><span class="term-key">role</span><span class="term-val">Project Engineer</span></div>
+        <div class="term-out"><span class="term-key">location</span><span class="term-val">London, UK</span></div>
+        <div class="term-out"><span class="term-key">languages</span><span class="term-val">EN · AR · FR</span></div>
+        <div class="term-out"><span class="term-key">available</span><span class="term-green">true</span></div>
+        <div class="term-out"><span class="term-key">notice</span><span class="term-val">immediate</span></div>
+        <div><span class="term-prompt">❯ </span><span class="term-cursor"></span></div>
+      </div>
+    </div>
+    <button class="opt-btn" onclick="pick('Terminal CLI Readout — Option 01')">→ Implement This</button>
+  </div>
+
+  <!-- ── 2. BLUEPRINT SPEC ── -->
+  <div class="option">
+    <div class="opt-label"><span class="opt-num">02 ·</span> Engineering Spec Sheet</div>
+    <div class="blueprint">
+      <div class="bp-border"></div>
+      <div class="bp-header">
+        <span class="bp-htext">Technical Profile · Rev A</span>
+        <span class="bp-logo">SB</span>
+      </div>
+      <div class="bp-rows">
+        <div class="bp-row">
+          <div class="bp-field">Designation</div>
+          <div class="bp-data hi">Project Engineer</div>
+        </div>
+        <div class="bp-row">
+          <div class="bp-field">Discipline</div>
+          <div class="bp-data">Mechanical / EPC</div>
+        </div>
+        <div class="bp-row">
+          <div class="bp-field">Portfolio</div>
+          <div class="bp-data hi">£20M+ Delivered</div>
+        </div>
+        <div class="bp-row">
+          <div class="bp-field">Clearance</div>
+          <div class="bp-data">PRINCE2 · Six Sigma BB</div>
+        </div>
+        <div class="bp-row">
+          <div class="bp-field">Location</div>
+          <div class="bp-data">London W4 · UK</div>
+        </div>
+        <div class="bp-row">
+          <div class="bp-field">Status</div>
+          <div class="bp-data hi">Available · Immediate</div>
+        </div>
+      </div>
+      <div class="bp-stamp">Approved</div>
+    </div>
+    <button class="opt-btn" onclick="pick('Engineering Spec Sheet — Option 02')">→ Implement This</button>
+  </div>
+
+  <!-- ── 3. CAREER GRAPH ── -->
+  <div class="option">
+    <div class="opt-label"><span class="opt-num">03 ·</span> Career Network Graph</div>
+    <div class="cgraph-wrap">
+      <div class="cgraph-header">◉ Career Network · 4 Engagements</div>
+      <canvas class="cgraph-canvas" id="graphCanvas" width="560" height="280" style="width:280px;height:140px"></canvas>
+    </div>
+    <button class="opt-btn" onclick="pick('Career Network Graph — Option 03')">→ Implement This</button>
+  </div>
+
+  <!-- ── 4. CODE BLOCK ── -->
+  <div class="option">
+    <div class="opt-label"><span class="opt-num">04 ·</span> Profile as Code</div>
+    <div class="code-wrap">
+      <div class="code-bar">
+        <div class="code-icon"></div>
+        <span class="code-lang">saif.json</span>
+        <div style="display:flex;gap:3px"><div class="code-icon" style="background:rgba(74,222,128,.4)"></div><div class="code-icon" style="background:rgba(251,191,36,.4)"></div></div>
+      </div>
+      <pre class="code-body"><span class="c-brace">{</span>
+  <span class="c-key">"name"</span>: <span class="c-str">"Saif Badawy"</span>,
+  <span class="c-key">"role"</span>: <span class="c-str">"Project Engineer"</span>,
+  <span class="c-key">"exp_years"</span>: <span class="c-num">4</span>,
+  <span class="c-key">"portfolio_gbp"</span>: <span class="c-str">"£20M+"</span>,
+  <span class="c-key">"personnel_led"</span>: <span class="c-num">65</span>,
+  <span class="c-key">"languages"</span>: <span class="c-brace">[</span><span class="c-str">"EN"</span>,<span class="c-str">"AR"</span>,<span class="c-str">"FR"</span><span class="c-brace">]</span>,
+  <span class="c-key">"available"</span>: <span class="c-kw">true</span>,
+  <span class="c-key">"relocate"</span>: <span class="c-kw">true</span>
+<span class="c-brace">}</span></pre>
+    </div>
+    <button class="opt-btn" onclick="pick('Profile as Code — Option 04')">→ Implement This</button>
+  </div>
+
+  <!-- ── 5. WORLD MAP ── -->
+  <div class="option">
+    <div class="opt-label"><span class="opt-num">05 ·</span> Global Footprint Map</div>
+    <div class="map-wrap">
+      <div class="map-header">
+        <span class="map-title">◈ Deployed Across</span>
+        <span class="map-count">4 Countries · 3 Continents</span>
+      </div>
+      <svg class="map-svg" viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg">
+        <!-- Simplified world outline paths -->
+        <rect width="500" height="250" fill="none"/>
+        <!-- Grid lines -->
+        <line x1="0" y1="125" x2="500" y2="125" stroke="rgba(232,130,12,.08)" stroke-width="1"/>
+        <line x1="250" y1="0" x2="250" y2="250" stroke="rgba(232,130,12,.08)" stroke-width="1"/>
+        <!-- Europe/UK blob -->
+        <ellipse cx="225" cy="90" rx="22" ry="18" fill="rgba(232,130,12,.08)" stroke="rgba(232,130,12,.2)" stroke-width="1"/>
+        <!-- Middle East blob -->
+        <ellipse cx="295" cy="118" rx="18" ry="14" fill="rgba(232,130,12,.08)" stroke="rgba(232,130,12,.2)" stroke-width="1"/>
+        <!-- Australia blob -->
+        <ellipse cx="405" cy="175" rx="28" ry="18" fill="rgba(232,130,12,.08)" stroke="rgba(232,130,12,.2)" stroke-width="1"/>
+        <!-- Connection lines -->
+        <line x1="225" y1="90" x2="295" y2="118" stroke="rgba(232,130,12,.25)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="295" y1="118" x2="405" y2="175" stroke="rgba(232,130,12,.25)" stroke-width="1" stroke-dasharray="3,3"/>
+        <!-- UK pin -->
+        <circle cx="222" cy="85" r="5" fill="#E8820C" opacity=".9"/>
+        <circle cx="222" cy="85" r="9" fill="none" stroke="#E8820C" stroke-width="1" opacity=".4"/>
+        <text x="210" y="74" font-family="'JetBrains Mono'" font-size="9" fill="rgba(240,237,232,.7)" letter-spacing="1">UK</text>
+        <!-- UAE pin -->
+        <circle cx="298" cy="114" r="5" fill="#E8820C" opacity=".9"/>
+        <circle cx="298" cy="114" r="9" fill="none" stroke="#E8820C" stroke-width="1" opacity=".4"/>
+        <text x="308" y="112" font-family="'JetBrains Mono'" font-size="9" fill="rgba(240,237,232,.7)" letter-spacing="1">UAE</text>
+        <!-- Iraq pin -->
+        <circle cx="305" cy="100" r="4" fill="#F5A623" opacity=".8"/>
+        <text x="312" y="97" font-family="'JetBrains Mono'" font-size="8" fill="rgba(240,237,232,.6)" letter-spacing="1">IRQ</text>
+        <!-- Australia pin -->
+        <circle cx="405" cy="172" r="5" fill="#E8820C" opacity=".9"/>
+        <circle cx="405" cy="172" r="9" fill="none" stroke="#E8820C" stroke-width="1" opacity=".4"/>
+        <text x="390" y="190" font-family="'JetBrains Mono'" font-size="9" fill="rgba(240,237,232,.7)" letter-spacing="1">AUS</text>
+      </svg>
+      <div class="map-pins">
+        <div class="map-pin"><div class="pin-dot"></div>London, UK</div>
+        <div class="map-pin"><div class="pin-dot"></div>Dubai, UAE</div>
+        <div class="map-pin"><div class="pin-dot"></div>Basra, Iraq</div>
+        <div class="map-pin"><div class="pin-dot"></div>Wollongong, AU</div>
+      </div>
+    </div>
+    <button class="opt-btn" onclick="pick('Global Footprint Map — Option 05')">→ Implement This</button>
+  </div>
+
+  <!-- ── 6. AVAILABILITY CALENDAR ── -->
+  <div class="option">
+    <div class="opt-label"><span class="opt-num">06 ·</span> Live Availability Calendar</div>
+    <div class="cal-wrap">
+      <div class="cal-header">
+        <span class="cal-month" id="calMonth">May 2026</span>
+        <span class="cal-status"><span class="cal-dot"></span>Open to offers</span>
+      </div>
+      <div class="cal-grid" id="calGrid">
+        <div class="cal-day-hdr">M</div><div class="cal-day-hdr">T</div><div class="cal-day-hdr">W</div>
+        <div class="cal-day-hdr">T</div><div class="cal-day-hdr">F</div><div class="cal-day-hdr">S</div><div class="cal-day-hdr">S</div>
+      </div>
+      <div class="cal-legend">
+        <div class="cal-leg-item"><div class="cal-leg-dot" style="background:var(--accent);opacity:.7"></div>Available</div>
+        <div class="cal-leg-item"><div class="cal-leg-dot" style="background:rgba(255,255,255,.15)"></div>Engaged</div>
+        <div class="cal-leg-item"><div class="cal-leg-dot" style="background:var(--accent)"></div>Today</div>
+      </div>
+    </div>
+    <button class="opt-btn" onclick="pick('Live Availability Calendar — Option 06')">→ Implement This</button>
+  </div>
+
+  <!-- ── 7. CLASSIFIED ── -->
+  <div class="option">
+    <div class="opt-label"><span class="opt-num">07 ·</span> Classified Dossier</div>
+    <div class="classified-wrap">
+      <div class="cl-top">
+        <span style="font-size:.7rem">🔴</span>
+        <span class="cl-top-text">Classified · Eyes Only</span>
+        <span style="font-size:.7rem">🔴</span>
+      </div>
+      <div class="cl-body">
+        <div class="cl-row">
+          <span class="cl-field">Subject</span>
+          <span class="cl-value">Saif Badawy</span>
+        </div>
+        <div class="cl-row">
+          <span class="cl-field">Designation</span>
+          <span class="cl-value">Project Engineer</span>
+        </div>
+        <div class="cl-row">
+          <span class="cl-field">Clearance</span>
+          <span class="cl-value">PRINCE2 · Six Sigma BB</span>
+        </div>
+        <div class="cl-row">
+          <span class="cl-field">Deployed</span>
+          <span class="cl-value">UAE · Iraq · UK</span>
+        </div>
+        <div class="cl-row">
+          <span class="cl-field">Assets</span>
+          <span class="cl-value">£20M+ Managed</span>
+        </div>
+        <div class="cl-row">
+          <span class="cl-field">Salary</span>
+          <span class="cl-value"><span class="cl-redact">██████ ████</span></span>
+        </div>
+      </div>
+      <div class="cl-stamp">Available</div>
+      <div class="cl-footer">Document ref: SB-2026 · Not for distribution</div>
+    </div>
+    <button class="opt-btn" onclick="pick('Classified Dossier — Option 07')">→ Implement This</button>
+  </div>
+
+  <!-- ── 8. CERT STACK ── -->
+  <div class="option">
+    <div class="opt-label"><span class="opt-num">08 ·</span> Credential Card Stack</div>
+    <div class="cert-wrap">
+      <div class="cert-header">◈ Credentials · Hover to fan</div>
+      <div class="cert-stack">
+        <div class="cert-card">
+          <div class="cert-icon">P2</div>
+          <div><div class="cert-name">PRINCE2</div><div class="cert-body">Practitioner · Active</div></div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon">6σ</div>
+          <div><div class="cert-name">Six Sigma</div><div class="cert-body">Black Belt · 2023</div></div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon">Mc</div>
+          <div><div class="cert-name">McKinsey</div><div class="cert-body">Forward Programme</div></div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon">MSc</div>
+          <div><div class="cert-name">Eng Management</div><div class="cert-body">Brunel University London</div></div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon">BE</div>
+          <div><div class="cert-name">Mech Engineering</div><div class="cert-body">Uni of Wollongong · Hons</div></div>
+        </div>
+      </div>
+      <div class="cert-count">5 credentials · 5 institution memberships</div>
+    </div>
+    <button class="opt-btn" onclick="pick('Credential Card Stack — Option 08')">→ Implement This</button>
+  </div>
+
+  <!-- ── 9. WAVEFORM ── -->
+  <div class="option">
+    <div class="opt-label"><span class="opt-num">09 ·</span> Career Waveform</div>
+    <div class="wave-wrap">
+      <div class="wave-header">
+        <span class="wave-title">⬡ Career Signal · 2021–Present</span>
+        <span class="wave-range">4 yr</span>
+      </div>
+      <canvas id="waveCanvas" class="wave-canvas" width="560" height="160" style="width:280px;height:80px"></canvas>
+      <div class="wave-events">
+        <div class="wave-event"><div class="wave-event-dot" style="background:#E8820C"></div>ExxonMobil 2021</div>
+        <div class="wave-event"><div class="wave-event-dot" style="background:#F5A623"></div>Wood PLC 2022</div>
+        <div class="wave-event"><div class="wave-event-dot" style="background:#E8820C"></div>Phantom 2024</div>
+        <div class="wave-event"><div class="wave-event-dot" style="background:#4ade80"></div>Freelance 2025→</div>
+      </div>
+    </div>
+    <button class="opt-btn" onclick="pick('Career Waveform — Option 09')">→ Implement This</button>
+  </div>
+
+  <!-- ── 10. ROTATING FACTS ── -->
+  <div class="option">
+    <div class="opt-label"><span class="opt-num">10 ·</span> Rotating Fact Cards</div>
+    <div class="facts-wrap">
+      <div class="facts-header">
+        <span class="facts-title">◉ By the Numbers</span>
+        <span class="facts-counter" id="factsCounter">1 / 6</span>
+      </div>
+      <div class="facts-body" id="factsBody">
+        <div class="fact-item active"><div class="fact-num">£20M+</div><div class="fact-label">Total portfolio value delivered across oil &amp; gas, EPC and renewables</div></div>
+        <div class="fact-item"><div class="fact-num">65+</div><div class="fact-label">Site personnel led simultaneously across Dubai and Basra</div></div>
+        <div class="fact-item"><div class="fact-num">90%</div><div class="fact-label">On-time delivery rate across all programmes managed</div></div>
+        <div class="fact-item"><div class="fact-num">11%</div><div class="fact-label">CAPEX reduction achieved through competitive tendering at Wood PLC</div></div>
+        <div class="fact-item"><div class="fact-num">30%</div><div class="fact-label">Approval cycle time cut using Six Sigma DMAIC methodology</div></div>
+        <div class="fact-item"><div class="fact-num">5</div><div class="fact-label">Engineering institution memberships · IMechE · IEEE · IET · ASME · EngAus</div></div>
+      </div>
+      <div class="facts-bar"><div class="facts-progress" id="factsProgress"></div></div>
+      <div class="facts-dots" id="factsDots">
+        <div class="facts-dot on"></div><div class="facts-dot"></div><div class="facts-dot"></div>
+        <div class="facts-dot"></div><div class="facts-dot"></div><div class="facts-dot"></div>
+      </div>
+    </div>
+    <button class="opt-btn" onclick="pick('Rotating Fact Cards — Option 10')">→ Implement This</button>
+  </div>
+
+</div>
+
+<div class="actions" id="actions"></div>
+
+<script>
+// ── Career Network Graph ──
+(function(){
+  const c=document.getElementById('graphCanvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  const W=560,H=280,dpr=window.devicePixelRatio||1;
+  c.width=W*dpr;c.height=H*dpr;ctx.scale(dpr,dpr);
+  const nodes=[
+    {x:W/2,y:H/2,label:'SAIF',sub:'London',r:28,col:'#E8820C',main:true},
+    {x:110,y:80,label:'ExxonMobil',sub:'$10–25M',r:18,col:'#F5A623'},
+    {x:440,y:80,label:'Wood PLC',sub:'£10M+',r:18,col:'#F5A623'},
+    {x:100,y:210,label:'Phantom',sub:'Mfg EPC',r:14,col:'rgba(232,130,12,.6)'},
+    {x:450,y:210,label:'Freelance',sub:'£15M',r:16,col:'#4ade80'},
+  ];
+  const edges=[[0,1],[0,2],[0,3],[0,4]];
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // Edges
+    edges.forEach(([a,b])=>{
+      const na=nodes[a],nb=nodes[b];
+      ctx.beginPath();ctx.moveTo(na.x,na.y);ctx.lineTo(nb.x,nb.y);
+      ctx.strokeStyle='rgba(232,130,12,.15)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.stroke();
+      ctx.setLineDash([]);
+      // Animated dot
+      const prog=(t*0.4+a*0.3)%1;
+      const px=na.x+(nb.x-na.x)*prog,py=na.y+(nb.y-na.y)*prog;
+      ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fillStyle='rgba(232,130,12,.6)';ctx.fill();
+    });
+    // Nodes
+    nodes.forEach(n=>{
+      const pulse=n.main?Math.sin(t*2)*4:0;
+      if(n.main){
+        ctx.beginPath();ctx.arc(n.x,n.y,n.r+8+pulse,0,Math.PI*2);
+        ctx.fillStyle='rgba(232,130,12,.06)';ctx.fill();
+      }
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+      ctx.fillStyle=n.main?'rgba(7,8,14,.9)':'rgba(13,15,24,.9)';ctx.fill();
+      ctx.strokeStyle=n.col;ctx.lineWidth=n.main?2:1;ctx.stroke();
+      ctx.fillStyle=n.col;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.font=`${n.main?'700':'400'} ${n.main?11:9}px 'JetBrains Mono'`;
+      ctx.fillText(n.label,n.x,n.y-(n.main?4:3));
+      ctx.font=`300 8px 'JetBrains Mono'`;ctx.fillStyle='rgba(240,237,232,.4)';
+      ctx.fillText(n.sub,n.x,n.y+(n.main?8:7));
+    });
+    t+=0.012;requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── Calendar ──
+(function(){
+  const grid=document.getElementById('calGrid');
+  if(!grid)return;
+  const now=new Date();
+  const y=now.getFullYear(),m=now.getMonth();
+  document.getElementById('calMonth').textContent=now.toLocaleString('en-GB',{month:'long',year:'numeric'});
+  const firstDay=(new Date(y,m,1).getDay()+6)%7;
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const today=now.getDate();
+  for(let i=0;i<firstDay;i++){const d=document.createElement('div');d.className='cal-day';grid.appendChild(d);}
+  for(let d=1;d<=daysInMonth;d++){
+    const el=document.createElement('div');
+    el.textContent=d;
+    const dow=(new Date(y,m,d).getDay()+6)%7;
+    if(d===today) el.className='cal-day today';
+    else if(dow<5 && d>=today) el.className='cal-day avail';
+    else el.className='cal-day busy';
+    grid.appendChild(el);
+  }
+})();
+
+// ── Waveform ──
+(function(){
+  const c=document.getElementById('waveCanvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  const W=560,H=160,dpr=window.devicePixelRatio||1;
+  c.width=W*dpr;c.height=H*dpr;ctx.scale(dpr,dpr);
+  const peaks=[
+    {x:0.18,h:.55,col:'#E8820C',label:'2021'},
+    {x:0.42,h:.85,col:'#F5A623',label:'2022'},
+    {x:0.62,h:.42,col:'#E8820C',label:'2024'},
+    {x:0.82,h:.72,col:'#4ade80',label:'2025'},
+  ];
+  const cy=H*0.75;
+  // Draw baseline
+  ctx.beginPath();ctx.moveTo(0,cy);
+  let px=0;
+  for(let i=0;i<W;i++){
+    let y=cy;
+    peaks.forEach(p=>{
+      const dist=Math.abs(i/W-p.x);
+      if(dist<0.18) y-=(1-dist/0.18)*p.h*(H*0.6)*Math.sin(Math.PI*(i/W-p.x+0.18)/(0.36));
+    });
+    if(i===0)ctx.moveTo(i,y);else ctx.lineTo(i,y);
+    px=i;
+  }
+  ctx.strokeStyle='rgba(232,130,12,.6)';ctx.lineWidth=1.5;ctx.stroke();
+  // Fill
+  ctx.lineTo(W,cy);ctx.lineTo(0,cy);ctx.closePath();
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'rgba(232,130,12,.18)');g.addColorStop(1,'rgba(232,130,12,0)');
+  ctx.fillStyle=g;ctx.fill();
+  // Peak dots
+  peaks.forEach(p=>{
+    const ix=Math.round(p.x*W);
+    let minY=cy;
+    for(let i=Math.max(0,ix-10);i<Math.min(W,ix+10);i++){
+      let y=cy;
+      peaks.forEach(pk=>{
+        const dist=Math.abs(i/W-pk.x);
+        if(dist<0.18) y-=(1-dist/0.18)*pk.h*(H*0.6)*Math.sin(Math.PI*(i/W-pk.x+0.18)/(0.36));
+      });
+      if(y<minY)minY=y;
+    }
+    ctx.beginPath();ctx.arc(ix,minY,4,0,Math.PI*2);ctx.fillStyle=p.col;ctx.fill();
+  });
+})();
+
+// ── Rotating Facts ──
+(function(){
+  const items=document.querySelectorAll('.fact-item');
+  const dots=document.querySelectorAll('.facts-dot');
+  const counter=document.getElementById('factsCounter');
+  const progress=document.getElementById('factsProgress');
+  let cur=0,prog=0,interval,animId;
+  const DUR=3500;
+  function goTo(i){
+    items[cur].classList.remove('active');
+    dots[cur].classList.remove('on');
+    cur=i;
+    items[cur].classList.add('active');
+    dots[cur].classList.add('on');
+    counter.textContent=(cur+1)+' / '+items.length;
+    prog=0;
+  }
+  function tick(){
+    prog+=100/(DUR/60);
+    if(prog>=100){goTo((cur+1)%items.length);prog=0;}
+    progress.style.width=prog+'%';
+    animId=requestAnimationFrame(tick);
+  }
+  dots.forEach((d,i)=>d.addEventListener('click',()=>{goTo(i);prog=0;}));
+  animId=requestAnimationFrame(tick);
+})();
+
+// ── Pick handler ──
+function pick(name){
+  const a=document.getElementById('actions');
+  a.innerHTML=`<div style="font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;color:rgba(232,130,12,.8);padding:.5rem 0">Selected: <strong style="color:var(--accent)">${name}</strong><br><br>Sending to Claude…</div>`;
+  if(typeof sendPrompt==='function') sendPrompt('Implement '+name+' under my headshot in index.html');
+}
+</script>
+</body>
+</html>

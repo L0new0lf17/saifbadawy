@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>3D Vehicle Sim v3b</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#03030b;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh}
+canvas{display:block}
+p{color:rgba(232,130,12,0.38);font-size:10px;margin-top:8px;font-family:monospace;letter-spacing:.12em}
+</style></head><body>
+<canvas id="c"></canvas>
+<p>PREVIEW v3b · BMW-STYLE SPORTS SEDAN · AL HABTOOR MOTORS · DUBAI 2015</p>
+<script>
+var C=document.getElementById('c'), ctx=C.getContext('2d');
+var W=C.width=840, H=C.height=520;
+var MONO="'JetBrains Mono','Courier New',monospace";
+var ACC='#E8820C';
+var frame=0, wRot=0, scanY=0, vPulse=0;
+
+/* ── Camera ─────────────────────────────────────────────── */
+var fov=500, camDist=7.0, camH=1.28;
+var angle=0.58;   // grows each frame → full 360
+
+function proj(x,y,z){
+  var cA=Math.cos(-angle),sA=Math.sin(-angle);
+  var rx=x*cA-z*sA, rz=x*sA+z*cA;
+  var dz=rz-camDist; if(dz>=-0.1) return null;
+  var sc=fov/(-dz);
+  return{x:W/2+rx*sc, y:H*0.50-(y-camH)*sc, scale:sc, z:rz};
+}
+
+/* ── Lighting (world-space, fixed) ──────────────────────── */
+function nrm(v){var l=Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);return[v[0]/l,v[1]/l,v[2]/l];}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];}
+var KL=nrm([0.5,0.9,0.4]),FL=nrm([-0.7,0.35,-0.3]),RL2=nrm([0,0.15,1]);
+
+function fNorm(pts){
+  var ax=pts[1][0]-pts[0][0],ay=pts[1][1]-pts[0][1],az=pts[1][2]-pts[0][2];
+  var bx=pts[2][0]-pts[0][0],by=pts[2][1]-pts[0][1],bz=pts[2][2]-pts[0][2];
+  var nx=ay*bz-az*by,ny=az*bx-ax*bz,nz=ax*by-ay*bx;
+  var l=Math.sqrt(nx*nx+ny*ny+nz*nz);
+  return l<1e-7?[0,1,0]:[nx/l,ny/l,nz/l];
+}
+function bright(pts){
+  var n=fNorm(pts),b=0.11;
+  var dk=dot(n,KL); b+=Math.max(dk,dk*0.06)*0.72;
+  var df=dot(n,FL); b+=Math.max(df,df*0.06)*0.20;
+  var dr=dot(n,RL2);b+=Math.max(dr,dr*0.06)*0.10;
+  return Math.min(1.12,Math.max(0.05,b));
+}
+function tint(hex,br,al){
+  var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  r=Math.min(255,Math.round(r*br));g=Math.min(255,Math.round(g*br));b=Math.min(255,Math.round(b*br));
+  return al!=null?'rgba('+r+','+g+','+b+','+al+')':'rgb('+r+','+g+','+b+')';
+}
+
+/* ── Colours ────────────────────────────────────────────── */
+var BODY='#8a9ab0',BLIT='#b8cade',BDARK='#4e606e',ROOF='#303840';
+var GLASS='#1b3244',CHR='#b8bcc4',TRIM='#0d0d10',GRLL='#080810';
+var HDLT='#c8dcff',TAIL='#ff1600',DRL='#ffeebb',TBAR='#bb1f00';
+var SKIRT='#0b0b0d';
+
+/* ── Key X/Y/Z landmarks ────────────────────────────────── */
+// X axis = car length (front = +)
+var xFN=2.22,xFB=2.06,xHF=1.48,xAP=0.90,xCP=-0.48,xDP=-1.55,xTK=-1.88,xRB=-2.06,xRN=-2.22;
+// Y axis = height (up = +)
+var yBT=-0.36,ySL=0.22,ySH=0.46,yWB=0.60,yAT=0.89,yRF=0.91,yTK=0.50,yHD=0.58;
+// Z axis = width (near camera = +)
+var zF=0.88,zR=0.82,zW=0.78;
+
+/* ── Build BMW geometry ─────────────────────────────────── */
+function buildCar(){
+  var F=[];
+  function q(col,al,a,b,c,d){F.push({col:col,al:al,pts:[a,b,c,d]});}
+  function tri(col,al,a,b,c){F.push({col:col,al:al,pts:[a,b,c]});}
+
+  // ── Floor
+  q(TRIM,null,[xFB,yBT,-zF],[xFB,yBT,zF],[xRB,yBT,zF],[xRB,yBT,-zF]);
+
+  // ── Front lower bumper
+  q(TRIM,null,[xFB,yBT,-zF],[xFB,yBT,zF],[xFB,ySL,zF],[xFB,ySL,-zF]);
+  // front upper slope (fascia)
+  q(BLIT,null,[xFB,ySL,-zF],[xFB,ySL,zF],[xFN,ySH,-zF+0.08],[xFN,ySH,zF-0.08]);
+  // lower fog-light strips
+  q(TRIM,null,[xFN,yBT+0.02,0.36],[xFN,yBT+0.02,0.86],[xFN,ySL+0.04,0.84],[xFN,ySL+0.04,0.38]);
+  q(TRIM,null,[xFN,yBT+0.02,-0.36],[xFN,yBT+0.02,-0.86],[xFN,ySL+0.04,-0.84],[xFN,ySL+0.04,-0.38]);
+
+  // ── BMW kidney grille (two openings + chrome surround)
+  q(CHR, null,[xFN,ySL+0.06,-0.60],[xFN,ySL+0.06,0.60],[xFN,ySH,0.56],[xFN,ySH,-0.56]);// surround
+  q(GRLL,null,[xFN,ySL+0.10,-0.56],[xFN,ySL+0.10,-0.06],[xFN,ySH-0.02,-0.06],[xFN,ySH-0.02,-0.54]);// left kidney
+  q(GRLL,null,[xFN,ySL+0.10, 0.06],[xFN,ySL+0.10, 0.56],[xFN,ySH-0.02, 0.54],[xFN,ySH-0.02, 0.06]);// right kidney
+  q(CHR, null,[xFN,ySL+0.10,-0.05],[xFN,ySL+0.10, 0.05],[xFN,ySH-0.02,0.05],[xFN,ySH-0.02,-0.05]);// centre bar
+
+  // ── Hood – 3 panels (centre crease + near + far)
+  q(BLIT,null,[xFN,ySH,-0.20],[xFN,ySH,0.20],[xHF,yHD,0.18],[xHF,yHD,-0.18]);
+  q(BODY,null,[xFN,ySH,0.20],[xFN,ySH,zF-0.04],[xHF,yHD,zR-0.04],[xHF,yHD,0.18]);
+  q(BDARK,null,[xFN,ySH,-0.20],[xFN,ySH,-zF+0.04],[xHF,yHD,-zR+0.04],[xHF,yHD,-0.18]);
+  // hood near chrome bevel
+  q(CHR,null,[xFN,ySH,zF],[xHF,yHD,zR],[xHF,yHD,zR-0.04],[xFN,ySH,zF-0.04]);
+
+  // ── Windshield (glass)
+  q(GLASS,0.70,[xHF,yWB,-zW],[xHF,yWB,zW],[xAP,yAT,zW],[xAP,yAT,-zW]);
+  // A-pillar near
+  q(BDARK,null,[xHF,yWB,zR],[xAP,yAT,zW],[xAP,ySH+0.08,zF],[xHF,ySH+0.08,zF]);
+  // A-pillar far
+  q(BDARK,null,[xHF,yWB,-zR],[xAP,yAT,-zW],[xAP,ySH+0.08,-zF],[xHF,ySH+0.08,-zF]);
+
+  // ── Roof
+  q(ROOF,null,[xAP,yRF,-zR],[xAP,yRF,zR],[xCP,yRF,zR],[xCP,yRF,-zR]);
+  q(ROOF,null,[xAP,yAT,zW],[xCP,yAT,zW],[xCP,yRF,zR],[xAP,yRF,zR]);   // near edge
+  q(BDARK,null,[xAP,yAT,-zW],[xCP,yAT,-zW],[xCP,yRF,-zR],[xAP,yRF,-zR]);// far edge
+
+  // ── Rear window (glass)
+  q(GLASS,0.62,[xCP,yAT,-zW],[xCP,yAT,zW],[xDP,yTK+0.06,zW-0.04],[xDP,yTK+0.06,-zW+0.04]);
+  // C-pillar near & far
+  q(BDARK,null,[xCP,yAT,zW],[xDP,yTK+0.06,zF],[xDP,ySH,zF],[xCP,ySH,zF]);
+  q(BDARK,null,[xCP,yAT,-zW],[xDP,yTK+0.06,-zF],[xDP,ySH,-zF],[xCP,ySH,-zF]);
+
+  // ── Side windows – near (+Z face)
+  tri(GLASS,0.62,[xHF,yWB,zF],[xAP,yAT,zW],[xAP,ySH+0.08,zF]);        // front quarter
+  q(GLASS,0.65,[xAP,yAT,zW],[xCP,yAT,zW],[xCP,ySH+0.04,zF],[xAP,ySH+0.08,zF]); // main
+  tri(GLASS,0.58,[xCP,yAT,zW],[xDP,yTK+0.06,zF],[xCP,ySH+0.04,zF]);    // rear quarter
+
+  // ── Side body NEAR (split into 4 x-sections to help Z-sort)
+  // Section A: xFB → xHF
+  q(BODY,null,[xFB,yBT,zF],[xHF,yBT,zF],[xHF,ySL,zF],[xFB,ySL,zF]);
+  q(BODY,null,[xFB,ySL,zF],[xHF,ySL,zF],[xHF,ySH,zF],[xFB,ySH,zF]);
+  q(BODY,null,[xFB,ySH,zF],[xHF,ySH,zF],[xHF,ySH+0.08,zF],[xFB,ySH+0.08,zF]);
+  // Section B: xHF → xCP (cabin)
+  q(BODY,null,[xHF,yBT,zF],[xCP,yBT,zF],[xCP,ySL,zF],[xHF,ySL,zF]);
+  q(BODY,null,[xHF,ySL,zF],[xCP,ySL,zF],[xCP,ySH,zF],[xHF,ySH,zF]);
+  // Section C: xCP → xDP
+  q(BODY,null,[xCP,yBT,zF],[xDP,yBT,zF],[xDP,ySL,zF],[xCP,ySL,zF]);
+  q(BODY,null,[xCP,ySL,zF],[xDP,ySL,zF],[xDP,ySH,zF],[xCP,ySH,zF]);
+  q(BODY,null,[xCP,ySH,zF],[xDP,ySH,zF],[xDP,ySH+0.04,zF],[xCP,ySH+0.04,zF]);
+  // Section D: xDP → xRB (trunk)
+  q(BODY,null,[xDP,yBT,zF],[xRB,yBT,zF],[xRB,ySL,zF],[xDP,ySL,zF]);
+  q(BODY,null,[xDP,ySL,zF],[xRB,ySL,zF],[xRB,ySH,zF],[xDP,ySH,zF]);
+
+  // character line
+  q(BLIT,null,[xFB+0.04,ySH,zF+0.001],[xRB-0.04,ySH,zF+0.001],[xRB-0.04,ySH+0.022,zF+0.001],[xFB+0.04,ySH+0.022,zF+0.001]);
+  // amber accent stripe
+  q(ACC, null,[xFB+0.04,ySL+0.012,zF+0.003],[xRB-0.04,ySL+0.012,zF+0.003],[xRB-0.04,ySL+0.038,zF+0.003],[xFB+0.04,ySL+0.038,zF+0.003]);
+  // side skirt
+  q(SKIRT,null,[xFB+0.04,yBT,zF+0.002],[xRB-0.04,yBT,zF+0.002],[xRB-0.04,ySL,zF+0.002],[xFB+0.04,ySL,zF+0.002]);
+  // door seam lines
+  q(TRIM,null,[xHF,ySL,zF+0.001],[xHF,ySH+0.08,zF+0.001],[xHF+0.012,ySH+0.08,zF+0.001],[xHF+0.012,ySL,zF+0.001]);
+  q(TRIM,null,[xCP,ySL,zF+0.001],[xCP,ySH+0.04,zF+0.001],[xCP+0.012,ySH+0.04,zF+0.001],[xCP+0.012,ySL,zF+0.001]);
+
+  // ── Side body FAR (-Z)
+  q(BDARK,null,[xFB,yBT,-zF],[xRB,yBT,-zF],[xRB,ySL,-zF],[xFB,ySL,-zF]);
+  q(BDARK,null,[xFB,ySL,-zF],[xRB,ySL,-zF],[xRB,ySH,-zF],[xFB,ySH,-zF]);
+  q(BDARK,null,[xFB,ySH,-zF],[xRB,ySH,-zF],[xRB,ySH+0.04,-zF],[xFB,ySH+0.04,-zF]);
+  // far accent stripe
+  q(ACC, null,[xFB+0.04,ySL+0.012,-zF-0.003],[xRB-0.04,ySL+0.012,-zF-0.003],[xRB-0.04,ySL+0.038,-zF-0.003],[xFB+0.04,ySL+0.038,-zF-0.003]);
+
+  // ── Door mirror (near side)
+  q(BDARK,null,[xHF-0.30,ySH+0.12,zF+0.02],[xHF-0.30,ySH+0.24,zF+0.02],[xHF-0.08,ySH+0.24,zF+0.015],[xHF-0.08,ySH+0.12,zF+0.015]);
+  q(GLASS,0.65,[xHF-0.29,ySH+0.14,zF+0.025],[xHF-0.29,ySH+0.22,zF+0.025],[xHF-0.10,ySH+0.22,zF+0.02],[xHF-0.10,ySH+0.14,zF+0.02]);
+
+  // ── Trunk lid
+  q(BODY,null,[xDP,yTK+0.06,-zW+0.04],[xDP,yTK+0.06,zW-0.04],[xTK,yTK,zR-0.08],[xTK,yTK,-zR+0.08]);
+  q(BDARK,null,[xTK,yTK,-zR+0.04],[xTK,yTK,zR-0.04],[xTK,ySH,zF],[xTK,ySH,-zF]);
+  q(BDARK,null,[xTK,ySH,-zF],[xTK,ySH,zF],[xRB,ySH-0.06,zF],[xRB,ySH-0.06,-zF]);
+  // trunk spoiler lip
+  q(TRIM,null,[xDP,yTK+0.06,-zW+0.04],[xDP,yTK+0.06,zW-0.04],[xDP,yTK+0.12,zW-0.06],[xDP,yTK+0.12,-zW+0.06]);
+
+  // ── Rear bumper + diffuser
+  q(TRIM,null,[xRB,yBT,-zF],[xRB,yBT,zF],[xRB,ySL,zF],[xRB,ySL,-zF]);
+  q(BDARK,null,[xRB,ySL,-zF],[xRB,ySL,zF],[xRB,ySH-0.06,zF],[xRB,ySH-0.06,-zF]);
+  q(TRIM,null,[xRN,yBT,-zF+0.12],[xRN,yBT,zF-0.12],[xRN,ySL-0.04,zF-0.15],[xRN,ySL-0.04,-zF+0.15]); // diffuser
+  // exhaust tips
+  q('#2e2e2e',null,[xRN,ySL-0.12,0.38],[xRN,ySL-0.12,0.54],[xRN,ySL-0.02,0.54],[xRN,ySL-0.02,0.38]);
+  q('#2e2e2e',null,[xRN,ySL-0.12,-0.38],[xRN,ySL-0.12,-0.54],[xRN,ySL-0.02,-0.54],[xRN,ySL-0.02,-0.38]);
+
+  // ── Headlights
+  q(HDLT,null,[xFN,ySL+0.06,0.36],[xFN,ySL+0.06,0.86],[xFN,ySH-0.02,0.84],[xFN,ySH-0.02,0.40]);
+  q(HDLT,null,[xFN,ySL+0.06,-0.36],[xFN,ySL+0.06,-0.86],[xFN,ySH-0.02,-0.84],[xFN,ySH-0.02,-0.40]);
+  // angel eye ring (inner bright ring)
+  q('#aac8ff',null,[xFN,ySL+0.22,0.46],[xFN,ySL+0.22,0.74],[xFN,ySH-0.14,0.72],[xFN,ySH-0.14,0.48]);
+  // DRL strips
+  q(DRL,null,[xFN,ySL+0.02,0.28],[xFN,ySL+0.02,0.90],[xFN,ySL+0.07,0.90],[xFN,ySL+0.07,0.28]);
+  q(DRL,null,[xFN,ySL+0.02,-0.28],[xFN,ySL+0.02,-0.90],[xFN,ySL+0.07,-0.90],[xFN,ySL+0.07,-0.28]);
+
+  // ── Taillights (L-shaped, modern BMW)
+  q(TAIL,null,[xRN,ySL+0.04,0.32],[xRN,ySL+0.04,0.86],[xRN,ySH-0.06,0.84],[xRN,ySH-0.06,0.38]);
+  q(TAIL,null,[xRN,ySL+0.04,-0.32],[xRN,ySL+0.04,-0.86],[xRN,ySH-0.06,-0.84],[xRN,ySH-0.06,-0.38]);
+  q(TBAR,null,[xRN,ySH-0.12,-0.30],[xRN,ySH-0.12,0.30],[xRN,ySH-0.06,0.30],[xRN,ySH-0.06,-0.30]);// light bar
+  q(CHR, null,[xRN,ySH-0.06,-0.28],[xRN,ySH-0.06,0.28],[xRN,ySH-0.02,0.26],[xRN,ySH-0.02,-0.26]);// chrome
+
+  return F;
+}
+var CAR=buildCar();
+
+/* ── Wheel drawing ──────────────────────────────────────── */
+// [cx, cy, cz, isNear]
+var WPOS=[[1.28,yBT+0.30,zF+0.07,true],[1.28,yBT+0.30,-zF-0.07,false],
+          [-1.28,yBT+0.30,zF+0.07,true],[-1.28,yBT+0.30,-zF-0.07,false]];
+
+function drawWheel(wx,wy,wz,isNear,c){
+  var R=c.scale*0.30;
+  // shadow ellipse
+  ctx.beginPath();ctx.ellipse(c.x,c.y+R*0.88,R*0.76,R*0.14,0,0,Math.PI*2);
+  ctx.fillStyle='rgba(0,0,0,0.32)';ctx.fill();
+  // tyre
+  ctx.beginPath();ctx.arc(c.x,c.y,R,0,Math.PI*2);
+  ctx.fillStyle='#181818';ctx.fill();
+  if(isNear){
+    var tg=ctx.createRadialGradient(c.x-R*0.3,c.y-R*0.3,R*0.04,c.x,c.y,R);
+    tg.addColorStop(0,'rgba(90,90,90,0.30)');tg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.beginPath();ctx.arc(c.x,c.y,R,0,Math.PI*2);ctx.fillStyle=tg;ctx.fill();
+  }
+  // barrel
+  ctx.beginPath();ctx.arc(c.x,c.y,R*0.79,0,Math.PI*2);ctx.fillStyle='#1e1e22';ctx.fill();
+  // brake rotor
+  ctx.beginPath();ctx.arc(c.x,c.y,R*0.50,0,Math.PI*2);ctx.fillStyle='#343438';ctx.fill();
+  // rotor vents
+  for(var v=0;v<10;v++){
+    var va=wRot*0.62+(v/10)*Math.PI*2;
+    ctx.save();ctx.translate(c.x,c.y);ctx.rotate(va);
+    ctx.fillStyle='#222224';ctx.fillRect(R*0.28,-R*0.026,R*0.20,R*0.052);ctx.restore();
+  }
+  // 5 Y-spokes
+  for(var s=0;s<5;s++){
+    var sa=wRot+(s/5)*Math.PI*2, w1=sa-0.14, w2=sa+0.14;
+    ctx.beginPath();
+    ctx.moveTo(c.x+Math.cos(w1)*R*0.12,c.y+Math.sin(w1)*R*0.12);
+    ctx.lineTo(c.x+Math.cos(w1)*R*0.78,c.y+Math.sin(w1)*R*0.78);
+    ctx.arc(c.x,c.y,R*0.78,w1,w2);
+    ctx.lineTo(c.x+Math.cos(w2)*R*0.12,c.y+Math.sin(w2)*R*0.12);
+    ctx.arc(c.x,c.y,R*0.12,w2,w1,true);
+    ctx.closePath();
+    var sg=ctx.createLinearGradient(c.x+Math.cos(sa)*R*0.12,c.y+Math.sin(sa)*R*0.12,
+                                    c.x+Math.cos(sa)*R*0.78,c.y+Math.sin(sa)*R*0.78);
+    sg.addColorStop(0,'#c8c8d0');sg.addColorStop(0.5,'#888898');sg.addColorStop(1,'#484850');
+    ctx.fillStyle=sg;ctx.fill();
+    ctx.strokeStyle='#181820';ctx.lineWidth=R*0.020;ctx.stroke();
+  }
+  // outer chrome ring
+  ctx.beginPath();ctx.arc(c.x,c.y,R*0.79,0,Math.PI*2);
+  ctx.strokeStyle=isNear?'#6a6a78':'#3a3a44';ctx.lineWidth=R*0.050;ctx.stroke();
+  // hub
+  ctx.beginPath();ctx.arc(c.x,c.y,R*0.16,0,Math.PI*2);ctx.fillStyle='#a8a8b2';ctx.fill();
+  ctx.beginPath();ctx.arc(c.x,c.y,R*0.08,0,Math.PI*2);
+  ctx.fillStyle=ACC;ctx.shadowColor=ACC;ctx.shadowBlur=7;ctx.fill();ctx.shadowBlur=0;
+}
+
+/* ── Callouts ───────────────────────────────────────────── */
+var CO=[
+  {name:'POWERTRAIN',sub:'V6 · TESTED',   wx:1.85,wy:0.24,wz:0,      col:'#E8820C',delay:40, zone:'TR'},
+  {name:'SUSPENSION', sub:'ADAPTIVE · OK',wx:1.28,wy:yBT+0.30,wz:zF, col:'#4ade80',delay:90, zone:'BR'},
+  {name:'ELECTRICAL', sub:'48V SYS · OK', wx:-0.1,wy:0.65,wz:0,      col:'#38bdf8',delay:140,zone:'TL'},
+  {name:'BRAKING',    sub:'ABS · EBD',    wx:-1.28,wy:yBT+0.30,wz:zF,col:'#a78bfa',delay:190,zone:'BL'},
+  {name:'FUEL SYS.',  sub:'DIRECT INJ.',  wx:1.52,wy:0.44,wz:0,      col:'#F5A623',delay:240,zone:'TC'}
+];
+function zone(z,bw,bh){
+  var p=16;
+  return z==='TR'?{lx:W-bw-p,ly:32}:z==='TL'?{lx:p,ly:32}:
+         z==='BR'?{lx:W-bw-p,ly:H-bh-28}:z==='BL'?{lx:p,ly:H-bh-28}:{lx:W/2-bw/2,ly:32};
+}
+
+/* ── DRAW LOOP ───────────────────────────────────────────── */
+function draw(){
+  ctx.clearRect(0,0,W,H);
+
+  /* background */
+  var bg=ctx.createRadialGradient(W/2,H*0.44,20,W/2,H*0.44,W*0.72);
+  bg.addColorStop(0,'#0c1520');bg.addColorStop(1,'#03040c');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+  /* perspective grid */
+  for(var gx=-11;gx<=11;gx++){
+    var g1=proj(gx*0.52,yBT,-4.5),g2=proj(gx*0.52,yBT,4.5);
+    if(g1&&g2){ctx.beginPath();ctx.moveTo(g1.x,g1.y);ctx.lineTo(g2.x,g2.y);
+      ctx.strokeStyle='rgba(26,42,80,0.52)';ctx.lineWidth=0.5;ctx.stroke();}
+  }
+  for(var gz=-5;gz<=5;gz++){
+    var h1=proj(-6,yBT,gz*0.56),h2=proj(6,yBT,gz*0.56);
+    if(h1&&h2){ctx.beginPath();ctx.moveTo(h1.x,h1.y);ctx.lineTo(h2.x,h2.y);
+      ctx.strokeStyle='rgba(26,42,80,0.52)';ctx.lineWidth=0.5;ctx.stroke();}
+  }
+  /* car glow */
+  var gc=proj(0,0.28,0);
+  if(gc){var gl=ctx.createRadialGradient(gc.x,gc.y,10,gc.x,gc.y,210);
+    gl.addColorStop(0,'rgba(22,44,100,0.20)');gl.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gl;ctx.fillRect(0,0,W,H);}
+
+  /* ── THREE-PASS DEPTH-CORRECT RENDERING ──────────────── */
+  // Determine which wheel side faces camera
+  var cA2=Math.cos(-angle),sA2=Math.sin(-angle);
+  function wrzOf(wx,wz){return wx*sA2+wz*cA2;}  // camera-space rz of wheel centre
+
+  /* PASS 1: far wheels (wCameraZ <= 0 → behind car body) */
+  WPOS.forEach(function(w){
+    if(wrzOf(w[0],w[2])<=0){
+      var c=proj(w[0],w[1],w[2]);if(c)drawWheel(w[0],w[1],w[2],w[3],c);
+    }
+  });
+
+  /* PASS 2: car body faces, sorted farthest → nearest */
+  var faces=[];
+  CAR.forEach(function(f){
+    if(!f.pts||f.pts.length<3)return;
+    var ps=f.pts.map(function(p){return proj(p[0],p[1],p[2]);});
+    if(ps.some(function(p){return!p;}))return;
+    var avgZ=ps.reduce(function(s,p){return s+p.z;},0)/ps.length;
+    faces.push({f:f,ps:ps,avgZ:avgZ,br:bright(f.pts)});
+  });
+  faces.sort(function(a,b){return a.avgZ-b.avgZ;});
+
+  faces.forEach(function(item){
+    var ps=item.ps,f=item.f;
+    ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);
+    for(var i=1;i<ps.length;i++)ctx.lineTo(ps[i].x,ps[i].y);
+    ctx.closePath();
+    ctx.fillStyle=f.al!=null?tint(f.col,item.br,f.al):tint(f.col,item.br);
+    ctx.fill();
+    /* glass shimmer */
+    if(f.col===GLASS){
+      var gs=ctx.createLinearGradient(ps[0].x,ps[0].y,ps[1]?ps[1].x:ps[0].x+20,ps[1]?ps[1].y:ps[0].y);
+      gs.addColorStop(0,'rgba(255,255,255,0.09)');gs.addColorStop(0.5,'rgba(255,255,255,0.02)');gs.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);for(var i=1;i<ps.length;i++)ctx.lineTo(ps[i].x,ps[i].y);
+      ctx.closePath();ctx.fillStyle=gs;ctx.fill();
+    }
+    /* headlight glow */
+    if(f.col===HDLT||f.col==='#aac8ff'){
+      ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);for(var i=1;i<ps.length;i++)ctx.lineTo(ps[i].x,ps[i].y);
+      ctx.closePath();ctx.shadowColor='#88aaff';ctx.shadowBlur=18;
+      ctx.fillStyle=tint(f.col,item.br);ctx.fill();ctx.shadowBlur=0;
+    }
+    /* taillight glow */
+    if(f.col===TAIL||f.col===TBAR){
+      ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);for(var i=1;i<ps.length;i++)ctx.lineTo(ps[i].x,ps[i].y);
+      ctx.closePath();ctx.shadowColor='#ff2400';ctx.shadowBlur=14;
+      ctx.fillStyle=tint(f.col,item.br);ctx.fill();ctx.shadowBlur=0;
+    }
+    ctx.strokeStyle='rgba(0,0,6,0.22)';ctx.lineWidth=0.35;ctx.stroke();
+  });
+
+  /* PASS 3: near wheels (on top of body) */
+  WPOS.forEach(function(w){
+    if(wrzOf(w[0],w[2])>0){
+      var c=proj(w[0],w[1],w[2]);if(c)drawWheel(w[0],w[1],w[2],w[3],c);
+    }
+  });
+  wRot+=0.030;
+
+  /* ground reflection */
+  var gp=proj(0,yBT,0);
+  if(gp){var rf=ctx.createLinearGradient(W/2,gp.y,W/2,gp.y+52);
+    rf.addColorStop(0,'rgba(30,55,120,0.08)');rf.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=rf;ctx.fillRect(0,gp.y,W,56);}
+
+  /* scan beam */
+  scanY=(scanY+1.8)%(H*0.76);
+  var sy=H*0.10+scanY;
+  var sg2=ctx.createLinearGradient(0,sy-4,0,sy+4);
+  sg2.addColorStop(0,'rgba(0,0,0,0)');sg2.addColorStop(0.5,'rgba(232,130,12,0.07)');sg2.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=sg2;ctx.fillRect(0,sy-4,W,8);
+
+  /* HUD corners */
+  var bS=18;
+  [[10,10],[W-10-bS,10],[10,H-10-bS],[W-10-bS,H-10-bS]].forEach(function(c,i){
+    ctx.strokeStyle='rgba(232,130,12,0.40)';ctx.lineWidth=1.5;ctx.beginPath();
+    if(i===0){ctx.moveTo(c[0],c[1]+bS);ctx.lineTo(c[0],c[1]);ctx.lineTo(c[0]+bS,c[1]);}
+    if(i===1){ctx.moveTo(c[0]+bS,c[1]+bS);ctx.lineTo(c[0]+bS,c[1]);ctx.lineTo(c[0],c[1]);}
+    if(i===2){ctx.moveTo(c[0],c[1]);ctx.lineTo(c[0],c[1]+bS);ctx.lineTo(c[0]+bS,c[1]+bS);}
+    if(i===3){ctx.moveTo(c[0]+bS,c[1]);ctx.lineTo(c[0]+bS,c[1]+bS);ctx.lineTo(c[0],c[1]+bS);}
+    ctx.stroke();
+  });
+
+  /* title */
+  ctx.font='500 10.5px '+MONO;ctx.fillStyle='rgba(232,130,12,0.82)';ctx.textAlign='left';
+  ctx.fillText('3D VEHICLE SIM — AL HABTOOR MOTORS · DUBAI 2015',32,23);
+  ctx.font='9px '+MONO;ctx.fillStyle='rgba(232,130,12,0.34)';ctx.textAlign='right';
+  ctx.fillText('SYS/DIAG v3b  ◉',W-32,23);
+  /* telemetry */
+  ctx.font='8px '+MONO;ctx.fillStyle='rgba(232,130,12,0.24)';ctx.textAlign='left';
+  ctx.fillText('ANG:'+((angle%(Math.PI*2)).toFixed(3))+'  FRM:'+String(frame).padStart(5,'0'),32,H-12);
+  ctx.textAlign='right';
+  ctx.fillText('AL·HABTOOR·MOTORS·DUBAI·2015  ▣',W-32,H-12);
+
+  /* ── Callout labels ─────────────────────────────────── */
+  CO.forEach(function(co){
+    if(frame<co.delay)return;
+    var al=Math.min((frame-co.delay)/20,1);
+    var sp=proj(co.wx,co.wy,co.wz);if(!sp)return;
+    ctx.globalAlpha=al;
+    var bw=98,bh=31,z2=zone(co.zone,bw,bh),lx=z2.lx,ly=z2.ly;
+    /* pulsing rings */
+    var r1=3.5+Math.sin(frame*0.09+co.delay*0.04)*1.8;
+    ctx.beginPath();ctx.arc(sp.x,sp.y,r1*2.1,0,Math.PI*2);
+    ctx.strokeStyle=co.col+'20';ctx.lineWidth=1;ctx.stroke();
+    ctx.beginPath();ctx.arc(sp.x,sp.y,r1,0,Math.PI*2);
+    ctx.strokeStyle=co.col+'55';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.beginPath();ctx.arc(sp.x,sp.y,3.2,0,Math.PI*2);
+    ctx.fillStyle=co.col;ctx.shadowColor=co.col;ctx.shadowBlur=10;ctx.fill();ctx.shadowBlur=0;
+    /* dashed leader */
+    ctx.strokeStyle=co.col+'40';ctx.lineWidth=1;ctx.setLineDash([3,5]);
+    ctx.beginPath();ctx.moveTo(sp.x,sp.y);ctx.lineTo(lx+bw/2,ly+bh/2);ctx.stroke();
+    ctx.setLineDash([]);
+    /* box */
+    ctx.fillStyle='rgba(3,5,16,0.94)';ctx.strokeStyle=co.col;ctx.lineWidth=1.4;
+    ctx.fillRect(lx,ly,bw,bh);ctx.strokeRect(lx,ly,bw,bh);
+    ctx.fillStyle=co.col;ctx.fillRect(lx,ly,bw,2);ctx.fillRect(lx,ly,2,bh);
+    ctx.strokeStyle=co.col+'28';ctx.lineWidth=0.7;ctx.strokeRect(lx+3,ly+4,bw-6,bh-7);
+    ctx.font='bold 9px '+MONO;ctx.fillStyle=co.col;ctx.textAlign='left';
+    ctx.fillText(co.name,lx+7,ly+15);
+    ctx.font='8px '+MONO;ctx.fillStyle='rgba(240,237,232,0.88)';
+    ctx.fillText(co.sub,lx+7,ly+26);
+    ctx.fillStyle='#4ade80';ctx.textAlign='right';ctx.font='9px '+MONO;
+    ctx.fillText('✓',lx+bw-5,ly+16);
+    ctx.globalAlpha=1;
+  });
+
+  /* all-systems banner */
+  if(frame>=CO[CO.length-1].delay+28){
+    vPulse+=0.04;
+    ctx.font='bold 10px '+MONO;
+    ctx.fillStyle='rgba(74,222,128,'+(0.58+Math.sin(vPulse)*0.28)+')';
+    ctx.textAlign='center';
+    ctx.fillText('◎  ALL SYSTEMS VERIFIED — OPERATIONAL RELIABILITY CONFIRMED  ◎',W/2,H-12);
+  }
+  ctx.textAlign='left';
+
+  /* full 360° rotation */
+  angle+=0.007;
+  frame++;
+  requestAnimationFrame(draw);
+}
+draw();
+</script></body></html>

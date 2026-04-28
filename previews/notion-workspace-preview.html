@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notion Workspace Preview — Saif Badawy</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #1f1f1f;
+  color: #e8e4de;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #191919;
+  border-right: 1px solid #2a2a2a;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+.sidebar-top {
+  padding: 14px 12px 8px;
+  border-bottom: 1px solid #2a2a2a;
+}
+.workspace-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e8e4de;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.workspace-icon {
+  width: 22px; height: 22px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: white; font-weight: 700;
+}
+.sidebar-section {
+  padding: 8px 8px 4px;
+}
+.sidebar-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #555;
+  padding: 0 6px;
+  margin-bottom: 4px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #888;
+  font-size: 12px;
+  transition: background 0.15s;
+}
+.nav-item:hover { background: #252525; color: #ccc; }
+.nav-item.active { background: #2a2a2a; color: #e8e4de; }
+.nav-icon { font-size: 13px; width: 18px; text-align: center; }
+.nav-badge {
+  margin-left: auto;
+  background: #3b82f6;
+  color: white;
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.nav-badge.orange { background: #f59e0b; }
+.nav-badge.green { background: #10b981; }
+.nav-badge.red { background: #ef4444; }
+
+/* Main content */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.page-header {
+  padding: 20px 28px 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+.page-icon { font-size: 28px; margin-bottom: 6px; }
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #e8e4de;
+  margin-bottom: 4px;
+}
+.page-meta {
+  font-size: 11px;
+  color: #555;
+  margin-bottom: 14px;
+}
+.view-tabs {
+  display: flex;
+  gap: 2px;
+}
+.view-tab {
+  padding: 6px 14px;
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+.view-tab.active { color: #e8e4de; border-bottom-color: #3b82f6; }
+.view-tab:hover { color: #aaa; }
+
+/* Database content */
+.db-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 28px;
+}
+
+/* Table view */
+.db-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.db-table th {
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: #555;
+  padding: 6px 10px;
+  border-bottom: 1px solid #2a2a2a;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.db-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid #222;
+  font-size: 12px;
+  color: #ccc;
+  vertical-align: middle;
+}
+.db-table tr:hover td { background: #252525; }
+.db-table tr:last-child td { border-bottom: none; }
+
+/* Tags/pills */
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.pill-blue { background: #1e3a5f; color: #60a5fa; }
+.pill-green { background: #0d2b1a; color: #4ade80; }
+.pill-yellow { background: #2b1f00; color: #fbbf24; }
+.pill-red { background: #2b0f0f; color: #f87171; }
+.pill-purple { background: #1f1040; color: #c084fc; }
+.pill-gray { background: #252525; color: #888; }
+.pill-orange { background: #2b1500; color: #fb923c; }
+.pill-teal { background: #0d2222; color: #2dd4bf; }
+
+.row-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #e8e4de;
+  font-size: 12px;
+}
+.row-icon { font-size: 13px; }
+
+.db-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.db-btn {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #666;
+  background: #252525;
+  border: 1px solid #2a2a2a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.db-btn:hover { background: #2e2e2e; color: #aaa; }
+.db-count {
+  margin-left: auto;
+  font-size: 11px;
+  color: #555;
+}
+
+/* Kanban view */
+.kanban {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.kanban-col {
+  min-width: 200px;
+  flex-shrink: 0;
+}
+.kanban-col-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 4px 0;
+}
+.kanban-col-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.kanban-col-count {
+  font-size: 10px;
+  color: #555;
+  background: #252525;
+  padding: 1px 6px;
+  border-radius: 8px;
+}
+.kanban-card {
+  background: #252525;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+.kanban-card:hover { border-color: #3a3a3a; }
+.kanban-card-title { font-size: 12px; font-weight: 500; color: #e8e4de; margin-bottom: 6px; }
+.kanban-card-meta { font-size: 10px; color: #666; display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Hidden panels */
+.db-panel { display: none; }
+.db-panel.active { display: flex; flex-direction: column; height: 100%; }
+
+/* Stats row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  background: #252525;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px;
+}
+.stat-val { font-size: 22px; font-weight: 700; color: #e8e4de; }
+.stat-label { font-size: 10px; color: #555; margin-top: 2px; }
+.stat-delta { font-size: 10px; color: #4ade80; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="sidebar-top">
+    <div class="workspace-name">
+      <div class="workspace-icon">SB</div>
+      Saif Badawy
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Portfolio System</div>
+    <div class="nav-item active" onclick="showDB('leads', this)">
+      <span class="nav-icon">👤</span> Lead Pipeline
+      <span class="nav-badge orange">3</span>
+    </div>
+    <div class="nav-item" onclick="showDB('visitors', this)">
+      <span class="nav-icon">👁</span> Visitor Log
+      <span class="nav-badge">47</span>
+    </div>
+    <div class="nav-item" onclick="showDB('bookings', this)">
+      <span class="nav-icon">📆</span> Bookings
+      <span class="nav-badge green">1</span>
+    </div>
+    <div class="nav-item" onclick="showDB('tasks', this)">
+      <span class="nav-icon">✅</span> Follow-up Tasks
+      <span class="nav-badge red">2</span>
+    </div>
+    <div class="nav-item" onclick="showDB('digest', this)">
+      <span class="nav-icon">📋</span> Weekly Digest
+    </div>
+    <div class="nav-item" onclick="showDB('tools', this)">
+      <span class="nav-icon">💡</span> Tool Interactions
+      <span class="nav-badge">12</span>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Monitoring</div>
+    <div class="nav-item">
+      <span class="nav-icon">📉</span> GA4 Dashboard
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">🟢</span> Uptime Status
+    </div>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- LEADS -->
+  <div id="db-leads" class="db-panel active">
+    <div class="page-header">
+      <div class="page-icon">👤</div>
+      <div class="page-title">Lead Pipeline</div>
+      <div class="page-meta">Auto-populated from contact form · email · Calendly · Make.com</div>
+      <div class="view-tabs">
+        <div class="view-tab active">All Leads</div>
+        <div class="view-tab">By Status</div>
+        <div class="view-tab">This Week</div>
+      </div>
+    </div>
+    <div class="db-content">
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-val">8</div><div class="stat-label">Total Leads</div><div class="stat-delta">↑ 3 this week</div></div>
+        <div class="stat-card"><div class="stat-val">3</div><div class="stat-label">Active</div><div class="stat-delta">needs follow-up</div></div>
+        <div class="stat-card"><div class="stat-val">1</div><div class="stat-label">Booked</div><div class="stat-delta">call Tuesday</div></div>
+        <div class="stat-card"><div class="stat-val">62%</div><div class="stat-label">From LinkedIn</div><div class="stat-delta">top source</div></div>
+      </div>
+      <div class="db-toolbar">
+        <div class="db-btn">⚙ Filter</div>
+        <div class="db-btn">↕ Sort: Date ↓</div>
+        <div class="db-btn">+ New Lead</div>
+        <div class="db-count">8 leads</div>
+      </div>
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Name</th><th>Company</th><th>Source</th><th>Type</th><th>Status</th><th>Date</th><th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">👤</span>Sarah Mitchell</div></td>
+            <td>Shell</td><td><span class="pill pill-blue">LinkedIn</span></td>
+            <td><span class="pill pill-purple">Consulting</span></td>
+            <td><span class="pill pill-yellow">Contacted</span></td>
+            <td>26 Apr 2026</td><td>Interested in HSE consulting</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">👤</span>James Al-Rashid</div></td>
+            <td>Halliburton</td><td><span class="pill pill-blue">LinkedIn</span></td>
+            <td><span class="pill pill-green">Full-time Role</span></td>
+            <td><span class="pill pill-green">Booked</span></td>
+            <td>25 Apr 2026</td><td>PM role, call Tue 2pm</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">👤</span>Priya Nair</div></td>
+            <td>BP</td><td><span class="pill pill-orange">Contact Form</span></td>
+            <td><span class="pill pill-purple">Consulting</span></td>
+            <td><span class="pill pill-yellow">Contacted</span></td>
+            <td>24 Apr 2026</td><td>HAZOP review project</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">👤</span>Tom Eriksson</div></td>
+            <td>Schlumberger</td><td><span class="pill pill-blue">LinkedIn</span></td>
+            <td><span class="pill pill-green">Full-time Role</span></td>
+            <td><span class="pill pill-red">No Reply</span></td>
+            <td>20 Apr 2026</td><td>Sent CV, no response yet</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">👤</span>Fatima Al-Zaabi</div></td>
+            <td>ADNOC</td><td><span class="pill pill-blue">LinkedIn</span></td>
+            <td><span class="pill pill-teal">Contract</span></td>
+            <td><span class="pill pill-gray">Closed</span></td>
+            <td>18 Apr 2026</td><td>Not the right fit currently</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">👤</span>Marcus Webb</div></td>
+            <td>TotalEnergies</td><td><span class="pill pill-orange">Email</span></td>
+            <td><span class="pill pill-purple">Consulting</span></td>
+            <td><span class="pill pill-yellow">Contacted</span></td>
+            <td>17 Apr 2026</td><td>Risk mgmt, onshore project</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- VISITORS -->
+  <div id="db-visitors" class="db-panel">
+    <div class="page-header">
+      <div class="page-icon">👁</div>
+      <div class="page-title">Visitor Log</div>
+      <div class="page-meta">Auto-populated directly from website JS · 0 Make.com ops · family visits included but tagged</div>
+      <div class="view-tabs">
+        <div class="view-tab active">All Visits</div>
+        <div class="view-tab">Professional Only</div>
+        <div class="view-tab">High Intent</div>
+      </div>
+    </div>
+    <div class="db-content">
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-val">47</div><div class="stat-label">This Week</div><div class="stat-delta">↑ 12 vs last week</div></div>
+        <div class="stat-card"><div class="stat-val">8m 22s</div><div class="stat-label">Avg. Time on Site</div><div class="stat-delta">↑ from 5m 10s</div></div>
+        <div class="stat-card"><div class="stat-val">62%</div><div class="stat-label">From LinkedIn</div><div class="stat-delta">top source</div></div>
+        <div class="stat-card"><div class="stat-val">5</div><div class="stat-label">High Intent</div><div class="stat-delta">3+ min + contact view</div></div>
+      </div>
+      <div class="db-toolbar">
+        <div class="db-btn">⚙ Filter</div>
+        <div class="db-btn">↕ Sort: Date ↓</div>
+        <div class="db-count">47 visits this week</div>
+      </div>
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Session</th><th>Source</th><th>Country</th><th>Time on Site</th><th>Pages Viewed</th><th>Intent</th><th>Date/Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">🌐</span>Visitor #047</div></td>
+            <td><span class="pill pill-blue">LinkedIn</span></td><td>🇬🇧 UK</td>
+            <td>9m 14s</td><td>Hero, Experience, Contact</td>
+            <td><span class="pill pill-green">High</span></td><td>26 Apr, 14:32</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">🌐</span>Visitor #046</div></td>
+            <td><span class="pill pill-orange">Direct</span></td><td>🇸🇦 KSA</td>
+            <td>1m 02s</td><td>Hero</td>
+            <td><span class="pill pill-gray">Family</span></td><td>26 Apr, 13:15</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">🌐</span>Visitor #045</div></td>
+            <td><span class="pill pill-blue">LinkedIn</span></td><td>🇳🇱 Netherlands</td>
+            <td>6m 48s</td><td>Hero, Projects, ROI Calc</td>
+            <td><span class="pill pill-green">High</span></td><td>26 Apr, 11:08</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">🌐</span>Visitor #044</div></td>
+            <td><span class="pill pill-orange">Direct</span></td><td>🇸🇦 KSA</td>
+            <td>4m 33s</td><td>Hero, 90-Day Plan, ROI</td>
+            <td><span class="pill pill-gray">Family</span></td><td>26 Apr, 10:22</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">🌐</span>Visitor #043</div></td>
+            <td><span class="pill pill-purple">Google</span></td><td>🇬🇧 UK</td>
+            <td>3m 51s</td><td>Hero, Experience, Skills</td>
+            <td><span class="pill pill-yellow">Medium</span></td><td>25 Apr, 17:44</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">🌐</span>Visitor #042</div></td>
+            <td><span class="pill pill-blue">LinkedIn</span></td><td>🇦🇪 UAE</td>
+            <td>11m 20s</td><td>All sections + Chatbot</td>
+            <td><span class="pill pill-green">High</span></td><td>25 Apr, 15:11</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- BOOKINGS -->
+  <div id="db-bookings" class="db-panel">
+    <div class="page-header">
+      <div class="page-icon">📆</div>
+      <div class="page-title">Bookings</div>
+      <div class="page-meta">Auto-populated from Calendly via Make.com · Telegram alert sent on every booking</div>
+      <div class="view-tabs">
+        <div class="view-tab active">All Bookings</div>
+        <div class="view-tab">Upcoming</div>
+        <div class="view-tab">Completed</div>
+      </div>
+    </div>
+    <div class="db-content">
+      <div class="db-toolbar">
+        <div class="db-btn">⚙ Filter</div>
+        <div class="db-btn">↕ Sort: Date ↑</div>
+        <div class="db-count">4 bookings total</div>
+      </div>
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Name</th><th>Company</th><th>Date & Time</th><th>Type</th><th>Status</th><th>Topic</th><th>Outcome</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">📅</span>James Al-Rashid</div></td>
+            <td>Halliburton</td><td>Tue 29 Apr, 14:00</td>
+            <td><span class="pill pill-green">Discovery Call</span></td>
+            <td><span class="pill pill-yellow">Upcoming</span></td>
+            <td>PM Role — Iraq Operations</td><td>—</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">📅</span>Nina Kowalski</div></td>
+            <td>Wood Group</td><td>Wed 23 Apr, 10:00</td>
+            <td><span class="pill pill-purple">Consulting</span></td>
+            <td><span class="pill pill-green">Completed</span></td>
+            <td>HAZOP Review Scope</td><td>Proposal sent</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">📅</span>Khalid Mansoor</div></td>
+            <td>Saudi Aramco</td><td>Thu 17 Apr, 15:30</td>
+            <td><span class="pill pill-green">Discovery Call</span></td>
+            <td><span class="pill pill-green">Completed</span></td>
+            <td>Contract — Ras Tanura</td><td>2nd interview scheduled</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">📅</span>Laura Chen</div></td>
+            <td>Petrofac</td><td>Mon 14 Apr, 11:00</td>
+            <td><span class="pill pill-teal">Contract</span></td>
+            <td><span class="pill pill-gray">No Show</span></td>
+            <td>Risk Management Role</td><td>Follow-up email sent</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TASKS -->
+  <div id="db-tasks" class="db-panel">
+    <div class="page-header">
+      <div class="page-icon">✅</div>
+      <div class="page-title">Follow-up Tasks</div>
+      <div class="page-meta">Auto-created when a lead goes 3 days without follow-up · Make.com watches Notion</div>
+      <div class="view-tabs">
+        <div class="view-tab active">Board</div>
+        <div class="view-tab">List</div>
+        <div class="view-tab">Overdue</div>
+      </div>
+    </div>
+    <div class="db-content">
+      <div class="kanban">
+        <div class="kanban-col">
+          <div class="kanban-col-head">
+            <span class="pill pill-red" style="font-size:10px">Overdue</span>
+            <span class="kanban-col-count">2</span>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Follow up with Tom Eriksson</div>
+            <div class="kanban-card-meta"><span class="pill pill-gray">Schlumberger</span><span style="color:#ef4444">6 days overdue</span></div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Send proposal to Priya Nair</div>
+            <div class="kanban-card-meta"><span class="pill pill-gray">BP</span><span style="color:#ef4444">3 days overdue</span></div>
+          </div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-col-head">
+            <span class="pill pill-yellow" style="font-size:10px">This Week</span>
+            <span class="kanban-col-count">2</span>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Prep for Halliburton call</div>
+            <div class="kanban-card-meta"><span class="pill pill-gray">James Al-Rashid</span><span>Due Tue</span></div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Reply to Marcus Webb email</div>
+            <div class="kanban-card-meta"><span class="pill pill-gray">TotalEnergies</span><span>Due Thu</span></div>
+          </div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-col-head">
+            <span class="pill pill-blue" style="font-size:10px">In Progress</span>
+            <span class="kanban-col-count">1</span>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Send proposal — Wood Group</div>
+            <div class="kanban-card-meta"><span class="pill pill-gray">Nina Kowalski</span><span>Draft ready</span></div>
+          </div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-col-head">
+            <span class="pill pill-green" style="font-size:10px">Done</span>
+            <span class="kanban-col-count">3</span>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Booked call with James</div>
+            <div class="kanban-card-meta"><span style="color:#4ade80">✓ Completed</span></div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">Sent CV to Aramco</div>
+            <div class="kanban-card-meta"><span style="color:#4ade80">✓ Completed</span></div>
+          </div>
+          <div class="kanban-card">
+            <div class="kanban-card-title">LinkedIn connection — ADNOC</div>
+            <div class="kanban-card-meta"><span style="color:#4ade80">✓ Completed</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIGEST -->
+  <div id="db-digest" class="db-panel">
+    <div class="page-header">
+      <div class="page-icon">📋</div>
+      <div class="page-title">Weekly Digest</div>
+      <div class="page-meta">Auto-generated every Monday · Sent to Telegram · Stored here for reference</div>
+      <div class="view-tabs">
+        <div class="view-tab active">All Digests</div>
+      </div>
+    </div>
+    <div class="db-content">
+      <div class="db-toolbar">
+        <div class="db-count">4 digests</div>
+      </div>
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Week</th><th>Visitors</th><th>New Leads</th><th>Bookings</th><th>Top Source</th><th>Chatbot Sessions</th><th>Highlight</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">📋</span>Week of 21 Apr</div></td>
+            <td>47</td><td><span class="pill pill-green">3</span></td><td>1</td>
+            <td><span class="pill pill-blue">LinkedIn</span></td><td>4</td><td>Halliburton booking confirmed</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">📋</span>Week of 14 Apr</div></td>
+            <td>35</td><td><span class="pill pill-yellow">2</span></td><td>1</td>
+            <td><span class="pill pill-blue">LinkedIn</span></td><td>2</td><td>Wood Group consulting inquiry</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">📋</span>Week of 7 Apr</div></td>
+            <td>28</td><td><span class="pill pill-yellow">2</span></td><td>0</td>
+            <td><span class="pill pill-purple">Google</span></td><td>1</td><td>Aramco lead from Google search</td>
+          </tr>
+          <tr>
+            <td><div class="row-name"><span class="row-icon">📋</span>Week of 31 Mar</div></td>
+            <td>19</td><td><span class="pill pill-gray">1</span></td><td>0</td>
+            <td><span class="pill pill-blue">LinkedIn</span></td><td>0</td><td>First organic LinkedIn visit</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <div id="db-tools" class="db-panel">
+    <div class="page-header">
+      <div class="page-icon">💡</div>
+      <div class="page-title">Tool Interactions</div>
+      <div class="page-meta">Auto-populated directly from website JS · 0 Make.com ops · chatbot, ROI, 90-day activity</div>
+      <div class="view-tabs">
+        <div class="view-tab active">All</div>
+        <div class="view-tab">Chatbot</div>
+        <div class="view-tab">ROI Calculator</div>
+        <div class="view-tab">90-Day Plan</div>
+      </div>
+    </div>
+    <div class="db-content">
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-val">12</div><div class="stat-label">This Week</div><div class="stat-delta">↑ 5 vs last week</div></div>
+        <div class="stat-card"><div class="stat-val">6</div><div class="stat-label">Chatbot Sessions</div><div class="stat-delta">4 unique questions</div></div>
+        <div class="stat-card"><div class="stat-val">4</div><div class="stat-label">ROI Calcs Run</div><div class="stat-delta">avg $2.1M saved</div></div>
+        <div class="stat-card"><div class="stat-val">2</div><div class="stat-label">90-Day Plans</div><div class="stat-delta">both downloaded</div></div>
+      </div>
+      <div class="db-toolbar">
+        <div class="db-btn">⚙ Filter</div>
+        <div class="db-btn">↕ Sort: Date ↓</div>
+        <div class="db-count">12 interactions</div>
+      </div>
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Tool</th><th>Input / Question</th><th>Visitor Source</th><th>Output / Result</th><th>Date/Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pill pill-purple">Chatbot</span></td>
+            <td>"What industries have you worked in?"</td>
+            <td><span class="pill pill-blue">LinkedIn</span></td>
+            <td>Response given, 3 follow-up Qs</td><td>26 Apr, 14:38</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-green">ROI Calc</span></td>
+            <td>Team: 12, Project: $8M, Duration: 18mo</td>
+            <td><span class="pill pill-orange">Direct (Family)</span></td>
+            <td>Estimated saving: $1.8M</td><td>26 Apr, 13:22</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-teal">90-Day Plan</span></td>
+            <td>Role: HSE Manager, Company: Oil & Gas</td>
+            <td><span class="pill pill-blue">LinkedIn</span></td>
+            <td>Plan generated + downloaded</td><td>26 Apr, 11:15</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-purple">Chatbot</span></td>
+            <td>"Are you open to contract roles?"</td>
+            <td><span class="pill pill-orange">Direct (Family)</span></td>
+            <td>Response given</td><td>26 Apr, 10:30</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-green">ROI Calc</span></td>
+            <td>Team: 25, Project: $15M, Duration: 24mo</td>
+            <td><span class="pill pill-blue">LinkedIn</span></td>
+            <td>Estimated saving: $3.4M</td><td>25 Apr, 16:02</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-purple">Chatbot</span></td>
+            <td>"What's your day rate?"</td>
+            <td><span class="pill pill-blue">LinkedIn</span></td>
+            <td>Response given, Calendly link shown</td><td>25 Apr, 15:18</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-teal">90-Day Plan</span></td>
+            <td>Role: Project Manager, Company: EPC</td>
+            <td><span class="pill pill-orange">Direct (Family)</span></td>
+            <td>Plan generated, not downloaded</td><td>25 Apr, 11:44</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showDB(name, el) {
+  document.querySelectorAll('.db-panel').forEach(p => {
+    p.style.display = 'none';
+    p.classList.remove('active');
+  });
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const panel = document.getElementById('db-' + name);
+  if (panel) {
+    panel.style.display = 'flex';
+    panel.classList.add('active');
+  }
+  if (el) el.classList.add('active');
+}
+</script>
+</body>
+</html>
