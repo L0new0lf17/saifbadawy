@@ -12239,6 +12239,18 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
   const WH_TOOLS       = 'https://hook.eu1.make.com/1521xfg3at8co635k2ub272qdea4bwo9'; // Tool Interactions → Notion + Telegram
   const WH_CONTACT     = 'https://hook.eu1.make.com/zwi8puas4hkwcfjp3pklpba1kw78z2qi';
 
+  // ── Telegram direct alert (browser → Telegram API — no CORS issues) ─
+  const TG_TOKEN   = atob('ODc5NTMyMzk0MzpBQUZnMkRTU2FNY1R2bXlicWVxbmpwQVNraUltcjBIU0lz');
+  const TG_CHAT    = '1670500337';
+  function tgPing(text) {
+    fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_CHAT, text: text, parse_mode: 'HTML' }),
+      keepalive: true,
+    }).catch(() => {});
+  }
+
   // ── Expose contact-form webhook for Hire Me section ───────────────
   window._whUrls = { CONTACT_FORM: WH_CONTACT };
   window._whSend = function (url, data) {
@@ -12357,6 +12369,13 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
         utm_campaign: getUTM('utm_campaign'),
         type:         'visitor_log',
       });
+      tgPing(
+        '👀 <b>High-Intent Visitor</b>\n' +
+        '🔗 Source: ' + source + '\n' +
+        '🌍 Country: ' + (geo.country || 'Unknown') + '\n' +
+        '🏢 Company: ' + (geo.company || 'Unknown') + '\n' +
+        '⏱️ On site: 3+ minutes'
+      );
     }, 3 * 60 * 1000); // 3 minutes
 
     // Cancel if user leaves before 3 min
@@ -12397,10 +12416,11 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
             _trigger = 'Tool Use';
 
             getGeo().then(geo => {
+              const src = getSource();
               window._whSend(WH_TOOLS, {
                 session_title: 'Chatbot · ' + new Date().toLocaleDateString('en-GB'),
                 tool:          'Chatbot',
-                visitor_source: getSource(),
+                visitor_source: src,
                 country:       geo.country,
                 company:       geo.company,
                 duration_sec:  duration,
@@ -12410,6 +12430,15 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
                 session_date:  new Date().toISOString(),
                 type:          'tool_interaction',
               });
+              tgPing(
+                '🤖 <b>Chatbot Session</b>\n' +
+                '📅 ' + new Date().toLocaleDateString('en-GB') + '\n' +
+                '🌍 ' + (geo.country || 'Unknown') + ' · ' + (geo.company || 'Unknown') + '\n' +
+                '🔗 Source: ' + src + '\n' +
+                '💬 Messages: ' + msgCount + ' (' + outcome + ')\n' +
+                '⏱️ Duration: ' + duration + 's\n\n' +
+                '<i>' + transcript.slice(0, 300).replace(/</g,'&lt;') + '</i>'
+              );
             });
           }
         });
@@ -12438,10 +12467,11 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
           const geo = await getGeo();
           _trigger = 'Tool Use';
 
+          const roiSrc = getSource();
           window._whSend(WH_TOOLS, {
             session_title:  'ROI Calc · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB'),
             tool:           'ROI Calculator',
-            visitor_source: getSource(),
+            visitor_source: roiSrc,
             country:        geo.country,
             company:        company || geo.company,
             outcome:        'High Intent',
@@ -12449,6 +12479,14 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
             session_date:   new Date().toISOString(),
             type:           'tool_interaction',
           });
+          tgPing(
+            '📊 <b>ROI Calculator Used</b>\n' +
+            '📅 ' + new Date().toLocaleDateString('en-GB') + '\n' +
+            '🌍 ' + (geo.country || 'Unknown') + ' · ' + (company || geo.company || 'Unknown') + '\n' +
+            '🔗 Source: ' + roiSrc + '\n' +
+            '📝 Sector: ' + sector + ' | Role: ' + role + '\n' +
+            '💰 Budget: £' + budget + 'M | Duration: ' + duration + 'mo'
+          );
         }, 300);
       });
     }, 1000);
@@ -12472,10 +12510,11 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
           const geo = await getGeo();
           _trigger = 'Tool Use';
 
+          const p90Src = getSource();
           window._whSend(WH_TOOLS, {
             session_title:  '90-Day Plan · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB'),
             tool:           '90-Day Plan',
-            visitor_source: getSource(),
+            visitor_source: p90Src,
             country:        geo.country,
             company:        company || geo.company,
             outcome:        'High Intent',
@@ -12483,6 +12522,13 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
             session_date:   new Date().toISOString(),
             type:           'tool_interaction',
           });
+          tgPing(
+            '📋 <b>90-Day Plan Generated</b>\n' +
+            '📅 ' + new Date().toLocaleDateString('en-GB') + '\n' +
+            '🌍 ' + (geo.country || 'Unknown') + ' · ' + (company || geo.company || 'Unknown') + '\n' +
+            '🔗 Source: ' + p90Src + '\n' +
+            '🏭 Sector: ' + (sector || 'Unknown')
+          );
         }, 500);
       });
     }, 1000);
