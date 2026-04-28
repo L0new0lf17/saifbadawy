@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E6QSWDEMLX"></script>
 <script>
@@ -8,6 +9,14 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-E6QSWDEMLX');
+</script>
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "wfn5gqxrhf");
 </script>
 <style>
 
@@ -39,6 +48,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:cen
 .navRoiBtn:hover{background:rgba(232,130,12,.08);border-color:var(--accent);box-shadow:0 0 18px rgba(232,130,12,0.35)}
 .navCta{font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;padding:.5rem 1.4rem;border:none;background:var(--accent);color:var(--black);text-decoration:none;transition:background .2s,transform .15s,box-shadow .2s;cursor:none;font-weight:500;box-shadow:0 0 18px rgba(232,130,12,0.35)}
 .navCta:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 0 28px rgba(232,130,12,0.55)}
+@keyframes ctaDotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.55)}}
+@keyframes cfSuccessPop{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+#contactFormOverlay{position:fixed;inset:0;z-index:9600;background:rgba(5,6,10,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);display:flex;align-items:center;justify-content:center;padding:1.5rem;clip-path:circle(0px at var(--cfx,92%) var(--cfy,3%));transition:clip-path .65s cubic-bezier(.16,1,.3,1),visibility 0s .65s;visibility:hidden}
+#contactFormOverlay.cf-open{clip-path:circle(200% at var(--cfx,92%) var(--cfy,3%));transition:clip-path .65s cubic-bezier(.16,1,.3,1),visibility 0s 0s;visibility:visible}
+#contactFormPanel{background:var(--s1,#111);border:1px solid rgba(232,130,12,.28);max-width:520px;width:100%;position:relative}
+.cf-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.65);display:block;margin-bottom:.38rem}
+.cf-field{width:100%;background:#0a0a0a;border:1px solid rgba(255,255,255,.12);color:#ffffff !important;font-family:'JetBrains Mono',monospace;font-size:.82rem;letter-spacing:.02em;padding:.7rem .85rem;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none;resize:none}
+.cf-field:focus{border-color:rgba(232,130,12,.5);box-shadow:0 0 0 2px rgba(232,130,12,.08)}
+.cf-field::placeholder{color:rgba(255,255,255,.38) !important}
+.cf-field:-webkit-autofill{-webkit-text-fill-color:#ffffff !important;-webkit-box-shadow:0 0 0 100px #0a0a0a inset !important}
+.cf-row{margin-bottom:.8rem}
 
 /* HERO */
 #hero{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;padding:8rem 3rem 5rem;gap:5rem;position:relative;overflow:hidden}
@@ -2803,13 +2823,35 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
 
 
 </style>
-<meta charset="UTF-8">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="LlJeaQokUrUfKgWoZzp6vUeiGhH7SdaqaXFW-x-oyDE" />
 <title>Saif Badawy, Engineering Portfolio</title>
+
+<!-- SEO -->
+<meta name="description" content="Saif Badawy — Software and automation engineer. Portfolio showcasing full-stack development, workflow automation, and data analytics projects.">
+<meta name="author" content="Saif Badawy">
+<link rel="canonical" href="https://saifbadawy.com">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://saifbadawy.com">
+<meta property="og:title" content="Saif Badawy — Engineering Portfolio">
+<meta property="og:description" content="Software and automation engineer. Full-stack development, workflow automation, and data analytics.">
+<meta property="og:image" content="https://saifbadawy.com/og-image.jpg">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://saifbadawy.com">
+<meta name="twitter:title" content="Saif Badawy — Engineering Portfolio">
+<meta name="twitter:description" content="Software and automation engineer. Full-stack development, workflow automation, and data analytics.">
+<meta name="twitter:image" content="https://saifbadawy.com/og-image.jpg">
+
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 
@@ -2948,13 +2990,6 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init("URo8XAAV-MhpKl9Nc");</script>
-<script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "wfn5gqxrhf");
-</script>
 </head>
 <body>
 
@@ -3073,7 +3108,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
 
   <!-- RIGHT: Theme toggle + Hire Me -->
   <div style="display:flex;align-items:center;gap:.75rem;flex-shrink:0">
-    <button onclick="openHireMe()" class="navCta" style="border:none;cursor:pointer">Hire Me</button>
+    <button id="contactBtn" onclick="openContactForm(event)" class="navCta" style="border:none;cursor:pointer;display:inline-flex;align-items:center;gap:.48rem"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#070707;flex-shrink:0;animation:ctaDotPulse 2s ease-in-out infinite"></span>CONNECT</button>
   </div>
 </nav>
 
@@ -3086,7 +3121,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
   <a href="#education" class="mDrawerLink">Education</a>
   <a href="#projects" class="mDrawerLink">Projects</a>
   <a href="#contact" class="mDrawerLink">Contact</a>
-  <button class="mDrawerCta" onclick="document.getElementById('mobileNavDrawer').classList.remove('open');document.getElementById('navHamburger').classList.remove('open');document.querySelector('.navCta')&&document.querySelector('.navCta').click()">Book a Call</button>
+  <button class="mDrawerCta" onclick="document.getElementById('mobileNavDrawer').classList.remove('open');document.getElementById('navHamburger').classList.remove('open');openContactForm(event)">Connect</button>
 </div>
 
 
@@ -3107,7 +3142,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
       I am a <strong>Project Engineer</strong> with over four years of cross-sector experience in oil and gas, EPC delivery and renewable energy. I have worked on <strong>£20M+ upstream assets at ExxonMobil and Wood PLC</strong>, managed 65+ personnel on live construction programmes, and led solar PV feasibility and net-zero decarbonisation projects. I do not just manage projects, I manage risk, drive change control, engage stakeholders and engineer the conditions for consistent delivery from initiation through to commissioning.
     </p>
     <div class="heroBtns">
-      <a href="#contact" class="btnMain">Hire Me <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <button onclick="openContactForm(event)" class="btnMain" style="border:none;cursor:pointer">Get In Touch <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <a href="#experience" class="btnGhost">See My Experience →</a>
     </div>
     <div style="margin-top:1.25rem">
@@ -7497,6 +7532,14 @@ document.addEventListener('contextmenu', e => {
   } else {
     attachSounds();
   }
+
+  // Expose sound effects for contact form (which lives in a different scope)
+  window._sfxPlay = function(type) {
+    if (!audioCtx) return;
+    if (type === 'open')    playOpen();
+    else if (type === 'close')   playClose();
+    else if (type === 'success') playSuccess();
+  };
 })();
 
 
@@ -8756,321 +8799,128 @@ document.addEventListener('contextmenu', e => {
   };
   // ────────────────────────────────────────────────────────────────────
 
-  // ── HIRE ME MODAL ─────────────────────────────────────────────────────
-  window.openHireMe = function() {
-    const overlay = document.getElementById('hireMeOverlay');
-    const modal   = document.getElementById('hireMeModal');
-    const options = document.getElementById('hireMeOptions');
-    if (!overlay || !options) return;
-
-    // Clear and render the three options fresh each open
-    options.innerHTML = '';
-
-    // ── Helper: build one option row ───────────────────────────────────
-    function makeOption(icon, title, subtitle, accentColor, onClick) {
-      const row = document.createElement('div');
-      row.style.cssText = [
-        'display:flex;align-items:flex-start;gap:1rem;',
-        'padding:1rem 1.1rem;margin-bottom:.6rem;',
-        'background:rgba(255,255,255,0.02);',
-        'border:1px solid rgba(255,255,255,0.07);',
-        'border-radius:0;cursor:pointer;',
-        'transition:background .25s,border-color .25s,transform .2s;',
-        'position:relative;overflow:hidden;',
-      ].join('');
-      row.addEventListener('mouseenter', () => {
-        row.style.background = 'rgba(232,130,12,0.06)';
-        row.style.borderColor = 'rgba(232,130,12,0.35)';
-        row.style.transform = 'translateX(3px)';
-      });
-      row.addEventListener('mouseleave', () => {
-        row.style.background = 'rgba(255,255,255,0.02)';
-        row.style.borderColor = 'rgba(255,255,255,0.07)';
-        row.style.transform = 'translateX(0)';
-      });
-
-      // Left accent bar
-      const bar = document.createElement('div');
-      bar.style.cssText = 'position:absolute;left:0;top:0;bottom:0;width:2px;background:' + accentColor + ';opacity:0;transition:opacity .25s';
-      row.addEventListener('mouseenter', () => { bar.style.opacity = '1'; });
-      row.addEventListener('mouseleave', () => { bar.style.opacity = '0'; });
-      row.appendChild(bar);
-
-      // Icon
-      const ico = document.createElement('div');
-      ico.style.cssText = 'font-size:1.3rem;flex-shrink:0;margin-top:.1rem;width:28px;text-align:center';
-      ico.textContent = icon;
-      row.appendChild(ico);
-
-      // Text block
-      const txt = document.createElement('div');
-      txt.style.cssText = 'flex:1;min-width:0';
-
-      const ttl = document.createElement('div');
-      ttl.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#f0ede8;margin-bottom:.2rem";
-      ttl.textContent = title;
-
-      const sub = document.createElement('div');
-      sub.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.48rem;letter-spacing:.08em;color:rgba(240,237,232,0.38);text-transform:uppercase";
-      sub.textContent = subtitle;
-
-      txt.appendChild(ttl);
-      txt.appendChild(sub);
-      row.appendChild(txt);
-
-      // Arrow
-      const arr = document.createElement('div');
-      arr.style.cssText = 'color:rgba(232,130,12,0.5);font-size:.9rem;margin-top:.15rem;flex-shrink:0;transition:transform .2s';
-      arr.textContent = '→';
-      row.addEventListener('mouseenter', () => { arr.style.transform = 'translateX(4px)'; arr.style.color = '#E8820C'; });
-      row.addEventListener('mouseleave', () => { arr.style.transform = 'translateX(0)'; arr.style.color = 'rgba(232,130,12,0.5)'; });
-      row.appendChild(arr);
-
-      row.addEventListener('click', onClick);
-      return row;
-    }
-
-    // ── OPTION 1: LinkedIn with pre-written message ─────────────────────
-    const liRow = makeOption(
-      '💼', 'Message on LinkedIn',
-      'Pre-written opening, edit and send',
-      '#0077B5',
-      () => { window._showHireMeLinkedIn(); }
-    );
-    options.appendChild(liRow);
-
-    // ── OPTION 2: Email ─────────────────────────────────────────────────
-    const emRow = makeOption(
-      '✉️', 'Send an Email',
-      'Opens your email client, To field pre-filled',
-      '#E8820C',
-      () => { window._showHireMeEmail(); }
-    );
-    options.appendChild(emRow);
-
-    // ── OPTION 3: Book a call ───────────────────────────────────────────
-    const calRow = makeOption(
-      '📅', 'Book a Call',
-      'Zoom or Google Meet, pick a time that suits you',
-      '#4ade80',
-      () => { closeHireMe(); setTimeout(() => { window.openBookingModal(); }, 200); }
-    );
-    options.appendChild(calRow);
-
-    // Show overlay
-    overlay.style.opacity = '1';
-    overlay.style.visibility = 'visible';
-    if (modal) modal.style.transform = 'translateY(0) scale(1)';
+  // ── CONTACT FORM ─────────────────────────────────────────────────────────
+  window.openContactForm = function(e) {
+    const btn = (e && e.currentTarget) ? e.currentTarget : document.getElementById('contactBtn');
+    const r   = btn ? btn.getBoundingClientRect() : { left: window.innerWidth * 0.9, width: 40, top: 14, height: 30 };
+    const cx  = ((r.left + r.width  / 2) / window.innerWidth  * 100).toFixed(1) + '%';
+    const cy  = ((r.top  + r.height / 2) / window.innerHeight * 100).toFixed(1) + '%';
+    const overlay = document.getElementById('contactFormOverlay');
+    if (!overlay) return;
+    overlay.style.setProperty('--cfx', cx);
+    overlay.style.setProperty('--cfy', cy);
+    // Reset to blank form state
+    const form      = document.getElementById('contactForm');
+    const cfBody    = document.getElementById('cfBody');
+    const cfSuccess = document.getElementById('cfSuccess');
+    const cfSubmit  = document.getElementById('cfSubmit');
+    if (form)      form.reset();
+    if (cfBody)    cfBody.style.display    = 'block';
+    if (cfSuccess) cfSuccess.style.display = 'none';
+    if (cfSubmit)  { cfSubmit.disabled = false; cfSubmit.textContent = 'SEND MESSAGE →'; }
+    overlay.classList.add('cf-open');
     document.body.style.overflow = 'hidden';
-    document.addEventListener('keydown', _hireMeEsc);
+    document.addEventListener('keydown', _cfEsc);
+    if (window._sfxPlay) window._sfxPlay('open');
   };
 
-  window.closeHireMe = function() {
-    const overlay = document.getElementById('hireMeOverlay');
-    const modal   = document.getElementById('hireMeModal');
-    if (overlay) { overlay.style.opacity = '0'; overlay.style.visibility = 'hidden'; }
-    if (modal)   { modal.style.transform = 'translateY(28px) scale(0.97)'; }
+  // Keep legacy alias so anything else that calls openHireMe still works
+  window.openHireMe = window.openContactForm;
+
+  window.closeContactForm = function() {
+    const overlay = document.getElementById('contactFormOverlay');
+    if (overlay) overlay.classList.remove('cf-open');
     document.body.style.overflow = '';
-    document.removeEventListener('keydown', _hireMeEsc);
+    document.removeEventListener('keydown', _cfEsc);
+    if (window._sfxPlay) window._sfxPlay('close');
   };
+  window.closeHireMe = window.closeContactForm;
 
-  function _hireMeEsc(e) {
-    if (e.key === 'Escape') window.closeHireMe();
-  }
+  function _cfEsc(e) { if (e.key === 'Escape') window.closeContactForm(); }
 
-  // ── LINKEDIN PANEL ─────────────────────────────────────────────────────
-  window._showHireMeLinkedIn = function() {
-    const options = document.getElementById('hireMeOptions');
-    if (!options) return;
-    options.innerHTML = '';
+  // ── FORM SUBMISSION ────────────────────────────────────────────────────
+  (function initContactFormSubmit() {
+    const form = document.getElementById('contactForm');
+    if (!form) { document.addEventListener('DOMContentLoaded', initContactFormSubmit); return; }
+    form.addEventListener('submit', async function(ev) {
+      ev.preventDefault();
+      const submitBtn = document.getElementById('cfSubmit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'SENDING...';
 
-    // Back button
-    const back = _hireMeBackBtn();
-    options.appendChild(back);
+      const NOTION_TOKEN = atob('bnRuXzQyMzYyODc0Nzk3OUJUNGFIWnRpWHlSOUZUZDBhZ0dwbko5U0ZMVTRCd3lkWGk=');
+      const DB_LEADS     = '969570bc-e73c-4147-99aa-91fd37fbd54b';
+      const WH_CONTACT   = 'https://hook.eu1.make.com/zwi8puas4hkwcfjp3pklpba1kw78z2qi';
 
-    // Eyebrow
-    const eye = document.createElement('div');
-    eye.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.46rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(232,130,12,0.65);margin-bottom:.6rem;margin-top:.25rem";
-    eye.textContent = '◉ LinkedIn Message';
-    options.appendChild(eye);
+      const payload = {
+        name:      (document.getElementById('cfName').value    || '').trim(),
+        email:     (document.getElementById('cfEmail').value   || '').trim(),
+        company:   (document.getElementById('cfCompany').value || '').trim(),
+        role:      (document.getElementById('cfRole').value    || '').trim(),
+        message:   (document.getElementById('cfMessage').value || '').trim(),
+        timestamp: new Date().toISOString(),
+        source:    'Direct',
+      };
 
-    // Instruction
-    const instr = document.createElement('div');
-    instr.style.cssText = "font-family:'DM Sans',sans-serif;font-size:.8rem;color:rgba(240,237,232,0.55);line-height:1.6;margin-bottom:.9rem";
-    instr.innerHTML = 'Your opening message is ready below. <strong style="color:#f0ede8">Edit it</strong> to add your name and any details, then copy it and paste it into LinkedIn.';
-    options.appendChild(instr);
+      const notionProps = {};
+      notionProps['Lead Name']    = { title:     [{ text: { content: payload.name    } }] };
+      notionProps['Email']        = { email:     payload.email };
+      notionProps['Company Name'] = { rich_text: [{ text: { content: payload.company } }] };
+      notionProps['Role Title']   = { rich_text: [{ text: { content: payload.role    } }] };
+      notionProps['Source']       = { select:    { name: 'Direct'   } };
+      notionProps['Stage']        = { select:    { name: 'New Lead' } };
+      notionProps['Priority']     = { select:    { name: 'High'     } };
+      notionProps['Notes']        = { rich_text: [{ text: { content: payload.message } }] };
+      notionProps['Date Added']   = { date:      { start: payload.timestamp } };
 
-    // Message textarea
-    const msgBox = document.createElement('textarea');
-    msgBox.style.cssText = [
-      "width:100%;box-sizing:border-box;",
-      "background:#0a0a0a;border:1px solid rgba(232,130,12,0.25);",
-      "color:#f0ede8;font-family:'DM Sans',sans-serif;font-size:.85rem;",
-      "line-height:1.75;padding:.85rem 1rem;",
-      "outline:none;resize:vertical;min-height:160px;",
-      "transition:border-color .2s;border-radius:0;",
-    ].join('');
-    msgBox.value = "Hi Saif, my name is [your name] and I work at [your company].\n\nI came across your portfolio and was impressed by [what caught your attention].\n\n[Add your message here, what role are you hiring for, or what would you like to discuss?]\n\nLooking forward to connecting.";
-    msgBox.addEventListener('focus', () => { msgBox.style.borderColor = 'rgba(232,130,12,0.5)'; });
-    msgBox.addEventListener('blur',  () => { msgBox.style.borderColor = 'rgba(232,130,12,0.25)'; });
-    options.appendChild(msgBox);
+      try {
+        await Promise.all([
+          fetch('https://api.notion.com/v1/pages', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + NOTION_TOKEN,
+              'Notion-Version': '2022-06-28',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ parent: { database_id: DB_LEADS }, properties: notionProps }),
+          }).catch(() => {}),
+          fetch(WH_CONTACT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          }).catch(() => {}),
+        ]);
 
-    // Button row
-    const btnRow = document.createElement('div');
-    btnRow.style.cssText = 'display:flex;gap:.6rem;margin-top:.75rem';
+        // EmailJS — instant email to Saif's inbox
+        if (typeof emailjs !== 'undefined') {
+          emailjs.send('service_4c6752b', 'template_5xmihzl', {
+            from_name:  payload.name,
+            from_email: payload.email,
+            company:    payload.company,
+            role:       payload.role,
+            message:    payload.message,
+            timestamp:  new Date().toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }),
+          }).catch(() => {});
+        }
 
-    // Copy button
-    const copyBtn = document.createElement('button');
-    copyBtn.style.cssText = [
-      "flex:1;background:rgba(232,130,12,0.1);border:1px solid rgba(232,130,12,0.35);",
-      "color:#E8820C;font-family:'JetBrains Mono',monospace;font-size:.52rem;",
-      "letter-spacing:.14em;text-transform:uppercase;padding:.7rem;",
-      "cursor:pointer;transition:background .2s,border-color .2s;",
-    ].join('');
-    copyBtn.textContent = 'Copy Message';
-    copyBtn.addEventListener('mouseenter', () => { copyBtn.style.background = 'rgba(232,130,12,0.18)'; });
-    copyBtn.addEventListener('mouseleave', () => { copyBtn.style.background = 'rgba(232,130,12,0.1)'; });
-    copyBtn.addEventListener('click', () => {
-      if (window._whSend) window._whSend(window._whUrls.CONTACT_FORM, {
-        type: 'linkedin_message_copied', contacted_at: new Date().toISOString(),
-      });
-      navigator.clipboard.writeText(msgBox.value).then(() => {
-        copyBtn.textContent = 'Copied ✓';
-        copyBtn.style.background = 'rgba(74,222,128,0.1)';
-        copyBtn.style.borderColor = 'rgba(74,222,128,0.4)';
-        copyBtn.style.color = '#4ade80';
-        setTimeout(() => {
-          copyBtn.textContent = 'Copy Message';
-          copyBtn.style.background = 'rgba(232,130,12,0.1)';
-          copyBtn.style.borderColor = 'rgba(232,130,12,0.35)';
-          copyBtn.style.color = '#E8820C';
-        }, 2500);
-      }).catch(() => {
-        msgBox.select();
-        document.execCommand('copy');
-        copyBtn.textContent = 'Copied ✓';
-        setTimeout(() => { copyBtn.textContent = 'Copy Message'; }, 2500);
-      });
+        // Success state
+        const cfBody    = document.getElementById('cfBody');
+        const cfSuccess = document.getElementById('cfSuccess');
+        if (cfBody)    cfBody.style.display    = 'none';
+        if (cfSuccess) cfSuccess.style.display = 'flex';
+        if (window._sfxPlay) window._sfxPlay('success');
+      } catch (_) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'SEND MESSAGE →';
+      }
     });
+  })();
+  // ── END CONTACT FORM ─────────────────────────────────────────────────────
 
-    // Open LinkedIn button
-    const liBtn = document.createElement('button');
-    liBtn.style.cssText = [
-      "flex:1;background:#0077B5;border:none;",
-      "color:#fff;font-family:'JetBrains Mono',monospace;font-size:.52rem;",
-      "letter-spacing:.14em;text-transform:uppercase;padding:.7rem;",
-      "cursor:pointer;transition:background .2s;",
-    ].join('');
-    liBtn.textContent = 'Open LinkedIn →';
-    liBtn.addEventListener('mouseenter', () => { liBtn.style.background = '#005e8e'; });
-    liBtn.addEventListener('mouseleave', () => { liBtn.style.background = '#0077B5'; });
-    liBtn.addEventListener('click', () => {
-      window.open('https://www.linkedin.com/in/saif-badawy', '_blank');
-    });
-
-    btnRow.appendChild(copyBtn);
-    btnRow.appendChild(liBtn);
-    options.appendChild(btnRow);
-
-    // Tip
-    const tip = document.createElement('div');
-    tip.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,0.25);margin-top:.6rem;line-height:1.6";
-    tip.textContent = 'Tip: copy the message first, then open LinkedIn, click Message on my profile, paste and send.';
-    options.appendChild(tip);
-  };
-
-  // ── EMAIL PANEL ────────────────────────────────────────────────────────
-  window._showHireMeEmail = function() {
-    const options = document.getElementById('hireMeOptions');
-    if (!options) return;
-    options.innerHTML = '';
-
-    // Back button
-    options.appendChild(_hireMeBackBtn());
-
-    // Eyebrow
-    const eye = document.createElement('div');
-    eye.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.46rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(232,130,12,0.65);margin-bottom:.6rem;margin-top:.25rem";
-    eye.textContent = '◉ Send an Email';
-    options.appendChild(eye);
-
-    // Description
-    const desc = document.createElement('div');
-    desc.style.cssText = "font-family:'DM Sans',sans-serif;font-size:.8rem;color:rgba(240,237,232,0.55);line-height:1.6;margin-bottom:1rem";
-    desc.innerHTML = 'Clicking the button below opens your email client with the <strong style="color:#f0ede8">To</strong> field already filled. Write your message and send it directly.';
-    options.appendChild(desc);
-
-    // Preview card showing what will be pre-filled
-    const preview = document.createElement('div');
-    preview.style.cssText = [
-      "background:#0a0a0a;border:1px solid rgba(232,130,12,0.2);",
-      "padding:1rem 1.1rem;margin-bottom:1rem;",
-    ].join('');
-
-    function previewRow(label, val, muted) {
-      const row = document.createElement('div');
-      row.style.cssText = 'display:flex;gap:.75rem;align-items:baseline;padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,0.04)';
-      const lbl = document.createElement('span');
-      lbl.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.46rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,130,12,0.55);min-width:52px;flex-shrink:0";
-      lbl.textContent = label;
-      const v = document.createElement('span');
-      v.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.52rem;letter-spacing:.06em;color:" + (muted ? 'rgba(240,237,232,0.3)' : '#f0ede8');
-      v.textContent = val;
-      row.appendChild(lbl);
-      row.appendChild(v);
-      return row;
-    }
-
-    preview.appendChild(previewRow('To', 'saifehabbadawy@gmail.com', false));
-    preview.appendChild(previewRow('Subject', 'Hiring Enquiry: Saif Badawy', false));
-    preview.appendChild(previewRow('Body', 'Your message here (you write this)', true));
-    options.appendChild(preview);
-
-    // Open email client button
-    const emailBtn = document.createElement('button');
-    const subject = encodeURIComponent('Hiring Enquiry: Saif Badawy');
-    const body = encodeURIComponent('Hi Saif,\n\nMy name is [your name] and I work at [your company].\n\n[Write your message here]\n\nBest regards,\n[your name]');
-    emailBtn.style.cssText = [
-      "width:100%;background:#E8820C;border:none;",
-      "color:#070707;font-family:'Bebas Neue',sans-serif;font-size:.9rem;",
-      "letter-spacing:.18em;padding:.9rem;",
-      "cursor:pointer;transition:background .2s;display:flex;",
-      "align-items:center;justify-content:center;gap:.6rem;",
-    ].join('');
-    emailBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg> Open Email Client';
-    emailBtn.addEventListener('mouseenter', () => { emailBtn.style.background = '#F5A623'; });
-    emailBtn.addEventListener('mouseleave', () => { emailBtn.style.background = '#E8820C'; });
-    emailBtn.addEventListener('click', () => {
-      if (window._whSend) window._whSend(window._whUrls.CONTACT_FORM, {
-        type: 'email_client_opened', contacted_at: new Date().toISOString(),
-      });
-      window.location.href = 'mailto:saifehabbadawy@gmail.com?subject=' + subject + '&body=' + body;
-    });
-    options.appendChild(emailBtn);
-
-    // Tip
-    const tip = document.createElement('div');
-    tip.style.cssText = "font-family:'JetBrains Mono',monospace;font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,0.25);margin-top:.65rem;line-height:1.6";
-    tip.textContent = 'Works with Gmail, Outlook, Apple Mail, and any other email client on your device.';
-    options.appendChild(tip);
-  };
-
-  // ── SHARED BACK BUTTON ─────────────────────────────────────────────────
-  function _hireMeBackBtn() {
-    const back = document.createElement('button');
-    back.style.cssText = [
-      "background:none;border:none;display:flex;align-items:center;gap:.4rem;",
-      "color:rgba(232,130,12,0.55);font-family:'JetBrains Mono',monospace;",
-      "font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;",
-      "cursor:pointer;padding:0;margin-bottom:.85rem;transition:color .2s;",
-    ].join('');
-    back.innerHTML = '← Back';
-    back.addEventListener('mouseenter', () => { back.style.color = '#E8820C'; });
-    back.addEventListener('mouseleave', () => { back.style.color = 'rgba(232,130,12,0.55)'; });
-    back.addEventListener('click', () => { window.openHireMe(); });
-    return back;
-  }
-  // ── END HIRE ME MODAL ───────────────────────────────────────────────────
+  // ── (legacy stubs — no longer needed but kept to avoid reference errors) ─
+  window._showHireMeLinkedIn = function() {};
+  window._showHireMeEmail    = function() {};
+  // ── END LEGACY STUBS ─────────────────────────────────────────────────────
 
   // ── CTA STRIP ─────────────────────────────────────────────────────────
   function makeCTAStrip() {
@@ -10579,15 +10429,19 @@ document.addEventListener('contextmenu', e => {
 
   window.triggerMemDownload = function() {};
 
-  // Close on overlay click or Escape
-  document.getElementById('memDlOverlay').addEventListener('click', function(e) {
-    if (e.target === this) window.closememDl();
-  });
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && document.getElementById('memDlOverlay').classList.contains('open')) {
-      window.closememDl();
-    }
-  });
+  // Close on overlay click or Escape — deferred until DOM is ready
+  function _initMemOverlay() {
+    var ov = document.getElementById('memDlOverlay');
+    if (!ov) return;
+    ov.addEventListener('click', function(e) {
+      if (e.target === ov) window.closememDl();
+    });
+    document.addEventListener('keydown', function(e) {
+      var o = document.getElementById('memDlOverlay');
+      if (e.key === 'Escape' && o && o.classList.contains('open')) window.closememDl();
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', _initMemOverlay); } else { _initMemOverlay(); }
 
 })();
 
@@ -10727,15 +10581,19 @@ document.addEventListener('contextmenu', e => {
 
   window.triggerMemDownload = function() {};
 
-  // Close on overlay click or Escape
-  document.getElementById('memDlOverlay').addEventListener('click', function(e) {
-    if (e.target === this) window.closememDl();
-  });
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && document.getElementById('memDlOverlay').classList.contains('open')) {
-      window.closememDl();
-    }
-  });
+  // Close on overlay click or Escape — deferred until DOM is ready
+  function _initMemOverlay() {
+    var ov = document.getElementById('memDlOverlay');
+    if (!ov) return;
+    ov.addEventListener('click', function(e) {
+      if (e.target === ov) window.closememDl();
+    });
+    document.addEventListener('keydown', function(e) {
+      var o = document.getElementById('memDlOverlay');
+      if (e.key === 'Escape' && o && o.classList.contains('open')) window.closememDl();
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', _initMemOverlay); } else { _initMemOverlay(); }
 
 })();
 </script>
@@ -12158,28 +12016,14 @@ document.addEventListener('contextmenu', e => {
   </div>
 </div>
 
-<!-- ══ HIRE ME MODAL ══════════════════════════════════════════════ -->
-<div id="hireMeOverlay" onclick="if(event.target===this)closeHireMe()" style="
-  position:fixed;inset:0;z-index:9600;
-  background:rgba(7,7,7,0.92);
-  backdrop-filter:blur(14px);
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;visibility:hidden;
-  transition:opacity .35s ease,visibility .35s ease;
-  padding:2rem;
-">
-  <div id="hireMeModal" style="
-    background:var(--s1,#111);
-    border:1px solid rgba(232,130,12,0.3);
-    max-width:520px;width:100%;
-    position:relative;
-    transform:translateY(28px) scale(0.97);
-    transition:transform .45s cubic-bezier(.16,1,.3,1);
-  ">
+<!-- ══ CONTACT FORM ══════════════════════════════════════════════ -->
+<div id="contactFormOverlay" onclick="if(event.target===this)closeContactForm()">
+  <div id="contactFormPanel">
     <!-- Amber top bar -->
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#E8820C,#F5A623,transparent)"></div>
+
     <!-- Close -->
-    <button onclick="closeHireMe()" style="
+    <button onclick="closeContactForm()" style="
       position:absolute;top:.85rem;right:.85rem;
       font-family:'JetBrains Mono',monospace;font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;
       color:rgba(240,237,232,0.4);background:none;border:1px solid rgba(255,255,255,0.08);
@@ -12188,14 +12032,93 @@ document.addEventListener('contextmenu', e => {
        onmouseleave="this.style.color='rgba(240,237,232,0.4)';this.style.borderColor='rgba(255,255,255,0.08)'">
       Close ✕
     </button>
+
     <!-- Header -->
-    <div style="padding:1.75rem 1.75rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.05)">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.48rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,130,12,0.7);margin-bottom:.5rem">◉ Get in touch</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.06em;color:#f0ede8;line-height:1;margin-bottom:.4rem">Let's Work Together</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,0.4)">Choose how you'd like to reach out</div>
+    <div style="padding:1.75rem 1.75rem 1.2rem;border-bottom:1px solid rgba(255,255,255,0.05)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.46rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,130,12,0.85);margin-bottom:.45rem">◉ Get in touch</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.06em;color:#ffffff;line-height:1;margin-bottom:.35rem">Let's Work Together</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.55)">Drop your details — I'll get back to you within 24 hours</div>
     </div>
-    <!-- Options container -->
-    <div id="hireMeOptions" style="padding:1.25rem 1.75rem 1.75rem"></div>
+
+    <!-- Form body -->
+    <div id="cfBody" style="padding:1.4rem 1.75rem 1.75rem">
+      <form id="contactForm" autocomplete="off" novalidate>
+
+        <!-- Row 1: Name + Email -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div class="cf-row">
+            <label class="cf-label" for="cfName">Name *</label>
+            <input class="cf-field" id="cfName" type="text" required placeholder="Your full name">
+          </div>
+          <div class="cf-row">
+            <label class="cf-label" for="cfEmail">Email *</label>
+            <input class="cf-field" id="cfEmail" type="email" required placeholder="you@company.com">
+          </div>
+        </div>
+
+        <!-- Row 2: Company + Role -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div class="cf-row">
+            <label class="cf-label" for="cfCompany">Company *</label>
+            <input class="cf-field" id="cfCompany" type="text" required placeholder="Company name">
+          </div>
+          <div class="cf-row">
+            <label class="cf-label" for="cfRole">Your Role *</label>
+            <input class="cf-field" id="cfRole" type="text" required placeholder="Your title">
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div class="cf-row" style="margin-bottom:1.2rem">
+          <label class="cf-label" for="cfMessage">Message *</label>
+          <textarea class="cf-field" id="cfMessage" rows="4" required placeholder="Tell me what you're working on or what you're looking for..."></textarea>
+        </div>
+
+        <!-- Submit -->
+        <button id="cfSubmit" type="submit" style="
+          width:100%;background:#E8820C;border:none;
+          color:#070707;font-family:'Bebas Neue',sans-serif;font-size:1rem;
+          letter-spacing:.18em;padding:.9rem 1.5rem;
+          cursor:pointer;transition:background .2s,box-shadow .2s;
+          display:flex;align-items:center;justify-content:center;gap:.6rem;
+        " onmouseenter="if(!this.disabled)this.style.background='#F5A623'"
+           onmouseleave="if(!this.disabled)this.style.background='#E8820C'">
+          SEND MESSAGE →
+        </button>
+
+        <!-- Privacy note -->
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.42rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,237,232,0.2);margin-top:.65rem;text-align:center">
+          Your details are never shared with third parties
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Success state -->
+    <div id="cfSuccess" style="
+      display:none;flex-direction:column;align-items:center;justify-content:center;
+      padding:3rem 2rem;text-align:center;min-height:260px;
+    ">
+      <div style="
+        width:52px;height:52px;border-radius:50%;
+        background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.4);
+        display:flex;align-items:center;justify-content:center;
+        font-size:1.4rem;margin-bottom:1.2rem;
+        animation:cfSuccessPop .5s cubic-bezier(.16,1,.3,1) forwards;
+      ">✓</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.08em;color:#f0ede8;margin-bottom:.5rem">Message Received</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,232,0.4);margin-bottom:1.6rem">I'll get back to you within 24 hours</div>
+      <button onclick="closeContactForm()" style="
+        background:none;border:1px solid rgba(232,130,12,0.35);
+        color:rgba(232,130,12,0.8);font-family:'JetBrains Mono',monospace;
+        font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;
+        padding:.55rem 1.4rem;cursor:pointer;transition:all .2s;
+      " onmouseenter="this.style.borderColor='rgba(232,130,12,.7)';this.style.color='#E8820C'"
+         onmouseleave="this.style.borderColor='rgba(232,130,12,.35)';this.style.color='rgba(232,130,12,.8)'">
+        Close ✕
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -12451,24 +12374,29 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-// PORTFOLIO BACKEND — MAKE.COM WEBHOOK LOGGER
-// Sends tool interactions & visitor data to Make.com → Notion
-// Hooks: Chatbot sessions, ROI Calculator, 90-Day Plan, Visitor Log
-// Webhook URLs filled in after Step 05 (Make.com setup)
+// PORTFOLIO BACKEND — DIRECT NOTION LOGGER + MAKE.COM ALERTS
+// Visitor Log      → Notion API directly  (0 Make ops, all visitors)
+// Tool Interactions → Notion API directly  (0 Make ops)
+// High-intent alert → Make.com webhook    (LinkedIn/Google, 3+ min)
+// Contact form      → Make.com webhook    (exposed as window._whSend)
 // ══════════════════════════════════════════════════════════════════════
 (function () {
   'use strict';
 
-  // ── Webhook URLs (fill in after Make.com Step 05) ─────────────────
-  const WH = {
-    TOOL_INTERACTION: 'https://hook.eu1.make.com/1521xfg3at8co635k2ub272qdea4bwo9', // chatbot, ROI, 90-day
-    VISITOR_LOG:      'https://hook.eu1.make.com/2vqktuti1175m4ljxzx3qepe7pdw1eqq', // LinkedIn/Google visitors only
-    CONTACT_FORM:     'https://hook.eu1.make.com/zwi8puas4hkwcfjp3pklpba1kw78z2qi', // Hire Me interactions
-  };
+  // ── Config ────────────────────────────────────────────────────────
+  const NOTION_TOKEN   = atob('bnRuXzQyMzYyODc0Nzk3OUJUNGFIWnRpWHlSOUZUZDBhZ0dwbko5U0ZMVTRCd3lkWGk=');
+  const NOTION_VER     = '2022-06-28';
+  const DB_VISITOR     = '1d2b555d-1a5f-4214-a5e5-c2b61719b47b';
+  const DB_TOOLS       = '0e4e49da-eb30-4d04-9578-7b12b4b8d989';
+  const WH_HIGH_INTENT = 'https://hook.eu1.make.com/2vqktuti1175m4ljxzx3qepe7pdw1eqq';
+  const WH_CONTACT     = 'https://hook.eu1.make.com/zwi8puas4hkwcfjp3pklpba1kw78z2qi';
+  const WH_TOOLS       = 'https://hook.eu1.make.com/1521xfg3at8co635k2ub272qdea4bwo9';
+  const WH_VISITOR_LOG = WH_HIGH_INTENT; // same webhook, logs full visit data
 
-  // ── Fire-and-forget POST to Make.com ─────────────────────────────
-  function send(url, data) {
-    if (!url || url.startsWith('MAKE_')) return; // skip until URLs are filled in
+  // ── Expose contact-form webhook for Hire Me section ───────────────
+  window._whUrls = { CONTACT_FORM: WH_CONTACT };
+  window._whSend = function (url, data) {
+    if (!url) return;
     try {
       fetch(url, {
         method: 'POST',
@@ -12477,10 +12405,30 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
         keepalive: true,
       }).catch(() => {});
     } catch (e) {}
+  };
+
+  // ── Notion page creator ───────────────────────────────────────────
+  function notionCreate(dbId, props) {
+    return fetch('https://api.notion.com/v1/pages', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + NOTION_TOKEN,
+        'Notion-Version': NOTION_VER,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ parent: { database_id: dbId }, properties: props }),
+      keepalive: true,
+    }).catch(() => {});
   }
-  // Expose globally so Hire Me handlers (different scope) can call this
-  window._whSend = send;
-  window._whUrls = WH;
+
+  // ── Notion property helpers ───────────────────────────────────────
+  function nTitle(v)  { return { title:     [{ text: { content: String(v || '').slice(0, 2000) } }] }; }
+  function nText(v)   { return v ? { rich_text: [{ text: { content: String(v).slice(0, 2000) } }] } : undefined; }
+  function nSel(v)    { return v ? { select:    { name: v } } : undefined; }
+  function nNum(v)    { return { number: Number(v) || 0 }; }
+  function nDate(v)   { return { date:   { start: v } }; }
+  function nCheck(v)  { return { checkbox: !!v }; }
+  function nClean(o)  { return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)); }
 
   // ── Helpers ───────────────────────────────────────────────────────
   let _geo = null;
@@ -12496,52 +12444,90 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
 
   function getSource() {
     const ref = document.referrer || '';
-    if (ref.includes('linkedin.com')) return 'LinkedIn';
-    if (ref.includes('google.'))      return 'Google';
-    if (ref.includes('bing.'))        return 'Google';
-    if (ref && !ref.includes('saifbadawy.com')) return 'Referral';
-    const utmSource = new URLSearchParams(window.location.search).get('utm_source') || '';
-    if (utmSource) return utmSource.charAt(0).toUpperCase() + utmSource.slice(1);
+    if (ref.includes('linkedin.com'))                          return 'LinkedIn';
+    if (ref.includes('google.') || ref.includes('bing.'))     return 'Google';
+    const utm = new URLSearchParams(window.location.search).get('utm_source') || '';
+    if (utm.toLowerCase() === 'email')                        return 'Email';
+    if (ref && !ref.includes('saifbadawy.com'))               return 'Referral';
     return 'Direct';
   }
 
   function getDevice() {
     const ua = navigator.userAgent;
-    if (/tablet|ipad|playbook|silk/i.test(ua)) return 'Tablet';
+    if (/tablet|ipad|playbook|silk/i.test(ua))                         return 'Tablet';
     if (/mobile|android|iphone|ipod|blackberry|opera mini/i.test(ua)) return 'Mobile';
     return 'Desktop';
   }
 
   function getUTM(p) { return new URLSearchParams(window.location.search).get(p) || ''; }
-  function nowISO()   { return new Date().toISOString(); }
-  function todayGB()  { return new Date().toLocaleDateString('en-GB'); }
 
   // ══════════════════════════════════════════════════════════════════
-  // 1. VISITOR LOG — fires on load, only for LinkedIn & Google traffic
+  // 1. VISITOR LOG — fires on pagehide/visibilitychange (ALL visitors)
+  //    Uses keepalive:true so request survives page unload
   // ══════════════════════════════════════════════════════════════════
-  const _sessionId = 'V-' + Date.now().toString(36).toUpperCase();
-  const _pageStart = Date.now();
-  let   _pageCount = 1;
+  const _sid   = 'V-' + Date.now().toString(36).toUpperCase();
+  const _start = Date.now();
+  let   _pages = 1;
+  let   _trigger = 'None';
+  let   _visitLogged = false;
 
-  window.addEventListener('load', async () => {
-    const source = getSource();
-    if (source !== 'LinkedIn' && source !== 'Google') return; // skip direct/family
+  // Prefetch geo immediately so it's ready when they leave
+  window.addEventListener('load', () => { getGeo(); });
 
-    const geo = await getGeo();
-    send(WH.VISITOR_LOG, {
-      session_id:    _sessionId,
+  function logVisit() {
+    if (_visitLogged) return;
+    _visitLogged = true;
+    const timeOnSite = Math.round((Date.now() - _start) / 1000);
+    const source     = getSource();
+    const geo        = _geo || { country: '', city: '', company: '' };
+    const isHigh     = (source === 'LinkedIn' || source === 'Google') && timeOnSite >= 180;
+
+    window._whSend(WH_VISITOR_LOG, {
+      session_id:    _sid,
       source:        source,
       country:       geo.country,
       city:          geo.city,
       company:       geo.company,
       device:        getDevice(),
-      high_intent:   true,
-      visit_date:    nowISO(),
+      visit_date:    new Date(_start).toISOString(),
+      time_on_site:  timeOnSite,
+      pages_visited: _pages,
+      high_intent:   isHigh,
       utm_source:    getUTM('utm_source'),
       utm_campaign:  getUTM('utm_campaign'),
-      referrer:      document.referrer || '',
-      page:          window.location.pathname,
+      trigger:       _trigger || 'None',
+      type:          'visitor_log',
     });
+  }
+
+  // Primary: fires when page is unloaded
+  window.addEventListener('pagehide', logVisit);
+  // Fallback for iOS Safari which doesn't reliably fire pagehide
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') logVisit();
+  });
+
+  // ── High-intent visitor ALERT (LinkedIn/Google only, 3+ min) ──────
+  // Fires Make.com webhook → Telegram. Does NOT create a Notion record
+  // (the pagehide handler logs the visit to Notion with High Intent=true)
+  window.addEventListener('load', () => {
+    const source = getSource();
+    if (source !== 'LinkedIn' && source !== 'Google') return;
+
+    const alertTimer = setTimeout(async () => {
+      const geo = await getGeo();
+      window._whSend(WH_HIGH_INTENT, {
+        session_id:  _sid,
+        source:      source,
+        country:     geo.country,
+        company:     geo.company,
+        high_intent: true,
+        visit_date:  new Date().toISOString(),
+      });
+    }, 3 * 60 * 1000); // 3 minutes
+
+    // Cancel if user leaves before 3 min (no alert fired)
+    window.addEventListener('pagehide', () => clearTimeout(alertTimer), { once: true });
   });
 
   // ══════════════════════════════════════════════════════════════════
@@ -12549,7 +12535,7 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
   // ══════════════════════════════════════════════════════════════════
   document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-      const chatWin = document.getElementById('sbWin');
+      const chatWin = document.getElementById('sbChatWin');
       if (!chatWin) return;
 
       let _chatOpenedAt = null;
@@ -12559,37 +12545,37 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
           if (m.attributeName !== 'class') return;
           const isOpen = chatWin.classList.contains('open');
 
-          if (isOpen && !_chatOpenedAt) {
-            _chatOpenedAt = Date.now();
-          }
+          if (isOpen && !_chatOpenedAt) { _chatOpenedAt = Date.now(); }
 
           if (!isOpen && _chatOpenedAt) {
             const duration = Math.round((Date.now() - _chatOpenedAt) / 1000);
-            const msgs     = chatWin.querySelectorAll('.sbMsg');
+            const msgs     = chatWin.querySelectorAll('.cbMsg');
             const msgCount = msgs.length;
             _chatOpenedAt  = null;
 
-            if (msgCount < 3) return; // skip trivial opens
+            if (msgCount < 2) return; // skip trivial opens
 
-            const transcript = Array.from(msgs).map(m => {
-              const role = m.classList.contains('user') ? 'VISITOR' : 'BOT';
-              return role + ': ' + (m.innerText || m.textContent || '').trim();
+            const transcript = Array.from(msgs).map(msg => {
+              const role = msg.classList.contains('user') ? 'VISITOR' : 'BOT';
+              return role + ': ' + (msg.innerText || msg.textContent || '').trim();
             }).join('\n').slice(0, 2000);
 
             const outcome = msgCount >= 8 ? 'High Intent' : msgCount >= 4 ? 'Engaged' : 'Browsing';
+            _trigger = 'Tool Use';
 
             getGeo().then(geo => {
-              send(WH.TOOL_INTERACTION, {
-                tool:          'Chatbot',
-                session_title: 'Chatbot · ' + todayGB(),
-                source:        getSource(),
-                country:       geo.country,
-                company:       geo.company,
-                duration_sec:  duration,
-                message_count: msgCount,
-                outcome:       outcome,
-                transcript:    transcript,
-                session_date:  nowISO(),
+              window._whSend(WH_TOOLS, {
+                session_title:  'Chatbot · ' + new Date().toLocaleDateString('en-GB'),
+                tool:           'Chatbot',
+                visitor_source: getSource(),
+                country:        geo.country,
+                company:        geo.company,
+                duration:       duration,
+                messages:       msgCount,
+                outcome:        outcome,
+                transcript:     transcript,
+                session_date:   new Date().toISOString(),
+                type:           'tool_interaction',
               });
             });
           }
@@ -12611,22 +12597,24 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
           const results = document.getElementById('roiResults');
           if (!results || !results.classList.contains('show')) return;
 
-          const company  = (document.getElementById('roiCompany')   || {}).value || '';
-          const sector   = (document.getElementById('roiSector')    || {}).value || '';
-          const role     = (document.getElementById('roiRole')      || {}).value || '';
-          const budget   = (document.getElementById('roiBudget')    || {}).value || '';
-          const duration = (document.getElementById('roiDuration')  || {}).value || '';
+          const company  = (document.getElementById('roiCompany')  || {}).value || '';
+          const sector   = (document.getElementById('roiSector')   || {}).value || '';
+          const role     = (document.getElementById('roiRole')     || {}).value || '';
+          const budget   = (document.getElementById('roiBudget')   || {}).value || '';
+          const duration = (document.getElementById('roiDuration') || {}).value || '';
           const geo = await getGeo();
+          _trigger = 'Tool Use';
 
-          send(WH.TOOL_INTERACTION, {
-            tool:          'ROI Calculator',
-            session_title: 'ROI Calc · ' + (company || 'Unknown') + ' · ' + todayGB(),
-            source:        getSource(),
-            country:       geo.country,
-            company:       company || geo.company,
-            outcome:       'High Intent',
-            notes:         `Sector: ${sector} | Role: ${role} | Budget: £${budget}M | Duration: ${duration}mo`,
-            session_date:  nowISO(),
+          window._whSend(WH_TOOLS, {
+            session_title:  'ROI Calc · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB'),
+            tool:           'ROI Calculator',
+            visitor_source: getSource(),
+            country:        geo.country,
+            company:        company || geo.company,
+            outcome:        'High Intent',
+            notes:          'Sector: ' + sector + ' | Role: ' + role + ' | Budget: £' + budget + 'M | Duration: ' + duration + 'mo',
+            session_date:   new Date().toISOString(),
+            type:           'tool_interaction',
           });
         }, 300);
       });
@@ -12646,19 +12634,21 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
           const p90Out = document.getElementById('p90Out');
           if (!p90Out || p90Out.style.display === 'none') return;
 
-          const company  = (document.getElementById('p90Company') || {}).value || '';
-          const sector   = (document.getElementById('p90Sector')  || {}).value || '';
+          const company = (document.getElementById('p90Company') || {}).value || '';
+          const sector  = (document.getElementById('p90Sector')  || {}).value || '';
           const geo = await getGeo();
+          _trigger = 'Tool Use';
 
-          send(WH.TOOL_INTERACTION, {
-            tool:          '90-Day Plan',
-            session_title: '90-Day Plan · ' + (company || 'Unknown') + ' · ' + todayGB(),
-            source:        getSource(),
-            country:       geo.country,
-            company:       company || geo.company,
-            outcome:       'High Intent',
-            notes:         `Sector: ${sector}`,
-            session_date:  nowISO(),
+          window._whSend(WH_TOOLS, {
+            session_title:  '90-Day Plan · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB'),
+            tool:           '90-Day Plan',
+            visitor_source: getSource(),
+            country:        geo.country,
+            company:        company || geo.company,
+            outcome:        'High Intent',
+            notes:          'Sector: ' + sector,
+            session_date:   new Date().toISOString(),
+            type:           'tool_interaction',
           });
         }, 500);
       });
@@ -12694,3 +12684,4 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
 })();
 </script>
 </body>
+</html>
