@@ -12235,11 +12235,8 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
   'use strict';
 
   // ── Config ────────────────────────────────────────────────────────
-  const NOTION_TOKEN   = atob('bnRuXzQyMzYyODc0Nzk3OUJUNGFIWnRpWHlSOUZUZDBhZ0dwbko5U0ZMVTRCd3lkWGk=');
-  const NOTION_VER     = '2022-06-28';
-  const DB_VISITOR     = '56c0f20d-1963-42f9-9596-0367337e3dd1'; // Visitor Log DB (confirmed from Make.com)
-  const DB_TOOLS       = 'ddcde884-46d3-43a6-841f-87f49c98c4f4'; // Tool Interactions DB (confirmed from Make.com)
-  const WH_HIGH_INTENT = 'https://hook.eu1.make.com/2vqktuti1175m4ljxzx3qepe7pdw1eqq'; // Telegram alert only
+  const WH_VISITOR     = 'https://hook.eu1.make.com/2vqktuti1175m4ljxzx3qepe7pdw1eqq'; // Visitor Log → Notion + Telegram (high-intent only)
+  const WH_TOOLS       = 'https://hook.eu1.make.com/1521xfg3at8co635k2ub272qdea4bwo9'; // Tool Interactions → Notion + Telegram
   const WH_CONTACT     = 'https://hook.eu1.make.com/zwi8puas4hkwcfjp3pklpba1kw78z2qi';
 
   // ── Expose contact-form webhook for Hire Me section ───────────────
@@ -12255,29 +12252,6 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
       }).catch(() => {});
     } catch (e) {}
   };
-
-  // ── Notion page creator ───────────────────────────────────────────
-  function notionCreate(dbId, props) {
-    return fetch('https://api.notion.com/v1/pages', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + NOTION_TOKEN,
-        'Notion-Version': NOTION_VER,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ parent: { database_id: dbId }, properties: props }),
-      keepalive: true,
-    }).catch(() => {});
-  }
-
-  // ── Notion property helpers ───────────────────────────────────────
-  function nTitle(v)  { return { title:     [{ text: { content: String(v || '').slice(0, 2000) } }] }; }
-  function nText(v)   { return v ? { rich_text: [{ text: { content: String(v).slice(0, 2000) } }] } : undefined; }
-  function nSel(v)    { return v ? { select:    { name: v } } : undefined; }
-  function nNum(v)    { return { number: Number(v) || 0 }; }
-  function nDate(v)   { return { date:   { start: v } }; }
-  function nCheck(v)  { return { checkbox: !!v }; }
-  function nClean(o)  { return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)); }
 
   // ── Helpers ───────────────────────────────────────────────────────
   let _geo = null;
@@ -12331,23 +12305,23 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
     const geo        = _geo || { country: '', city: '', company: '' };
     const isHigh     = (source === 'LinkedIn' || source === 'Google') && timeOnSite >= 180;
 
-    // Direct Notion write — 0 Make.com ops (spec: DB 02 "Direct from site")
-    // Property IDs from confirmed Make.com blueprint mapper
-    notionCreate(DB_VISITOR, nClean({
-      'title':   nTitle(_sid),
-      'vByA':    nSel(source),
-      'EJki':    nText(geo.country),
-      'ym:E':    nText(geo.city),
-      'RS}L':    nText(geo.company),
-      'WQeR':    nSel(getDevice()),
-      '@gU{':    nDate(new Date(_start).toISOString()),
-      'qYI;':    nNum(timeOnSite),
-      'xx_L':    nNum(_pages),
-      'J=q~':    nCheck(isHigh),
-      'fbqg':    nText(_trigger || 'None'),
-      '\\_CX':   nText(getUTM('utm_source')),
-      'I@GF':    nText(getUTM('utm_campaign')),
-    }));
+    // Route through Make.com — works from browser (no CORS issue)
+    window._whSend(WH_VISITOR, {
+      session_id:    _sid,
+      source:        source,
+      country:       geo.country,
+      city:          geo.city,
+      company:       geo.company,
+      device:        getDevice(),
+      visit_date:    new Date(_start).toISOString(),
+      time_on_site:  timeOnSite,
+      pages_visited: _pages,
+      high_intent:   isHigh,
+      trigger:       _trigger || 'None',
+      utm_source:    getUTM('utm_source'),
+      utm_campaign:  getUTM('utm_campaign'),
+      type:          'visitor_log',
+    });
   }
 
   // Primary: fires when page is unloaded
@@ -12357,26 +12331,35 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
     if (document.visibilityState === 'hidden') logVisit();
   });
 
-  // ── High-intent visitor ALERT (LinkedIn/Google only, 3+ min) ──────
-  // Fires Make.com webhook → Telegram. Does NOT create a Notion record
-  // (the pagehide handler logs the visit to Notion with High Intent=true)
+  // ── High-intent Telegram alert (LinkedIn/Google, 3+ min) ──────────
+  // logVisit above already sends all data to Make.com.
+  // This extra ping fires early (at 3 min mark) so Telegram arrives
+  // while the visitor is still on the site.
   window.addEventListener('load', () => {
     const source = getSource();
     if (source !== 'LinkedIn' && source !== 'Google') return;
 
     const alertTimer = setTimeout(async () => {
       const geo = await getGeo();
-      window._whSend(WH_HIGH_INTENT, {
-        session_id:  _sid,
-        source:      source,
-        country:     geo.country,
-        company:     geo.company,
-        high_intent: true,
-        visit_date:  new Date().toISOString(),
+      window._whSend(WH_VISITOR, {
+        session_id:   _sid,
+        source:       source,
+        country:      geo.country,
+        city:         geo.city,
+        company:      geo.company,
+        device:       getDevice(),
+        visit_date:   new Date().toISOString(),
+        time_on_site: 180,
+        pages_visited: _pages,
+        high_intent:  true,
+        trigger:      _trigger || 'None',
+        utm_source:   getUTM('utm_source'),
+        utm_campaign: getUTM('utm_campaign'),
+        type:         'visitor_log',
       });
     }, 3 * 60 * 1000); // 3 minutes
 
-    // Cancel if user leaves before 3 min (no alert fired)
+    // Cancel if user leaves before 3 min
     window.addEventListener('pagehide', () => clearTimeout(alertTimer), { once: true });
   });
 
@@ -12414,19 +12397,19 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
             _trigger = 'Tool Use';
 
             getGeo().then(geo => {
-              // Direct Notion write — 0 Make.com ops (spec: DB 05 "Direct from site")
-              notionCreate(DB_TOOLS, nClean({
-                'title':   nTitle('Chatbot · ' + new Date().toLocaleDateString('en-GB')),
-                '[^yn':    nSel('Chatbot'),
-                'NGhO':    nText(getSource()),
-                'vtXK':    nText(geo.country),
-                'lG\\W':   nText(geo.company),
-                'XrFJ':    nNum(duration),
-                'OCLp':    nNum(msgCount),
-                'Hale':    nSel(outcome),
-                '::{x':    nText(transcript),
-                'hMUv':    nDate(new Date().toISOString()),
-              }));
+              window._whSend(WH_TOOLS, {
+                session_title: 'Chatbot · ' + new Date().toLocaleDateString('en-GB'),
+                tool:          'Chatbot',
+                visitor_source: getSource(),
+                country:       geo.country,
+                company:       geo.company,
+                duration_sec:  duration,
+                message_count: msgCount,
+                outcome:       outcome,
+                transcript:    transcript,
+                session_date:  new Date().toISOString(),
+                type:          'tool_interaction',
+              });
             });
           }
         });
@@ -12455,17 +12438,17 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
           const geo = await getGeo();
           _trigger = 'Tool Use';
 
-          // Direct Notion write — 0 Make.com ops (spec: DB 05 "Direct from site")
-          notionCreate(DB_TOOLS, nClean({
-            'title':   nTitle('ROI Calc · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB')),
-            '[^yn':    nSel('ROI Calculator'),
-            'NGhO':    nText(getSource()),
-            'vtXK':    nText(geo.country),
-            'lG\\W':   nText(company || geo.company),
-            'Hale':    nSel('High Intent'),
-            'Bg}\\':   nText('Sector: ' + sector + ' | Role: ' + role + ' | Budget: £' + budget + 'M | Duration: ' + duration + 'mo'),
-            'hMUv':    nDate(new Date().toISOString()),
-          }));
+          window._whSend(WH_TOOLS, {
+            session_title:  'ROI Calc · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB'),
+            tool:           'ROI Calculator',
+            visitor_source: getSource(),
+            country:        geo.country,
+            company:        company || geo.company,
+            outcome:        'High Intent',
+            notes:          'Sector: ' + sector + ' | Role: ' + role + ' | Budget: £' + budget + 'M | Duration: ' + duration + 'mo',
+            session_date:   new Date().toISOString(),
+            type:           'tool_interaction',
+          });
         }, 300);
       });
     }, 1000);
@@ -12489,17 +12472,17 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
           const geo = await getGeo();
           _trigger = 'Tool Use';
 
-          // Direct Notion write — 0 Make.com ops (spec: DB 05 "Direct from site")
-          notionCreate(DB_TOOLS, nClean({
-            'title':   nTitle('90-Day Plan · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB')),
-            '[^yn':    nSel('90-Day Plan'),
-            'NGhO':    nText(getSource()),
-            'vtXK':    nText(geo.country),
-            'lG\\W':   nText(company || geo.company),
-            'Hale':    nSel('High Intent'),
-            'Bg}\\':   nText('Sector: ' + sector),
-            'hMUv':    nDate(new Date().toISOString()),
-          }));
+          window._whSend(WH_TOOLS, {
+            session_title:  '90-Day Plan · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB'),
+            tool:           '90-Day Plan',
+            visitor_source: getSource(),
+            country:        geo.country,
+            company:        company || geo.company,
+            outcome:        'High Intent',
+            notes:          'Sector: ' + sector,
+            session_date:   new Date().toISOString(),
+            type:           'tool_interaction',
+          });
         }, 500);
       });
     }, 1000);
