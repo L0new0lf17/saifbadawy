@@ -12386,12 +12386,10 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
   // ── Config ────────────────────────────────────────────────────────
   const NOTION_TOKEN   = atob('bnRuXzQyMzYyODc0Nzk3OUJUNGFIWnRpWHlSOUZUZDBhZ0dwbko5U0ZMVTRCd3lkWGk=');
   const NOTION_VER     = '2022-06-28';
-  const DB_VISITOR     = '1d2b555d-1a5f-4214-a5e5-c2b61719b47b';
-  const DB_TOOLS       = '0e4e49da-eb30-4d04-9578-7b12b4b8d989';
-  const WH_HIGH_INTENT = 'https://hook.eu1.make.com/2vqktuti1175m4ljxzx3qepe7pdw1eqq';
+  const DB_VISITOR     = '56c0f20d-1963-42f9-9596-0367337e3dd1'; // Visitor Log DB (confirmed from Make.com)
+  const DB_TOOLS       = 'ddcde884-46d3-43a6-841f-87f49c98c4f4'; // Tool Interactions DB (confirmed from Make.com)
+  const WH_HIGH_INTENT = 'https://hook.eu1.make.com/2vqktuti1175m4ljxzx3qepe7pdw1eqq'; // Telegram alert only
   const WH_CONTACT     = 'https://hook.eu1.make.com/zwi8puas4hkwcfjp3pklpba1kw78z2qi';
-  const WH_TOOLS       = 'https://hook.eu1.make.com/1521xfg3at8co635k2ub272qdea4bwo9';
-  const WH_VISITOR_LOG = WH_HIGH_INTENT; // same webhook, logs full visit data
 
   // ── Expose contact-form webhook for Hire Me section ───────────────
   window._whUrls = { CONTACT_FORM: WH_CONTACT };
@@ -12482,22 +12480,23 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
     const geo        = _geo || { country: '', city: '', company: '' };
     const isHigh     = (source === 'LinkedIn' || source === 'Google') && timeOnSite >= 180;
 
-    window._whSend(WH_VISITOR_LOG, {
-      session_id:    _sid,
-      source:        source,
-      country:       geo.country,
-      city:          geo.city,
-      company:       geo.company,
-      device:        getDevice(),
-      visit_date:    new Date(_start).toISOString(),
-      time_on_site:  timeOnSite,
-      pages_visited: _pages,
-      high_intent:   isHigh,
-      utm_source:    getUTM('utm_source'),
-      utm_campaign:  getUTM('utm_campaign'),
-      trigger:       _trigger || 'None',
-      type:          'visitor_log',
-    });
+    // Direct Notion write — 0 Make.com ops (spec: DB 02 "Direct from site")
+    // Property IDs from confirmed Make.com blueprint mapper
+    notionCreate(DB_VISITOR, nClean({
+      'title':   nTitle(_sid),
+      'vByA':    nSel(source),
+      'EJki':    nText(geo.country),
+      'ym:E':    nText(geo.city),
+      'RS}L':    nText(geo.company),
+      'WQeR':    nSel(getDevice()),
+      '@gU{':    nDate(new Date(_start).toISOString()),
+      'qYI;':    nNum(timeOnSite),
+      'xx_L':    nNum(_pages),
+      'J=q~':    nCheck(isHigh),
+      'fbqg':    nText(_trigger || 'None'),
+      '\\_CX':   nText(getUTM('utm_source')),
+      'I@GF':    nText(getUTM('utm_campaign')),
+    }));
   }
 
   // Primary: fires when page is unloaded
@@ -12564,19 +12563,19 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
             _trigger = 'Tool Use';
 
             getGeo().then(geo => {
-              window._whSend(WH_TOOLS, {
-                session_title:  'Chatbot · ' + new Date().toLocaleDateString('en-GB'),
-                tool:           'Chatbot',
-                visitor_source: getSource(),
-                country:        geo.country,
-                company:        geo.company,
-                duration:       duration,
-                messages:       msgCount,
-                outcome:        outcome,
-                transcript:     transcript,
-                session_date:   new Date().toISOString(),
-                type:           'tool_interaction',
-              });
+              // Direct Notion write — 0 Make.com ops (spec: DB 05 "Direct from site")
+              notionCreate(DB_TOOLS, nClean({
+                'title':   nTitle('Chatbot · ' + new Date().toLocaleDateString('en-GB')),
+                '[^yn':    nSel('Chatbot'),
+                'NGhO':    nText(getSource()),
+                'vtXK':    nText(geo.country),
+                'lG\\W':   nText(geo.company),
+                'XrFJ':    nNum(duration),
+                'OCLp':    nNum(msgCount),
+                'Hale':    nSel(outcome),
+                '::{x':    nText(transcript),
+                'hMUv':    nDate(new Date().toISOString()),
+              }));
             });
           }
         });
@@ -12605,17 +12604,17 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
           const geo = await getGeo();
           _trigger = 'Tool Use';
 
-          window._whSend(WH_TOOLS, {
-            session_title:  'ROI Calc · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB'),
-            tool:           'ROI Calculator',
-            visitor_source: getSource(),
-            country:        geo.country,
-            company:        company || geo.company,
-            outcome:        'High Intent',
-            notes:          'Sector: ' + sector + ' | Role: ' + role + ' | Budget: £' + budget + 'M | Duration: ' + duration + 'mo',
-            session_date:   new Date().toISOString(),
-            type:           'tool_interaction',
-          });
+          // Direct Notion write — 0 Make.com ops (spec: DB 05 "Direct from site")
+          notionCreate(DB_TOOLS, nClean({
+            'title':   nTitle('ROI Calc · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB')),
+            '[^yn':    nSel('ROI Calculator'),
+            'NGhO':    nText(getSource()),
+            'vtXK':    nText(geo.country),
+            'lG\\W':   nText(company || geo.company),
+            'Hale':    nSel('High Intent'),
+            'Bg}\\':   nText('Sector: ' + sector + ' | Role: ' + role + ' | Budget: £' + budget + 'M | Duration: ' + duration + 'mo'),
+            'hMUv':    nDate(new Date().toISOString()),
+          }));
         }, 300);
       });
     }, 1000);
@@ -12639,17 +12638,17 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
           const geo = await getGeo();
           _trigger = 'Tool Use';
 
-          window._whSend(WH_TOOLS, {
-            session_title:  '90-Day Plan · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB'),
-            tool:           '90-Day Plan',
-            visitor_source: getSource(),
-            country:        geo.country,
-            company:        company || geo.company,
-            outcome:        'High Intent',
-            notes:          'Sector: ' + sector,
-            session_date:   new Date().toISOString(),
-            type:           'tool_interaction',
-          });
+          // Direct Notion write — 0 Make.com ops (spec: DB 05 "Direct from site")
+          notionCreate(DB_TOOLS, nClean({
+            'title':   nTitle('90-Day Plan · ' + (company || 'Unknown') + ' · ' + new Date().toLocaleDateString('en-GB')),
+            '[^yn':    nSel('90-Day Plan'),
+            'NGhO':    nText(getSource()),
+            'vtXK':    nText(geo.country),
+            'lG\\W':   nText(company || geo.company),
+            'Hale':    nSel('High Intent'),
+            'Bg}\\':   nText('Sector: ' + sector),
+            'hMUv':    nDate(new Date().toISOString()),
+          }));
         }, 500);
       });
     }, 1000);
