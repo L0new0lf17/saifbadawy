@@ -8894,7 +8894,7 @@ document.addEventListener('contextmenu', e => {
             });
             const coData = await coResp.json();
             companyPageId = coData.id || null;
-          } catch (e) { /* non-fatal — lead will still be created */ }
+          } catch (e) { console.warn('[Notion Companies] creation failed:', e); }
         }
 
         // Step 2: Link Company relation on the Lead record (if company was created)
@@ -10697,6 +10697,7 @@ document.addEventListener('contextmenu', e => {
     // Show output
     document.getElementById('p90FormBody').style.display='none';
     document.getElementById('p90Out').style.display='block';
+    window._p90Generated = true;
     document.querySelectorAll('.p90Tab').forEach((t,i)=>t.classList.toggle('on',i===0));
     p90RenderTab(0);
 
@@ -10742,6 +10743,7 @@ document.addEventListener('contextmenu', e => {
   window.p90Reset=function(){
     document.getElementById('p90FormBody').style.display='block';
     document.getElementById('p90Out').style.display='none';
+    window._p90Generated = false;
     planData=null;planMeta=null;
   };
 
@@ -12323,7 +12325,7 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
   // 1. VISITOR LOG — fires on pagehide/visibilitychange (ALL visitors)
   //    Writes DIRECTLY to Notion API (reliable, no Make field mapping).
   //    Also pings Make.com webhook for Telegram alerts only.
-  //    Uses keepalive:true so requests survive page unload.
+  //    Proactive 30s timer fires while page is alive; pagehide/visibilitychange as backup.
   // ══════════════════════════════════════════════════════════════════
   const NOTION_TOK     = atob('bnRuXzQyMzYyODc0Nzk3OUJUNGFIWnRpWHlSOUZUZDBhZ0dwbko5U0ZMVTRCd3lkWGk=');
   const DB_VISITOR_LOG = '1d2b555d-1a5f-4214-a5e5-c2b61719b47b';
@@ -12369,7 +12371,7 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
     if (validTriggers.includes(trigger)) notionVL['Trigger'] = { select: { name: trigger } };
 
     fetch('https://api.notion.com/v1/pages', {
-      method: 'POST', headers: NOTION_HEADERS, keepalive: true,
+      method: 'POST', headers: NOTION_HEADERS,
       body: JSON.stringify({ parent: { database_id: DB_VISITOR_LOG }, properties: notionVL }),
     }).catch(() => {});
 
@@ -12391,6 +12393,8 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') logVisit();
   });
+  // Proactive: fire logVisit after 30s while page is still alive (avoids unload CORS issues)
+  setTimeout(() => logVisit('proactive'), 30 * 1000);
 
   // ── High-intent Telegram alert (LinkedIn/Google, 3+ min) ──────────
   // logVisit above already sends all data to Make.com.
@@ -12554,8 +12558,7 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
 
       p90Btn.addEventListener('click', () => {
         setTimeout(async () => {
-          const p90Out = document.getElementById('p90Out');
-          if (!p90Out || p90Out.style.display === 'none') return;
+          if (!window._p90Generated) return;
 
           const company = (document.getElementById('p90Company') || {}).value || '';
           const sector  = (document.getElementById('p90Sector')  || {}).value || '';
