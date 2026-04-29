@@ -8849,9 +8849,11 @@ document.addEventListener('contextmenu', e => {
       submitBtn.disabled = true;
       submitBtn.textContent = 'SENDING...';
 
-      const NOTION_TOKEN = atob('bnRuXzQyMzYyODc0Nzk3OUJUNGFIWnRpWHlSOUZUZDBhZ0dwbko5U0ZMVTRCd3lkWGk=');
-      const DB_LEADS     = '969570bc-e73c-4147-99aa-91fd37fbd54b';
-      const WH_CONTACT   = 'https://hook.eu1.make.com/zwi8puas4hkwcfjp3pklpba1kw78z2qi';
+      const NOTION_TOKEN  = atob('bnRuXzQyMzYyODc0Nzk3OUJUNGFIWnRpWHlSOUZUZDBhZ0dwbko5U0ZMVTRCd3lkWGk=');
+      const DB_LEADS      = '969570bc-e73c-4147-99aa-91fd37fbd54b';
+      const DB_COMPANIES  = 'e79999e5-003f-4d8d-91a9-795ff9c990ee';
+      const CF_N_HEADERS  = { 'Authorization': 'Bearer ' + NOTION_TOKEN, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' };
+      const WH_CONTACT    = 'https://hook.eu1.make.com/zwi8puas4hkwcfjp3pklpba1kw78z2qi';
 
       const payload = {
         name:      (document.getElementById('cfName').value    || '').trim(),
@@ -8875,14 +8877,35 @@ document.addEventListener('contextmenu', e => {
       notionProps['Date Added']   = { date:      { start: payload.timestamp } };
 
       try {
+        // Step 1: Create Company record first (if company provided), get its page ID
+        let companyPageId = null;
+        if (payload.company) {
+          try {
+            const coResp = await fetch('https://api.notion.com/v1/pages', {
+              method: 'POST', headers: CF_N_HEADERS,
+              body: JSON.stringify({
+                parent: { database_id: DB_COMPANIES },
+                properties: {
+                  'Company Name':  { title:  [{ text: { content: payload.company } }] },
+                  'Status':        { select: { name: 'Warm' } },
+                  'Last Activity': { date:   { start: payload.timestamp } },
+                },
+              }),
+            });
+            const coData = await coResp.json();
+            companyPageId = coData.id || null;
+          } catch (e) { /* non-fatal — lead will still be created */ }
+        }
+
+        // Step 2: Link Company relation on the Lead record (if company was created)
+        if (companyPageId) {
+          notionProps['Company'] = { relation: [{ id: companyPageId }] };
+        }
+
+        // Step 3: Create Lead Pipeline record + fire Make.com webhook in parallel
         await Promise.all([
           fetch('https://api.notion.com/v1/pages', {
-            method: 'POST',
-            headers: {
-              'Authorization': 'Bearer ' + NOTION_TOKEN,
-              'Notion-Version': '2022-06-28',
-              'Content-Type': 'application/json',
-            },
+            method: 'POST', headers: CF_N_HEADERS,
             body: JSON.stringify({ parent: { database_id: DB_LEADS }, properties: notionProps }),
           }).catch(() => {}),
           fetch(WH_CONTACT, {
@@ -12298,41 +12321,67 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
 
   // ══════════════════════════════════════════════════════════════════
   // 1. VISITOR LOG — fires on pagehide/visibilitychange (ALL visitors)
-  //    Uses keepalive:true so request survives page unload
+  //    Writes DIRECTLY to Notion API (reliable, no Make field mapping).
+  //    Also pings Make.com webhook for Telegram alerts only.
+  //    Uses keepalive:true so requests survive page unload.
   // ══════════════════════════════════════════════════════════════════
+  const NOTION_TOK     = atob('bnRuXzQyMzYyODc0Nzk3OUJUNGFIWnRpWHlSOUZUZDBhZ0dwbko5U0ZMVTRCd3lkWGk=');
+  const DB_VISITOR_LOG = '1d2b555d-1a5f-4214-a5e5-c2b61719b47b';
+  const NOTION_HEADERS = { 'Authorization': 'Bearer ' + NOTION_TOK, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' };
+
   const _sid   = 'V-' + Date.now().toString(36).toUpperCase();
   const _start = Date.now();
   let   _pages = 1;
   let   _trigger = 'None';
+  let   _sessionCompany = ''; // set by ROI Calc / 90-Day Plan when user types company
   let   _visitLogged = false;
 
   // Prefetch geo immediately so it's ready when they leave
   window.addEventListener('load', () => { getGeo(); });
 
-  function logVisit() {
+  async function logVisit() {
     if (_visitLogged) return;
     _visitLogged = true;
     const timeOnSite = Math.round((Date.now() - _start) / 1000);
     const source     = getSource();
-    const geo        = _geo || { country: '', city: '', company: '' };
+    const geo        = await getGeo();   // always await — ensures real geo data
     const isHigh     = (source === 'LinkedIn' || source === 'Google') && timeOnSite >= 180;
+    const trigger    = _trigger || 'None';
+    const device     = getDevice();
+    const visitISO   = new Date(_start).toISOString();
 
-    // Route through Make.com — works from browser (no CORS issue)
+    // 1a. Write DIRECTLY to Notion — exact property names, no Make middleman
+    const validTriggers = ['None', 'Contact Form', 'Calendly', 'Tool Use', 'Return Visit'];
+    const notionVL = {
+      'Session ID':    { title:     [{ text: { content: _sid } }] },
+      'City':          { rich_text: [{ text: { content: geo.city        || '' } }] },
+      'Company':       { rich_text: [{ text: { content: geo.company     || '' } }] },
+      'Country':       { rich_text: [{ text: { content: geo.country     || '' } }] },
+      'Device':        { select:    { name: device } },
+      'High Intent':   { checkbox:  isHigh },
+      'Pages Visited': { number:    _pages },
+      'Source':        { select:    { name: source } },
+      'Time on Site':  { number:    timeOnSite },
+      'Visit Date':    { date:      { start: visitISO } },
+      'UTM Source':    { rich_text: [{ text: { content: getUTM('utm_source')   } }] },
+      'UTM Campaign':  { rich_text: [{ text: { content: getUTM('utm_campaign') } }] },
+    };
+    if (validTriggers.includes(trigger)) notionVL['Trigger'] = { select: { name: trigger } };
+
+    fetch('https://api.notion.com/v1/pages', {
+      method: 'POST', headers: NOTION_HEADERS, keepalive: true,
+      body: JSON.stringify({ parent: { database_id: DB_VISITOR_LOG }, properties: notionVL }),
+    }).catch(() => {});
+
+    // 1b. Also send to Make.com — for Telegram alert only (high-intent), not Notion
     window._whSend(WH_VISITOR, {
-      session_id:    _sid,
-      source:        source,
-      country:       geo.country,
-      city:          geo.city,
-      company:       geo.company,
-      device:        getDevice(),
-      visit_date:    new Date(_start).toISOString(),
-      time_on_site:  timeOnSite,
-      pages_visited: _pages,
-      high_intent:   isHigh,
-      trigger:       _trigger || 'None',
-      utm_source:    getUTM('utm_source'),
-      utm_campaign:  getUTM('utm_campaign'),
-      type:          'visitor_log',
+      session_id:    _sid,   source:        source,
+      country:       geo.country,            city:          geo.city,
+      company:       geo.company,            device:        device,
+      visit_date:    visitISO,              time_on_site:  timeOnSite,
+      pages_visited: _pages,                high_intent:   isHigh,
+      trigger:       trigger,               utm_source:    getUTM('utm_source'),
+      utm_campaign:  getUTM('utm_campaign'), type:          'visitor_log',
     });
   }
 
@@ -12417,12 +12466,14 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
 
             getGeo().then(geo => {
               const src = getSource();
+              // Prefer company typed into a tool (ROI Calc / 90-Day Plan) over ISP lookup
+              const chatCompany = _sessionCompany || geo.company || '';
               window._whSend(WH_TOOLS, {
                 session_title: 'Chatbot · ' + new Date().toLocaleDateString('en-GB'),
                 tool:          'Chatbot',
                 visitor_source: src,
                 country:       geo.country,
-                company:       geo.company,
+                company:       chatCompany,
                 duration_sec:  duration,
                 message_count: msgCount,
                 outcome:       outcome,
@@ -12465,6 +12516,7 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
           const budget   = (document.getElementById('roiBudget')   || {}).value || '';
           const duration = (document.getElementById('roiDuration') || {}).value || '';
           const geo = await getGeo();
+          if (company) _sessionCompany = company; // share with chatbot
           _trigger = 'Tool Use';
 
           const roiSrc = getSource();
@@ -12508,6 +12560,7 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
           const company = (document.getElementById('p90Company') || {}).value || '';
           const sector  = (document.getElementById('p90Sector')  || {}).value || '';
           const geo = await getGeo();
+          if (company) _sessionCompany = company; // share with chatbot
           _trigger = 'Tool Use';
 
           const p90Src = getSource();
