@@ -7507,7 +7507,7 @@ document.addEventListener('contextmenu', e => {
         if (!audioCtx) return;
         playNav();
       }
-      if (e.key === 'p' || e.key === 'P') playToggle();
+      if ((e.key === 'p' || e.key === 'P') && !['INPUT','TEXTAREA'].includes(e.target.tagName)) playToggle();
     });
 
     // Scroll milestone sounds (every major section)
@@ -7550,7 +7550,7 @@ document.addEventListener('contextmenu', e => {
 // ══════════════════════════════════════════════════════════════════
 (function() {
   document.addEventListener('keydown', e => {
-    if (e.target.tagName === 'INPUT') return;
+    if (['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
     if (e.key === 'p' || e.key === 'P') {
       if (!e.ctrlKey && !e.metaKey) {
         e.preventDefault();
