@@ -8379,6 +8379,619 @@ document.addEventListener('contextmenu', e => {
 }
 #sbChatSend:hover{background:#f59c2a}
 #sbChatSend svg{width:14px;height:14px;fill:none;stroke:#070707;stroke-width:2.5;stroke-linecap:round}
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — covers all breakpoints up to 768px
+   Fixes: nav, hero, all grids, modals, chatbot, experience
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── TABLET (≤900px) ──────────────────────────────────────────── */
+@media(max-width:900px){
+  #hero{grid-template-columns:1fr!important;gap:3rem;padding:7rem 2rem 4rem;min-height:auto}
+  .heroR{order:-1;margin-bottom:0}
+  .photoWrap{width:200px}
+  .heroName{font-size:clamp(3.5rem,10vw,5.5rem)}
+  section{padding:5rem 2rem}
+  .expInner{padding:0 2rem}
+  .aboutGrid{grid-template-columns:1fr;gap:3rem}
+  .skillsLayout{grid-template-columns:1fr;gap:2rem}
+  .chartsRow{grid-template-columns:1fr 1fr}
+  .expCard{grid-template-columns:1fr;gap:0}
+  .expNodeCentre,.expSpine{display:none}
+  .expCardL,.expCardR{padding:1.5rem 0}
+  .expCardR{order:2}
+  .expCardL{order:1}
+  .expCard:nth-child(even) .expCardL{order:1}
+  .expCard:nth-child(even) .expCardR{order:2}
+  .projGrid{grid-template-columns:1fr}
+  .eduGrid{grid-template-columns:1fr}
+  .memberGrid{grid-template-columns:repeat(3,1fr)}
+  .footprintGrid{grid-template-columns:repeat(3,1fr)}
+  .statsStrip{grid-template-columns:repeat(2,1fr)}
+  .imgPanelGrid{grid-template-columns:1fr 1fr}
+  .industryGrid{grid-template-columns:1fr 1fr}
+  .qStats{min-width:unset;max-width:unset;border-left:none;border-top:1px solid var(--border)}
+  #sbChatWin{width:calc(100vw - 2rem);left:1rem;right:1rem}
+}
+
+/* ── MOBILE (≤640px) ──────────────────────────────────────────── */
+@media(max-width:640px){
+
+  /* ── NAV ──────────────────────────────────────────────────── */
+  nav{padding:.75rem 1.1rem;flex-wrap:nowrap;gap:.5rem}
+  .navLinks{display:none}
+  .navCta{display:none}
+  #availBadge{display:none}
+
+  /* Hamburger toggle */
+  #navHamburger{
+    display:none;flex-direction:column;justify-content:center;gap:5px;
+    width:36px;height:36px;background:transparent;border:1px solid var(--border);
+    border-radius:3px;cursor:pointer;flex-shrink:0;margin-left:auto;padding:7px 8px;
+    transition:border-color .2s;
+  }
+  #navHamburger span{display:block;height:1px;background:var(--white);border-radius:1px;transition:all .3s}
+  #navHamburger.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
+  #navHamburger.open span:nth-child(2){opacity:0}
+  #navHamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
+
+  /* Mobile nav drawer */
+  #mobileNavDrawer{
+    display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+    background:rgba(7,7,7,0.98);z-index:490;
+    flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;
+    opacity:0;transition:opacity .3s ease;
+  }
+  #mobileNavDrawer.open{display:flex;opacity:1}
+  #mobileNavDrawer a{
+    font-family:var(--bebas);font-size:2.2rem;letter-spacing:.1em;
+    color:var(--white);text-decoration:none;transition:color .2s;
+  }
+  #mobileNavDrawer a:hover{color:var(--accent)}
+  #mobileNavDrawer .mDrawerCta{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
+    padding:.75rem 2rem;background:var(--accent);color:var(--black);
+    border:none;margin-top:1rem;cursor:pointer;
+  }
+  #mobileNavDrawer .mDrawerClose{
+    position:absolute;top:1.2rem;right:1.4rem;background:transparent;
+    border:none;color:var(--white);font-size:1.5rem;cursor:pointer;line-height:1;
+    font-family:var(--mono);
+  }
+
+  /* ── HERO ─────────────────────────────────────────────────── */
+  #hero{padding:5.5rem 1.25rem 3rem;min-height:auto;gap:2rem}
+  .heroName{font-size:clamp(3rem,13vw,5rem);margin-bottom:1rem}
+  .heroDesc{font-size:.88rem;max-width:100%}
+  .heroR{gap:1rem}
+  .photoWrap{width:160px}
+  .miniStats{grid-template-columns:1fr 1fr}
+  .pillRow{gap:.35rem}
+  .pill{font-size:.5rem;padding:.25rem .6rem}
+  .heroActions{flex-direction:column;gap:.75rem;align-items:flex-start}
+  .heroActions a, .heroActions button{width:100%;text-align:center;justify-content:center}
+
+  /* ── SECTIONS ─────────────────────────────────────────────── */
+  section{padding:3.5rem 1.25rem}
+  .secTitle{font-size:clamp(2.2rem,9vw,3.5rem)}
+  .expInner{padding:0 1.25rem}
+
+  /* ── STATS STRIP ───────────────────────────────────────────── */
+  .statsStrip{grid-template-columns:1fr 1fr}
+  .sStat{padding:1.25rem 1rem}
+  .sNum{font-size:1.6rem}
+  .sLabel{font-size:.5rem}
+  .sDivLine{display:none}
+
+  /* ── ABOUT ─────────────────────────────────────────────────── */
+  .aboutGrid{grid-template-columns:1fr;gap:2rem}
+  .imgPanelGrid{grid-template-columns:1fr;gap:1px}
+  .imgPanel{height:200px}
+
+  /* ── EXPERIENCE ────────────────────────────────────────────── */
+  .expCard{grid-template-columns:1fr}
+  .expNodeCentre,.expSpine{display:none}
+  .expCardL,.expCardR{padding:0}
+  .expCard.vis .expCardL,.expCard.vis .expCardR{transform:none}
+  .expBannerLeft,.expBannerRight{
+    position:static;transform:none!important;
+    font-size:3rem;letter-spacing:.05em;
+    opacity:.06;margin-bottom:0
+  }
+  .expBannerNum{font-size:2.2rem}
+  .expMetrics{flex-wrap:wrap;gap:.5rem}
+  .expMet{min-width:calc(50% - .25rem)}
+
+  /* ── SKILLS ────────────────────────────────────────────────── */
+  .skillsLayout{grid-template-columns:1fr;gap:1.5rem}
+  .skillGrid{grid-template-columns:1fr}
+  .chartsRow{grid-template-columns:1fr}
+  /* Genome+Radar row: 1 column on mobile (target the specific wrapper only) */
+  .genomeRadarRow{grid-template-columns:1fr!important}
+  /* Override any inline 2-col grid on mobile */
+  [style*="grid-template-columns:1fr 1fr"]{
+    grid-template-columns:1fr!important;
+  }
+  #gnCanvas{min-height:320px}
+  .sCell{padding:1rem}
+
+  /* ── EDUCATION ─────────────────────────────────────────────── */
+  .eduGrid{grid-template-columns:1fr;gap:1rem}
+
+  /* ── PROJECTS ──────────────────────────────────────────────── */
+  .projGrid{grid-template-columns:1fr}
+  .projCard{min-height:200px}
+  .projReveal{padding:1rem}
+  .projRevealNum{font-size:2.5rem}
+
+  /* ── MEMBERSHIPS ───────────────────────────────────────────── */
+  .memberGrid{grid-template-columns:1fr 1fr;gap:1px}
+  .memCard{padding:1.25rem 1rem}
+  .memCardTitle{font-size:1rem}
+  .memLogo{width:38px;height:38px}
+  .memLogoWrap{width:56px;height:56px}
+
+  /* ── FOOTPRINT / INDUSTRY ──────────────────────────────────── */
+  .footprintGrid{grid-template-columns:repeat(2,1fr)}
+  .industryGrid{grid-template-columns:1fr}
+  .iCard{padding:1.25rem}
+
+  /* ── CONTACT / CTA ─────────────────────────────────────────── */
+  #contact{padding:5rem 1.25rem}
+  .ctaHead{font-size:clamp(2.5rem,10vw,4rem)}
+  .ctaSub{font-size:.85rem;max-width:100%}
+  .ctaLinks{flex-direction:column;align-items:center;gap:.75rem;max-width:100%}
+  .ctaBtn,.ctaLinks a{width:100%;max-width:320px;text-align:center;justify-content:center}
+
+  /* ── TRUST STRIP ───────────────────────────────────────────── */
+  .trustInner{flex-direction:column;gap:1rem;text-align:center;padding:1.5rem 1.25rem}
+  .trustDivider{display:none}
+
+  /* ── FOOTER ─────────────────────────────────────────────────── */
+  footer{padding:2rem 1.25rem;flex-direction:column;gap:1rem;text-align:center}
+
+  /* ── ROI CALCULATOR ─────────────────────────────────────────── */
+  .roiModal{padding:1.5rem 1.25rem;width:calc(100vw - 2rem);max-width:100%}
+  .roiGrid{grid-template-columns:1fr}
+  .roiClose{top:.75rem;right:.75rem}
+  .roiResults{padding:1rem}
+
+  /* ── CASE STUDY MODAL ───────────────────────────────────────── */
+  .caseModal{max-width:100%;width:calc(100vw - 1rem);padding:1rem;border-radius:4px}
+  .caseHero{height:180px}
+  .caseBody{padding:1.25rem 1rem}
+  .caseKPIs{grid-template-columns:1fr 1fr;gap:1px}
+  .caseMeta{flex-direction:column;gap:.5rem}
+
+  /* ── CHATBOT ────────────────────────────────────────────────── */
+  #sbChatBtn{bottom:1.2rem;left:1.2rem;width:50px;height:50px}
+  #bgHint{left:5.8rem;bottom:1.2rem}
+  #sbChatWin{
+    bottom:0!important;left:0!important;right:0!important;
+    width:100%!important;max-width:100%!important;
+    max-height:75vh;border-radius:12px 12px 0 0;
+    border-left:none;border-right:none;border-bottom:none;
+    transform:translateY(100%) scale(1)!important;
+  }
+  #sbChatWin.open{transform:translateY(0) scale(1)!important}
+  #sbChatWin.expanded{
+    bottom:0!important;left:0!important;right:0!important;
+    top:0!important;width:100%!important;max-width:100%!important;
+    max-height:100%;border-radius:0;transform:none!important;
+  }
+  #sbChatHead{padding:.85rem 1rem}
+  #sbChatMsgs{padding:.75rem .85rem}
+  #sbChatForm{padding:.5rem .75rem}
+  #sbChatInput{font-size:.85rem}
+  .cbAvatar{width:34px;height:34px}
+  .cbHeadName{font-size:.75rem}
+  .cbHeadStatus{font-size:.6rem}
+
+  /* ── BOOKING MODAL ───────────────────────────────────────────── */
+  .makeBookingCard{
+    width:calc(100vw - 1.5rem)!important;
+    max-width:100%!important;
+    padding:1.25rem 1rem!important;
+    max-height:85vh;overflow-y:auto;
+  }
+  .bookOption{padding:.65rem .75rem;gap:.5rem}
+  .bookOptionLabel{font-size:.62rem}
+  .bookOptionSub{font-size:.5rem}
+
+  /* ── MEMBERSHIP CERT MODAL ───────────────────────────────────── */
+  .memDlModal{
+    width:calc(100vw - 1.5rem)!important;
+    max-width:100%!important;
+    padding:1.5rem 1.25rem!important;
+    border-radius:6px;
+  }
+
+  /* ── GENOME SECTION ──────────────────────────────────────────── */
+  #genomeSection{overflow-x:hidden}
+  #gnCanvas{width:100%!important;min-height:280px}
+  #gnList{max-height:220px;overflow-y:auto}
+
+  /* ── SCROLL PATH / ORBIT ─────────────────────────────────────── */
+  #scrollPath{display:none}
+
+  /* ── SECTION DOTS (desktop only) ────────────────────────────── */
+  #sectionDots{display:none}
+
+  /* ── SCROLL TOP ───────────────────────────────────────────────── */
+  #scrollTop{bottom:1.5rem;right:1.2rem;width:36px;height:36px}
+
+  /* ── AMBIENT BUTTON (sound) ──────────────────────────────────── */
+  #ambientBtn{bottom:5rem;left:1.2rem;width:34px;height:34px}
+
+  /* ── COLD OPEN ────────────────────────────────────────────────── */
+  #coldOpen{overflow-x:hidden}
+  .coLine{font-size:clamp(1.4rem,6vw,2.2rem)!important;padding:0 1rem}
+
+  /* ── Q-STATS PANEL ────────────────────────────────────────────── */
+  .qStats{min-width:unset;max-width:100%;width:100%;border-left:none;border-top:1px solid var(--border)}
+
+  /* ── MISC FIXES ───────────────────────────────────────────────── */
+  /* Genome + Radar row — inline style override */
+  .genomeRadarRow{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:1.5rem!important;
+  }
+  .p90Grid{grid-template-columns:1fr}
+  .p90Field.full{grid-column:1}
+  .caseKPIs{grid-template-columns:1fr 1fr}
+  .expBannerLeft,.expBannerRight{font-size:2.5rem}
+  .techScrollInner{gap:.4rem}
+  .tickInner{gap:.5rem;font-size:.55rem}
+
+  /* Cursor: default on mobile (no custom cursor) */
+  *{cursor:auto!important}
+  .cursor,.cursorRing{display:none!important}
+}
+
+/* ── MOBILE EXTRA RULES (≤640px) — previously orphaned, now properly scoped ── */
+@media(max-width:640px){
+
+  /* ── HERO BUTTONS ────────────────────────────────────────────── */
+  .heroBtns{flex-direction:column;gap:.75rem;align-items:stretch;width:100%}
+  .btnMain,.btnGhost{width:100%;justify-content:center;text-align:center;box-sizing:border-box}
+  .btnMain{padding:.9rem 1.5rem;font-size:.85rem}
+  #roiTrigger{width:100%;justify-content:center;margin-top:.75rem;padding:.75rem 1rem;font-size:.6rem}
+
+  /* ── QUOTE / QUICK-STATS SECTION ────────────────────────────── */
+  .quoteStrip{flex-direction:column!important;display:flex!important}
+  #quoteSection{flex-direction:column!important}
+  .quoteMain{padding:2rem 1.25rem!important;border-right:none!important;border-bottom:1px solid var(--border)}
+  .qStats{width:100%;border-left:none;border-top:1px solid var(--border);flex-direction:row;flex-wrap:wrap;padding:1.5rem 1.25rem;gap:1.5rem;align-items:flex-start;justify-content:space-around}
+  .qStat{flex:1;min-width:120px;text-align:center}
+  .qStatNum{font-size:2.2rem}
+  .qStatLabel{font-size:.55rem}
+
+  /* ── TICKER STRIP ─────────────────────────────────────────────── */
+  .ticker{font-size:.55rem}
+  .tItem{gap:.5rem;padding:0 .5rem}
+
+  /* ── EXPERIENCE TIMELINE ─────────────────────────────────────── */
+  .expTrack{padding:0}
+  .expCard{display:block;margin-bottom:2.5rem;padding:0 1.25rem}
+  .expCardL,.expCardR{padding:0}
+  .expCardR{padding-left:0;margin-top:1rem}
+  .expCardL{padding-right:0}
+  .expBannerLeft{display:none!important}
+  .expBannerRight{display:none!important}
+  .expMetrics{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+  .expMet{flex:1;min-width:calc(50% - .25rem)}
+  .expNode{width:10px;height:10px}
+  .expYear{font-size:.6rem}
+  .expTitle{font-size:1rem}
+  .expRole{font-size:.85rem}
+
+  /* ── SKILLS GENOME + RADAR ───────────────────────────────────── */
+  #gnCanvas{width:100%!important}
+  #radarCanvas{max-width:280px;margin:0 auto;display:block}
+  .genomeSection{overflow:hidden}
+  #gnList{max-height:180px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  #gnFilterWrap{flex-wrap:wrap;gap:.3rem}
+
+  /* ── CASE STUDY OVERLAY ──────────────────────────────────────── */
+  .caseOverlay{padding:.5rem}
+  .caseClose{top:.5rem;right:.5rem;width:32px;height:32px}
+  .caseSteps{flex-direction:column;gap:.5rem}
+  .caseStep{padding:.6rem .75rem}
+
+  /* ── ROI MODAL ───────────────────────────────────────────────── */
+  .roiOverlay{padding:.5rem;align-items:flex-end}
+  .roiModal{padding:1.25rem 1rem;border-radius:12px 12px 0 0;width:100%;max-width:100%;max-height:90vh;overflow-y:auto}
+  .roiClose{top:.6rem;right:.75rem}
+  .roiGrid{grid-template-columns:1fr}
+  .roiResults{padding:.85rem;margin-top:.75rem}
+  select,input[type='text'],input[type='number']{font-size:16px!important} /* prevent iOS zoom */
+
+  /* ── BOOKING MODAL ───────────────────────────────────────────── */
+  .bookOverlay,.roiOverlay{padding:0}
+  .makeBookingCard{
+    border-radius:14px 14px 0 0!important;
+    position:fixed!important;
+    bottom:0!important;left:0!important;right:0!important;
+    top:auto!important;
+    transform:none!important;
+    width:100%!important;
+    max-width:100%!important;
+    padding:1.5rem 1.25rem!important;
+    max-height:88vh;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  /* ── SECTION TITLE ───────────────────────────────────────────── */
+  .secTitle{margin-bottom:1.5rem}
+  .secTitle br{display:none}
+
+  /* ── TRUST STRIP ─────────────────────────────────────────────── */
+  .trustInner{flex-direction:column;gap:1rem;align-items:center}
+  .trustStat{text-align:center}
+  .trustDivider{display:none}
+
+  /* ── SECTION DOTS ─────────────────────────────────────────────── */
+  #sectionDots{display:none!important}
+
+  /* ── AMBIENT SOUND BTN ────────────────────────────────────────── */
+  #ambientBtn{bottom:5.5rem;left:1.2rem}
+
+  /* ── SCROLL TOP ───────────────────────────────────────────────── */
+  #scrollTop{bottom:1.5rem;right:1.2rem}
+
+  /* ── GENOME SECTION INNER LAYOUT ─────────────────────────────── */
+  #genomeSection > div > div[style*='grid-template-columns']{
+    grid-template-columns:1fr!important;
+    display:grid!important;
+  }
+
+
+  /* ── EXPERIENCE CARDS ── */
+  .expCard{display:grid!important;grid-template-columns:1fr!important}
+  .expCardL{order:1;padding:0 0 1rem}
+  .expCardR{order:2;padding:0}
+  .expNodeCentre{display:none!important}
+  .expSpine{display:none!important}
+  /* ── COLD OPEN ── */
+  #coSoundBtn{min-height:48px;touch-action:manipulation}
+  #coContent{padding:1.5rem 1rem!important}
+  /* ── QUOTE STRIP ── */
+  .quoteStrip{flex-direction:column!important;min-height:auto}
+  .quotePane{border-right:none!important;border-bottom:1px solid var(--border);padding:1.5rem 1.25rem!important}
+  .quotePane:last-child{border-bottom:none}
+  .qStatDivider{display:none}
+  /* ── OVERFLOW ── */
+  section,#hero,.expInner{max-width:100%;overflow-x:hidden}
+  /* ── TAP SIZES (touch only — prevents desktop buttons from getting extra height) ── */
+  .is-touch button,.is-touch a{min-height:44px}
+  #navHamburger{min-height:44px;min-width:44px}
+
+} /* end @media(max-width:640px) extra rules */
+
+@media(max-width:380px){
+  #hero{padding:5rem 1rem 2.5rem}
+  .heroName{font-size:clamp(2.6rem,14vw,3.5rem)}
+  section{padding:3rem 1rem}
+  .memberGrid{grid-template-columns:1fr}
+  .statsStrip{grid-template-columns:1fr 1fr}
+  .miniStats{grid-template-columns:1fr}
+  .caseKPIs{grid-template-columns:1fr}
+  .footprintGrid{grid-template-columns:1fr 1fr}
+  nav{padding:.65rem .9rem}
+  .logo{font-size:1.1rem}
+}
+
+
+
+/* Touch device overrides */
+.is-touch *{cursor:auto!important}
+.is-touch .cursor,.is-touch .cursorRing{display:none!important}
+.is-touch button,.is-touch a{cursor:pointer!important}
+
+
+
+
+/* ── Experience visual captions ── */
+.expVizCaption{
+  padding:1.4rem 1.2rem 1rem;
+  border-top:1px solid rgba(232,130,12,0.3);
+  background:rgba(0,0,0,0.22);
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity .55s ease,transform .55s ease;
+}
+.expVizCaption.cap-vis{opacity:1;transform:translateY(0)}
+.expVizCaption p{
+  margin:0;
+  font-family:var(--sans);
+  font-size:.75rem;
+  font-weight:300;
+  line-height:1.72;
+  color:rgba(232,130,12,0.85);
+}
+.expVizCaption p strong{
+  font-family:var(--mono);
+  font-size:.54rem;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(232,130,12,1);
+  font-style:normal;
+}
+.expVizCaption p em{
+  font-style:italic;
+  color:rgba(232,130,12,0.72);
+}
+
+@media print{body{padding:1.5rem}}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE FIX BLOCK — all rules use !important where needed to
+   beat inline styles. Desktop is completely untouched.
+   ═══════════════════════════════════════════════════════════════ */
+@media(max-width:640px){
+
+  /* ── BASE OVERFLOW GUARD ───────────────────────────────────── */
+  html,body{max-width:100%;overflow-x:hidden!important}
+
+  /* ── CURSOR (body has cursor:none which can confuse some iOS taps) */
+  body{cursor:auto!important}
+
+  /* ── AMBIENT ORBS — 600px/500px/400px blobs cause horizontal scroll ── */
+  .ambOrb{display:none!important}
+
+  /* ── EXPERIENCE SECTION ─────────────────────────────────────
+     #experience has inline padding-left/right:0; the inner
+     .expInner already handles padding, but .expTrack has
+     inline style="padding:0 3rem" which we must beat          */
+  .expTrack{padding:0!important}
+  .expInner{padding:0 1.25rem!important}
+
+  /* ── CONTACT SECTION ────────────────────────────────────────
+     #contact has inline padding-left/right:0; add them back   */
+  #contact{padding-left:1.25rem!important;padding-right:1.25rem!important}
+
+  /* ── CONTACT SECTION BUTTONS — stack vertically ────────────── */
+  #contact .ctaBtn+.ctaBtn,
+  #contact a.ctaBtn+button.ctaBtn,
+  #contact button.ctaBtn+button.ctaBtn{
+    margin-left:0!important;
+    margin-top:.75rem!important;
+    display:block!important;
+    width:100%!important;
+    max-width:320px!important;
+  }
+  #contact .ctaBtn{
+    display:block!important;
+    width:100%!important;
+    max-width:320px!important;
+    text-align:center!important;
+  }
+
+  /* ── COMMUTE CALCULATOR ─────────────────────────────────────── */
+  #commuteWrap [style*="display:flex"][style*="gap:.75rem"]{
+    flex-direction:column!important;
+    gap:.5rem!important;
+  }
+  #commuteWrap input,#commuteWrap button{width:100%!important}
+  #commuteGrid{grid-template-columns:1fr 1fr!important}
+  #commuteWrap [style*="padding:1.5rem 2rem"]{padding:1.25rem 1rem!important}
+  #commuteWrap [style*="padding:1rem 2rem"]{padding:1rem!important}
+
+  /* ── CONTACT FORM OVERLAY ────────────────────────────────────
+     Name/Email and Company/Role rows are 1fr 1fr inline grids  */
+  #contactFormPanel{
+    width:calc(100vw - 2rem)!important;
+    max-width:100%!important;
+    max-height:90vh;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  #cfBody [style*="grid-template-columns:1fr 1fr"]{
+    grid-template-columns:1fr!important;
+  }
+  #cfBody [style*="padding:1.4rem 1.75rem"]{padding:1.1rem 1rem!important}
+  #contactFormPanel [style*="padding:1.75rem 1.75rem"]{padding:1.1rem 1rem!important}
+
+  /* ── 90-DAY PLAN SECTION ─────────────────────────────────────
+     #plan90 has padding:6rem 3rem with no mobile override       */
+  #plan90{padding:3.5rem 1.25rem!important}
+
+  /* ── TAG CLOUD in contact ────────────────────────────────────── */
+  .tagCloud{flex-wrap:wrap!important;gap:.4rem!important;justify-content:flex-start!important}
+  .tagCloudItem{font-size:.5rem!important}
+
+  /* ── ROI MODAL — ensure scrollable on small screens ─────────── */
+  .roiModal{
+    max-height:88vh!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+
+  /* ── COLD OPEN: Enable Sound button — ensure it's tappable ───── */
+  #coSoundBtn{
+    min-height:48px!important;
+    min-width:200px!important;
+    padding:1rem 2rem!important;
+    font-size:.65rem!important;
+  }
+  #coSkip{
+    min-height:44px!important;
+    display:flex!important;
+    align-items:center!important;
+    padding:.75rem 1.1rem!important;
+  }
+
+  /* ── HERO inline padding-top:5rem vs media-query — keep safe ─── */
+  #hero{padding-left:1.25rem!important;padding-right:1.25rem!important}
+
+  /* ── STATUS PANEL — can be wide on small phones ─────────────── */
+  .statusPanel{width:100%!important;box-sizing:border-box!important}
+  .spRow{flex-wrap:wrap;gap:.2rem}
+  .spVal{text-align:right;flex-shrink:0}
+
+  /* ── TICKER STRIP ────────────────────────────────────────────── */
+  .ticker{overflow:hidden!important}
+  .tickInner{white-space:nowrap}
+
+  /* ── PHOTO WRAP ───────────────────────────────────────────────── */
+  .photoWrap{width:140px!important;margin:0 auto!important}
+
+  /* ── SECTION EYEBROW / NUM ────────────────────────────────────── */
+  .secNum{font-size:3rem}
+} /* end MOBILE FIX BLOCK */
+
+/* ── Touch body cursor fix (applies at all widths on touch devices) ── */
+.is-touch body,.is-touch{cursor:auto!important}
+
+/* ═══════════════════════════════════════════════════════════════
+   FINAL MOBILE PATCH — beats all remaining inline styles
+   ═══════════════════════════════════════════════════════════════ */
+@media(max-width:640px){
+
+  /* ── GENOME: hide sidebar, canvas fills full width ───────────── */
+  #gnList{display:none!important}
+  #gnCanvas{width:100%!important;min-height:260px}
+
+  /* ── QUOTE BLOCK inline padding override ────────────────────── */
+  .quoteBlock{padding:2rem 1.25rem!important}
+
+  /* ── COMMUTE WRAP: stack input+button vertically ─────────────── */
+  #commuteWrap [style*="padding:1.5rem 2rem"]{padding:1.25rem 1rem!important}
+  #commuteWrap [style*="padding:1rem 2rem"]{padding:1rem!important}
+  #commuteWrap [style*="display:flex"][style*="gap:.75rem"]{
+    flex-direction:column!important;gap:.5rem!important;
+  }
+  #commuteInput{width:100%!important;box-sizing:border-box!important}
+  #commuteGrid{grid-template-columns:repeat(2,1fr)!important}
+
+  /* ── EXPERIENCE track inline padding ─────────────────────────── */
+  .expTrack[style]{padding:0!important}
+
+  /* ── PLAN90 section padding ───────────────────────────────────── */
+  #plan90[style]{padding:3.5rem 1.25rem!important}
+
+  /* ── INDUSTRY SECTION padding ────────────────────────────────── */
+  .industrySec[style]{padding:3rem 1.25rem!important}
+
+  /* ── SECTIONS with inline padding:0 ──────────────────────────── */
+  section[style*="padding-left:0"]{padding-left:1.25rem!important}
+  section[style*="padding-right:0"]{padding-right:1.25rem!important}
+
+  /* ── HERO side padding ───────────────────────────────────────── */
+  #hero[style]{padding-left:1.25rem!important;padding-right:1.25rem!important}
+
+  /* ── CONTACT FORM PANEL ──────────────────────────────────────── */
+  #contactFormPanel{
+    width:calc(100vw - 1.5rem)!important;max-width:100%!important;
+    max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  }
+
+  /* ── OVERFLOW GUARD ──────────────────────────────────────────── */
+  html,body{overflow-x:hidden!important;max-width:100vw!important}
+
+} /* end FINAL MOBILE PATCH */
 </style>
 
 <!-- Launcher -->
@@ -10821,619 +11434,6 @@ document.addEventListener('contextmenu', e => {
       .kpi{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border:1px solid rgba(232,130,12,0.28);color:rgba(240,237,232,0.68);margin:.25rem .25rem 0 0;background:rgba(232,130,12,0.04)}
       .footer{margin-top:3rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(240,237,232,0.32);display:flex;justify-content:space-between}
       
-/* ═══════════════════════════════════════════════════════════════
-   MOBILE RESPONSIVE — covers all breakpoints up to 768px
-   Fixes: nav, hero, all grids, modals, chatbot, experience
-   ═══════════════════════════════════════════════════════════════ */
-
-/* ── TABLET (≤900px) ──────────────────────────────────────────── */
-@media(max-width:900px){
-  #hero{grid-template-columns:1fr;gap:3rem;padding:7rem 2rem 4rem;min-height:auto}
-  .heroR{order:-1;margin-bottom:0}
-  .photoWrap{width:200px}
-  .heroName{font-size:clamp(3.5rem,10vw,5.5rem)}
-  section{padding:5rem 2rem}
-  .expInner{padding:0 2rem}
-  .aboutGrid{grid-template-columns:1fr;gap:3rem}
-  .skillsLayout{grid-template-columns:1fr;gap:2rem}
-  .chartsRow{grid-template-columns:1fr 1fr}
-  .expCard{grid-template-columns:1fr;gap:0}
-  .expNodeCentre,.expSpine{display:none}
-  .expCardL,.expCardR{padding:1.5rem 0}
-  .expCardR{order:2}
-  .expCardL{order:1}
-  .expCard:nth-child(even) .expCardL{order:1}
-  .expCard:nth-child(even) .expCardR{order:2}
-  .projGrid{grid-template-columns:1fr}
-  .eduGrid{grid-template-columns:1fr}
-  .memberGrid{grid-template-columns:repeat(3,1fr)}
-  .footprintGrid{grid-template-columns:repeat(3,1fr)}
-  .statsStrip{grid-template-columns:repeat(2,1fr)}
-  .imgPanelGrid{grid-template-columns:1fr 1fr}
-  .industryGrid{grid-template-columns:1fr 1fr}
-  .qStats{min-width:unset;max-width:unset;border-left:none;border-top:1px solid var(--border)}
-  #sbChatWin{width:calc(100vw - 2rem);left:1rem;right:1rem}
-}
-
-/* ── MOBILE (≤640px) ──────────────────────────────────────────── */
-@media(max-width:640px){
-
-  /* ── NAV ──────────────────────────────────────────────────── */
-  nav{padding:.75rem 1.1rem;flex-wrap:nowrap;gap:.5rem}
-  .navLinks{display:none}
-  .navCta{display:none}
-  #availBadge{display:none}
-
-  /* Hamburger toggle */
-  #navHamburger{
-    display:none;flex-direction:column;justify-content:center;gap:5px;
-    width:36px;height:36px;background:transparent;border:1px solid var(--border);
-    border-radius:3px;cursor:pointer;flex-shrink:0;margin-left:auto;padding:7px 8px;
-    transition:border-color .2s;
-  }
-  #navHamburger span{display:block;height:1px;background:var(--white);border-radius:1px;transition:all .3s}
-  #navHamburger.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
-  #navHamburger.open span:nth-child(2){opacity:0}
-  #navHamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
-
-  /* Mobile nav drawer */
-  #mobileNavDrawer{
-    display:none;position:fixed;top:0;left:0;right:0;bottom:0;
-    background:rgba(7,7,7,0.98);z-index:490;
-    flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;
-    opacity:0;transition:opacity .3s ease;
-  }
-  #mobileNavDrawer.open{display:flex;opacity:1}
-  #mobileNavDrawer a{
-    font-family:var(--bebas);font-size:2.2rem;letter-spacing:.1em;
-    color:var(--white);text-decoration:none;transition:color .2s;
-  }
-  #mobileNavDrawer a:hover{color:var(--accent)}
-  #mobileNavDrawer .mDrawerCta{
-    font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
-    padding:.75rem 2rem;background:var(--accent);color:var(--black);
-    border:none;margin-top:1rem;cursor:pointer;
-  }
-  #mobileNavDrawer .mDrawerClose{
-    position:absolute;top:1.2rem;right:1.4rem;background:transparent;
-    border:none;color:var(--white);font-size:1.5rem;cursor:pointer;line-height:1;
-    font-family:var(--mono);
-  }
-
-  /* ── HERO ─────────────────────────────────────────────────── */
-  #hero{padding:5.5rem 1.25rem 3rem;min-height:auto;gap:2rem}
-  .heroName{font-size:clamp(3rem,13vw,5rem);margin-bottom:1rem}
-  .heroDesc{font-size:.88rem;max-width:100%}
-  .heroR{gap:1rem}
-  .photoWrap{width:160px}
-  .miniStats{grid-template-columns:1fr 1fr}
-  .pillRow{gap:.35rem}
-  .pill{font-size:.5rem;padding:.25rem .6rem}
-  .heroActions{flex-direction:column;gap:.75rem;align-items:flex-start}
-  .heroActions a, .heroActions button{width:100%;text-align:center;justify-content:center}
-
-  /* ── SECTIONS ─────────────────────────────────────────────── */
-  section{padding:3.5rem 1.25rem}
-  .secTitle{font-size:clamp(2.2rem,9vw,3.5rem)}
-  .expInner{padding:0 1.25rem}
-
-  /* ── STATS STRIP ───────────────────────────────────────────── */
-  .statsStrip{grid-template-columns:1fr 1fr}
-  .sStat{padding:1.25rem 1rem}
-  .sNum{font-size:1.6rem}
-  .sLabel{font-size:.5rem}
-  .sDivLine{display:none}
-
-  /* ── ABOUT ─────────────────────────────────────────────────── */
-  .aboutGrid{grid-template-columns:1fr;gap:2rem}
-  .imgPanelGrid{grid-template-columns:1fr;gap:1px}
-  .imgPanel{height:200px}
-
-  /* ── EXPERIENCE ────────────────────────────────────────────── */
-  .expCard{grid-template-columns:1fr}
-  .expNodeCentre,.expSpine{display:none}
-  .expCardL,.expCardR{padding:0}
-  .expCard.vis .expCardL,.expCard.vis .expCardR{transform:none}
-  .expBannerLeft,.expBannerRight{
-    position:static;transform:none!important;
-    font-size:3rem;letter-spacing:.05em;
-    opacity:.06;margin-bottom:0
-  }
-  .expBannerNum{font-size:2.2rem}
-  .expMetrics{flex-wrap:wrap;gap:.5rem}
-  .expMet{min-width:calc(50% - .25rem)}
-
-  /* ── SKILLS ────────────────────────────────────────────────── */
-  .skillsLayout{grid-template-columns:1fr;gap:1.5rem}
-  .skillGrid{grid-template-columns:1fr}
-  .chartsRow{grid-template-columns:1fr}
-  /* Genome+Radar row: 1 column on mobile (target the specific wrapper only) */
-  .genomeRadarRow{grid-template-columns:1fr!important}
-  /* Override any inline 2-col grid on mobile */
-  [style*="grid-template-columns:1fr 1fr"]{
-    grid-template-columns:1fr!important;
-  }
-  #gnCanvas{min-height:320px}
-  .sCell{padding:1rem}
-
-  /* ── EDUCATION ─────────────────────────────────────────────── */
-  .eduGrid{grid-template-columns:1fr;gap:1rem}
-
-  /* ── PROJECTS ──────────────────────────────────────────────── */
-  .projGrid{grid-template-columns:1fr}
-  .projCard{min-height:200px}
-  .projReveal{padding:1rem}
-  .projRevealNum{font-size:2.5rem}
-
-  /* ── MEMBERSHIPS ───────────────────────────────────────────── */
-  .memberGrid{grid-template-columns:1fr 1fr;gap:1px}
-  .memCard{padding:1.25rem 1rem}
-  .memCardTitle{font-size:1rem}
-  .memLogo{width:38px;height:38px}
-  .memLogoWrap{width:56px;height:56px}
-
-  /* ── FOOTPRINT / INDUSTRY ──────────────────────────────────── */
-  .footprintGrid{grid-template-columns:repeat(2,1fr)}
-  .industryGrid{grid-template-columns:1fr}
-  .iCard{padding:1.25rem}
-
-  /* ── CONTACT / CTA ─────────────────────────────────────────── */
-  #contact{padding:5rem 1.25rem}
-  .ctaHead{font-size:clamp(2.5rem,10vw,4rem)}
-  .ctaSub{font-size:.85rem;max-width:100%}
-  .ctaLinks{flex-direction:column;align-items:center;gap:.75rem;max-width:100%}
-  .ctaBtn,.ctaLinks a{width:100%;max-width:320px;text-align:center;justify-content:center}
-
-  /* ── TRUST STRIP ───────────────────────────────────────────── */
-  .trustInner{flex-direction:column;gap:1rem;text-align:center;padding:1.5rem 1.25rem}
-  .trustDivider{display:none}
-
-  /* ── FOOTER ─────────────────────────────────────────────────── */
-  footer{padding:2rem 1.25rem;flex-direction:column;gap:1rem;text-align:center}
-
-  /* ── ROI CALCULATOR ─────────────────────────────────────────── */
-  .roiModal{padding:1.5rem 1.25rem;width:calc(100vw - 2rem);max-width:100%}
-  .roiGrid{grid-template-columns:1fr}
-  .roiClose{top:.75rem;right:.75rem}
-  .roiResults{padding:1rem}
-
-  /* ── CASE STUDY MODAL ───────────────────────────────────────── */
-  .caseModal{max-width:100%;width:calc(100vw - 1rem);padding:1rem;border-radius:4px}
-  .caseHero{height:180px}
-  .caseBody{padding:1.25rem 1rem}
-  .caseKPIs{grid-template-columns:1fr 1fr;gap:1px}
-  .caseMeta{flex-direction:column;gap:.5rem}
-
-  /* ── CHATBOT ────────────────────────────────────────────────── */
-  #sbChatBtn{bottom:1.2rem;left:1.2rem;width:50px;height:50px}
-  #bgHint{left:5.8rem;bottom:1.2rem}
-  #sbChatWin{
-    bottom:0!important;left:0!important;right:0!important;
-    width:100%!important;max-width:100%!important;
-    max-height:75vh;border-radius:12px 12px 0 0;
-    border-left:none;border-right:none;border-bottom:none;
-    transform:translateY(100%) scale(1)!important;
-  }
-  #sbChatWin.open{transform:translateY(0) scale(1)!important}
-  #sbChatWin.expanded{
-    bottom:0!important;left:0!important;right:0!important;
-    top:0!important;width:100%!important;max-width:100%!important;
-    max-height:100%;border-radius:0;transform:none!important;
-  }
-  #sbChatHead{padding:.85rem 1rem}
-  #sbChatMsgs{padding:.75rem .85rem}
-  #sbChatForm{padding:.5rem .75rem}
-  #sbChatInput{font-size:.85rem}
-  .cbAvatar{width:34px;height:34px}
-  .cbHeadName{font-size:.75rem}
-  .cbHeadStatus{font-size:.6rem}
-
-  /* ── BOOKING MODAL ───────────────────────────────────────────── */
-  .makeBookingCard{
-    width:calc(100vw - 1.5rem)!important;
-    max-width:100%!important;
-    padding:1.25rem 1rem!important;
-    max-height:85vh;overflow-y:auto;
-  }
-  .bookOption{padding:.65rem .75rem;gap:.5rem}
-  .bookOptionLabel{font-size:.62rem}
-  .bookOptionSub{font-size:.5rem}
-
-  /* ── MEMBERSHIP CERT MODAL ───────────────────────────────────── */
-  .memDlModal{
-    width:calc(100vw - 1.5rem)!important;
-    max-width:100%!important;
-    padding:1.5rem 1.25rem!important;
-    border-radius:6px;
-  }
-
-  /* ── GENOME SECTION ──────────────────────────────────────────── */
-  #genomeSection{overflow-x:hidden}
-  #gnCanvas{width:100%!important;min-height:280px}
-  #gnList{max-height:220px;overflow-y:auto}
-
-  /* ── SCROLL PATH / ORBIT ─────────────────────────────────────── */
-  #scrollPath{display:none}
-
-  /* ── SECTION DOTS (desktop only) ────────────────────────────── */
-  #sectionDots{display:none}
-
-  /* ── SCROLL TOP ───────────────────────────────────────────────── */
-  #scrollTop{bottom:1.5rem;right:1.2rem;width:36px;height:36px}
-
-  /* ── AMBIENT BUTTON (sound) ──────────────────────────────────── */
-  #ambientBtn{bottom:5rem;left:1.2rem;width:34px;height:34px}
-
-  /* ── COLD OPEN ────────────────────────────────────────────────── */
-  #coldOpen{overflow-x:hidden}
-  .coLine{font-size:clamp(1.4rem,6vw,2.2rem)!important;padding:0 1rem}
-
-  /* ── Q-STATS PANEL ────────────────────────────────────────────── */
-  .qStats{min-width:unset;max-width:100%;width:100%;border-left:none;border-top:1px solid var(--border)}
-
-  /* ── MISC FIXES ───────────────────────────────────────────────── */
-  /* Genome + Radar row — inline style override */
-  .genomeRadarRow{
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:1.5rem!important;
-  }
-  .p90Grid{grid-template-columns:1fr}
-  .p90Field.full{grid-column:1}
-  .caseKPIs{grid-template-columns:1fr 1fr}
-  .expBannerLeft,.expBannerRight{font-size:2.5rem}
-  .techScrollInner{gap:.4rem}
-  .tickInner{gap:.5rem;font-size:.55rem}
-
-  /* Cursor: default on mobile (no custom cursor) */
-  *{cursor:auto!important}
-  .cursor,.cursorRing{display:none!important}
-}
-
-/* ── MOBILE EXTRA RULES (≤640px) — previously orphaned, now properly scoped ── */
-@media(max-width:640px){
-
-  /* ── HERO BUTTONS ────────────────────────────────────────────── */
-  .heroBtns{flex-direction:column;gap:.75rem;align-items:stretch;width:100%}
-  .btnMain,.btnGhost{width:100%;justify-content:center;text-align:center;box-sizing:border-box}
-  .btnMain{padding:.9rem 1.5rem;font-size:.85rem}
-  #roiTrigger{width:100%;justify-content:center;margin-top:.75rem;padding:.75rem 1rem;font-size:.6rem}
-
-  /* ── QUOTE / QUICK-STATS SECTION ────────────────────────────── */
-  .quoteStrip{flex-direction:column!important;display:flex!important}
-  #quoteSection{flex-direction:column!important}
-  .quoteMain{padding:2rem 1.25rem!important;border-right:none!important;border-bottom:1px solid var(--border)}
-  .qStats{width:100%;border-left:none;border-top:1px solid var(--border);flex-direction:row;flex-wrap:wrap;padding:1.5rem 1.25rem;gap:1.5rem;align-items:flex-start;justify-content:space-around}
-  .qStat{flex:1;min-width:120px;text-align:center}
-  .qStatNum{font-size:2.2rem}
-  .qStatLabel{font-size:.55rem}
-
-  /* ── TICKER STRIP ─────────────────────────────────────────────── */
-  .ticker{font-size:.55rem}
-  .tItem{gap:.5rem;padding:0 .5rem}
-
-  /* ── EXPERIENCE TIMELINE ─────────────────────────────────────── */
-  .expTrack{padding:0}
-  .expCard{display:block;margin-bottom:2.5rem;padding:0 1.25rem}
-  .expCardL,.expCardR{padding:0}
-  .expCardR{padding-left:0;margin-top:1rem}
-  .expCardL{padding-right:0}
-  .expBannerLeft{display:none!important}
-  .expBannerRight{display:none!important}
-  .expMetrics{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
-  .expMet{flex:1;min-width:calc(50% - .25rem)}
-  .expNode{width:10px;height:10px}
-  .expYear{font-size:.6rem}
-  .expTitle{font-size:1rem}
-  .expRole{font-size:.85rem}
-
-  /* ── SKILLS GENOME + RADAR ───────────────────────────────────── */
-  #gnCanvas{width:100%!important}
-  #radarCanvas{max-width:280px;margin:0 auto;display:block}
-  .genomeSection{overflow:hidden}
-  #gnList{max-height:180px;overflow-y:auto;-webkit-overflow-scrolling:touch}
-  #gnFilterWrap{flex-wrap:wrap;gap:.3rem}
-
-  /* ── CASE STUDY OVERLAY ──────────────────────────────────────── */
-  .caseOverlay{padding:.5rem}
-  .caseClose{top:.5rem;right:.5rem;width:32px;height:32px}
-  .caseSteps{flex-direction:column;gap:.5rem}
-  .caseStep{padding:.6rem .75rem}
-
-  /* ── ROI MODAL ───────────────────────────────────────────────── */
-  .roiOverlay{padding:.5rem;align-items:flex-end}
-  .roiModal{padding:1.25rem 1rem;border-radius:12px 12px 0 0;width:100%;max-width:100%;max-height:90vh;overflow-y:auto}
-  .roiClose{top:.6rem;right:.75rem}
-  .roiGrid{grid-template-columns:1fr}
-  .roiResults{padding:.85rem;margin-top:.75rem}
-  select,input[type='text'],input[type='number']{font-size:16px!important} /* prevent iOS zoom */
-
-  /* ── BOOKING MODAL ───────────────────────────────────────────── */
-  .bookOverlay,.roiOverlay{padding:0}
-  .makeBookingCard{
-    border-radius:14px 14px 0 0!important;
-    position:fixed!important;
-    bottom:0!important;left:0!important;right:0!important;
-    top:auto!important;
-    transform:none!important;
-    width:100%!important;
-    max-width:100%!important;
-    padding:1.5rem 1.25rem!important;
-    max-height:88vh;
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
-  }
-
-  /* ── SECTION TITLE ───────────────────────────────────────────── */
-  .secTitle{margin-bottom:1.5rem}
-  .secTitle br{display:none}
-
-  /* ── TRUST STRIP ─────────────────────────────────────────────── */
-  .trustInner{flex-direction:column;gap:1rem;align-items:center}
-  .trustStat{text-align:center}
-  .trustDivider{display:none}
-
-  /* ── SECTION DOTS ─────────────────────────────────────────────── */
-  #sectionDots{display:none!important}
-
-  /* ── AMBIENT SOUND BTN ────────────────────────────────────────── */
-  #ambientBtn{bottom:5.5rem;left:1.2rem}
-
-  /* ── SCROLL TOP ───────────────────────────────────────────────── */
-  #scrollTop{bottom:1.5rem;right:1.2rem}
-
-  /* ── GENOME SECTION INNER LAYOUT ─────────────────────────────── */
-  #genomeSection > div > div[style*='grid-template-columns']{
-    grid-template-columns:1fr!important;
-    display:grid!important;
-  }
-
-
-  /* ── EXPERIENCE CARDS ── */
-  .expCard{display:grid!important;grid-template-columns:1fr!important}
-  .expCardL{order:1;padding:0 0 1rem}
-  .expCardR{order:2;padding:0}
-  .expNodeCentre{display:none!important}
-  .expSpine{display:none!important}
-  /* ── COLD OPEN ── */
-  #coSoundBtn{min-height:48px;touch-action:manipulation}
-  #coContent{padding:1.5rem 1rem!important}
-  /* ── QUOTE STRIP ── */
-  .quoteStrip{flex-direction:column!important;min-height:auto}
-  .quotePane{border-right:none!important;border-bottom:1px solid var(--border);padding:1.5rem 1.25rem!important}
-  .quotePane:last-child{border-bottom:none}
-  .qStatDivider{display:none}
-  /* ── OVERFLOW ── */
-  section,#hero,.expInner{max-width:100%;overflow-x:hidden}
-  /* ── TAP SIZES (touch only — prevents desktop buttons from getting extra height) ── */
-  .is-touch button,.is-touch a{min-height:44px}
-  #navHamburger{min-height:44px;min-width:44px}
-
-} /* end @media(max-width:640px) extra rules */
-
-@media(max-width:380px){
-  #hero{padding:5rem 1rem 2.5rem}
-  .heroName{font-size:clamp(2.6rem,14vw,3.5rem)}
-  section{padding:3rem 1rem}
-  .memberGrid{grid-template-columns:1fr}
-  .statsStrip{grid-template-columns:1fr 1fr}
-  .miniStats{grid-template-columns:1fr}
-  .caseKPIs{grid-template-columns:1fr}
-  .footprintGrid{grid-template-columns:1fr 1fr}
-  nav{padding:.65rem .9rem}
-  .logo{font-size:1.1rem}
-}
-
-
-
-/* Touch device overrides */
-.is-touch *{cursor:auto!important}
-.is-touch .cursor,.is-touch .cursorRing{display:none!important}
-.is-touch button,.is-touch a{cursor:pointer!important}
-
-
-
-
-/* ── Experience visual captions ── */
-.expVizCaption{
-  padding:1.4rem 1.2rem 1rem;
-  border-top:1px solid rgba(232,130,12,0.3);
-  background:rgba(0,0,0,0.22);
-  opacity:0;
-  transform:translateY(8px);
-  transition:opacity .55s ease,transform .55s ease;
-}
-.expVizCaption.cap-vis{opacity:1;transform:translateY(0)}
-.expVizCaption p{
-  margin:0;
-  font-family:var(--sans);
-  font-size:.75rem;
-  font-weight:300;
-  line-height:1.72;
-  color:rgba(232,130,12,0.85);
-}
-.expVizCaption p strong{
-  font-family:var(--mono);
-  font-size:.54rem;
-  font-weight:700;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:rgba(232,130,12,1);
-  font-style:normal;
-}
-.expVizCaption p em{
-  font-style:italic;
-  color:rgba(232,130,12,0.72);
-}
-
-@media print{body{padding:1.5rem}}
-
-/* ═══════════════════════════════════════════════════════════════
-   MOBILE FIX BLOCK — all rules use !important where needed to
-   beat inline styles. Desktop is completely untouched.
-   ═══════════════════════════════════════════════════════════════ */
-@media(max-width:640px){
-
-  /* ── BASE OVERFLOW GUARD ───────────────────────────────────── */
-  html,body{max-width:100%;overflow-x:hidden!important}
-
-  /* ── CURSOR (body has cursor:none which can confuse some iOS taps) */
-  body{cursor:auto!important}
-
-  /* ── AMBIENT ORBS — 600px/500px/400px blobs cause horizontal scroll ── */
-  .ambOrb{display:none!important}
-
-  /* ── EXPERIENCE SECTION ─────────────────────────────────────
-     #experience has inline padding-left/right:0; the inner
-     .expInner already handles padding, but .expTrack has
-     inline style="padding:0 3rem" which we must beat          */
-  .expTrack{padding:0!important}
-  .expInner{padding:0 1.25rem!important}
-
-  /* ── CONTACT SECTION ────────────────────────────────────────
-     #contact has inline padding-left/right:0; add them back   */
-  #contact{padding-left:1.25rem!important;padding-right:1.25rem!important}
-
-  /* ── CONTACT SECTION BUTTONS — stack vertically ────────────── */
-  #contact .ctaBtn+.ctaBtn,
-  #contact a.ctaBtn+button.ctaBtn,
-  #contact button.ctaBtn+button.ctaBtn{
-    margin-left:0!important;
-    margin-top:.75rem!important;
-    display:block!important;
-    width:100%!important;
-    max-width:320px!important;
-  }
-  #contact .ctaBtn{
-    display:block!important;
-    width:100%!important;
-    max-width:320px!important;
-    text-align:center!important;
-  }
-
-  /* ── COMMUTE CALCULATOR ─────────────────────────────────────── */
-  #commuteWrap [style*="display:flex"][style*="gap:.75rem"]{
-    flex-direction:column!important;
-    gap:.5rem!important;
-  }
-  #commuteWrap input,#commuteWrap button{width:100%!important}
-  #commuteGrid{grid-template-columns:1fr 1fr!important}
-  #commuteWrap [style*="padding:1.5rem 2rem"]{padding:1.25rem 1rem!important}
-  #commuteWrap [style*="padding:1rem 2rem"]{padding:1rem!important}
-
-  /* ── CONTACT FORM OVERLAY ────────────────────────────────────
-     Name/Email and Company/Role rows are 1fr 1fr inline grids  */
-  #contactFormPanel{
-    width:calc(100vw - 2rem)!important;
-    max-width:100%!important;
-    max-height:90vh;
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
-  }
-  #cfBody [style*="grid-template-columns:1fr 1fr"]{
-    grid-template-columns:1fr!important;
-  }
-  #cfBody [style*="padding:1.4rem 1.75rem"]{padding:1.1rem 1rem!important}
-  #contactFormPanel [style*="padding:1.75rem 1.75rem"]{padding:1.1rem 1rem!important}
-
-  /* ── 90-DAY PLAN SECTION ─────────────────────────────────────
-     #plan90 has padding:6rem 3rem with no mobile override       */
-  #plan90{padding:3.5rem 1.25rem!important}
-
-  /* ── TAG CLOUD in contact ────────────────────────────────────── */
-  .tagCloud{flex-wrap:wrap!important;gap:.4rem!important;justify-content:flex-start!important}
-  .tagCloudItem{font-size:.5rem!important}
-
-  /* ── ROI MODAL — ensure scrollable on small screens ─────────── */
-  .roiModal{
-    max-height:88vh!important;
-    overflow-y:auto!important;
-    -webkit-overflow-scrolling:touch!important;
-  }
-
-  /* ── COLD OPEN: Enable Sound button — ensure it's tappable ───── */
-  #coSoundBtn{
-    min-height:48px!important;
-    min-width:200px!important;
-    padding:1rem 2rem!important;
-    font-size:.65rem!important;
-  }
-  #coSkip{
-    min-height:44px!important;
-    display:flex!important;
-    align-items:center!important;
-    padding:.75rem 1.1rem!important;
-  }
-
-  /* ── HERO inline padding-top:5rem vs media-query — keep safe ─── */
-  #hero{padding-left:1.25rem!important;padding-right:1.25rem!important}
-
-  /* ── STATUS PANEL — can be wide on small phones ─────────────── */
-  .statusPanel{width:100%!important;box-sizing:border-box!important}
-  .spRow{flex-wrap:wrap;gap:.2rem}
-  .spVal{text-align:right;flex-shrink:0}
-
-  /* ── TICKER STRIP ────────────────────────────────────────────── */
-  .ticker{overflow:hidden!important}
-  .tickInner{white-space:nowrap}
-
-  /* ── PHOTO WRAP ───────────────────────────────────────────────── */
-  .photoWrap{width:140px!important;margin:0 auto!important}
-
-  /* ── SECTION EYEBROW / NUM ────────────────────────────────────── */
-  .secNum{font-size:3rem}
-} /* end MOBILE FIX BLOCK */
-
-/* ── Touch body cursor fix (applies at all widths on touch devices) ── */
-.is-touch body,.is-touch{cursor:auto!important}
-
-/* ═══════════════════════════════════════════════════════════════
-   FINAL MOBILE PATCH — beats all remaining inline styles
-   ═══════════════════════════════════════════════════════════════ */
-@media(max-width:640px){
-
-  /* ── GENOME: hide sidebar, canvas fills full width ───────────── */
-  #gnList{display:none!important}
-  #gnCanvas{width:100%!important;min-height:260px}
-
-  /* ── QUOTE BLOCK inline padding override ────────────────────── */
-  .quoteBlock{padding:2rem 1.25rem!important}
-
-  /* ── COMMUTE WRAP: stack input+button vertically ─────────────── */
-  #commuteWrap [style*="padding:1.5rem 2rem"]{padding:1.25rem 1rem!important}
-  #commuteWrap [style*="padding:1rem 2rem"]{padding:1rem!important}
-  #commuteWrap [style*="display:flex"][style*="gap:.75rem"]{
-    flex-direction:column!important;gap:.5rem!important;
-  }
-  #commuteInput{width:100%!important;box-sizing:border-box!important}
-  #commuteGrid{grid-template-columns:repeat(2,1fr)!important}
-
-  /* ── EXPERIENCE track inline padding ─────────────────────────── */
-  .expTrack[style]{padding:0!important}
-
-  /* ── PLAN90 section padding ───────────────────────────────────── */
-  #plan90[style]{padding:3.5rem 1.25rem!important}
-
-  /* ── INDUSTRY SECTION padding ────────────────────────────────── */
-  .industrySec[style]{padding:3rem 1.25rem!important}
-
-  /* ── SECTIONS with inline padding:0 ──────────────────────────── */
-  section[style*="padding-left:0"]{padding-left:1.25rem!important}
-  section[style*="padding-right:0"]{padding-right:1.25rem!important}
-
-  /* ── HERO side padding ───────────────────────────────────────── */
-  #hero[style]{padding-left:1.25rem!important;padding-right:1.25rem!important}
-
-  /* ── CONTACT FORM PANEL ──────────────────────────────────────── */
-  #contactFormPanel{
-    width:calc(100vw - 1.5rem)!important;max-width:100%!important;
-    max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  }
-
-  /* ── OVERFLOW GUARD ──────────────────────────────────────────── */
-  html,body{overflow-x:hidden!important;max-width:100vw!important}
-
-} /* end FINAL MOBILE PATCH */
 
     </style></head><body>
     <div class="header">
