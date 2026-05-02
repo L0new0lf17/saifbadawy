@@ -4403,8 +4403,6 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
   (function initCharAnim(){
     const cv = document.getElementById('coCharCanvas');
     if(!cv) return;
-    // Skip heavy canvas animation on mobile — saves GPU on cold open
-    if(window.innerWidth<=768||'ontouchstart' in window){cv.style.display='none';return;}
     const ctx = cv.getContext('2d');
     const PR = Math.min(devicePixelRatio||1, 2);
     let W, H, t = 0, charX = -80, charPhase = 'walk';
