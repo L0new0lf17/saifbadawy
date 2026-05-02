@@ -3122,7 +3122,15 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
   <a href="#education" class="mDrawerLink">Education</a>
   <a href="#projects" class="mDrawerLink">Projects</a>
   <a href="#contact" class="mDrawerLink">Contact</a>
-  <button class="mDrawerCta" onclick="document.getElementById('mobileNavDrawer').classList.remove('open');document.getElementById('navHamburger').classList.remove('open');openContactForm(event)">Connect</button>
+  <div style="display:flex;flex-direction:column;gap:.75rem;width:100%;align-items:center;margin-top:.5rem">
+    <button class="mDrawerCta" onclick="document.getElementById('mobileNavDrawer').classList.remove('open');document.getElementById('navHamburger').classList.remove('open');openContactForm(event)">Connect</button>
+    <button style="font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:.65rem 1.5rem;background:transparent;color:var(--accent);border:1px solid rgba(232,130,12,.5);cursor:pointer;width:80%;max-width:260px" onclick="document.getElementById('mobileNavDrawer').classList.remove('open');document.getElementById('navHamburger').classList.remove('open');document.getElementById('roiOverlay').classList.add('open');document.body.style.overflow='hidden'">
+      <svg width="11" height="11" viewBox="0 0 12 12" fill="none" style="vertical-align:middle;margin-right:.4rem"><path d="M1 9 L4 4 L7 6.5 L10 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>ROI Calculator
+    </button>
+    <button style="font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:.65rem 1.5rem;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;width:80%;max-width:260px" onclick="document.getElementById('mobileNavDrawer').classList.remove('open');document.getElementById('navHamburger').classList.remove('open');openBookingModal()">
+      📅 Book Interview
+    </button>
+  </div>
 </div>
 
 
@@ -8063,6 +8071,17 @@ document.addEventListener('contextmenu', e => {
   });
   scrollHint?.addEventListener('mouseup', () => { clearInterval(holdInterval); holdProgress = 0; });
   scrollHint?.addEventListener('mouseleave', () => { clearInterval(holdInterval); holdProgress = 0; });
+  // Touch equivalent of hold-2s Easter egg
+  scrollHint?.addEventListener('touchstart', e => {
+    e.stopPropagation();
+    holdProgress = 0;
+    holdInterval = setInterval(() => {
+      holdProgress += 50;
+      if (holdProgress >= 2000) { clearInterval(holdInterval); showScramble(); }
+    }, 50);
+  }, { passive: true });
+  scrollHint?.addEventListener('touchend', () => { clearInterval(holdInterval); holdProgress = 0; });
+  scrollHint?.addEventListener('touchcancel', () => { clearInterval(holdInterval); holdProgress = 0; });
 
   // ── EASTER EGG 4: "My Journey So Far" title, double click → quote ──
   document.getElementById('eeJourneyTitle')?.addEventListener('dblclick', e => { e.stopPropagation(); showQuote(); });
@@ -8438,19 +8457,19 @@ document.addEventListener('contextmenu', e => {
   #mobileNavDrawer{
     display:none;position:fixed;top:0;left:0;right:0;bottom:0;
     background:rgba(7,7,7,0.98);z-index:490;
-    flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;
-    opacity:0;transition:opacity .3s ease;
+    flex-direction:column;align-items:center;justify-content:center;gap:1.75rem;
+    opacity:0;transition:opacity .3s ease;overflow-y:auto;padding:4rem 1.5rem 2rem;
   }
   #mobileNavDrawer.open{display:flex;opacity:1}
   #mobileNavDrawer a{
-    font-family:var(--bebas);font-size:2.2rem;letter-spacing:.1em;
+    font-family:var(--bebas);font-size:2rem;letter-spacing:.1em;
     color:var(--white);text-decoration:none;transition:color .2s;
   }
   #mobileNavDrawer a:hover{color:var(--accent)}
   #mobileNavDrawer .mDrawerCta{
     font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
     padding:.75rem 2rem;background:var(--accent);color:var(--black);
-    border:none;margin-top:1rem;cursor:pointer;
+    border:none;cursor:pointer;width:80%;max-width:260px;
   }
   #mobileNavDrawer .mDrawerClose{
     position:absolute;top:1.2rem;right:1.4rem;background:transparent;
@@ -9279,7 +9298,7 @@ document.addEventListener('contextmenu', e => {
      PLAN 90 + INDUSTRY INLINE PADDING
   ══════════════════════════════════════════════════════════════ */
   #plan90[style]{padding:3.5rem 1.25rem!important}
-  .industrySec[style]{padding:3rem 1.25rem!important}
+  .industrySec{padding:3rem 1.25rem!important}
   .p90Grid{grid-template-columns:1fr!important}
   .p90Field.full{grid-column:1!important}
 
@@ -9320,22 +9339,151 @@ document.addEventListener('contextmenu', e => {
   select,input[type='text'],input[type='number']{font-size:16px!important}
   #sectionDots{display:none!important}
   #scrollPath{display:none!important}
-  /* ── CURSOR: hide custom cursor, restore native touch feedback ── */
+  /* ══════════════════════════════════════════════════════════════
+     INDUSTRY SECTION — full padding override (no inline style)
+  ══════════════════════════════════════════════════════════════ */
+  .industryInner{padding:0!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     SECRET TIPS — always appear BELOW the badge on mobile
+     (default positioning pushes them off the right edge)
+  ══════════════════════════════════════════════════════════════ */
+  .secret-tip{
+    left:50%!important;
+    top:calc(100% + 8px)!important;
+    right:auto!important;
+    bottom:auto!important;
+    transform:translateX(-50%)!important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     PHOTO BADGE — prevent text overflow at 180px width
+  ══════════════════════════════════════════════════════════════ */
+  .photoBadge{
+    font-size:.38rem!important;
+    padding:.4rem .5rem!important;
+    letter-spacing:.08em!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     LANGUAGE CARDS — wrap on narrow screens
+  ══════════════════════════════════════════════════════════════ */
+  .langRow{flex-wrap:wrap!important;gap:.5rem!important;margin-top:1rem!important}
+  .langCard{flex:1 1 80px!important;min-width:80px!important}
+  .langName{font-size:.85rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     PERSONAL NOTE — reduce desktop padding
+  ══════════════════════════════════════════════════════════════ */
+  .personalNote{padding:1rem!important;margin-top:1.5rem!important}
+  .pNoteText{font-size:.82rem!important;line-height:1.75!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     MAP BOX — reduce padding
+  ══════════════════════════════════════════════════════════════ */
+  .mapBox{padding:1.25rem 1rem!important;margin-top:1rem!important}
+  .footprintGrid{gap:.5rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     ABOUT TEXT — ensure readable body copy
+  ══════════════════════════════════════════════════════════════ */
+  .aboutText{font-size:.86rem!important;line-height:1.85!important;margin-bottom:.9rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION TITLES — ensure clamp on mobile
+  ══════════════════════════════════════════════════════════════ */
+  .secTitle{font-size:clamp(1.9rem,8.5vw,2.8rem)!important;line-height:1.05!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     COMPETENCY BARS — prevent name overflow
+  ══════════════════════════════════════════════════════════════ */
+  .compHead{flex-wrap:nowrap!important;gap:.25rem!important;align-items:baseline!important}
+  .compName{font-size:.55rem!important;white-space:normal!important;flex:1!important}
+  .compPct{font-size:.55rem!important;flex-shrink:0!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     DISCIPLINE ACCORDION — bigger tap targets, pointer cursor
+  ══════════════════════════════════════════════════════════════ */
+  .discItem{
+    min-height:48px!important;
+    padding:.85rem 0!important;
+    cursor:pointer!important;
+    -webkit-tap-highlight-color:rgba(232,130,12,0.1)!important;
+  }
+  .discArrow{font-size:1.3rem!important;padding:.25rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     QUOTE SECTION — reduce padding
+  ══════════════════════════════════════════════════════════════ */
+  .quoteMain{padding:1.5rem 1.25rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     BOOKING MODAL INNER — override inline padding
+  ══════════════════════════════════════════════════════════════ */
+  #bookingModalInner{padding:1.25rem 1rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     FOOTER — wrap and reduce size
+  ══════════════════════════════════════════════════════════════ */
+  footer{
+    flex-wrap:wrap!important;
+    font-size:.48rem!important;
+    gap:.6rem!important;
+    padding:1.5rem 1.25rem!important;
+    justify-content:center!important;
+  }
+  footer>span,footer>div{text-align:center!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     SCROLL HINT — position below content
+  ══════════════════════════════════════════════════════════════ */
+  .scrollHint{
+    margin-top:1.5rem!important;
+    font-size:.52rem!important;
+    justify-content:flex-start!important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     iCARD NUMBERS — scale down on mobile
+  ══════════════════════════════════════════════════════════════ */
+  .iCardNum{font-size:2rem!important}
+  .iCardLabel{font-size:.65rem!important}
+  .iCardSub{font-size:.7rem!important}
+  .iCardSrc{font-size:.48rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION EYE / NUMBERS
+  ══════════════════════════════════════════════════════════════ */
+  .secNum{font-size:2.5rem!important}
+  .secEye{margin-bottom:.75rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     CURSOR — hide custom cursor, restore native touch feedback
+  ══════════════════════════════════════════════════════════════ */
   .cursor,.cursorRing{display:none!important}
+  /* body inherits cursor:none — explicitly override */
+  body{cursor:auto!important}
   /* Reset ALL cursor:none from desktop styles */
   *{cursor:auto!important}
-  /* Restore pointer on anything tappable */
+  /* Restore pointer on EVERYTHING tappable */
   a,button,[role="button"],[onclick],
   .btnMain,.btnGhost,.ctaBtn,.ctaLink,
   .expBanner,.expMet,.projCard,
-  .memCard,.iCard,.sStat,
+  .memCard,.iCard,.sStat,.discItem,
   #sbChatBtn,#ambientBtn,#scrollTop,
   .secret-badge,.bhChip,
   #gnCanvas,#radarCanvas,
-  .bookOption,.sCell,[data-copy]{
+  .bookOption,.sCell,[data-copy],
+  .spFooter,.scrollHint,.langCard,
+  .fpCard,.personalNote,.logoWrap,
+  .techItem,.p90SubmitBtn,.pill,
+  .eduCard,.certCard,.scrollHint{
     cursor:pointer!important;
   }
-  /* Inputs should stay text cursor */
+  /* Inputs stay text cursor */
   input,textarea,select{cursor:text!important}
   input[type="button"],input[type="submit"],input[type="reset"]{cursor:pointer!important}
 
