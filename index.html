@@ -8950,6 +8950,9 @@ document.addEventListener('contextmenu', e => {
    ═══════════════════════════════════════════════════════════════ */
 @media(max-width:640px){
 
+  /* ── OVERFLOW GUARD ──────────────────────────────────────────── */
+  html,body{overflow-x:hidden!important;max-width:100vw!important}
+
   /* ── GENOME: hide sidebar, canvas fills full width ───────────── */
   #gnList{display:none!important}
   #gnCanvas{width:100%!important;min-height:260px}
@@ -8988,35 +8991,166 @@ document.addEventListener('contextmenu', e => {
     max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
   }
 
-  /* ── OVERFLOW GUARD ──────────────────────────────────────────── */
-  html,body{overflow-x:hidden!important;max-width:100vw!important}
+  /* ══════════════════════════════════════════════════════════════
+     COLD OPEN / INTRO BEAM — mobile fixes
+  ══════════════════════════════════════════════════════════════ */
+  /* Make the scanning beam more visible on hi-DPI mobile screens */
+  #coScanline{height:3px!important;background:rgba(232,130,12,0.9)!important}
+  /* Full overflow clipping on cold open (no scroll) */
+  #coldOpen{overflow:hidden!important}
+  /* Anchor coContent absolutely so flex-height shifts don't jar the layout */
+  #coContent{
+    position:absolute!important;
+    top:50%!important;left:50%!important;
+    transform:translate(-50%,-50%)!important;
+    width:calc(100vw - 2rem)!important;
+    max-height:calc(100vh - 6rem)!important;
+    overflow-y:auto!important;overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding:1.5rem 1rem!important;
+  }
+  /* Name: don't let it overflow on small screens */
+  #coName{font-size:clamp(2.2rem,11vw,4rem)!important;margin-top:1.5rem!important}
+  /* Credential badges: reduce gap and allow smaller size */
+  #coCredentials{gap:.35rem!important;margin-top:1rem!important}
+  #coCredentials > div{min-width:90px!important;padding:.4rem .75rem!important}
+  #coCredentials > div span[style*="font-size:.72rem"]{font-size:.6rem!important}
+  /* Progress bar: slightly thicker for visibility */
+  #coProgress{height:3px!important}
+  /* Skip button: adequate tap target */
+  #coSkip{padding:.75rem 1rem!important;font-size:.7rem!important}
 
-  /* ── EXPERIENCE SECTION — zero horizontal padding so track fills viewport ── */
-  #experience{padding-left:0!important;padding-right:0!important}
-
-  /* ── EXPERIENCE CARDS — left-align text (desktop uses text-align:right) ─── */
-  .expLeft{text-align:left!important;padding:0!important}
-  .expBody{text-align:left!important}
-  .expRole,.expLocation,.expTitle,.expYear{text-align:left!important}
-
-
-  /* ── EXPERIENCE BANNER — fill full card width on mobile ─────────── */
-  .expBanner{width:100%!important;max-width:100%!important}
-  
-  /* ── EXPERIENCE SECTION — fix inner container widths ─────────────── */
-  .expInner,.expTrack{width:100%!important;box-sizing:border-box!important}
-  
-  /* ── EXPERIENCE CARD BODY font size — readable on narrow screens ─── */
-  .expBody{font-size:.82rem!important;line-height:1.7!important}
-  
-  /* ── HIDE SCHEMATIC ACTIVE FLOATING BUTTON ON MOBILE ────────────────────── */
+  /* ══════════════════════════════════════════════════════════════
+     HERO — fix floating button overlaps with status panel
+  ══════════════════════════════════════════════════════════════ */
+  /* Move SB chat button to bottom-RIGHT on mobile so status panel is clear */
+  #sbChatBtn{
+    right:1.2rem!important;
+    left:auto!important;
+    bottom:1.2rem!important;
+  }
+  /* Move ambient sound button to bottom-RIGHT above chat button */
+  #ambientBtn{
+    right:1.2rem!important;
+    left:auto!important;
+    bottom:6rem!important;
+  }
+  /* Stagger right-side buttons so they don't overlap */
+  #scrollTop{
+    right:1.2rem!important;
+    bottom:5.5rem!important;
+  }
+  /* Ensure status panel has enough bottom padding to clear buttons */
+  .statusPanel{
+    padding-bottom:1rem!important;
+  }
+  /* HIDE DUPLICATE SOUND TOGGLE (ambientBtn handles audio on mobile) */
+  #soundToggle{display:none!important}
+  /* HIDE SCHEMATIC ACTIVE button */
   #bgHint{display:none!important}
-
-  /* ── HIDE "TRY ME" SECRET BADGE LABELS ON MOBILE ───────────────────────── */
+  /* HIDE "TRY ME" easter-egg labels in nav/sections */
   .secret-badge::after{display:none!important}
 
-  /* ── HIDE DUPLICATE SOUND TOGGLE ON MOBILE (ambientBtn serves this role) ── */
-  #soundToggle{display:none!important}
+  /* ══════════════════════════════════════════════════════════════
+     HERO TEXT — full-width, readable
+  ══════════════════════════════════════════════════════════════ */
+  .heroName{font-size:clamp(2.6rem,14vw,3.5rem)!important}
+  .heroDesc{font-size:.88rem!important;max-width:100%!important;text-align:left!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     EXPERIENCE SECTION — comprehensive mobile overhaul
+  ══════════════════════════════════════════════════════════════ */
+  /* Zero out section padding so expTrack fills full width */
+  #experience{padding-left:0!important;padding-right:0!important}
+  .expInner,.expTrack{width:100%!important;box-sizing:border-box!important;padding:0 1.25rem!important}
+
+  /* ── expBanner: show company name (essential info!) ── */
+  .expBanner{width:100%!important;max-width:100%!important;box-sizing:border-box!important;padding:1rem!important}
+  /* Un-hide expBannerLeft to show company logo + name + location */
+  .expBannerLeft{
+    display:flex!important;
+    opacity:1!important;
+    font-size:1rem!important;
+    position:static!important;
+    transform:none!important;
+    gap:.25rem!important;
+  }
+  /* Tweak company name size for mobile banner */
+  .expBannerCo{font-size:1.1rem!important;line-height:1.2!important}
+  .expBannerLoc{font-size:.48rem!important;letter-spacing:.1em!important}
+  /* Hide the logo SVG on very small banners (saves space) */
+  .expLogoSvg{display:none!important}
+  /* Hide expBannerRight metrics in banner (shown in expMetrics cards below) */
+  .expBannerRight{display:none!important}
+  /* Hide large decorative year watermark (transparent anyway) */
+  .expBannerYear{display:none!important}
+
+  /* ── expNode: show year as horizontal label row ── */
+  .expNode{
+    width:100%!important;
+    height:auto!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    padding:0.6rem 0 0.4rem!important;
+    gap:0.5rem!important;
+    border-top:1px solid rgba(232,130,12,0.25)!important;
+    margin-top:0.75rem!important;
+  }
+  /* Hide connector lines (desktop-only decorations) */
+  .expConnL,.expConnR{display:none!important}
+  /* Compact the node dot */
+  .expDot{width:7px!important;height:7px!important;flex-shrink:0!important}
+  /* Year label: horizontal, readable */
+  .expYear{
+    font-size:.62rem!important;
+    writing-mode:horizontal-tb!important;
+    transform:none!important;
+    color:var(--accent)!important;
+    letter-spacing:.18em!important;
+    text-transform:uppercase!important;
+    text-align:left!important;
+    white-space:nowrap!important;
+  }
+
+  /* ── expCard: use flex column so order attributes work ── */
+  .expCard{display:flex!important;flex-direction:column!important}
+  /* Text content always first, year node second, chart always last */
+  .expLeft,.expRight{order:1!important}
+  .expNode{order:2!important}
+  .expViz{order:3!important;width:100%!important;margin:0!important;padding:0!important}
+  .vizWrap canvas{width:100%!important;max-width:100%!important}
+
+  /* ── expLeft / expRight: left-align all text ── */
+  .expLeft{text-align:left!important;padding:0!important}
+  .expRight{text-align:left!important;padding:0!important}
+  .expBody{
+    text-align:left!important;
+    font-size:.82rem!important;
+    line-height:1.7!important;
+  }
+  .expRole,.expLocation,.expTitle{text-align:left!important}
+  .expRole{font-size:.88rem!important}
+
+  /* ── expMetrics: 2-column grid ── */
+  .expMetrics{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:.5rem!important;
+    margin-top:1rem!important;
+  }
+  .expMet{
+    text-align:center!important;
+    padding:.6rem .5rem!important;
+    border:1px solid rgba(232,130,12,0.2)!important;
+    border-radius:3px!important;
+  }
+  .expMetNum{font-size:1.3rem!important}
+  .expMetLabel{font-size:.48rem!important;letter-spacing:.08em!important}
+
+  /* ── expTags ── */
+  .expTags{flex-wrap:wrap!important;gap:.35rem!important;margin-top:.75rem!important;text-align:left!important;justify-content:flex-start!important}
+  .etag{font-size:.52rem!important;padding:.2rem .5rem!important}
 
 } /* end FINAL MOBILE PATCH */
 </style>
