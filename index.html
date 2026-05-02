@@ -9022,14 +9022,35 @@ document.addEventListener('contextmenu', e => {
   .spRow{padding:.45rem .9rem!important}
 
   /* ══════════════════════════════════════════════════════════════
-     FLOATING BUTTONS — right side, no overlap
+     FLOATING BUTTONS — chat+ambient LEFT / scroll-top RIGHT
+     (splits to opposite sides so they NEVER overlap)
   ══════════════════════════════════════════════════════════════ */
-  #sbChatBtn{right:1.2rem!important;left:auto!important;bottom:1.2rem!important}
-  #ambientBtn{right:1.2rem!important;left:auto!important;bottom:6rem!important}
-  #scrollTop{right:1.2rem!important;bottom:5.5rem!important}
+  #sbChatBtn{left:1.2rem!important;right:auto!important;bottom:1.2rem!important}
+  #ambientBtn{left:1.2rem!important;right:auto!important;bottom:5rem!important}
+  #scrollTop{right:1.2rem!important;left:auto!important;bottom:1.5rem!important}
   #soundToggle{display:none!important}
-  #bgHint{display:none!important}
-  .secret-badge::after{display:none!important}
+  /* bgHint: reposition to sit beside chat button, not hide it */
+  #bgHint{left:5.8rem!important;right:auto!important;bottom:1.2rem!important}
+  /* "try me" label — keep visible on mobile so hints are discoverable */
+  .secret-badge::after{
+    display:block!important;
+    font-size:.38rem!important;
+    letter-spacing:.1em!important;
+    opacity:.8!important;
+  }
+  /* Secret badge tip — show on :active (tap-and-hold) and :focus */
+  .secret-badge{
+    touch-action:manipulation!important;
+    -webkit-tap-highlight-color:rgba(232,130,12,0.15)!important;
+    min-width:34px!important;
+    min-height:34px!important;
+  }
+  .secret-badge:active .secret-tip,
+  .secret-badge:focus .secret-tip,
+  .secret-badge.tip-open .secret-tip{
+    opacity:1!important;
+    visibility:visible!important;
+  }
 
   /* ══════════════════════════════════════════════════════════════
      COLD OPEN / INTRO BEAM
@@ -9299,8 +9320,24 @@ document.addEventListener('contextmenu', e => {
   select,input[type='text'],input[type='number']{font-size:16px!important}
   #sectionDots{display:none!important}
   #scrollPath{display:none!important}
+  /* ── CURSOR: hide custom cursor, restore native touch feedback ── */
   .cursor,.cursorRing{display:none!important}
+  /* Reset ALL cursor:none from desktop styles */
   *{cursor:auto!important}
+  /* Restore pointer on anything tappable */
+  a,button,[role="button"],[onclick],
+  .btnMain,.btnGhost,.ctaBtn,.ctaLink,
+  .expBanner,.expMet,.projCard,
+  .memCard,.iCard,.sStat,
+  #sbChatBtn,#ambientBtn,#scrollTop,
+  .secret-badge,.bhChip,
+  #gnCanvas,#radarCanvas,
+  .bookOption,.sCell,[data-copy]{
+    cursor:pointer!important;
+  }
+  /* Inputs should stay text cursor */
+  input,textarea,select{cursor:text!important}
+  input[type="button"],input[type="submit"],input[type="reset"]{cursor:pointer!important}
 
 } /* end FINAL MOBILE PATCH */
 </style>
@@ -13103,6 +13140,107 @@ document.querySelectorAll('.secTitle').forEach(el => headlineObs.observe(el));
   hint.querySelector('.bhChip')?.addEventListener('click', () => {
     hint.classList.toggle('bh-open');
   });
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════
+     MOBILE TOUCH ENHANCEMENTS
+     - Canvas tooltip support (genome + radar)
+     - Secret-badge tap-to-reveal tips
+     ══════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+  if (!('ontouchstart' in window)) return; // desktop: do nothing
+
+  /* ── Helper: simulate a mouse event on a canvas from a Touch ── */
+  function canvasTouch(canvas, touch, type) {
+    try {
+      canvas.dispatchEvent(new MouseEvent(type, {
+        bubbles: true, cancelable: true,
+        clientX: touch.clientX,
+        clientY: touch.clientY
+      }));
+    } catch(e) {}
+  }
+
+  /* ── GENOME CANVAS touch ────────────────────────────────────── */
+  var gnCanvas = document.getElementById('gnCanvas');
+  if (gnCanvas) {
+    gnCanvas.style.touchAction = 'pan-y'; // allow page scroll, capture taps
+    gnCanvas.addEventListener('touchstart', function(e) {
+      if (e.touches.length !== 1) return;
+      canvasTouch(gnCanvas, e.touches[0], 'mousemove');
+    }, { passive: true });
+
+    gnCanvas.addEventListener('touchmove', function(e) {
+      if (e.touches.length !== 1) return;
+      e.preventDefault(); // stop page scroll while inspecting a dot
+      canvasTouch(gnCanvas, e.touches[0], 'mousemove');
+    }, { passive: false });
+
+    gnCanvas.addEventListener('touchend', function() {
+      // Keep label visible for 1.8 s then clear
+      setTimeout(function() {
+        gnCanvas.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+      }, 1800);
+    }, { passive: true });
+  }
+
+  /* ── RADAR CANVAS touch ─────────────────────────────────────── */
+  var radarCanvas = document.getElementById('radarCanvas');
+  if (radarCanvas) {
+    radarCanvas.addEventListener('touchstart', function(e) {
+      if (e.touches.length !== 1) return;
+      canvasTouch(radarCanvas, e.touches[0], 'mousemove');
+    }, { passive: true });
+
+    radarCanvas.addEventListener('touchmove', function(e) {
+      if (e.touches.length !== 1) return;
+      e.preventDefault();
+      canvasTouch(radarCanvas, e.touches[0], 'mousemove');
+    }, { passive: false });
+
+    radarCanvas.addEventListener('touchend', function() {
+      setTimeout(function() {
+        radarCanvas.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+      }, 1800);
+    }, { passive: true });
+  }
+
+  /* ── SECRET-BADGE tap-to-toggle tip ─────────────────────────── */
+  document.querySelectorAll('.secret-badge').forEach(function(badge) {
+    badge.setAttribute('tabindex', '0');
+    badge.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var tip = badge.querySelector('.secret-tip');
+      if (!tip) return;
+      var isOpen = badge.classList.contains('tip-open');
+
+      // Close all other open tips first
+      document.querySelectorAll('.secret-badge.tip-open').forEach(function(b) {
+        b.classList.remove('tip-open');
+      });
+
+      if (!isOpen) {
+        badge.classList.add('tip-open');
+        // Auto-dismiss after 2.5 s
+        setTimeout(function() {
+          badge.classList.remove('tip-open');
+        }, 2500);
+      }
+    });
+  });
+
+  // Tapping anywhere else closes open tips
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.secret-badge')) {
+      document.querySelectorAll('.secret-badge.tip-open').forEach(function(b) {
+        b.classList.remove('tip-open');
+      });
+    }
+  }, { passive: true });
+
 })();
 </script>
 </body>
