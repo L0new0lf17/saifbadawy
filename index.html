@@ -6139,7 +6139,7 @@ document.addEventListener('visibilitychange', () => {
 
 // ── AMBIENT CURSOR GLOW ───────────────────────────────────────────────────
 const ambGlow = document.getElementById('ambientGlow');
-if (ambGlow) {
+if (ambGlow && !('ontouchstart' in window)) {
   let glowX = 0, glowY = 0, tX = 0, tY = 0, glowRaf;
   document.addEventListener('mousemove', e => { tX = e.clientX; tY = e.clientY; });
   function glowLoop() {
@@ -10299,6 +10299,8 @@ document.addEventListener('contextmenu', e => {
 (function(){
   const cv=document.getElementById('energyBg');
   if(!cv)return;
+  // Skip on mobile — complex animation tanks GPU on phones
+  if(window.innerWidth<=768||'ontouchstart' in window){cv.style.display='none';return;}
   const ctx=cv.getContext('2d');
   let W,H,t=0,raf;
   const MA=0.48;
@@ -11087,7 +11089,8 @@ document.addEventListener('contextmenu', e => {
   .cursor,.cursorRing{display:none!important}
 }
 
-/* ── VERY SMALL (≤380px) ──────────────────────────────────────── */
+/* ── MOBILE EXTRA RULES (≤640px) — previously orphaned, now properly scoped ── */
+@media(max-width:640px){
 
   /* ── HERO BUTTONS ────────────────────────────────────────────── */
   .heroBtns{flex-direction:column;gap:.75rem;align-items:stretch;width:100%}
@@ -11202,9 +11205,11 @@ document.addEventListener('contextmenu', e => {
   .qStatDivider{display:none}
   /* ── OVERFLOW ── */
   section,#hero,.expInner{max-width:100%;overflow-x:hidden}
-  /* ── TAP SIZES ── */
-  button,a{min-height:44px}
+  /* ── TAP SIZES (touch only — prevents desktop buttons from getting extra height) ── */
+  .is-touch button,.is-touch a{min-height:44px}
   #navHamburger{min-height:44px;min-width:44px}
+
+} /* end @media(max-width:640px) extra rules */
 
 @media(max-width:380px){
   #hero{padding:5rem 1rem 2.5rem}
@@ -12023,6 +12028,9 @@ document.addEventListener('contextmenu', e => {
 
 /* ─── 1. CURSOR PARTICLE TRAIL ─────────────────────────────────────────── */
 const tc = document.getElementById('trailCanvas');
+// Skip cursor trail entirely on touch devices — mousemove never fires, saves canvas overhead
+if('ontouchstart' in window){if(tc)tc.style.display='none';}
+if(!tc||'ontouchstart' in window)return;
 const tctx = tc.getContext('2d');
 let W = window.innerWidth, H = window.innerHeight;
 tc.width = W; tc.height = H;
