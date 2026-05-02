@@ -34,6 +34,22 @@ body{background:var(--black);color:var(--white);font-family:var(--sans);font-wei
 
 #cur{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:999999;transform:translate(-50%,-50%);will-change:left,top}
 body:has(a:hover) #curR,body:has(button:hover) #curR{width:56px;height:56px;opacity:.18}
+/* ── TOUCH / COARSE-POINTER DEVICES: kill custom cursor completely ───────
+   pointer:coarse matches ALL touch screens (phones, tablets) at any width.
+   This is the definitive kill-switch — the JS also hides them but CSS is
+   the safety net in case script loads late.                               */
+@media(pointer:coarse){
+  #cur,#curR{display:none!important}
+  body,*{cursor:auto!important}
+  a,button,[role="button"],[onclick],
+  .btnMain,.btnGhost,.ctaBtn,.ctaLink,.expBanner,
+  .projCard,.memCard,.iCard,.sStat,.discItem,
+  #sbChatBtn,#ambientBtn,#scrollTop,.secret-badge,
+  .bhChip,.bookOption,.sCell,[data-copy],
+  .spFooter,.langCard,.fpCard,.techItem,.pill,
+  .eduCard,.certCard,.scrollHint{cursor:pointer!important}
+  input,textarea,select{cursor:text!important}
+}
 
 nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:.9rem 2.5rem;background:rgba(7,7,7,0.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
 #mobileNavDrawer{display:none}
@@ -5756,11 +5772,20 @@ setTimeout(() => {
   if (splash) splash.classList.add('done');
 }, 3000);
 
-// CURSOR
+// CURSOR — desktop only; touch devices get native feedback
 const cur=document.getElementById('cur'),curR=document.getElementById('curR');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
-(function loop(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(loop)})();
+const _isTouch='ontouchstart' in window||navigator.maxTouchPoints>0;
+if(_isTouch){
+  // Hide both cursor elements immediately and permanently on touch devices
+  if(cur){cur.style.display='none';}
+  if(curR){curR.style.display='none';}
+  // Restore native cursor so touch interactions get normal OS feedback
+  document.body.style.cursor='auto';
+} else {
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+  (function loop(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(loop)})();
+}
 
 // SCROLL FADE, general
 const fuObs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')}),{threshold:.08});
@@ -5967,7 +5992,9 @@ if (tape && tapeInner) {
 // ── MAGNETIC BUTTONS ─────────────────────────────────────────────────────
 // Applies to all primary CTAs: the button nudges toward the cursor
 // within a 90px field radius — even before the cursor enters the element.
+// Skipped entirely on touch devices — mousemove fires on tap and causes jitter.
 (function initMagneticButtons() {
+  if('ontouchstart' in window||navigator.maxTouchPoints>0) return;
   const FIELD   = 90;   // px — attraction starts this far outside the button
   const PULL_IN = 0.38; // strength when cursor is inside
   const PULL_OUT= 0.22; // strength when cursor is in the field but outside
@@ -6216,11 +6243,12 @@ function scramble(el) {
     iteration += 0.5;
   }, 40);
 }
-document.querySelectorAll('.scrambleTarget').forEach(el => {
+if(!('ontouchstart' in window)&&!navigator.maxTouchPoints) document.querySelectorAll('.scrambleTarget').forEach(el => {
   el.addEventListener('mouseenter', () => scramble(el));
 });
 
-// ── 3D TILT EFFECT ────────────────────────────────────────────────────────
+// ── 3D TILT EFFECT — desktop only ────────────────────────────────────────
+if(!('ontouchstart' in window)&&!navigator.maxTouchPoints){
 document.querySelectorAll('.tiltCard').forEach(card => {
   card.addEventListener('mousemove', e => {
     const r = card.getBoundingClientRect();
@@ -6236,6 +6264,7 @@ document.querySelectorAll('.tiltCard').forEach(card => {
     card.style.transition = 'transform .08s linear';
   });
 });
+}
 
 // ── MEMBER GRID REVEAL (low threshold, fires reliably) ───────────────────
 const memGridEl = document.getElementById('memGrid');
@@ -6379,7 +6408,7 @@ if (tapeEl) {
 }
 
 // ── EXPERIENCE BANNER COUNTER ANIMATE ────────────────────────────────────
-document.querySelectorAll('.expBanner').forEach(banner => {
+if(!('ontouchstart' in window)&&!navigator.maxTouchPoints) document.querySelectorAll('.expBanner').forEach(banner => {
   banner.addEventListener('mouseenter', () => {
     const numEl = banner.querySelector('.expBannerNum');
     if (!numEl) return;
@@ -6530,6 +6559,8 @@ document.addEventListener('contextmenu', e => {
 // ENHANCEMENT 3, KINETIC NUMBER RE-COUNT ON HOVER
 // ══════════════════════════════════════════════════════════════════
 (function() {
+  // Skip on touch — mouseenter fires on tap, causing jarring scale jumps
+  if('ontouchstart' in window||navigator.maxTouchPoints>0) return;
   // Find all stat elements with data-count
   const statEls = document.querySelectorAll('[data-count]');
 
@@ -7302,9 +7333,10 @@ document.addEventListener('contextmenu', e => {
 
 
 // ══════════════════════════════════════════════════════════════════
-// ENHANCEMENT 15, MAGNETIC PROJECT CARDS
+// ENHANCEMENT 15, MAGNETIC PROJECT CARDS — desktop only
 // ══════════════════════════════════════════════════════════════════
 (function() {
+  if('ontouchstart' in window||navigator.maxTouchPoints>0) return;
   document.querySelectorAll('.projCard, .eduCard, .iCard').forEach(card => {
     card.addEventListener('mousemove', e => {
       const r = card.getBoundingClientRect();
@@ -7335,6 +7367,8 @@ document.addEventListener('contextmenu', e => {
 // ENHANCEMENT 16, COMPREHENSIVE SOUND DESIGN
 // ══════════════════════════════════════════════════════════════════
 (function() {
+  // Skip on touch — hover sounds fire on tap and make no UX sense on mobile
+  if('ontouchstart' in window||navigator.maxTouchPoints>0) return;
   const btn = document.getElementById('soundToggle');
   if (!btn) return;
   let audioCtx = null, masterGain = null, muted = false, audioReady = false;
