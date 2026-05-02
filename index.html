@@ -8424,7 +8424,7 @@ document.addEventListener('contextmenu', e => {
 
   /* Hamburger toggle */
   #navHamburger{
-    display:none;flex-direction:column;justify-content:center;gap:5px;
+    display:flex!important;flex-direction:column;justify-content:center;gap:5px;
     width:36px;height:36px;background:transparent;border:1px solid var(--border);
     border-radius:3px;cursor:pointer;flex-shrink:0;margin-left:auto;padding:7px 8px;
     transition:border-color .2s;
@@ -8461,7 +8461,7 @@ document.addEventListener('contextmenu', e => {
   /* ── HERO ─────────────────────────────────────────────────── */
   #hero{padding:5.5rem 1.25rem 3rem;min-height:auto;gap:2rem}
   .heroName{font-size:clamp(3rem,13vw,5rem);margin-bottom:1rem}
-  .heroDesc{font-size:.88rem;max-width:100%}
+  .heroDesc{font-size:.88rem;max-width:100%;text-align:left!important}
   .heroR{gap:1rem}
   .photoWrap{width:160px}
   .miniStats{grid-template-columns:1fr 1fr}
@@ -8672,7 +8672,7 @@ document.addEventListener('contextmenu', e => {
 
   /* ── EXPERIENCE TIMELINE ─────────────────────────────────────── */
   .expTrack{padding:0}
-  .expCard{display:block;margin-bottom:2.5rem;padding:0 1.25rem}
+  .expCard{display:block;margin-bottom:2.5rem;padding:0}
   .expCardL,.expCardR{padding:0}
   .expCardR{padding-left:0;margin-top:1rem}
   .expCardL{padding-right:0}
@@ -8976,8 +8976,8 @@ document.addEventListener('contextmenu', e => {
   .industrySec[style]{padding:3rem 1.25rem!important}
 
   /* ── SECTIONS with inline padding:0 ──────────────────────────── */
-  section[style*="padding-left:0"]{padding-left:1.25rem!important}
-  section[style*="padding-right:0"]{padding-right:1.25rem!important}
+  section:not(#experience):not(#contact)[style*="padding-left:0"]{padding-left:1.25rem!important}
+  section:not(#experience):not(#contact)[style*="padding-right:0"]{padding-right:1.25rem!important}
 
   /* ── HERO side padding ───────────────────────────────────────── */
   #hero[style]{padding-left:1.25rem!important;padding-right:1.25rem!important}
@@ -8990,6 +8990,33 @@ document.addEventListener('contextmenu', e => {
 
   /* ── OVERFLOW GUARD ──────────────────────────────────────────── */
   html,body{overflow-x:hidden!important;max-width:100vw!important}
+
+  /* ── EXPERIENCE SECTION — zero horizontal padding so track fills viewport ── */
+  #experience{padding-left:0!important;padding-right:0!important}
+
+  /* ── EXPERIENCE CARDS — left-align text (desktop uses text-align:right) ─── */
+  .expLeft{text-align:left!important;padding:0!important}
+  .expBody{text-align:left!important}
+  .expRole,.expLocation,.expTitle,.expYear{text-align:left!important}
+
+
+  /* ── EXPERIENCE BANNER — fill full card width on mobile ─────────── */
+  .expBanner{width:100%!important;max-width:100%!important}
+  
+  /* ── EXPERIENCE SECTION — fix inner container widths ─────────────── */
+  .expInner,.expTrack{width:100%!important;box-sizing:border-box!important}
+  
+  /* ── EXPERIENCE CARD BODY font size — readable on narrow screens ─── */
+  .expBody{font-size:.82rem!important;line-height:1.7!important}
+  
+  /* ── HIDE SCHEMATIC ACTIVE FLOATING BUTTON ON MOBILE ────────────────────── */
+  #bgHint{display:none!important}
+
+  /* ── HIDE "TRY ME" SECRET BADGE LABELS ON MOBILE ───────────────────────── */
+  .secret-badge::after{display:none!important}
+
+  /* ── HIDE DUPLICATE SOUND TOGGLE ON MOBILE (ambientBtn serves this role) ── */
+  #soundToggle{display:none!important}
 
 } /* end FINAL MOBILE PATCH */
 </style>
