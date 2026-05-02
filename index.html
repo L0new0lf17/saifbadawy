@@ -8950,123 +8950,183 @@ document.addEventListener('contextmenu', e => {
    ═══════════════════════════════════════════════════════════════ */
 @media(max-width:640px){
 
-  /* ── OVERFLOW GUARD ──────────────────────────────────────────── */
+  /* ══════════════════════════════════════════════════════════════
+     OVERFLOW GUARD
+  ══════════════════════════════════════════════════════════════ */
   html,body{overflow-x:hidden!important;max-width:100vw!important}
+  section,#hero,.expInner,.expTrack{max-width:100%!important;overflow-x:hidden!important}
 
-  /* ── GENOME: hide sidebar, canvas fills full width ───────────── */
-  #gnList{display:none!important}
-  #gnCanvas{width:100%!important;min-height:260px}
-
-  /* ── QUOTE BLOCK inline padding override ────────────────────── */
-  .quoteBlock{padding:2rem 1.25rem!important}
-
-  /* ── COMMUTE WRAP: stack input+button vertically ─────────────── */
-  #commuteWrap [style*="padding:1.5rem 2rem"]{padding:1.25rem 1rem!important}
-  #commuteWrap [style*="padding:1rem 2rem"]{padding:1rem!important}
-  #commuteWrap [style*="display:flex"][style*="gap:.75rem"]{
-    flex-direction:column!important;gap:.5rem!important;
+  /* ══════════════════════════════════════════════════════════════
+     HERO — SINGLE COLUMN STACK (critical fix: CSS uses grid 2-col)
+  ══════════════════════════════════════════════════════════════ */
+  #hero{
+    display:flex!important;
+    flex-direction:column!important;
+    grid-template-columns:unset!important;
+    padding:5.5rem 1.25rem 3rem!important;
+    min-height:auto!important;
+    gap:2.5rem!important;
+    align-items:flex-start!important;
   }
-  #commuteInput{width:100%!important;box-sizing:border-box!important}
-  #commuteGrid{grid-template-columns:repeat(2,1fr)!important}
+  .heroL,.heroR{
+    width:100%!important;
+    max-width:100%!important;
+  }
+  .heroR{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    gap:1.25rem!important;
+  }
+  /* Photo: centred, smaller */
+  .photoWrap{
+    width:180px!important;
+    margin-bottom:0!important;
+  }
+  /* Mini stats + status panel: full width */
+  .miniStats,.statusPanel{width:100%!important}
 
-  /* ── EXPERIENCE track inline padding ─────────────────────────── */
-  .expTrack[style]{padding:0!important}
-
-  /* ── PLAN90 section padding ───────────────────────────────────── */
-  #plan90[style]{padding:3.5rem 1.25rem!important}
-
-  /* ── INDUSTRY SECTION padding ────────────────────────────────── */
-  .industrySec[style]{padding:3rem 1.25rem!important}
-
-  /* ── SECTIONS with inline padding:0 ──────────────────────────── */
-  section:not(#experience):not(#contact)[style*="padding-left:0"]{padding-left:1.25rem!important}
-  section:not(#experience):not(#contact)[style*="padding-right:0"]{padding-right:1.25rem!important}
-
-  /* ── HERO side padding ───────────────────────────────────────── */
-  #hero[style]{padding-left:1.25rem!important;padding-right:1.25rem!important}
-
-  /* ── CONTACT FORM PANEL ──────────────────────────────────────── */
-  #contactFormPanel{
-    width:calc(100vw - 1.5rem)!important;max-width:100%!important;
-    max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  /* ══════════════════════════════════════════════════════════════
+     HERO TEXT
+  ══════════════════════════════════════════════════════════════ */
+  .heroName{font-size:clamp(2.8rem,14vw,4rem)!important;line-height:.9!important}
+  .heroDesc{font-size:.88rem!important;max-width:100%!important;text-align:left!important;margin-bottom:1.5rem!important}
+  .heroBtns{
+    flex-direction:column!important;
+    gap:.75rem!important;
+    align-items:stretch!important;
+    width:100%!important;
+  }
+  .btnMain,.btnGhost{
+    width:100%!important;
+    justify-content:center!important;
+    text-align:center!important;
+    box-sizing:border-box!important;
+  }
+  .btnMain{padding:.9rem 1.5rem!important;font-size:.85rem!important}
+  #roiTrigger{
+    width:100%!important;
+    justify-content:center!important;
+    margin-top:.75rem!important;
+    padding:.75rem 1rem!important;
+    font-size:.6rem!important;
+    box-sizing:border-box!important;
   }
 
   /* ══════════════════════════════════════════════════════════════
-     COLD OPEN / INTRO BEAM — mobile fixes
+     STATUS PANEL — readable at all widths
   ══════════════════════════════════════════════════════════════ */
-  /* Make the scanning beam more visible on hi-DPI mobile screens */
-  #coScanline{height:3px!important;background:rgba(232,130,12,0.9)!important}
-  /* Full overflow clipping on cold open (no scroll) */
-  #coldOpen{overflow:hidden!important}
-  /* Anchor coContent absolutely so flex-height shifts don't jar the layout */
-  #coContent{
-    position:absolute!important;
-    top:50%!important;left:50%!important;
-    transform:translate(-50%,-50%)!important;
-    width:calc(100vw - 2rem)!important;
-    max-height:calc(100vh - 6rem)!important;
-    overflow-y:auto!important;overflow-x:hidden!important;
-    -webkit-overflow-scrolling:touch!important;
-    padding:1.5rem 1rem!important;
-  }
-  /* Name: don't let it overflow on small screens */
-  #coName{font-size:clamp(2.2rem,11vw,4rem)!important;margin-top:1.5rem!important}
-  /* Credential badges: reduce gap and allow smaller size */
-  #coCredentials{gap:.35rem!important;margin-top:1rem!important}
-  #coCredentials > div{min-width:90px!important;padding:.4rem .75rem!important}
-  #coCredentials > div span[style*="font-size:.72rem"]{font-size:.6rem!important}
-  /* Progress bar: slightly thicker for visibility */
-  #coProgress{height:3px!important}
-  /* Skip button: adequate tap target */
-  #coSkip{padding:.75rem 1rem!important;font-size:.7rem!important}
+  .statusPanel{overflow:hidden!important}
+  .spKey{min-width:68px!important;font-size:.58rem!important}
+  .spVal{font-size:.65rem!important;white-space:nowrap!important}
+  .spRow{padding:.45rem .9rem!important}
 
   /* ══════════════════════════════════════════════════════════════
-     HERO — fix floating button overlaps with status panel
+     FLOATING BUTTONS — right side, no overlap
   ══════════════════════════════════════════════════════════════ */
-  /* Move SB chat button to bottom-RIGHT on mobile so status panel is clear */
-  #sbChatBtn{
-    right:1.2rem!important;
-    left:auto!important;
-    bottom:1.2rem!important;
-  }
-  /* Move ambient sound button to bottom-RIGHT above chat button */
-  #ambientBtn{
-    right:1.2rem!important;
-    left:auto!important;
-    bottom:6rem!important;
-  }
-  /* Stagger right-side buttons so they don't overlap */
-  #scrollTop{
-    right:1.2rem!important;
-    bottom:5.5rem!important;
-  }
-  /* Ensure status panel has enough bottom padding to clear buttons */
-  .statusPanel{
-    padding-bottom:1rem!important;
-  }
-  /* HIDE DUPLICATE SOUND TOGGLE (ambientBtn handles audio on mobile) */
+  #sbChatBtn{right:1.2rem!important;left:auto!important;bottom:1.2rem!important}
+  #ambientBtn{right:1.2rem!important;left:auto!important;bottom:6rem!important}
+  #scrollTop{right:1.2rem!important;bottom:5.5rem!important}
   #soundToggle{display:none!important}
-  /* HIDE SCHEMATIC ACTIVE button */
   #bgHint{display:none!important}
-  /* HIDE "TRY ME" easter-egg labels in nav/sections */
   .secret-badge::after{display:none!important}
 
   /* ══════════════════════════════════════════════════════════════
-     HERO TEXT — full-width, readable
+     COLD OPEN / INTRO BEAM
   ══════════════════════════════════════════════════════════════ */
-  .heroName{font-size:clamp(2.6rem,14vw,3.5rem)!important}
-  .heroDesc{font-size:.88rem!important;max-width:100%!important;text-align:left!important}
+  #coScanline{height:3px!important;background:rgba(232,130,12,0.9)!important}
+  #coldOpen{overflow:hidden!important}
+  #coContent{
+    position:absolute!important;
+    top:50%!important;
+    left:50%!important;
+    transform:translate(-50%,-50%)!important;
+    width:calc(100vw - 2rem)!important;
+    max-height:calc(100vh - 5rem)!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding:1.5rem 1rem!important;
+  }
+  #coName{font-size:clamp(2.2rem,11vw,3.8rem)!important;margin-top:1.5rem!important}
+  #coCredentials{gap:.35rem!important;margin-top:1rem!important;flex-wrap:wrap!important;justify-content:center!important}
+  #coCredentials > div{min-width:90px!important;padding:.4rem .75rem!important}
+  #coProgress{height:3px!important}
+  #coSkip{padding:.75rem 1rem!important;font-size:.7rem!important}
+  .coLine{font-size:clamp(1.2rem,5.5vw,2rem)!important;padding:0 .75rem!important}
 
   /* ══════════════════════════════════════════════════════════════
-     EXPERIENCE SECTION — comprehensive mobile overhaul
+     TICKER
   ══════════════════════════════════════════════════════════════ */
-  /* Zero out section padding so expTrack fills full width */
-  #experience{padding-left:0!important;padding-right:0!important}
-  .expInner,.expTrack{width:100%!important;box-sizing:border-box!important;padding:0 1.25rem!important}
+  .ticker{font-size:.52rem!important}
+  .tItem{gap:.4rem!important;padding:0 .4rem!important}
 
-  /* ── expBanner: show company name (essential info!) ── */
-  .expBanner{width:100%!important;max-width:100%!important;box-sizing:border-box!important;padding:1rem!important}
-  /* Un-hide expBannerLeft to show company logo + name + location */
+  /* ══════════════════════════════════════════════════════════════
+     STATS STRIP
+  ══════════════════════════════════════════════════════════════ */
+  .statsStrip{grid-template-columns:1fr 1fr!important}
+  .sStat{padding:1.25rem 1rem 1.25rem 1.5rem!important}
+  .sNum{font-size:1.6rem!important}
+  .sLabel{font-size:.48rem!important}
+  .sDivLine{display:none!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     QUOTE STRIP
+  ══════════════════════════════════════════════════════════════ */
+  .quoteBlock{padding:2rem 1.25rem!important}
+  .quoteStrip{flex-direction:column!important;min-height:auto!important}
+  .quoteMain{padding:2rem 1.25rem!important;border-right:none!important;border-bottom:1px solid var(--border)!important}
+  .qStats{
+    width:100%!important;
+    border-left:none!important;
+    border-top:1px solid var(--border)!important;
+    flex-direction:row!important;
+    flex-wrap:wrap!important;
+    padding:1.5rem 1.25rem!important;
+    gap:1rem!important;
+    align-items:flex-start!important;
+    justify-content:space-around!important;
+  }
+  .qStat{flex:1!important;min-width:100px!important;text-align:center!important}
+  .qStatNum{font-size:2rem!important}
+  .qStatLabel{font-size:.52rem!important}
+  .qStatDivider{display:none!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     ABOUT SECTION
+  ══════════════════════════════════════════════════════════════ */
+  .aboutGrid{grid-template-columns:1fr!important;gap:2rem!important}
+  .imgPanelGrid{grid-template-columns:1fr!important;gap:1px!important}
+  .imgPanel{height:200px!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     SKILLS & GENOME
+  ══════════════════════════════════════════════════════════════ */
+  #gnList{display:none!important}
+  #gnCanvas{width:100%!important;min-height:260px!important}
+  .genomeRadarRow{grid-template-columns:1fr!important;display:grid!important;gap:1.5rem!important}
+  [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+  .skillsLayout{grid-template-columns:1fr!important;gap:1.5rem!important}
+  .skillGrid{grid-template-columns:1fr!important}
+  .chartsRow{grid-template-columns:1fr!important}
+  #radarCanvas{max-width:260px!important;margin:0 auto!important;display:block!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     EXPERIENCE SECTION — comprehensive overhaul
+  ══════════════════════════════════════════════════════════════ */
+  #experience{padding-left:0!important;padding-right:0!important}
+  .expInner,.expTrack{
+    width:100%!important;
+    box-sizing:border-box!important;
+    padding:0 1.25rem!important;
+  }
+  /* Banner — show company name */
+  .expBanner{
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    padding:1rem!important;
+  }
   .expBannerLeft{
     display:flex!important;
     opacity:1!important;
@@ -9074,34 +9134,28 @@ document.addEventListener('contextmenu', e => {
     position:static!important;
     transform:none!important;
     gap:.25rem!important;
+    flex-direction:column!important;
   }
-  /* Tweak company name size for mobile banner */
   .expBannerCo{font-size:1.1rem!important;line-height:1.2!important}
   .expBannerLoc{font-size:.48rem!important;letter-spacing:.1em!important}
-  /* Hide the logo SVG on very small banners (saves space) */
   .expLogoSvg{display:none!important}
-  /* Hide expBannerRight metrics in banner (shown in expMetrics cards below) */
   .expBannerRight{display:none!important}
-  /* Hide large decorative year watermark (transparent anyway) */
   .expBannerYear{display:none!important}
-
-  /* ── expNode: show year as horizontal label row ── */
+  /* Year node — horizontal row */
   .expNode{
     width:100%!important;
     height:auto!important;
     flex-direction:row!important;
     align-items:center!important;
     justify-content:flex-start!important;
-    padding:0.6rem 0 0.4rem!important;
-    gap:0.5rem!important;
+    padding:.6rem 0 .4rem!important;
+    gap:.5rem!important;
     border-top:1px solid rgba(232,130,12,0.25)!important;
-    margin-top:0.75rem!important;
+    margin-top:.75rem!important;
+    order:2!important;
   }
-  /* Hide connector lines (desktop-only decorations) */
   .expConnL,.expConnR{display:none!important}
-  /* Compact the node dot */
   .expDot{width:7px!important;height:7px!important;flex-shrink:0!important}
-  /* Year label: horizontal, readable */
   .expYear{
     font-size:.62rem!important;
     writing-mode:horizontal-tb!important;
@@ -9112,27 +9166,17 @@ document.addEventListener('contextmenu', e => {
     text-align:left!important;
     white-space:nowrap!important;
   }
-
-  /* ── expCard: use flex column so order attributes work ── */
-  .expCard{display:flex!important;flex-direction:column!important}
-  /* Text content always first, year node second, chart always last */
-  .expLeft,.expRight{order:1!important}
-  .expNode{order:2!important}
+  /* Card stacking: content → year → chart */
+  .expCard{display:flex!important;flex-direction:column!important;margin-bottom:2rem!important}
+  .expLeft{order:1!important;text-align:left!important;padding:0!important}
+  .expRight{order:1!important;text-align:left!important;padding:0!important;margin-top:1rem!important}
   .expViz{order:3!important;width:100%!important;margin:0!important;padding:0!important}
   .vizWrap canvas{width:100%!important;max-width:100%!important}
-
-  /* ── expLeft / expRight: left-align all text ── */
-  .expLeft{text-align:left!important;padding:0!important}
-  .expRight{text-align:left!important;padding:0!important}
-  .expBody{
-    text-align:left!important;
-    font-size:.82rem!important;
-    line-height:1.7!important;
-  }
+  .expBody{text-align:left!important;font-size:.82rem!important;line-height:1.7!important}
   .expRole,.expLocation,.expTitle{text-align:left!important}
   .expRole{font-size:.88rem!important}
-
-  /* ── expMetrics: 2-column grid ── */
+  .expTitle{font-size:1rem!important}
+  /* Metrics: 2-column grid */
   .expMetrics{
     display:grid!important;
     grid-template-columns:1fr 1fr!important;
@@ -9144,13 +9188,119 @@ document.addEventListener('contextmenu', e => {
     padding:.6rem .5rem!important;
     border:1px solid rgba(232,130,12,0.2)!important;
     border-radius:3px!important;
+    min-width:0!important;
   }
   .expMetNum{font-size:1.3rem!important}
   .expMetLabel{font-size:.48rem!important;letter-spacing:.08em!important}
-
-  /* ── expTags ── */
-  .expTags{flex-wrap:wrap!important;gap:.35rem!important;margin-top:.75rem!important;text-align:left!important;justify-content:flex-start!important}
+  /* Tags */
+  .expTags{flex-wrap:wrap!important;gap:.35rem!important;margin-top:.75rem!important;justify-content:flex-start!important}
   .etag{font-size:.52rem!important;padding:.2rem .5rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     EDUCATION
+  ══════════════════════════════════════════════════════════════ */
+  .eduGrid{grid-template-columns:1fr!important;gap:1rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     PROJECTS
+  ══════════════════════════════════════════════════════════════ */
+  .projGrid{grid-template-columns:1fr!important}
+  .projCard{min-height:200px!important}
+  .projReveal{padding:1rem!important}
+  .projRevealNum{font-size:2.5rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     MEMBERSHIPS
+  ══════════════════════════════════════════════════════════════ */
+  .memberGrid{grid-template-columns:1fr 1fr!important;gap:1px!important}
+  .memCard{padding:1.25rem 1rem!important}
+  .memCardTitle{font-size:.9rem!important}
+  .memLogo{width:36px!important;height:36px!important}
+  .memLogoWrap{width:52px!important;height:52px!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     FOOTPRINT / INDUSTRY
+  ══════════════════════════════════════════════════════════════ */
+  .footprintGrid{grid-template-columns:repeat(2,1fr)!important}
+  .industryGrid{grid-template-columns:1fr!important}
+  .iCard{padding:1.25rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     CONTACT / CTA
+  ══════════════════════════════════════════════════════════════ */
+  #contact{padding:5rem 1.25rem!important}
+  .ctaHead{font-size:clamp(2.5rem,10vw,4rem)!important}
+  .ctaSub{font-size:.85rem!important;max-width:100%!important}
+  .ctaLinks{flex-direction:column!important;align-items:center!important;gap:.75rem!important;max-width:100%!important}
+  .ctaBtn,.ctaLinks a{width:100%!important;max-width:320px!important;text-align:center!important;justify-content:center!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     TRUST STRIP
+  ══════════════════════════════════════════════════════════════ */
+  .trustInner{flex-direction:column!important;gap:1rem!important;text-align:center!important;padding:1.5rem 1.25rem!important;align-items:center!important}
+  .trustDivider{display:none!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════════════════════════════ */
+  footer{padding:2rem 1.25rem!important;flex-direction:column!important;gap:1rem!important;text-align:center!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     COMMUTE CALCULATOR + CONTACT SECTION
+  ══════════════════════════════════════════════════════════════ */
+  #commuteWrap [style*="padding:1.5rem 2rem"]{padding:1.25rem 1rem!important}
+  #commuteWrap [style*="padding:1rem 2rem"]{padding:1rem!important}
+  #commuteWrap [style*="display:flex"][style*="gap:.75rem"]{flex-direction:column!important;gap:.5rem!important}
+  #commuteInput{width:100%!important;box-sizing:border-box!important}
+  #commuteGrid{grid-template-columns:repeat(2,1fr)!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     PLAN 90 + INDUSTRY INLINE PADDING
+  ══════════════════════════════════════════════════════════════ */
+  #plan90[style]{padding:3.5rem 1.25rem!important}
+  .industrySec[style]{padding:3rem 1.25rem!important}
+  .p90Grid{grid-template-columns:1fr!important}
+  .p90Field.full{grid-column:1!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTIONS — inline padding overrides
+  ══════════════════════════════════════════════════════════════ */
+  section:not(#experience):not(#contact)[style*="padding-left:0"]{padding-left:1.25rem!important}
+  section:not(#experience):not(#contact)[style*="padding-right:0"]{padding-right:1.25rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     CONTACT FORM PANEL
+  ══════════════════════════════════════════════════════════════ */
+  #contactFormPanel{
+    width:calc(100vw - 1.5rem)!important;
+    max-width:100%!important;
+    max-height:90vh!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     ROI MODAL
+  ══════════════════════════════════════════════════════════════ */
+  .roiModal{padding:1.5rem 1.25rem!important;width:calc(100vw - 2rem)!important;max-width:100%!important}
+  .roiGrid{grid-template-columns:1fr!important}
+  .roiResults{padding:1rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     BOOKING MODAL — inline grid override
+  ══════════════════════════════════════════════════════════════ */
+  .makeBookingCard [style*="grid-template-columns:1fr 1fr"]{
+    grid-template-columns:1fr!important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     MISC / GLOBAL
+  ══════════════════════════════════════════════════════════════ */
+  select,input[type='text'],input[type='number']{font-size:16px!important}
+  #sectionDots{display:none!important}
+  #scrollPath{display:none!important}
+  .cursor,.cursorRing{display:none!important}
+  *{cursor:auto!important}
 
 } /* end FINAL MOBILE PATCH */
 </style>
