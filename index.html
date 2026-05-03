@@ -4318,7 +4318,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
   <div id="footerEgg">🔥 Built with ambition. Engineered to last. Now you know the secret.</div>
   <span>Engineering · Project Management · Energy &amp; Renewables</span>
   <span>London, England, United Kingdom · Open to Relocation</span>
-  <div style="display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;color:var(--white);text-transform:uppercase">
+  <div id="footerKbHint" style="display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;color:var(--white);text-transform:uppercase">
     <span style="border:1px solid rgba(255,255,255,.15);padding:.1rem .4rem">1</span>–<span style="border:1px solid rgba(255,255,255,.15);padding:.1rem .4rem">6</span> jump sections
     <span class="secret-badge" style="position:relative;width:16px;height:16px;flex-shrink:0;animation-delay:3.5s">
       <svg viewBox="0 0 10 10" fill="none"><rect x="1" y="2" width="8" height="6" rx="1" stroke="currentColor" stroke-width=".8"/></svg>
@@ -9401,6 +9401,23 @@ document.addEventListener('contextmenu', e => {
   select,input[type='text'],input[type='number']{font-size:16px!important}
   #sectionDots{display:none!important}
   #scrollPath{display:none!important}
+  /* Keyboard shortcut hint is irrelevant on touch devices */
+  #footerKbHint{display:none!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     EGG TOAST — constrain width so it doesn't overflow narrow screens
+     The desktop version uses white-space:nowrap + left:50% centering
+     which would extend ~540px on a 320px phone.
+  ══════════════════════════════════════════════════════════════ */
+  #eggToast{
+    max-width:calc(100vw - 2rem)!important;
+    white-space:normal!important;
+    width:max-content!important;
+    font-size:.52rem!important;
+    padding:.6rem 1rem!important;
+    text-align:center!important;
+    justify-content:center!important;
+  }
   /* ══════════════════════════════════════════════════════════════
      INDUSTRY SECTION — full padding override (no inline style)
   ══════════════════════════════════════════════════════════════ */
