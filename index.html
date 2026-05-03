@@ -9384,7 +9384,14 @@ document.addEventListener('contextmenu', e => {
   /* ══════════════════════════════════════════════════════════════
      ROI MODAL
   ══════════════════════════════════════════════════════════════ */
-  .roiModal{padding:1.5rem 1.25rem!important;width:calc(100vw - 2rem)!important;max-width:100%!important}
+  .roiModal{padding:1rem 0!important;width:calc(100vw - 2rem)!important;max-width:100%!important}
+  /* roiHeader and roiForm each carry 2.5rem sides — compounded with the old
+     modal padding that left only 168px of usable content width on 320px screens.
+     Fix: zero modal horizontal padding, give header/form their own 1rem sides
+     → 288px − 32px = 256px of clean content width. */
+  .roiHeader{padding:1.25rem 1rem 1rem!important}
+  .roiTitle{font-size:1.8rem!important;letter-spacing:.03em!important}
+  .roiForm{padding:1rem 1rem 1.25rem!important}
   .roiGrid{grid-template-columns:1fr!important}
   .roiResults{padding:1rem!important}
 
@@ -9805,6 +9812,113 @@ document.addEventListener('contextmenu', e => {
   #sbExpandBtn{
     min-width:36px!important;min-height:36px!important;
     width:36px!important;height:36px!important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     90-DAY PLAN OUTPUT — mobile layout
+     The output panel (p90Out) has no mobile overrides at all.
+     All sections use 2rem horizontal padding that crushes on
+     320–375px screens, and the footer buttons are under 44px.
+  ══════════════════════════════════════════════════════════════ */
+  /* Context bar + greeting + body + footer: reduce horizontal padding */
+  .p90CtxBar{padding:.7rem 1rem!important}
+  .p90Greeting{padding:.85rem 1rem .1rem!important;font-size:.6rem!important}
+  .p90Body{padding:1.1rem 1rem 1.4rem!important}
+  .p90Footer{
+    padding:.85rem 1rem!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    gap:.6rem!important;
+  }
+  .p90Sig{font-size:.44rem!important;letter-spacing:.06em!important;line-height:1.5!important}
+  .p90FooterBtns{width:100%!important;justify-content:stretch!important;gap:.5rem!important}
+  .p90DlBtn{
+    min-height:44px!important;
+    flex:1!important;
+    justify-content:center!important;
+    font-size:.72rem!important;
+  }
+  .p90EditBtn{
+    min-height:44px!important;
+    flex:1!important;
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    font-size:.48rem!important;
+  }
+  /* Tabs: three flex-equal panels; shrink labels so they fit ~107px each */
+  .p90Tab{padding:.65rem .2rem!important}
+  .p90Tab .p90Td{font-size:.78rem!important;letter-spacing:.03em!important}
+  .p90Tab .p90Tl{
+    font-size:.38rem!important;
+    letter-spacing:.05em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    max-width:100%!important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     RING MODAL — skill detail panel
+     min-width:300px + padding:2rem sides = 264px content area;
+     on 280-320px phones the card clips the screen edge.
+     Close button is tiny (text-only) and needs a 44px tap zone.
+  ══════════════════════════════════════════════════════════════ */
+  .ringCard{
+    min-width:0!important;
+    width:calc(100vw - 2.5rem)!important;
+    max-width:340px!important;
+    padding:2rem 1.25rem 1.5rem!important;
+  }
+  .ringClose{
+    min-width:44px!important;
+    min-height:44px!important;
+    display:flex!important;align-items:center!important;justify-content:flex-end!important;
+    top:.2rem!important;right:.2rem!important;
+    font-size:.52rem!important;
+  }
+  .ringSkillDesc{max-width:100%!important;font-size:.5rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     CV MODAL — flip card + download/close buttons
+     The flip and download buttons are desktop-size only; close
+     button sits above the card at top:-40px which can clip off-screen
+     on shorter phones.
+  ══════════════════════════════════════════════════════════════ */
+  .cvModal{width:calc(100vw - 2rem)!important;max-width:380px!important}
+  .cvFlipBtn{min-height:44px!important;width:100%!important;justify-content:center!important}
+  .cvDownloadBtn{min-height:48px!important;font-size:.82rem!important}
+  .cvCloseBtn{
+    top:-36px!important;
+    min-height:36px!important;
+    display:flex!important;align-items:center!important;
+    padding:.5rem .75rem!important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     EASTER EGG QUOTE BOX — reduce padding on narrow screens
+     padding:2.5rem 3rem on a 90%-wide card = 48px each side on
+     a 288px card, leaving only 192px for text — crushingly tight.
+  ══════════════════════════════════════════════════════════════ */
+  #eeQuoteBox{padding:1.75rem 1.25rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     CASE STUDY HERO TEXT — reclaim wasted width from right:5rem
+     The close button on mobile is repositioned to right:.5rem so
+     the 5rem right offset (80px) is no longer needed for clearance.
+     Reducing to 1.5rem (24px) restores ~56px of title text width.
+  ══════════════════════════════════════════════════════════════ */
+  .caseHeroText{right:1.5rem!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     EASTER EGG SKILL REVEAL — safety wrap on very narrow screens
+     white-space:nowrap is safe for all known skill names (max 21
+     chars ≈ 217px < 280px phone), but adding a fallback ensures
+     nothing clips if future skills are longer.
+  ══════════════════════════════════════════════════════════════ */
+  #eeSkillReveal{
+    max-width:calc(100vw - 2rem)!important;
+    white-space:normal!important;
+    text-align:center!important;
+    padding:.85rem 1.25rem!important;
   }
 
 } /* end FINAL MOBILE PATCH */
