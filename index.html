@@ -49,6 +49,16 @@ body:has(a:hover) #curR,body:has(button:hover) #curR{width:56px;height:56px;opac
   .spFooter,.langCard,.fpCard,.techItem,.pill,
   .eduCard,.certCard,.scrollHint{cursor:pointer!important}
   input,textarea,select{cursor:text!important}
+  /* Global tap-delay elimination for all touch devices */
+  a,button,[role="button"],[onclick],
+  .btnMain,.btnGhost,.ctaBtn,.ctaLink,.navCta,.btnMagnetic,
+  .projCard,.memCard,.iCard,.eduCard,.certCard,.expBanner,
+  .sCell,.discItem,.spFooter,.bhChip,.bookOption,[data-copy],
+  .sStat,.scrollHint,.langCard,.fpCard,.secret-badge,
+  #sbChatBtn,#ambientBtn,#scrollTop,#navHamburger,.sDot{
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:rgba(232,130,12,0.07);
+  }
 }
 
 nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:.9rem 2.5rem;background:rgba(7,7,7,0.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
@@ -592,8 +602,8 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
 /* ═══ NAV ACTIVE LINK ═══ */
 .navLinks a.navActive{color:var(--accent);background:rgba(232,130,12,0.08)}
 
-/* ═══ TICKER PAUSE ON HOVER ═══ */
-.ticker:hover .tickInner{animation-play-state:paused}
+/* ═══ TICKER PAUSE ON HOVER — desktop only ═══ */
+@media(pointer:fine){.ticker:hover .tickInner{animation-play-state:paused}}
 
 /* ═══ IMAGE PANEL REVEAL ═══ */
 .imgPanel .ipText{transform:translateY(8px);transition:transform .4s ease,opacity .4s}
@@ -1722,7 +1732,8 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
   width:max-content;
   animation:techScroll linear infinite;
 }
-.techScrollTrack:hover .techScrollInner { animation-play-state:paused; }
+/* Pause tech scroll on hover — desktop only; on touch it causes a brief freeze on tap */
+@media(pointer:fine){.techScrollTrack:hover .techScrollInner { animation-play-state:paused; }}
 
 @keyframes techScroll {
   0%   { transform:translateX(0); }
@@ -8504,8 +8515,11 @@ document.addEventListener('contextmenu', e => {
   #mobileNavDrawer a{
     font-family:var(--bebas);font-size:2rem;letter-spacing:.1em;
     color:var(--white);text-decoration:none;transition:color .2s;
+    touch-action:manipulation;min-height:52px;display:flex;align-items:center;
   }
-  #mobileNavDrawer a:hover{color:var(--accent)}
+  /* Hover accent only on real pointer devices; on touch use :active instead */
+  @media(pointer:fine){#mobileNavDrawer a:hover{color:var(--accent)}}
+  #mobileNavDrawer a:active{color:var(--accent)}
   #mobileNavDrawer .mDrawerCta{
     font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
     padding:.75rem 2rem;background:var(--accent);color:var(--black);
@@ -9558,14 +9572,20 @@ document.addEventListener('contextmenu', e => {
   /* ══════════════════════════════════════════════════════════════
      AMBIENT PANEL — constrain to viewport width on mobile
   ══════════════════════════════════════════════════════════════ */
+  /* bhPanel — anchor to viewport edges, not relative to parent offset.
+     Without this, the 300px panel starting at ~93px overflows 320px screens. */
   .bhPanel{
-    width:min(300px,calc(100vw - 2rem))!important;
-    left:0!important;
-    right:auto!important;
+    position:fixed!important;
+    left:1rem!important;
+    right:1rem!important;
+    bottom:80px!important;
+    width:auto!important;
+    max-width:calc(100vw - 2rem)!important;
+    top:auto!important;
   }
   /* Enlarge the close button to a tap-safe 44px target */
   #bhClose{
-    min-width:36px!important;min-height:36px!important;
+    min-width:44px!important;min-height:44px!important;
     display:flex!important;align-items:center!important;justify-content:center!important;
     font-size:1.4rem!important;
   }
@@ -9602,6 +9622,83 @@ document.addEventListener('contextmenu', e => {
      SECTION PADDING SAFETY — catch any remaining inline-padded sections
   ══════════════════════════════════════════════════════════════ */
   section{box-sizing:border-box!important;max-width:100vw!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     iOS KEYBOARD ZOOM PREVENTION
+     iOS zooms in when any input has font-size < 16px. This covers
+     every text input on the site: contact form, chatbot, commute,
+     ROI calculator, 90-day plan generator.
+  ══════════════════════════════════════════════════════════════ */
+  input,textarea,select,.cf-field,#sbChatInput,#commuteInput,
+  .p90Inp,.p90Sel,.roiInput,.roiSelect{font-size:16px!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     RANGE SLIDER — FAT-FINGER FRIENDLY
+     Default 14px thumb is too small for reliable mobile tapping.
+  ══════════════════════════════════════════════════════════════ */
+  .roiSlider{height:4px!important;margin:.75rem 0!important;cursor:pointer!important}
+  .roiSlider::-webkit-slider-thumb{width:26px!important;height:26px!important;box-shadow:0 0 0 3px rgba(232,130,12,0.25),0 0 14px rgba(232,130,12,0.4)!important}
+  .roiSlider::-moz-range-thumb{width:26px!important;height:26px!important;border-radius:50%!important;background:var(--accent)!important;border:none!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     TAP DELAY + FLASH ELIMINATION
+     touch-action:manipulation removes the 300ms tap delay and
+     prevents double-tap zoom on buttons/links/cards.
+     -webkit-tap-highlight-color replaces the ugly grey OS flash
+     with a subtle amber brand glow.
+  ══════════════════════════════════════════════════════════════ */
+  a,button,[role="button"],[onclick],
+  .projCard,.memCard,.iCard,.eduCard,.certCard,.expBanner,
+  .sCell,.discItem,.spFooter,.bhChip,.bookOption,[data-copy],
+  .sStat,.scrollHint,.langCard,.fpCard,.secret-badge,
+  #navHamburger,.sDot,.tickInner,.ticker{
+    touch-action:manipulation!important;
+    -webkit-tap-highlight-color:rgba(232,130,12,0.07)!important;
+  }
+  /* Inputs keep their default touch-action (panning) */
+  input,textarea,select{-webkit-tap-highlight-color:rgba(232,130,12,0.12)!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     ACTIVE / PRESS FEEDBACK ON TAPPABLE CARDS
+     Gives instant visual confirmation that a tap registered,
+     since hover states don't exist on touch.
+  ══════════════════════════════════════════════════════════════ */
+  .projCard:active,.memCard:active,.iCard:active,
+  .eduCard:active,.certCard:active{
+    transform:scale(0.97)!important;
+    transition:transform .08s ease!important;
+    opacity:0.88!important;
+  }
+  .expBanner:active{opacity:0.85!important;transition:opacity .08s ease!important}
+  .discItem:active{background:rgba(232,130,12,0.06)!important}
+  .bookOption:active{background:rgba(232,130,12,0.12)!important;border-color:rgba(232,130,12,0.6)!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     PREVENT TEXT SELECTION ON LONG-PRESS
+     Cards, banners, and decorative elements should not trigger
+     the OS text-selection popup on long-press.
+  ══════════════════════════════════════════════════════════════ */
+  .projCard,.memCard,.iCard,.eduCard,.certCard,.expBanner,
+  .sStat,.sCell,.discItem,.langCard,.fpCard,.pill,.bhChip,
+  .techItem,.tPill,.tickInner,.spFooter,nav,.heroName,
+  .secNum,.secTitle,.expBannerLeft,.expBannerRight{
+    -webkit-user-select:none!important;
+    user-select:none!important;
+  }
+  /* Allow selection in text content areas and inputs */
+  p,li,blockquote,.expBody,.projDesc,.aboutText,
+  input,textarea,.cf-field{-webkit-user-select:auto!important;user-select:auto!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     MODAL OVERSCROLL — CONTAIN SCROLL WITHIN MODALS
+     Without this, reaching the top/bottom of a scrollable modal
+     bounces the page behind it (iOS rubber-band effect).
+  ══════════════════════════════════════════════════════════════ */
+  .caseModal,.roiModal,.makeBookingCard,.memDlModal,
+  #sbChatMsgs,#sbChatWin,#contactFormPanel{
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
 
 } /* end FINAL MOBILE PATCH */
 </style>
@@ -11452,6 +11549,8 @@ document.addEventListener('contextmenu', e => {
   if(closeBtn) closeBtn.addEventListener('click', closeDrawer);
   drawer.querySelectorAll('a.mDrawerLink').forEach(a => a.addEventListener('click', closeDrawer));
   document.addEventListener('keydown', e => { if(e.key==='Escape') closeDrawer(); });
+  // Tap backdrop (the dark overlay behind the nav links) also closes drawer
+  drawer.addEventListener('click', e => { if(e.target === drawer) closeDrawer(); });
 })();
 
 // ── MOBILE TOUCH FIXES ────────────────────────────────────────
