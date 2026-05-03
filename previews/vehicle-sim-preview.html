@@ -128,6 +128,22 @@
     .lbl .nm{font-size:10.5px}
     .hint{display:none}
   }
+  /* Phone — compress labels to tiny chips so 3D vehicle stays visible */
+  @media (max-width:479px){
+    .topbar{top:14px;left:12px;right:12px;font-size:8.5px;letter-spacing:0.1em}
+    .topbar .r .live{font-size:8px}
+    .footbar{display:none}
+    .bracket{width:24px;height:24px}
+    .lbl .card{min-width:0;padding:3px 6px 4px 8px}
+    .lbl .ix{display:none}
+    .lbl .sub{display:none}
+    .lbl .nm{font-size:9px;letter-spacing:0.04em;line-height:1.2}
+    .controls{gap:5px;padding:5px 7px;bottom:36px}
+    .ctrl{padding:7px 8px;font-size:8px;letter-spacing:0.12em;gap:5px}
+    .ctrl .dot{width:5px;height:5px}
+    .infocard{width:calc(100% - 24px);right:12px;left:12px;bottom:110px}
+    .infocard .ti{font-size:15px}
+  }
 </style>
 </head>
 <body>
@@ -1487,17 +1503,20 @@
   /* ── label fixed screen positions — kept clear of corners/telemetry ── */
   function labelPositions(){
     /* arrange 5 labels around the perimeter, away from corner brackets and topbar */
-    const pad=40;
-    const topY = 110;          /* below top header */
-    const midY = H*0.50 - 30;
-    const lowY = H - 200;      /* above controls */
-    /* default sane positions for any aspect */
+    /* On phones (W<480) use tighter margins so the 3D vehicle body stays clear */
+    const isPhone = W < 480;
+    const pad     = isPhone ? 10 : 40;
+    const rPad    = isPhone ? 10 : 40;
+    const lblW    = isPhone ? 80 : 180;   /* approximate rendered label width */
+    const topY    = isPhone ? 90  : 110;
+    const midY    = H * 0.50 - 30;
+    const lowY    = isPhone ? H - 150 : H - 200;
     return [
-      { x: W - 180 - pad, y: topY },   // POWERTRAIN — right top (well below corner)
-      { x: W - 180 - pad, y: lowY },   // SUSPENSION  — right bottom
-      { x: pad,           y: topY },   // ELECTRICAL — left top
-      { x: pad,           y: lowY },   // BRAKING    — left bottom
-      { x: pad,           y: midY }    // FUEL       — left middle
+      { x: W - lblW - rPad, y: topY },   // POWERTRAIN — right top
+      { x: W - lblW - rPad, y: lowY },   // SUSPENSION  — right bottom
+      { x: pad,             y: topY },   // ELECTRICAL — left top
+      { x: pad,             y: lowY },   // BRAKING    — left bottom
+      { x: pad,             y: midY }    // FUEL       — left middle
     ];
   }
 

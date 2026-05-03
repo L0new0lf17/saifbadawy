@@ -8697,10 +8697,10 @@ document.addEventListener('contextmenu', e => {
   #sectionDots{display:none}
 
   /* ── SCROLL TOP ───────────────────────────────────────────────── */
-  #scrollTop{bottom:1.5rem;right:1.2rem;width:36px;height:36px}
+  #scrollTop{bottom:1.5rem;right:1.2rem;width:44px;height:44px}
 
   /* ── AMBIENT BUTTON (sound) ──────────────────────────────────── */
-  #ambientBtn{bottom:5rem;left:1.2rem;width:34px;height:34px}
+  #ambientBtn{bottom:5rem;left:1.2rem;width:44px;height:44px}
 
   /* ── COLD OPEN ────────────────────────────────────────────────── */
   #coldOpen{overflow-x:hidden}
@@ -9597,6 +9597,12 @@ document.addEventListener('contextmenu', e => {
     display:flex!important;align-items:center!important;justify-content:center!important;
     font-size:1.4rem!important;
   }
+  /* bhChip is a div (not button) so .is-touch rule misses it — fix manually */
+  .bhChip{
+    min-height:44px!important;
+    padding:.7rem .9rem!important;
+    display:inline-flex!important;align-items:center!important;
+  }
 
   /* ══════════════════════════════════════════════════════════════
      GNOME / RADAR CANVAS — remove crosshair inline cursor
@@ -9768,6 +9774,20 @@ document.addEventListener('contextmenu', e => {
 
     /* Nav: keep it compact */
     #navbar{padding:.6rem 1.5rem!important}
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     CHATBOT SEND + EXPAND BUTTONS — touch-safe 44px targets
+     Both are <button> so min-height:44px comes from .is-touch rule,
+     but min-width needs an explicit override since they're fixed-width.
+  ══════════════════════════════════════════════════════════════ */
+  #sbChatSend{
+    min-width:44px!important;min-height:44px!important;
+    width:44px!important;height:44px!important;
+  }
+  #sbExpandBtn{
+    min-width:36px!important;min-height:36px!important;
+    width:36px!important;height:36px!important;
   }
 
 } /* end FINAL MOBILE PATCH */
@@ -12485,10 +12505,14 @@ document.addEventListener('contextmenu', e => {
         canvas.style.cursor = 'default';
       }
     }
-    // Keep tooltip following cursor
+    // Keep tooltip following cursor — clamped within canvas container
     if(hit>=0 && tt){
-      tt.style.left = (e.clientX-rect.left+14)+'px';
-      tt.style.top  = (e.clientY-rect.top-40)+'px';
+      const ttW = tt.offsetWidth  || 210;
+      const ttH = tt.offsetHeight || 120;
+      const rawL = e.clientX - rect.left + 14;
+      const rawT = e.clientY - rect.top  - 40;
+      tt.style.left = Math.max(4, Math.min(rawL, rect.width  - ttW - 4)) + 'px';
+      tt.style.top  = Math.max(4, Math.min(rawT, rect.height - ttH - 4)) + 'px';
     }
   });
 
