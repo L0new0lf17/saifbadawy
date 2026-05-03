@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E6QSWDEMLX"></script>
 <script>
@@ -40,6 +40,9 @@ body:has(a:hover) #curR,body:has(button:hover) #curR{width:56px;height:56px;opac
    the safety net in case script loads late.                               */
 @media(pointer:coarse){
   #cur,#curR{display:none!important}
+  /* ambientGlow is never animated on touch (JS-guarded) — hide it to
+     release the GPU compositing layer its will-change:transform allocates */
+  #ambientGlow{display:none!important}
   body,*{cursor:auto!important}
   a,button,[role="button"],[onclick],
   .btnMain,.btnGhost,.ctaBtn,.ctaLink,.expBanner,
@@ -2880,6 +2883,9 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
+<!-- Preconnect to Google Fonts origin before the font link fires — saves ~150ms on mobile -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 
@@ -3393,17 +3399,17 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
 <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
   <div class="imgPanelGrid">
     <div class="imgPanel">
-      <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80" alt="Project management">
+      <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80" alt="Project management" loading="lazy" decoding="async">
       <div class="ipOverlay"></div>
       <div class="ipText"><div class="ipTitle">Project Management &amp; Process Optimisation</div><div class="ipSub">PRINCE2 · EVM · CPM</div></div>
     </div>
     <div class="imgPanel">
-      <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80" alt="Solar farm">
+      <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80" alt="Solar farm" loading="lazy" decoding="async">
       <div class="ipOverlay"></div>
       <div class="ipText"><div class="ipTitle">Renewable Energy</div><div class="ipSub">Solar PV · ESG · Net Zero</div></div>
     </div>
     <div class="imgPanel">
-      <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80" alt="Offshore platform">
+      <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80" alt="Offshore platform" loading="lazy" decoding="async">
       <div class="ipOverlay"></div>
       <div class="ipText"><div class="ipTitle">AI Implementation &amp; Process Strategy</div><div class="ipSub">SCADA · AWS · BMS</div></div>
     </div>
@@ -3959,7 +3965,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
       <div class="pScan"></div>
       <div>
         <div class="projImg">
-          <img src="https://images.unsplash.com/photo-1563883830555-79971475cc22?w=1200&q=80&auto=format" alt="Oil field, Al-Zubair, Iraq" style="object-fit:contain;">
+          <img src="https://images.unsplash.com/photo-1563883830555-79971475cc22?w=1200&q=80&auto=format" alt="Oil field, Al-Zubair, Iraq" style="object-fit:contain;" loading="lazy" decoding="async">
           <div class="pio"></div>
           <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" style="position:absolute;bottom:0;left:0;width:100%;padding:1rem">
             <text x="8" y="14" fill="rgba(232,130,12,.7)" font-family="'JetBrains Mono',monospace" font-size="7" letter-spacing="2">PROJECT PHASES 2021</text>
@@ -3999,7 +4005,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
       <div class="projTag">EPC · Dubai and Basra</div>
       <div class="projTitle">EPC Programme · 65+ Site Personnel</div>
       <div class="projImg" style="height:150px;margin-bottom:1rem">
-        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80" alt="Engineering site">
+        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80" alt="Engineering site" loading="lazy" decoding="async">
         <div class="pio"></div>
       </div>
       <p class="projDesc">I coordinated over 65 site personnel across construction and commissioning phases, delivered an 11% CAPEX reduction through competitive tendering and maintained 90% on-time delivery under rigorous HSE and COSHH governance throughout.</p>
@@ -4016,7 +4022,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
       <div class="projTag">Renewable Energy and Sustainability</div>
       <div class="projTitle">Solar PV and ESG Programme · £15M</div>
       <div class="projImg" style="height:150px;margin-bottom:1rem">
-        <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800&q=80" alt="Wind turbines">
+        <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800&q=80" alt="Wind turbines" loading="lazy" decoding="async">
         <div class="pio"></div>
       </div>
       <p class="projDesc">I am managing solar PV feasibility, FEED coordination and ESG decarbonisation strategies across concurrent client projects. Two of my technical submissions were shortlisted for green infrastructure funding. I also applied Six Sigma to cut approval cycles by 30%.</p>
@@ -4033,7 +4039,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
       <div class="projTag">Research and Sustainability</div>
       <div class="projTitle">Net-Zero Retrofit Strategy · Dubai Building</div>
       <div class="projImg" style="height:150px;margin-bottom:1rem">
-        <img src="https://images.unsplash.com/photo-1497440001374-f26997328c1b?w=800&q=80" alt="Sustainable building">
+        <img src="https://images.unsplash.com/photo-1497440001374-f26997328c1b?w=800&q=80" alt="Sustainable building" loading="lazy" decoding="async">
         <div class="pio"></div>
         <svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg" style="position:absolute;bottom:0;left:0;width:100%;padding:.75rem">
           <path d="M0,55 L40,50 L80,42 L120,30 L160,18 L220,7 L280,4" stroke="rgba(232,130,12,.8)" stroke-width="1.5" fill="none"/>
@@ -4055,7 +4061,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
       <div class="projTag">Environmental Engineering · Decarbonisation</div>
       <div class="projTitle">Carbon Reduction · EIA and Emissions Strategy</div>
       <div class="projImg" style="height:150px;margin-bottom:1rem">
-        <img src="https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&q=80" alt="Environmental sustainability">
+        <img src="https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=800&q=80" alt="Environmental sustainability" loading="lazy" decoding="async">
         <div class="pio"></div>
         <svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg" style="position:absolute;bottom:0;left:0;width:100%;padding:.75rem">
           <text x="8" y="14" fill="rgba(232,130,12,.7)" font-family="'JetBrains Mono',monospace" font-size="7" letter-spacing="1.5">CO₂ REDUCTION TRAJECTORY</text>
@@ -8641,7 +8647,7 @@ document.addEventListener('contextmenu', e => {
   #sbChatWin{
     bottom:0!important;left:0!important;right:0!important;
     width:100%!important;max-width:100%!important;
-    max-height:75vh;border-radius:12px 12px 0 0;
+    max-height:75svh;border-radius:12px 12px 0 0;
     border-left:none;border-right:none;border-bottom:none;
     transform:translateY(100%) scale(1)!important;
   }
@@ -8664,7 +8670,7 @@ document.addEventListener('contextmenu', e => {
     width:calc(100vw - 1.5rem)!important;
     max-width:100%!important;
     padding:1.25rem 1rem!important;
-    max-height:85vh;overflow-y:auto;
+    max-height:85svh;overflow-y:auto;-webkit-overflow-scrolling:touch;
   }
   .bookOption{padding:.65rem .75rem;gap:.5rem}
   .bookOptionLabel{font-size:.62rem}
@@ -8676,6 +8682,7 @@ document.addEventListener('contextmenu', e => {
     max-width:100%!important;
     padding:1.5rem 1.25rem!important;
     border-radius:6px;
+    max-height:85svh!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;
   }
 
   /* ── GENOME SECTION ──────────────────────────────────────────── */
@@ -8767,7 +8774,8 @@ document.addEventListener('contextmenu', e => {
 
   /* ── CASE STUDY OVERLAY ──────────────────────────────────────── */
   .caseOverlay{padding:.5rem}
-  .caseClose{top:.5rem;right:.5rem;width:32px;height:32px}
+  .caseModal{max-height:88svh!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important}
+  .caseClose{top:.5rem;right:.5rem;min-width:44px!important;min-height:44px!important;padding:.5rem 1rem!important;display:flex!important;align-items:center!important;justify-content:center!important}
   .caseSteps{flex-direction:column;gap:.5rem}
   .caseStep{padding:.6rem .75rem}
 
@@ -9698,6 +9706,68 @@ document.addEventListener('contextmenu', e => {
   #sbChatMsgs,#sbChatWin,#contactFormPanel{
     overscroll-behavior:contain!important;
     -webkit-overflow-scrolling:touch!important;
+  }
+
+
+  /* ══════════════════════════════════════════════════════════════
+     iOS SAFE AREA INSETS — HOME INDICATOR CLEARANCE
+     On iPhone X+, the home indicator bar sits at the very bottom
+     of the screen. Fixed elements with a fixed bottom value can
+     be partially or fully hidden behind it.
+     env(safe-area-inset-bottom) adds the exact height of that bar
+     (typically ~34px) so buttons always sit above it.
+  ══════════════════════════════════════════════════════════════ */
+  @supports(padding: env(safe-area-inset-bottom)){
+    #sbChatBtn{bottom:calc(1.2rem + env(safe-area-inset-bottom))!important}
+    #ambientBtn{bottom:calc(5rem + env(safe-area-inset-bottom))!important}
+    #bgHint{bottom:calc(1.2rem + env(safe-area-inset-bottom))!important}
+    #scrollTop{bottom:calc(1.5rem + env(safe-area-inset-bottom))!important}
+    #sbChatWin{padding-bottom:calc(.5rem + env(safe-area-inset-bottom))!important}
+    .bhPanel{bottom:calc(80px + env(safe-area-inset-bottom))!important}
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     iOS SAFARI VIEWPORT HEIGHT FIX — 100svh
+     iOS Safari's browser chrome (URL bar + bottom toolbar) is
+     NOT included in 100vh, so elements set to 100vh get clipped.
+     100svh = "smallest viewport height" — the viewport height
+     with the browser chrome fully visible (most conservative).
+     This means the hero/cold-open always fit without clipping.
+  ══════════════════════════════════════════════════════════════ */
+  #hero{min-height:100svh!important}
+  #coldOpen{height:100svh!important}
+  #coContent{max-height:calc(100svh - 5rem)!important}
+
+  /* ══════════════════════════════════════════════════════════════
+     LANDSCAPE PHONE — SHORT VIEWPORT ADJUSTMENTS
+     On phones rotated to landscape, viewport height is ~350–430px.
+     The cold open and hero need to scale down significantly.
+  ══════════════════════════════════════════════════════════════ */
+  @media(max-height:500px) and (orientation:landscape){
+    /* Cold open: compress vertical padding and shrink type */
+    #coldOpen{height:100svh!important;overflow-y:auto!important}
+    #coContent{
+      padding:0.75rem 1rem!important;
+      max-height:calc(100svh - 2rem)!important;
+      gap:.5rem!important;
+    }
+    #coName{font-size:clamp(1.4rem,7vw,2rem)!important;margin-top:.5rem!important}
+    .coLine{font-size:clamp(.9rem,3.5vw,1.4rem)!important}
+    #coCredentials{gap:.2rem!important;margin-top:.4rem!important}
+    #coCredentials > div{padding:.25rem .6rem!important;font-size:.6rem!important}
+    #coSkip{padding:.5rem .75rem!important}
+
+    /* Hero: single column, tighter padding */
+    #hero{
+      grid-template-columns:1fr!important;
+      padding:4rem 1.5rem 3rem!important;
+      gap:1.5rem!important;
+      min-height:100svh!important;
+    }
+    .heroOrb{display:none!important}
+
+    /* Nav: keep it compact */
+    #navbar{padding:.6rem 1.5rem!important}
   }
 
 } /* end FINAL MOBILE PATCH */
