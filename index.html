@@ -11796,7 +11796,7 @@ document.addEventListener('contextmenu', e => {
 
     document.getElementById('roiNarrative').innerHTML = narrative;
 
-    // ── Silent email notification to Saif (with location) ───────────────
+    // ── Email notification to Saif ───────────────
     (function() {
       const _payload = {
         company:     company,
@@ -11810,18 +11810,8 @@ document.addEventListener('contextmenu', e => {
         salary:      salaryStr,
         roi_multiple: roiMultiple + 'x',
         timestamp:   new Date().toLocaleString('en-GB'),
-        location:    'Fetching…',
       };
-      // Silently fetch city + country from ipapi.co, then send
-      fetch('https://ipapi.co/json/')
-        .then(r => r.json())
-        .then(geo => {
-          _payload.location = [geo.city, geo.region, geo.country_name].filter(Boolean).join(', ');
-        })
-        .catch(() => { _payload.location = 'Unknown'; })
-        .finally(() => {
-          emailjs.send('service_4c6752b', 'template_roi01', _payload).catch(() => {});
-        });
+      emailjs.send('service_4c6752b', 'template_roi01', _payload).catch(() => {});
     })();
     // ─────────────────────────────────────────────────────────────────────
 
