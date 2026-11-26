@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+/* Email is assembled at runtime so scrapers reading the raw HTML cannot harvest it. */
+window._em=function(){return atob('bW9jLmxpYW1nQHl3YWRhYmJhaGVmaWFz').split('').reverse().join('');};
+window._mailto=function(q){location.href='mailto:'+window._em()+(q?'?'+q:'');};
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('[data-em]').forEach(function(el){el.textContent=el.textContent.replace('[email]',window._em());});
+  document.querySelectorAll('a[data-mailto]').forEach(function(a){a.addEventListener('click',function(e){if(a.hasAttribute('data-copy'))return;e.preventDefault();window._mailto(a.dataset.mailto);});});
+});
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <!-- Google tag (gtag.js) -->
@@ -3082,7 +3091,6 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
     "addressLocality": "London",
     "addressCountry": "GB"
   },
-  "email": "saifehabbadawy@gmail.com",
   "alumniOf": [
     {
       "@type": "CollegeOrUniversity",
@@ -4324,7 +4332,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
         </div>
         <div class="p90Body" id="p90Body"></div>
         <div class="p90Footer">
-          <span class="p90Sig">Saif Badawy · saifehabbadawy@gmail.com · London, UK</span>
+          <span class="p90Sig" data-em>Saif Badawy · [email] · London, UK</span>
           <div class="p90FooterBtns">
             <button class="p90EditBtn" onclick="p90Reset()">← Adjust inputs</button>
             <button class="p90DlBtn" onclick="p90Download()">
@@ -4355,7 +4363,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
     <span class="tagCloudItem" style="--float-y:-5px;animation-duration:5.1s;animation-delay:1.8s">Consulting</span>
   </div>
   
-  <a href="mailto:saifehabbadawy@gmail.com" class="ctaBtn btnMagnetic" id="magnetBtn">Let's Talk <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <a href="#contact" data-mailto="" class="ctaBtn btnMagnetic" id="magnetBtn">Let's Talk <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
   <button onclick="openBookingModal()" class="ctaBtn btnMagnetic" style="background:transparent;border:1px solid rgba(232,130,12,.5);color:var(--accent);margin-left:1rem;font-family:var(--bebas);font-size:.9rem;letter-spacing:.15em;cursor:none">Book an Interview <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2a5 5 0 1 1 0 10A5 5 0 0 1 7 2zm0 3v2l1.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 
   <!-- ══ COMMUTE TIMER ══ -->
@@ -4395,7 +4403,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
     </div>
   </span>
     <button class="ctaLink" id="cvTrigger" style="background:none;border:none;cursor:none;font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:.15rem;transition:color .2s,border-color .2s" onmouseenter="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseleave="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">Request CV</button>
-    <a href="mailto:saifehabbadawy@gmail.com" class="ctaLink copyable" data-copy="saifehabbadawy@gmail.com">saifehabbadawy@gmail.com</a>
+    <a href="#contact" data-mailto="" class="ctaLink copyable" data-copy="email" data-em>[email]</a>
   </div>
 </section>
 
@@ -5638,7 +5646,7 @@ footer{border-top:1px solid var(--border);padding:.9rem 2.5rem;display:flex;just
               <div class="cvPreviewLine w70"></div>
             </div>
           </div>
-          <a href="mailto:saifehabbadawy@gmail.com?subject=CV Request" class="cvDownloadBtn" id="cvDownloadBtn">
+          <a href="#contact" data-mailto="subject=CV%20Request" class="cvDownloadBtn" id="cvDownloadBtn">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v8M3 7l4 4 4-4M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Request Full CV
           </a>
@@ -6533,7 +6541,7 @@ if(!('ontouchstart' in window)&&!navigator.maxTouchPoints) document.querySelecto
 document.addEventListener('contextmenu', e => {
   e.preventDefault();
   const msg = document.createElement('div');
-  msg.textContent = 'saifehabbadawy@gmail.com';
+  msg.textContent = window._em();
   msg.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;background:#E8820C;color:#070707;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;padding:.4rem .85rem;z-index:9999;pointer-events:none;animation:eggFade .3s ease`;
   document.body.appendChild(msg);
   setTimeout(() => msg.remove(), 2500);
@@ -6753,7 +6761,7 @@ document.addEventListener('contextmenu', e => {
       // Silent notification to Saif
       const notif = document.createElement('iframe');
       notif.style.display = 'none';
-      notif.src = 'mailto:saifehabbadawy@gmail.com?subject=CV%20Request%20from%20Portfolio%20Visitor&body=Someone%20visited%20your%20portfolio%20and%20requested%20your%20CV%20at%20' + encodeURIComponent(new Date().toUTCString()) + '%20from%20' + encodeURIComponent(window.location.href);
+      notif.src = 'mailto:' + window._em() + '?subject=CV%20Request%20from%20Portfolio%20Visitor&body=Someone%20visited%20your%20portfolio%20and%20requested%20your%20CV%20at%20' + encodeURIComponent(new Date().toUTCString()) + '%20from%20' + encodeURIComponent(window.location.href);
       document.body.appendChild(notif);
       setTimeout(() => notif.remove(), 3000);
       openCV();
@@ -7006,7 +7014,7 @@ document.addEventListener('contextmenu', e => {
   document.querySelectorAll('[data-copy]').forEach(el => {
     el.addEventListener('click', e => {
       e.preventDefault();
-      const text = el.dataset.copy;
+      const text = el.dataset.copy === 'email' ? window._em() : el.dataset.copy;
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(showToast);
       } else {
@@ -10062,7 +10070,7 @@ document.addEventListener('contextmenu', e => {
     certifications: "Credentials:<br><br>✅ <strong>PRINCE2 Practitioner</strong><br>✅ <strong>Lean Six Sigma Black Belt</strong><br>✅ <strong>McKinsey Forward Leadership Programme</strong><br>🔄 <strong>LEED Green Associate</strong>, in progress<br>🔄 <strong>PMP</strong>, in progress<br><br>Memberships: AMIMechE · M-IEEE · M-IET · M-ASME · Engineers Australia. All current, all with active membership numbers.",
     education: "Two degrees:<br><br>🎓 <strong>MSc Engineering Management</strong>, Brunel University London (2023–2024). Dissertation on environmental impact assessments in energy sector data centres across Sweden, Saudi Arabia and the Netherlands. Elected Student Rep for the cohort of 216.<br><br>🎓 <strong>BEng (Hons) Mechanical Engineering</strong>, University of Wollongong, Australia (2019–2023). Dissertation was a net-zero carbon retrofit for a Dubai commercial building: solar PV, biogas, NPV-positive business case.",
     location: "Chiswick, West London (W4), England, UK. I also have residency in the UAE and Egypt, so I'm familiar with the Gulf and comfortable working internationally.",
-    contact: "Best ways to reach me:<br><br>📧 <strong>saifehabbadawy@gmail.com</strong><br>💼 <strong>linkedin.com/in/saif-badawy</strong><br>📍 Chiswick, London W4<br><br>I usually respond same day.",
+    contact: "Best ways to reach me:<br><br>📧 <strong>" + window._em() + "</strong><br>💼 <strong>linkedin.com/in/saif-badawy</strong><br>📍 Chiswick, London W4<br><br>I usually respond same day.",
     experience: "Career so far:<br><br>🔷 <strong>Freelance Engineering and PM Consultant</strong>, Jan 2025 to now. UK and Europe. Renewable energy FEED, ESG strategy, CPM scheduling across concurrent client projects.<br><br>🔷 <strong>Phantom Contracting LLC</strong>, Feb to Dec 2024. Assistant General Manager. EPC operations, supply chain coordination. 12% cost reduction, 20% productivity improvement.<br><br>🔷 <strong>Wood PLC</strong>, 2022. Project Engineer, Dubai and Basra. 65 personnel, 11% CAPEX reduction, 90% on-time delivery.<br><br>🔷 <strong>ExxonMobil</strong>, 2021. Project Engineer, UAE and Iraq. $10 to $25M upstream asset. On time and on budget.<br><br>🔷 <strong>Al Habtoor Group</strong>, 2015. Engineering Intern, UAE.",
     hazop: "Yes, HAZOP is something I've done properly. At ExxonMobil I supported HAZOP review preparation, reviewed P&IDs and isometrics against ASME B31.3 and API 650, and was involved in resolving the issues that came out before they became construction problems. Being thorough at that stage saves a lot of pain later.",
     sixsigma: "Certified Lean Six Sigma Black Belt and I've actually applied it. Most recently I used DMAIC to cut approval cycle times by 30% on consulting engagements, which brought workflows in line with ISO 9001 and ASME standards. The McKinsey Forward Programme sits alongside it, similar analytical framing in a different context.",
@@ -10070,7 +10078,7 @@ document.addEventListener('contextmenu', e => {
     freelance: "Since January 2025 I've been consulting independently for UK and European engineering firms. Typically running two or three concurrent client projects: renewable energy FEED coordination, solar feasibility studies, heat recovery analyses, ESG roadmaps. Managing schedules on Primavera P6 and MS Project with CPM and EVM. Two client submissions got shortlisted for green infrastructure funding. Applied Six Sigma to cut approval cycles by 30% on one engagement.",
     phantom: "Phantom Contracting LLC was Feb to Dec 2024, part-time and remote as Assistant General Manager. Manufacturing and infrastructure EPC projects. Supply chain coordination, delivery timelines. Cut delivery delays by 10%, 15% performance uplift on the fabrication side, process automation that drove a 12% cost reduction and 20% productivity improvement. 98% quality compliance throughout.",
     portfolio: "Total portfolio value delivered across my career is over £20M across upstream oil and gas, EPC civil and mechanical works, renewable energy feasibility, across four countries. The two headline programmes are the ExxonMobil upstream asset (UAE and Iraq, 2021) and the Wood PLC EPC programme (Dubai and Basra, 2022). Currently consulting on sustainable infrastructure projects up to £15M.",
-    availability: "Available immediately. No notice period. If something is the right fit I can start quickly. Best to reach me at saifehabbadawy@gmail.com or book a call using the option above.",
+    availability: "Available immediately. No notice period. If something is the right fit I can start quickly. Best to reach me at " + window._em() + " or book a call using the option above.",
     salary: "SALARY_FLOW",
     ai: "It's something I'm genuinely working in, not just interested in. I've been mapping engineering PM workflows to automation, developing AI prompt frameworks for project controls processes, and advising on where AI makes sense in safety-critical environments. I work with SCADA systems, AWS cloud infrastructure and BMS in the context of process optimisation and smart infrastructure. On the personal side, this entire portfolio was built by me from scratch: the genome visualisation, ROI calculator, 90-day plan generator, commute calculator and this chatbot. Engineers who thrive in the next decade will speak both languages: steel and data.",
     hse: "HSE has been a consistent thread through every operational role. At Wood PLC I maintained full HSE and COSHH governance across construction and commissioning, zero LTIs across the programme. At ExxonMobil I applied HSE standards throughout FEED and execution on a live energy asset. Permit-to-work, COSHH, HAZOP preparation, site inductions. I treat these as how you keep a programme safe and claims-free.",
@@ -10276,7 +10284,7 @@ document.addEventListener('contextmenu', e => {
 
     const options = [
       { icon: '📅', label: 'Book a call', sub: 'calendly.com/saifehabbadawy/30min', action: () => window.open('https://calendly.com/saifehabbadawy/30min') },
-      { icon: '📧', label: 'Email directly', sub: 'saifehabbadawy@gmail.com', action: () => window.open('mailto:saifehabbadawy@gmail.com?subject=Interview%20Request%20%E2%80%94%20Let\'s%20Talk') },
+      { icon: '📧', label: 'Email directly', sub: window._em(), action: () => window._mailto('subject=Interview%20Request%20%E2%80%94%20Let%27s%20Talk') },
       { icon: '💼', label: 'Connect on LinkedIn', sub: 'linkedin.com/in/saif-badawy', action: () => window.open('https://linkedin.com/in/saif-badawy') },
       { icon: '📄', label: 'Request CV first', sub: 'I\'ll send it within minutes', action: () => window._showModalCVForm() },
     ];
@@ -10586,7 +10594,7 @@ document.addEventListener('contextmenu', e => {
         addMsg('I\'d like to book a call with Saif', 'user');
         respond('Great, here are the best ways to make that happen:', makeBookingCard());
       }},
-      {label:'✉ Email Saif', fn: () => window.open('mailto:saifehabbadawy@gmail.com'), primary: true},
+      {label:'✉ Email Saif', fn: () => window._mailto(), primary: true},
       {label:'📄 Request CV', fn: triggerCVRequest},
       {label:'🔗 LinkedIn', fn: () => window.open('https://linkedin.com/in/saif-badawy')},
     ];
@@ -10743,7 +10751,7 @@ document.addEventListener('contextmenu', e => {
     if (/nationality|origin|where.*from|background.*personal/.test(t)) return {text: "Middle Eastern heritage 🌙, grew up across multiple countries and have lived in Australia, UAE and the UK. Genuinely international perspective, both personally and professionally."};
     if (/married|relationship|single|partner/.test(t)) return {text: "Ha, that's a bit personal! 😄 Let's stick to the professional side for now. Anything about my engineering background or projects I can help with?"};
     if (/thank|thanks|cheers|appreciate/.test(t)) return {text: "No problem at all. Anything else you want to know?"};
-    if (/bye|goodbye|cya|see you|later/.test(t)) return {text: "Good talking with you. Feel free to reach out at saifehabbadawy@gmail.com anytime. 👋"};
+    if (/bye|goodbye|cya|see you|later/.test(t)) return {text: "Good talking with you. Feel free to reach out at " + window._em() + " anytime. 👋"};
     if (/how are you|how you doing|how's it going|you good|you okay|alright/.test(t)) return {text: "Good thanks! Juggling a few things but always happy to stop and have a proper conversation. What's on your mind? 😊"};
     if (/what do you do|what.?s your job|what is your job|tell me what you do|^what are you[^r]/.test(t)) return {text: KB.personal};
     if (/nice to meet|good to meet|pleasure/.test(t)) return {text: "Good to meet you. What would you like to know about my background?"};
@@ -10757,7 +10765,7 @@ document.addEventListener('contextmenu', e => {
     if (/why.*look|why.*leav|why.*left|why.*still|why.*market/.test(t)) return {text: KB.why};
     if (/fun|hobby|interest|outside|sport|football|travel|personal/.test(t)) return {text: KB.fun};
     if (/thank|thanks|cheers|appreciate/.test(t)) return {text: "Of course, really glad this has been useful. 😊 Anything else you want to dig into?"};
-    if (/bye|goodbye|cya|see you|later/.test(t)) return {text: "Great talking with you. 👋 Feel free to come back anytime, or reach out at saifehabbadawy@gmail.com. Take care!"};
+    if (/bye|goodbye|cya|see you|later/.test(t)) return {text: "Great talking with you. 👋 Feel free to come back anytime, or reach out at " + window._em() + ". Take care!"};
     if (/how old|your age|age are you/.test(t)) return {text: KB.age};
     if (/your name|who are you|who is saif|full name/.test(t)) return {text: KB.name};
     if (/born|birthday|date of birth/.test(t)) return {text: KB.age};
@@ -12462,7 +12470,7 @@ document.addEventListener('contextmenu', e => {
     </div>
     <div class="greeting">${document.getElementById('p90Greeting').innerHTML}</div>
     ${phasesHTML}
-    <div class="footer"><span>Saif Badawy · saifehabbadawy@gmail.com</span><span>Generated ${planMeta.timestamp}</span></div>
+    <div class="footer"><span>Saif Badawy · ${window._em()}</span><span>Generated ${planMeta.timestamp}</span></div>
     <script>window.onload=()=>{window.print();}<\/script>
     
 </body></html>`);
